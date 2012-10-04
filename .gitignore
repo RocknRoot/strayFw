@@ -1,3 +1,4 @@
 ^config/settings.yml$
+^config/routes.yml$
 info.yml$
 ^web/robots.txt$
