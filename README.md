@@ -1,3 +1,0 @@
-# strayFw
-
-Coming...
