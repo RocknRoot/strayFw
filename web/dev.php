@@ -2,8 +2,6 @@
 
 if (isset($_SERVER['REMOTE_ADDR']) === false
   || in_array($_SERVER['REMOTE_ADDR'], array(
-    '88.177.188.81',
-    '88.165.92.25',
     '127.0.0.1',
     '::1')) === false)
 {
@@ -34,7 +32,7 @@ require $straypath . 'routing/require.php';
 require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
 require $straypath . 'locale/require.php';
 require $straypath . 'apps/require.php';
-//require $straypath . 'form/require.php';
+require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
 
 // run
