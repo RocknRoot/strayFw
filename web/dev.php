@@ -12,6 +12,7 @@ if (isset($_SERVER['REMOTE_ADDR']) === false
 define('STRAY_PATH_TO_APPS', '../apps/');
 define('STRAY_PATH_TO_MODELS', '../models/');
 define('STRAY_PATH_TO_LIB', '../lib/');
+define('STRAY_PATH_TO_SCRIPTS', '../scripts/');
 define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 
@@ -31,7 +32,7 @@ require $straypath . 'routing/require.php';
 require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
 require $straypath . 'locale/require.php';
 require $straypath . 'apps/require.php';
-//require $straypath . 'form/require.php';
+require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
 
 // run
