@@ -3,6 +3,7 @@
 define('STRAY_PATH_TO_APPS', '../apps/');
 define('STRAY_PATH_TO_MODELS', '../models/');
 define('STRAY_PATH_TO_LIB', '../lib/');
+define('STRAY_PATH_TO_SCRIPTS', '../scripts/');
 define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 

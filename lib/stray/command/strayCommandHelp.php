@@ -16,6 +16,9 @@ function strayfCommandHelp()
   // models
   echo "\nModels:\n   model:create db_name\n"
       . "   model:generate [db_name]\n";
+  // scripts
+  echo "\nScripts:\n  script:create script_name\n"
+      . "  script:exec script_name [script_arguments]\n";
   // sql
   echo "\nSQL:\n   sql:build [db_name]\n";
   // widgets

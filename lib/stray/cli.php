@@ -5,24 +5,25 @@
  * @author nekith@gmail.com
  */
 
-define('STRAY_PATH_TO_APPS', '../apps/');
-define('STRAY_PATH_TO_MODELS', '../models/');
-define('STRAY_PATH_TO_LIB', '../');
-define('STRAY_PATH_TO_PLUGINS', '../plugins/');
-define('STRAY_PATH_TO_WEB', '../web/');
-define('STRAY_PATH_TO_INSTALL', '../');
+$base = rtrim(dirname(__FILE__), '/') . '/';
+
+define('STRAY_PATH_TO_APPS', $base . '../../apps/');
+define('STRAY_PATH_TO_MODELS', $base . '../../models/');
+define('STRAY_PATH_TO_LIB', $base . '../');
+define('STRAY_PATH_TO_SCRIPTS', $base . '../../scripts/');
+define('STRAY_PATH_TO_WEB', $base . '../../web/');
+define('STRAY_PATH_TO_INSTALL', $base . '../../');
 
 require 'global/require.php';
+require 'exception/require.php';
+require 'config/require.php';
 require 'persistance/norel/require.php';
 require 'persistance/strayLog.class.php';
-require 'config/require.php';
-require 'exception/require.php';
 require 'models/require.php';
 require 'models/mod/require.php';
 require 'models/mutation/require.php';
 require 'models/query/require.php';
 require 'locale/require.php';
-require 'plugins/strayITool.class.php';
 require 'command/require.php';
 
 echo 'Welcome to the Amazing Stray CLI !' . PHP_EOL . PHP_EOL;

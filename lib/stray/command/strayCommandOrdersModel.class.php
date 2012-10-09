@@ -18,13 +18,14 @@ final class strayCommandOrdersModel
   {
     if (1 != count($params))
       throw new strayException('wrong syntax for model:create');
-    if (false === isset(strayConfigInstall::fGetInstance()->GetConfig()['databases'][$params[0]]))
-      throw new strayExceptionFatal('can\'t find database "' . $params[0] . '" in settings.' . strayConfigFile::EXTENSION);
-    $db = strayConfigInstall::fGetInstance()->GetConfig()['databases'][$params[0]];
-    $db->alias = $params[0];
-    $path = STRAY_PATH_TO_MODELS . $db->alias;
+    $config = strayConfigInstall::fGetInstance()->GetConfig();
+    if (false === isset($config['databases'][$params[0]]))
+      throw new strayExceptionFatal('can\'t find database "' . $params[0] . '" in settings');
+    $db = $databases[$params[0]];
+    $db['alias'] = $params[0];
+    $path = STRAY_PATH_TO_MODELS . $db['alias'];
     if (true === is_dir($path))
-      throw new strayExceptionError('database "'. $db->alias . '" already exists');
+      throw new strayExceptionError('database "'. $db['alias'] . '" already exists');
     // dirs
     if (false === mkdir($path) || false === mkdir($path . '/classes')
         || false === mkdir($path . '/classes/base') || false === mkdir($path . '/migrations')
@@ -36,7 +37,7 @@ final class strayCommandOrdersModel
         || false === strayConfigFile::fCreate($path . '/i18n/fr'))
       throw new strayExceptionFatal('can\'t touch (this!)');
     // end
-    echo 'Database "' . $db->alias . "\" created!\n";
+    echo 'Database "' . $db['alias'] . "\" created!\n";
   }
 
   /**
