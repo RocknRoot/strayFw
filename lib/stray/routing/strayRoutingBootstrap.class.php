@@ -24,9 +24,10 @@ final class strayRoutingBootstrap extends strayASingleton
 
   /**
    * Bootstrapping the installation.
-   * @param string $uri routing requested URI
+   * @param string $url routing requested URL
+   * @param string $method HTTP method
    */
-  public function Run($uri)
+  public function Run($url, $method)
   {
     set_error_handler(array('strayRoutingBootstrap', 'fError'));
     ignore_user_abort();
@@ -52,34 +53,20 @@ final class strayRoutingBootstrap extends strayASingleton
     catch (strayExceptionRedirect $e)
     {
       ob_end_clean();
-      if (true === $e->IsHttpMode())
-      {
-        header('Location: http://' . strayRouting::fGetInstance()->GetHost() . '/' . $e->GetUri());
-        exit();
-      }
-      $this->Run($e->GetUri());
+      header('Location: http://' . strayRouting::fGetInstance()->GetHost() . '/' . $e->GetUri());
+      exit();
     }
     catch (strayExceptionNotfound $e)
     {
-      strayLog::fGetInstance()->Notice('404 : ' . (true === isset($this->_request->entireString) ? $this->_request->entireString : $uri));
+      strayLog::fGetInstance()->Notice('404 : ' . $url);
       if (strayExceptionNotfound::NOTFOUND_APP == $e->GetType())
       {
         header('HTTP/1.1 404 Not Found');
-        header('Location: http://' . $_SERVER['HTTP_HOST'] . '/hub/home/error/unknown');
       }
       elseif (strayExceptionNotfound::NOTFOUND_ACTION == $e->GetType()
-        || strayExceptionNotfound::NOTFOUND_MODULE == $e->GetType())
+        || strayExceptionNotfound::NOTFOUND_WIDGET == $e->GetType())
       {
         header('HTTP/1.0 404 Not Found');
-        if (true === isset(strayConfigApp::fGetInstance($this->_request->app)->Config()->module)
-          && true === isset(strayConfigApp::fGetInstance($this->_request->app)->Config()->module->error)
-          && true === isset(strayConfigApp::fGetInstance($this->_request->app)->Config()->module->error->routing))
-        {
-          $url = strayConfigApp::fGetInstance($this->_request->app)->Config()->module->error->routing;
-          header('Location: http://' . $_SERVER['HTTP_HOST'] . $url);
-        }
-        else
-          header('Location: http://' . $_SERVER['HTTP_HOST'] . '/hub/home/error/unknown');
       }
     }
     catch (strayException $e)
@@ -88,7 +75,6 @@ final class strayRoutingBootstrap extends strayASingleton
         ob_end_clean();
       $log = strayLog::fGetInstance();
       $log->FwFatal($e->Display());
-      header('Location: http://' . $_SERVER['HTTP_HOST'] . '/hub/home/error/unknown');
     }
     catch (Exception $e)
     {
@@ -96,7 +82,6 @@ final class strayRoutingBootstrap extends strayASingleton
         ob_end_clean();
       $log = strayLog::fGetInstance();
       $log->FwFatal($e->getMessage());
-      header('Location: http://' . $_SERVER['HTTP_HOST'] . '/hub/home/error/unknown');
     }
   }
 
@@ -110,8 +95,8 @@ final class strayRoutingBootstrap extends strayASingleton
     if (false === $done)
     {
       strayExtTwig::fGetInstance()->Init();
-      //$plugins = new strayPlugins($request);
-      //$plugins->Run();
+      $plugins = new strayPlugins($request);
+      $plugins->Init();
       $done = true;
     }
   }

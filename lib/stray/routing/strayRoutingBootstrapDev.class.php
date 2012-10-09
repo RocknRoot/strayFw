@@ -53,12 +53,8 @@ final class strayRoutingBootstrapDev extends strayASingleton
     catch (strayExceptionRedirect $e)
     {
       ob_end_clean();
-      if (true === $e->IsHttpMode())
-      {
-        header('Location: http://' . strayRouting::fGetInstance()->GetHost() . '/' . $e->GetUri());
-        exit();
-      }
-      $this->Run($e->GetUri());
+      header('Location: http://' . strayRouting::fGetInstance()->GetHost() . '/' . $e->GetUri());
+      exit();
     }
   }
 
@@ -73,8 +69,8 @@ final class strayRoutingBootstrapDev extends strayASingleton
     {
       strayExtTwig::fGetInstance()->Init();
       strayExtTwig::fGetInstance()->debug = true;
-      //$plugins = new strayPlugins($request);
-      //$plugins->Run();
+      $plugins = new strayPlugins($request);
+      $plugins->Init();
       $done = true;
     }
   }

@@ -21,7 +21,7 @@ final class strayCommandOrdersModel
     $config = strayConfigInstall::fGetInstance()->GetConfig();
     if (false === isset($config['databases'][$params[0]]))
       throw new strayExceptionFatal('can\'t find database "' . $params[0] . '" in settings');
-    $db = $databases[$params[0]];
+    $db = $config['databases'][$params[0]];
     $db['alias'] = $params[0];
     $path = STRAY_PATH_TO_MODELS . $db['alias'];
     if (true === is_dir($path))
@@ -29,12 +29,11 @@ final class strayCommandOrdersModel
     // dirs
     if (false === mkdir($path) || false === mkdir($path . '/classes')
         || false === mkdir($path . '/classes/base') || false === mkdir($path . '/migrations')
-        || false === mkdir($path . '/datasets') || false === mkdir($path . '/i18n'))
+        || false === mkdir($path . '/i18n'))
       throw new strayExceptionFatal('can\'t mkdir');
     // files
     if (false === strayConfigFile::fCreate($path . '/schema')
-        || false === strayConfigFile::fCreate($path . '/i18n/en')
-        || false === strayConfigFile::fCreate($path . '/i18n/fr'))
+        || false === strayConfigFile::fCreate($path . '/i18n/en'))
       throw new strayExceptionFatal('can\'t touch (this!)');
     // end
     echo 'Database "' . $db['alias'] . "\" created!\n";
@@ -96,22 +95,22 @@ final class strayCommandOrdersModel
       $accessors = null;
       $allColumns = "  static public function fGetAllRealNameColumns()\n  {\n    return array(";
       $allColumnsAlias = "  static public function fGetAllAliasColumns()\n  {\n    return array(";
-      foreach ($elem->columns as $colName => $column)
+      foreach ($elem['columns'] as $colName => $column)
       {
         $properties .= '  protected $_column' . ucfirst($colName) . ";\n"
-          . '  const COLUMN_' . strtoupper($colName) . ' = \'' . $elem->name . '.' . $column->name . "';\n";
-        if ('enum' == $column->type)
-          foreach ($column->values as $v)
+          . '  const COLUMN_' . strtoupper($colName) . ' = \'' . $elem['name'] . '.' . $column['name'] . "';\n";
+        if ('enum' == $column['type'])
+          foreach ($column['values'] as $v)
             $properties .= '  const ' . strtoupper($colName) . '_' . strtoupper($v) . ' = \'' . $v . '\';' . PHP_EOL;
         $constructor .= '    $this->_column' . ucfirst($colName)
-          . " = array('name' => '" . $column->name
-          . '\', \'value\' => $fetch->' . $column->name
+          . " = array('name' => '" . $column['name']
+          . '\', \'value\' => $fetch->' . $column['name']
           . ', \'alias\' => \'' . $colName . "');\n";
-        if (true === isset($column->primary))
+        if (true === isset($column['primary']))
           $constructor .= '    $this->_primary[] = \'' . $colName . "';\n";
         // get
         $accessors .= '  public function Get' . ucfirst($colName) . "()\n  {\n";
-        if ('string' == $column->type || 'char' == $column->type)
+        if ('string' == $column['type'] || 'char' == $column['type'])
           $accessors .= '    return stripslashes($this->_column' . ucfirst($colName) . "['value']);";
         else
           $accessors .= '    return $this->_column' . ucfirst($colName) . "['value'];";
@@ -119,9 +118,9 @@ final class strayCommandOrdersModel
         // validate
         $accessors .= '  public function Validate' . ucfirst($colName)
           . '($value)' . "\n  {\n";
-        if ('enum' == $column->type)
+        if ('enum' == $column['type'])
         {
-          $accessors .= '    if (false === in_array($value, array(\'' . implode('\', \'', (array)$column->values) . '\')))' . PHP_EOL
+          $accessors .= '    if (false === in_array($value, array(\'' . implode('\', \'', (array)$column['values']) . '\')))' . PHP_EOL
             . '      return false;' . PHP_EOL;
         }
         $accessors .= "    return true;\n  }\n\n";
@@ -129,7 +128,7 @@ final class strayCommandOrdersModel
         $accessors .= '  public function Set' . ucfirst($colName) . '($value)' . "\n  {\n"
           . '    if (true === $this->Validate' . ucfirst($colName) . '($value))'
           . "\n    {\n";
-        if ('bool' == $column->type)
+        if ('bool' == $column['type'])
           $accessors .= '      if (1 == $value || true === $value)' . PHP_EOL . '        $this->_column'
             . ucfirst($colName) . '[\'value\'] = \'true\';' . PHP_EOL . '      else' . PHP_EOL
             . '        $this->_column' . ucfirst($colName) . '[\'value\'] = \'false\';' . PHP_EOL;
@@ -142,19 +141,18 @@ final class strayCommandOrdersModel
         // reset
         $accessors .= '  public function Reset' . ucfirst($colName) . "()\n  {\n"
           . '    $this->_column' . ucfirst($colName) . "['value'] = null;\n  }\n\n";
-        $allColumns .= "'" . $elem->name . '.' . $column->name . "', ";
+        $allColumns .= "'" . $elem['name'] . '.' . $column['name'] . "', ";
         $allColumnsAlias .= "'" . $colName . "', ";
       }
       $allColumns = substr($allColumns, 0, -2) . ");\n  }\n\n";
       $allColumnsAlias = substr($allColumnsAlias, 0, -2) . ");\n  }\n\n";
-      $path = STRAY_PATH_TO_MODELS . $name . '/classes/base/ModelBase'
-        . ucfirst($key) . '.model.php';
+      $path = STRAY_PATH_TO_MODELS . $name . '/classes/base/' . $key . '.model.php';
       $file = fopen($path, 'w+');
-      if (false === fwrite($file, "<?php\n/*\n * Model base class for " . ucfirst($key)
-          . ".\n */\n\n" . (true === isset($elem->inherits) ?
-              'require_once STRAY_PATH_TO_MODELS . \'' . $name . '/classes/base/ModelBase' . ucfirst($elem->inherits) . ".model.php';\n" : null)
-          . 'class ModelBase' . ucfirst($key)
-          . ' extends ' . (true === isset($elem->inherits) ? 'ModelBase' . ucfirst($elem->inherits) : 'strayModelsATable')
+      if (false === fwrite($file, "<?php\n\n"
+          . (true === isset($elem['inherits']) ?
+              'require_once STRAY_PATH_TO_MODELS . \'' . $name . '/classes/base/' . ucfirst($elem['inherits']) . ".model.php';\n" : null)
+          . 'class models' . ucfirst($name) . 'Base' . ucfirst($key)
+          . ' extends ' . (true === isset($elem['inherits']) ? 'models' . ucfirst($name) . 'Base' . ucfirst($elem['inherits']) : 'strayModelsATable')
           . "\n{\n" . $properties
           . "\n  static public function fGetDb()\n  {\n"
           . '    return strayModelsDatabase::fGetInstance(\'' . $name
@@ -165,27 +163,24 @@ final class strayCommandOrdersModel
           . '      $fetch = new array();'
           . "\n" . $constructor . "  }\n\n"
           . '  static public function fGetName()' . "\n  {\n    return '"
-          . $elem->name . "';\n  }\n\n"
+          . $elem['name'] . "';\n  }\n\n"
           . $accessors . $allColumns . $allColumnsAlias
           . "}\n"))
         throw new strayExceptionError('can\'t write in "' . $path . '"');
       fclose($file);
       // user class
-      $path = STRAY_PATH_TO_MODELS . $name . '/classes/Model' . ucfirst($key)
-        . '.model.php';
+      $path = STRAY_PATH_TO_MODELS . $name . '/classes/' . $key . '.model.php';
       if (false === file_exists($path))
       {
         $file = fopen($path, 'w+');
-        if (false === fwrite($file, "<?php\n/*\n * Model user class for "
-            . ucfirst($key) . ".\n */\n\nrequire_once STRAY_PATH_TO_MODELS . '"
-            . $name . "/classes/base/ModelBase" . ucfirst($key)
-            . ".model.php';\n\nclass Model" . ucfirst($key)
-            . " extends ModelBase" . ucfirst($key) . "\n{\n}\n"))
+        if (false === fwrite($file, "<?php\n\nrequire_once STRAY_PATH_TO_MODELS . '"
+            . $name . "/classes/base/" . ucfirst($key) . ".model.php';\n\nclass models" . ucfirst($name) . ucfirst($key)
+            . ' extends models' . ucfirst($name) . 'Base' . ucfirst($key) . "\n{\n}\n"))
           throw new strayExceptionError('can\'t write in "' . $path . '"');
         fclose($file);
       }
       // require file
-      if (false === fwrite($require_file, 'require \'Model' . ucfirst($key) . '.model.php\';' . PHP_EOL))
+      if (false === fwrite($require_file, 'require \'' . $key . '.model.php\';' . PHP_EOL))
         throw new strayExceptionError('can\'t write in "require.php"');
     }
     fclose($require_file);

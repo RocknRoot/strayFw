@@ -16,13 +16,14 @@ function strayfCommandHelp()
   // models
   echo "\nModels:\n   model:create db_name\n"
       . "   model:generate [db_name]\n";
+  echo "\nPlugins:\n   plugin:create plugin_name\n";
   // scripts
-  echo "\nScripts:\n  script:create script_name\n"
-      . "  script:exec script_name [script_arguments]\n";
+  echo "\nScripts:\n   script:create script_name\n"
+      . "   script:exec script_name [script_arguments]\n";
   // sql
   echo "\nSQL:\n   sql:build [db_name]\n";
   // widgets
-  echo "\nWidgets:\n    widget:create app_name widget_name\n";
+  echo "\nWidgets:\n   widget:create app_name widget_name\n";
   // -
   echo "\n";
 }

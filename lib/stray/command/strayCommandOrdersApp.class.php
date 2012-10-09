@@ -29,6 +29,7 @@ final class strayCommandOrdersApp
       throw new strayExceptionFatal('can\'t mkdir');
     // files
     if (false === strayConfigFile::fCreate($path . '/routes')
+        || false === strayConfigFile::fCreate($path . '/settings')
         || false === strayConfigFile::fCreate($path . '/i18n/en')
         || false === touch($path . '/templates/base.html')
         || false === touch(STRAY_PATH_TO_WEB . 'css/' . $params[0] . '/main.css')

@@ -24,26 +24,28 @@ class strayPlugins
   /**
    * Includes enabled plugins.
    */
-  public function Run()
+  public function Init()
   {
     // install plugins
-    if (true === isset(strayConfigInstall::fGetInstance()->Config()->plugins))
+    $config = strayConfigInstall::fGetInstance()->GetConfig();
+    if (true === isset($config['plugins']))
     {
-      $plugins = strayConfigInstall::fGetInstance()->Config()->plugins;
+      $plugins = $config['plugins'];
       if (true === is_array($plugins))
         foreach ($plugins as $elem)
-          if (true === is_dir(STRAY_PATH_TO_PLUGINS . $elem)
-              && true === file_exists(STRAY_PATH_TO_PLUGINS . $elem . '/require.php'))
-            require STRAY_PATH_TO_PLUGINS . $elem . '/require.php';
+          if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
+              && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
+            require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
     }
     // app plugins
-    if (true === isset(strayConfigApp::fGetInstance($this->_request->app)->Config()->plugins))
+    $config = strayConfigApp::fGetInstance($this->_request->app)->GetConfig();
+    if (true === isset($config['plugins']))
     {
-      $plugins = strayConfigApp::fGetInstance($this->_request->app)->Config()->plugins;
+      $plugins = $config['plugins'];
       foreach ($plugins as $elem)
-        if (true === is_dir(STRAY_PATH_TO_PLUGINS . $elem)
-            && true === file_exists(STRAY_PATH_TO_PLUGINS . $elem . '/require.php'))
-          require STRAY_PATH_TO_PLUGINS . $elem . '/require.php';
+        if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
+            && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
+          require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
     }
   }
 }
