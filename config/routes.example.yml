@@ -1,7 +1,3 @@
-includes:
-  - home
-  - admin
-
 defaults:
   app: home
   subdomain: www
