@@ -1,14 +1,14 @@
 <?php
 /**
  * Singleton.
- * @brief Wrapper for session vars.
+ * @brief Wrapper for cookies vars.
  * @author nekith@gmail.com
  */
 
-final class straySession extends strayASingleton
+final class strayCookies extends strayASingleton
 {
   /**
-   * Session vars.
+   * Cookies vars.
    * @var array
    */
   private $_vars;
@@ -18,9 +18,8 @@ final class straySession extends strayASingleton
    */
   protected function __construct()
   {
-    session_start();
     $this->_vars = array();
-    foreach ($_SESSION as $key => $e)
+    foreach ($_COOKIES as $key => $e)
       $this->_vars[$key] = $e;
   }
 
@@ -50,11 +49,16 @@ final class straySession extends strayASingleton
    * Set key $name with value $value.
    * @param $name key
    * @param $value value
+   * @param $ttl seconds to live
+   * @param $path cookie path
    */
-  public function Set($name, $value)
+  public function Set($name, $value, $ttl = 0, $path = null)
   {
     $this->_vars[$name] = $value;
-    $_SESSION[$name] = $value;
+    if (null != $path)
+      setcookie($name, $value, time() + $ttl, $path);
+    else
+      setcookie($name, $value, time() + $ttl);
   }
 
   /**
@@ -67,19 +71,19 @@ final class straySession extends strayASingleton
     if (true === $ret)
     {
       unset($this->_vars[$name]);
-      unset($_SESSION[$name]);
+      setcookie($name, '--', 1);
     }
     return $ret;
   }
 
   /**
-   * Clear all session vars.
+   * Clear all cookies.
    */
   public function Clear()
   {
+    foreach ($this->_vars as $v)
+      setcookie($name, '--', 1);
     unset($this->_vars);
     $this->_vars = array();
-    session_unset();
-    session_destroy();
   }
 }
