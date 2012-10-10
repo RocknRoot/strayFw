@@ -15,14 +15,14 @@ final class strayConfigDatabase extends strayAMultiton
   private $_db;
 
   /**
-   * Database info JSON decode result.
-   * @var stdClass
+   * Database info file decode result.
+   * @var array
    */
   private $_info;
 
   /**
-   * Database schema JSON decode result.
-   * @var stdClass
+   * Database schema file decode result.
+   * @var array
    */
   private $_schema;
 
@@ -38,11 +38,11 @@ final class strayConfigDatabase extends strayAMultiton
   }
 
   /**
-   * Get/Set the database info JSON stdClass.
-   * @param stdClass $info new info value
-   * @return stdClass JSON decode result
+   * Get/Set the database info file data.
+   * @param array $info new info value
+   * @return array info file decode result
    */
-  public function Info(stdClass $info = null)
+  public function Info(array $info = null)
   {
     if (null == $info)
     {
@@ -81,8 +81,8 @@ final class strayConfigDatabase extends strayAMultiton
   }
 
   /**
-   * Get the database schema JSON stdClass.
-   * @return stdClass JSON decode result
+   * Get the database schema file data.
+   * @return array schema file decode result
    */
   public function Schema()
   {

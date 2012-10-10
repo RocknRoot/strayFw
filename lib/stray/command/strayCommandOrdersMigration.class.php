@@ -73,7 +73,7 @@ final class strayCommandOrdersMigration
     echo 'Help screen for migration "' . ucfirst($params[1]) . "\"\n\n";
     require $base_path . $migration_dir . '/' . $params[1] . '.migration.php';
     $class = 'Migration' . ucfirst($params[1]);
-    $migration = new $class($params[0]);
+    $migration = new $class($params[0], $migration_dir);
     $migration->Help();
     echo "\n";
   }
@@ -122,7 +122,7 @@ final class strayCommandOrdersMigration
   static private function _fMigrate($db)
   {
     $info = strayConfigDatabase::fGetInstance($db)->Info();
-    $date_old = strayModelsAMigration::fDateToTime($info->last_up);
+    $date_old = strayModelsAMigration::fDateToTime($info['last_up']);
     if ($date_old == 0)
       throw new strayExceptionError('do a sql:build before migrate');
     $date_new_str = date(strayModelsAMigration::DATE_FORMAT);
@@ -146,7 +146,7 @@ final class strayCommandOrdersMigration
         }
       }
     closedir($handle);
-    $info->last_up = $date_new_str;
+    $info['last_up'] = $date_new_str;
     strayConfigDatabase::fGetInstance($db)->Info($info);
   }
 

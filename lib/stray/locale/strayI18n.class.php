@@ -128,9 +128,9 @@ final class strayI18n extends strayASingleton
 
   /**
    * Add trads to the fetched ones.
-   * @param stdClass $data new trads
+   * @param array $data new trads
    */
-  protected function _AddTrads(stdClass $data)
+  protected function _AddTrads(array $data)
   {
     foreach ($data as $k => $e)
       $this->_trads[$k] = $e;

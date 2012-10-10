@@ -14,7 +14,7 @@ abstract class strayConfigFile
    * @param string $path file to parse
    * @param string $extension file extension
    * @return false if file doesn't exist
-   * @return stdClass data
+   * @return array data
    * @static
    */ 
   static public function fParse($path, $extension = self::EXTENSION)

@@ -1,14 +1,14 @@
 <?php
 /**
  * Generate code for type deletion.
- * @param stdClass $schema column schema
+ * @param array $schema column schema
  * @return string SQL query
  */
 
-function strayfModRemoveType(stdClass $schema)
+function strayfModRemoveType(array $schema)
 {
   $statement = null;
-  if ($schema->type == 'enum')
-    $statement = 'DROP TYPE IF EXISTS t_' . $schema->name . ';';
+  if ($schema['type'] == 'enum')
+    $statement = 'DROP TYPE IF EXISTS t_' . $schema['name'] . ';';
   return $statement;
 }

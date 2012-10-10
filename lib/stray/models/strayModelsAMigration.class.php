@@ -24,14 +24,14 @@ abstract class strayModelsAMigration
   protected $_dir;
 
   /**
-   * Previous schema JSON decode result.
-   * @var stdClass
+   * Previous schema file decode result.
+   * @var array
    */
   protected $_schema;
 
   /**
-   * Next schema JSON decode result.
-   * @var stdClass
+   * Next schema file decode result.
+   * @var array
    */
   protected $_forwardSchema;
 
@@ -77,7 +77,7 @@ abstract class strayModelsAMigration
   /**
    * Get next schema.
    * Current schema or next migration schema.
-   * @return stdClass forward schema
+   * @return array forward schema
    */
   public function GetForwardSchema()
   {
@@ -119,7 +119,7 @@ abstract class strayModelsAMigration
 
   /**
    * Get migration saved schema.
-   * @return stdClass previous schema
+   * @return array previous schema
    */
   public function GetSchema()
   {

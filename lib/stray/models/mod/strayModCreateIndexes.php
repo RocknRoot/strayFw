@@ -1,19 +1,19 @@
 <?php
 /**
  * Generate SQL code for indexes creation.
- * @param stdClass $schema column schema
+ * @param array $schema column schema
  * @return string SQL query
  */
-function strayfModCreateIndexes(stdClass $schema)
+function strayfModCreateIndexes(array $schema)
 {
   $statement = null;
-  if (true === isset($schema->indexes))
+  if (true === isset($schema['indexes']))
   {
-    foreach ($schema->indexes as $key => $elem)
+    foreach ($schema['indexes'] as $key => $elem)
     {
-      $statement .= 'CREATE INDEX ' . $key . ' ON ' . $schema->name . ' (';
+      $statement .= 'CREATE INDEX ' . $key . ' ON ' . $schema['name'] . ' (';
       foreach ($elem as $subElem)
-        $statement .= $schema->columns->$subElem->name . ', ';
+        $statement .= $schema['columns'][$subElem]['name'] . ', ';
       $statement = substr($statement, 0, -2) . ');';
     }
   }
