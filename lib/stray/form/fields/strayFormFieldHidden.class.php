@@ -19,27 +19,23 @@ class strayFormFieldHidden extends strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
    */
-  public function Render($separator = null, $flags = self::RENDER_ALL)
+  public function Render()
   {
-    echo $separator . '<input type="hidden" name="' . $this->id
+    $content = '<input type="hidden" name="' . $this->name
         . '" id="' . $this->id . '"';
     if (true === isset($this->_value))
-      echo ' value="' . $this->_value . '"';
-    echo '/>';
+      $content .= ' value="' . $this->_value . '"';
+    $content .= '/>';
+    return $content;
   }
 
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
+   * Render label tag.
+   * @return string generated render
    */
-  public function Merge(strayFormAField $oldOne)
+  public function RenderLabel()
   {
-    if ($oldOne instanceof strayFormFieldHidden)
-    {
-      $this->_value = $oldOne->_value;
-    }
+    return null;
   }
 }

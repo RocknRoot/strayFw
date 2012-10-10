@@ -104,7 +104,7 @@ final class strayCommandOrdersModel
             $properties .= '  const ' . strtoupper($colName) . '_' . strtoupper($v) . ' = \'' . $v . '\';' . PHP_EOL;
         $constructor .= '    $this->_column' . ucfirst($colName)
           . " = array('name' => '" . $column['name']
-          . '\', \'value\' => $fetch->' . $column['name']
+          . '\', \'value\' => @$fetch[\'' . $column['name'] . '\']'
           . ', \'alias\' => \'' . $colName . "');\n";
         if (true === isset($column['primary']))
           $constructor .= '    $this->_primary[] = \'' . $colName . "';\n";
@@ -160,7 +160,7 @@ final class strayCommandOrdersModel
           . 'array $fetch = null' . ")\n  {\n"
           . "    parent::__construct();\n    if (null != " . '$fetch' . ")\n"
           . '      $this->_new = false;' . "\n    else\n"
-          . '      $fetch = new array();'
+          . '      $fetch = array();'
           . "\n" . $constructor . "  }\n\n"
           . '  static public function fGetName()' . "\n  {\n    return '"
           . $elem['name'] . "';\n  }\n\n"

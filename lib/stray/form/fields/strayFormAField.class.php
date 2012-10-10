@@ -7,18 +7,6 @@
 
 abstract class strayFormAField
 {
-  #Types
-  const TYPE_HIDDEN     = 'hidden';
-  const TYPE_PASSWORD   = 'password';
-  const TYPE_RADIO      = 'radio';
-  const TYPE_SUBMIT     = 'submit';
-  const TYPE_TEXT       = 'text';
-  const TYPE_TEXTAREA   = 'textarea';
-
-  #Render
-  const RENDER_ALL            = 0;
-  const RENDER_WITHOUT_LABEL  = 1;
-
   /**
    * Field name.
    * @var string
@@ -52,15 +40,7 @@ abstract class strayFormAField
   public function __construct($name)
   {
     $this->name = $name;
-  }
-
-  /**
-   * Set field tag id.
-   * @param string $name form name
-   */
-  public function SetId($name)
-  {
-    $this->id = 'form' . ucfirst($name) . ucfirst($this->name);
+    $this->id = 'field_' . $name;
   }
 
   /**
@@ -83,27 +63,36 @@ abstract class strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
    * @abstract
    */
-  abstract public function Render($separator = null, $flags = self::RENDER_ALL);
+  abstract public function Render();
 
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
+   * Render label tag.
+   * @return string generated render
    * @abstract
    */
-  abstract public function Merge(strayFormAField $oldOne);
+  abstract public function RenderLabel();
 
   /**
    * Add notice to field.
    * @param string $msg notice content
-   * @return bool false
    */
   public function AddNotice($msg)
   {
     $this->notices[] = $msg;
-    return false;
+  }
+
+  /**
+   * Helper for templates.
+   * @param string $name called function
+   * @param array $args arguments
+   * @return string generated render
+   */
+  public function __call($name, array $args)
+  {
+    if ('render_label' == $name)
+      return $this->RenderLabel();
+    return null;
   }
 }

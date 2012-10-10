@@ -51,6 +51,10 @@ class strayExtTwig extends strayASingleton
           'cache' => $tmp . '/twig_compil',
           'debug' => $this->debug
         ));
+      if (true === $this->debug)
+      {
+        $this->_envs[$dir]->addExtension(new Twig_Extension_Debug());
+      }
       return $this->_envs[$dir];
     }
     return null;

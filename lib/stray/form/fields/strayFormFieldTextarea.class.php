@@ -49,41 +49,31 @@ class strayFormFieldTextarea extends strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
    */
-  public function Render($separator = null, $flags = self::RENDER_ALL)
+  public function Render()
   {
-    if ($flags != self::RENDER_WITHOUT_LABEL)
-      echo '<label for="' . $this->id . '">' . $this->label . '</label>';
-    echo $separator . '<textarea name="' . $this->id
+    $content = '<textarea name="' . $this->name
       . '" id="' . $this->id
       . '" class="' . $this->class . '"';
     if (true === isset($this->rows))
-      echo ' rows="' . $this->rows . '"';
+      $content .= ' rows="' . $this->rows . '"';
     if (true === isset($this->cols))
-      echo ' cols="' . $this->cols . '"';
+      $content .= ' cols="' . $this->cols . '"';
     if (true === $this->readOnly)
-      echo ' readonly';
-    echo '>';
+      $content .= ' readonly';
+    $content .= '>';
     if (true === isset($this->_value))
-      echo $this->_value;
-    echo '</textarea>';
+      $content .= $this->_value;
+    $content .= '</textarea>';
+    return $content;
   }
 
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
-   * @return bool if false, merging fails
+   * Render label tag.
+   * @return string generated render
    */
-  public function Merge(strayFormAField $oldOne)
+  public function RenderLabel()
   {
-    if ($oldOne instanceof strayFormFieldTextarea
-        || $oldOne instanceof strayFormFieldText
-        || $oldOne instanceof strayFormFieldPassword)
-    {
-      $this->label = $oldOne->label;
-      $this->_value = $oldOne->_value;
-    }
+    return '<label for="' . $this->id . '">' . $this->label . '</label>';
   }
 }

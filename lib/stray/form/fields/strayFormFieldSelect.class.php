@@ -32,37 +32,30 @@ class strayFormFieldSelect extends strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
    */
-  public function Render($separator = null, $flags = self::RENDER_ALL)
+  public function Render()
   {
-    if ($flags != self::RENDER_WITHOUT_LABEL)
-      echo '<label for="' . $this->id . '">' . $this->label . '</label>';
-    echo $separator . '<select name="' . $this->id
+    $content = '<select name="' . $this->name
       . '" id="' . $this->id
       . '" class="' . $this->class . '"';
-    echo '>';
+    $content .= '>';
     foreach ($this->options as $key => $elem)
     {
-      echo '<option value="' . $key . '"';
+      $content .= '<option value="' . $key . '"';
       if ($key == $this->_value)
-        echo ' selected="selected"';
-      echo '>' . $elem . '</option>';
+        $content .= ' selected="selected"';
+      $content .= '>' . $elem . '</option>';
     }
-    echo '</select>';
+    $content .= '</select>';
+    return $content;
   }
 
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
+   * Render label tag.
+   * @return string generated render
    */
-  public function Merge(strayFormAField $oldOne)
+  public function RenderLabel()
   {
-    if ($oldOne instanceof strayFormFieldSelect)
-    {
-      $this->options = $oldOne->options;
-      $this->_value = $oldOne->_value;
-    }
+    return '<label for="' . $this->id . '">' . $this->label . '</label>';
   }
 }

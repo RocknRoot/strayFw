@@ -26,19 +26,19 @@ final class strayCommandOrdersWidget
     // files
     if (false === touch(STRAY_PATH_TO_APPS . $params[0] . '/templates/' . $params[1] . '/index.html'))
         throw new strayExceptionFatal('can\'t touch (this!)');
-    // xxx.controller.php
+    // xxx.controls.php
     $file = fopen($path . '/' . $params[1] . '.controller.php', 'x+');
     if (false === $file)
       throw new strayExceptionFatal('can\'t create file ' . $params[1] . '.controller.php');
-    if (false === fwrite($file, "<?php\nclass apps" . ucfirst($params[0]) . ucfirst($params[1])
-        . "Controller extends strayAppsWidgetAController\n{\n}\n"))
+    if (false === fwrite($file, "<?php\n\nfunction apps" . ucfirst($params[0]) . ucfirst($params[1])
+        . "Index()\n{\n}\n"))
       throw new strayExceptionFatal('can\'t write in file ' . $params[1] . '.controller.php');
     fclose($file);
     // xxx.view.php
     $file = fopen($path . '/' . $params[1] . '.view.php', 'x+');
     if (false === $file)
       throw new strayExceptionFatal('can\'t create file ' . $params[1] . '.view.php');
-    if (false === fwrite($file, "<?php\nrequire '" . $params[1] . ".controller.php';\n\nclass apps"
+    if (false === fwrite($file, "<?php\nrequire '" . $params[1] . ".controls.php';\n\nclass apps"
         . ucfirst($params[0]) . ucfirst($params[1])
         . "View extends strayAppsWidgetAView\n{\n  public function IndexAction(strayRoutingRequest" . ' $request' . ")\n"
         . "  {\n    " . '$view = new strayAppsRenderTemplate(\'' . $params[1] . '/index.html\');' . "\n"

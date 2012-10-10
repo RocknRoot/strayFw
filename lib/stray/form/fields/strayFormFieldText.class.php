@@ -34,14 +34,10 @@ class strayFormFieldText extends strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
    */
-  public function Render($separator = null, $flags = self::RENDER_ALL)
+  public function Render()
   {
-    if ($flags != self::RENDER_WITHOUT_LABEL)
-      echo '<label for="' . $this->id . '">' . $this->label . '</label>';
-    echo $separator . '<input type="text" name="' . $this->id
+    echo '<input type="text" name="' . $this->name
       . '" id="' . $this->id
       . '" class="' . $this->class . '"';
     if (true === isset($this->_value))
@@ -52,17 +48,11 @@ class strayFormFieldText extends strayFormAField
   }
 
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
+   * Render label tag.
+   * @return string generated render
    */
-  public function Merge(strayFormAField $oldOne)
+  public function RenderLabel()
   {
-    if ($oldOne instanceof strayFormFieldText
-        || $oldOne instanceof strayFormFieldPassword
-        || $oldOne instanceof strayFormFieldTextarea)
-    {
-      $this->label = $oldOne->label;
-      $this->_value = $oldOne->_value;
-    }
+    return '<label for="' . $this->id . '">' . $this->label . '</label>';
   }
 }

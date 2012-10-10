@@ -34,39 +34,26 @@ class strayFormFieldRadio extends strayFormAField
 
   /**
    * Render the field display code.
-   * @param string $separator label/input separator
-   * @param int $flags render flags
-   * @param string $newLine new line string displayed between two option
    */
-  public function Render($separator = null, $flags = self::RENDER_ALL, $newLine = '<br/>')
+  public function Render()
   {
-    if ($flags != self::RENDER_WITHOUT_LABEL)
-      echo $this->label;
-    echo $separator;
     $content = null;
     foreach ($this->options as $key => $e)
     {
-      $content .= '<label><input type="radio" name="' . $this->id
+      $content .= '<label><input type="radio" name="' . $this->name
         . '" id="' . $this->id . '" class="' . $this->class . '" value="' . $key . '"';
       if ($this->_value == $key)
         $content .= ' checked';
-      $content .= '/>' . $e . '</label>' . $newLine;
+      $content .= '/>' . $e . '</label>';
     }
-    echo substr($content, 0, -strlen($newLine));
+    return $content;
   }
-
   /**
-   * Called when a field with same name already exists.
-   * @param strayFormAField $oldOne old field
+   * Render label tag.
+   * @return string generated render
    */
-  public function Merge(strayFormAField $oldOne)
+  public function RenderLabel()
   {
-    if ($oldOne instanceof strayFormFieldText
-        || $oldOne instanceof strayFormFieldPassword
-        || $oldOne instanceof strayFormFieldTextarea)
-    {
-      $this->label = $oldOne->label;
-      $this->_value = $oldOne->_value;
-    }
+    return $this->label;
   }
 }
