@@ -22,7 +22,7 @@ require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
 
 // run
-strayRouting::fGetInstance()->SetServerName($_SERVER['SERVER_NAME']);
+strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);
 $url = (empty($_SERVER['HTTPS']) === false && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $url .= $_SERVER['SERVER_NAME'] . str_replace('/index.php', null, $_SERVER['REQUEST_URI']);
 strayRoutingBootstrap::fGetInstance()->Run($url, $_SERVER['REQUEST_METHOD']);
