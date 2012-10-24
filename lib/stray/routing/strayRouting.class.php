@@ -17,17 +17,18 @@ final class strayRouting extends strayASingleton
    * Resolve routing request URL.
    * @param string $url request URL
    * @param string $method request HTTP method
+   * @param bool $debug true if debug mode
    * @return strayRoutingRequest internal routing request
    */
-  public function Route($url, $method)
+  public function Route($url, $method, $debug = false)
   {
+    $request = new strayRoutingRequest($url, $method, $debug);
     $components = parse_url($url);
     if (false === $components)
       throw new strayExceptionError('can\'t execute this request');
     $components['method'] = $method;
     if (false === isset($components['path']))
       $components['path'] = '/';
-    $request = new strayRoutingRequest();
     $this->_ResolveRoutes($components, $request);
     return $request;
   }
@@ -55,17 +56,16 @@ final class strayRouting extends strayASingleton
             break;
           }
         }
-        elseif (true === isset($route['url']))
+        if (true === isset($route['url']))
         {
-          if (true === isset($components['path']) && 0 === stripos($components['path'], $route['url']))
+          if (0 === stripos($components['path'], $route['url']))
           {
             $request->app = $route['app'];
-            $components['path'] = substr($route['app'], strlen($components['path']));
+            if (1 < strlen($components['path']))
+              $components['path'] = rtrim(substr($route['app'], strlen($components['path'])), '/') . '/';
             break;
           }
         }
-        else
-          throw new strayExceptionError('install routes : can\'t parse route ' . var_export($route, true));
       }
       if (null === $request->app)
       {

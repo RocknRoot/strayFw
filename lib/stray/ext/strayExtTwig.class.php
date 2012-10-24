@@ -51,10 +51,7 @@ class strayExtTwig extends strayASingleton
           'cache' => $tmp . '/twig_compil',
           'debug' => $this->debug
         ));
-      if (true === $this->debug)
-      {
-        $this->_envs[$dir]->addExtension(new Twig_Extension_Debug());
-      }
+      $this->_Extending($this->_envs[$dir]);
       return $this->_envs[$dir];
     }
     return null;
@@ -71,6 +68,18 @@ class strayExtTwig extends strayASingleton
   {
     $template = $env->loadTemplate($template);
     return $template->render($args);
+  }
+
+  /**
+   * Extending Twig env with stray functions.
+   * @param Twig_Environment $env Twig environment
+   */
+  private function _Extending(Twig_Environment $env)
+  {
+    if (true === $this->debug)
+      $env->addExtension(new Twig_Extension_Debug());
+    $env->addFunction('route', new Twig_Function_Function('strayExtTwigRoute'));
+    $env->addFunction('url', new Twig_Function_Function('strayExtTwigUrl'));
   }
 
   /**

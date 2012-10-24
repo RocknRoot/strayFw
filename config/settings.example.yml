@@ -1,4 +1,6 @@
 tmp: /tmp/stray
+plugins:
+  -
 
 databases:
   global:
@@ -35,5 +37,5 @@ norel:
 i18n:
   default: en
   hosts:
-    "example.com": en
-    "exemple.fr": fr
+    example.com: en
+    exemple.fr: fr

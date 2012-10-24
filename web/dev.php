@@ -39,4 +39,4 @@ require $straypath . 'ext/require.php';
 strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);
 $url = (empty($_SERVER['HTTPS']) === false && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $url .= $_SERVER['SERVER_NAME'] . str_replace('/dev.php', null, $_SERVER['REQUEST_URI']);
-strayRoutingBootstrapDev::fGetInstance()->Run($url, $_SERVER['REQUEST_METHOD']);
+strayRoutingBootstrap::fGetInstance()->Run($url, $_SERVER['REQUEST_METHOD']);

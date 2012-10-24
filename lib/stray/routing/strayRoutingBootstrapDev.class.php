@@ -5,7 +5,7 @@
  * @author nekith@gmail.com
  */
 
-final class strayRoutingBootstrapDev extends strayASingleton
+final class strayRoutingBootstrap extends strayASingleton
 {
   /**
    * Routing request.
@@ -33,7 +33,7 @@ final class strayRoutingBootstrapDev extends strayASingleton
     ob_start();
     try
     {
-      $this->_request = strayRouting::fGetInstance()->Route($url, $method);
+      $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
       $this->_LoadExt($this->_request);
       strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
       $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'

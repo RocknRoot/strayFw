@@ -16,6 +16,7 @@ require $straypath . 'persistance/require.php';
 require $straypath . 'models/require.php';
 require $straypath . 'models/query/require.php';
 require $straypath . 'routing/require.php';
+require $straypath . 'routing/strayRoutingBootstrap.class.php';
 require $straypath . 'locale/require.php';
 require $straypath . 'apps/require.php';
 require $straypath . 'form/require.php';

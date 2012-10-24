@@ -42,7 +42,7 @@ final class strayRoutingBootstrap extends strayASingleton
       if (false === file_exists($path))
         throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
       require_once $path;
-      $type = 'widget' . ucfirst($this->_request->app) . ucfirst($this->_request->widget, true) . 'View';
+      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'View';
       $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);
       $render = $view->Run($this->_request);
       if (!($render instanceof strayAppsARender))

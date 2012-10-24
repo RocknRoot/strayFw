@@ -24,6 +24,7 @@ abstract class strayAppsARender
    */
   public function __construct(strayAppsWidgetAView $view)
   {
+    $this->vars = array();
     $this->_view = $view;
   }
 
