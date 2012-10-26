@@ -1,5 +1,7 @@
 # strayFw
 
+[![Build Status](https://travis-ci.org/Nekith/strayFw.png)](https://travis-ci.org/Nekith/strayFw)
+
 The strayFw is yet another PHP framework which is trying to present few things differently.
 
 * Homepage : http://stray.errant-works.com
