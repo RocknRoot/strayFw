@@ -3,12 +3,11 @@ php:
   - 5.4
 
 before_script:
-  - sudo pecl install yaml
+  - wget http://pecl.php.net/get/yaml-1.1.0.tgz
+  - tar -xzf yaml-1.1.0.tgz
+  - sh -c "cd yaml-1.1.0 && phpize && ./configure && make && sudo make install"
   - echo "extension=yaml.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - psql -c "DROP DATABASE IF EXISTS strayFw_test;" -U postgres
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
 
 script: phpunit --configuration .phpunit_pgsql.xml --coverage-text
-
-notifications:
-  irc: "irc.quakenet.net#errant"
