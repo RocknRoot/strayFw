@@ -2,29 +2,22 @@
 
 The strayFw is yet another PHP framework which is trying to present few things differently.
 
-* Homepage : inc
+* Homepage : http://stray.errant-works.com
 * Version : beta - 0.1-Leoric
 
 Yes, it's loosely based on MVC architecture. Yes, again. But, again, we try to change a few things.
 We don't think it's a revolutionary framework. We just try to do different. Maybe you will like the
 way too.
 
-Documentation is somewhere on the homepage (ahem). So... read it !
+Documentation is somewhere on the homepage. So... read it !
 
 Code is free, new-BSD license. So... fork us !
 
-## Documentation
+## Requirements
 
-yeah yeah yeah
-
-### Requirements
-
+* Running web server handling PHP
 * PHP 5.4.x
 * [pecl-yaml](http://pecl.php.net/package/yaml 'pecl-yaml') 1.1.0
-
-### Installation
-
-Yeah yeah
 
 ## Need help ?
 
