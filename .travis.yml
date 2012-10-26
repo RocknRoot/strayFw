@@ -3,7 +3,7 @@ php:
   - 5.4
 
 before_script:
-  - pecl install yaml
+  - sudo pecl install yaml
   - echo "extension=yaml.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - psql -c "DROP DATABASE IF EXISTS strayFw_test;" -U postgres
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
