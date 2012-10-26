@@ -37,10 +37,10 @@ final class strayRoutingBootstrap extends strayASingleton
       $this->_LoadExt($this->_request);
       strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
       $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
-          . $this->_request->widget . '/' . $this->_request->widget . '.view.php';
+          . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
       if (false === file_exists($path))
         throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
-      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'View';
+      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
       if (false === class_exists($type))
         require $path;
       $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);

@@ -38,12 +38,12 @@ final class strayRoutingBootstrap extends strayASingleton
       $this->_LoadExt($this->_request);
       strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
       $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
-          . $this->_request->widget . '/' . $this->_request->widget . '.view.php';
+          . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
       if (false === file_exists($path))
         throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
       require_once $path;
-      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'View';
-      $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);
+      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
+      $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app .'/', STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget . '/');
       $render = $view->Run($this->_request);
       if (!($render instanceof strayAppsARender))
         throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request) . ')');

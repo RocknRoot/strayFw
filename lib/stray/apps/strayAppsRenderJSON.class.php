@@ -14,10 +14,10 @@ class strayAppsRenderJSON extends strayAppsARender
 
   /**
    * Construct.
-   * @param strayAppsWidgetAView $view calling view
+   * @param strayAppsWidgetAViews $view calling view
    * @param mixed $data data to be encoded
    */
-  public function __construct(strayAppsWidgetAView $view, $data)
+  public function __construct(strayAppsWidgetAViews $view, $data)
   {
     parent::__construct($view);
     $this->_data = $data;

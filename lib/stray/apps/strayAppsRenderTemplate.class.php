@@ -14,10 +14,10 @@ class strayAppsRenderTemplate extends strayAppsARender
 
   /**
    * Construct.
-   * @param strayAppsWidgetAView $view calling view
+   * @param strayAppsWidgetAViews $view calling view
    * @param string $template template path
    */
-  public function __construct(strayAppsWidgetAView $view, $template)
+  public function __construct(strayAppsWidgetAViews $view, $template)
   {
     parent::__construct($view);
     $this->_template = $template;

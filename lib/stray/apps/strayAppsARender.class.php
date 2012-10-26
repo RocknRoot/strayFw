@@ -14,15 +14,15 @@ abstract class strayAppsARender
   public $vars;
   /**
    * Widget view.
-   * @var strayAppsWidgetAView
+   * @var strayAppsWidgetAViews
    */
   protected $_view;
 
   /**
    * Construct.
-   * @param strayAppsWidgetAView $view calling view
+   * @param strayAppsWidgetAViews $view calling view
    */
-  public function __construct(strayAppsWidgetAView $view)
+  public function __construct(strayAppsWidgetAViews $view)
   {
     $this->vars = array();
     $this->_view = $view;

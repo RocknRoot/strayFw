@@ -34,16 +34,16 @@ final class strayCommandOrdersWidget
         . "Index()\n{\n}\n"))
       throw new strayExceptionFatal('can\'t write in file ' . $params[1] . '.controls.php');
     fclose($file);
-    // xxx.view.php
-    $file = fopen($path . '/' . $params[1] . '.view.php', 'x+');
+    // xxx.views.php
+    $file = fopen($path . '/' . $params[1] . '.views.php', 'x+');
     if (false === $file)
-      throw new strayExceptionFatal('can\'t create file ' . $params[1] . '.view.php');
+      throw new strayExceptionFatal('can\'t create file ' . $params[1] . '.views.php');
     if (false === fwrite($file, "<?php\nrequire '" . $params[1] . ".controls.php';\n\nclass apps"
         . ucfirst($params[0]) . ucfirst($params[1])
-        . "View extends strayAppsWidgetAView\n{\n  public function IndexAction(strayRoutingRequest" . ' $request' . ")\n"
-        . "  {\n    " . '$view = new strayAppsRenderTemplate($this, \'' . $params[1] . '/index.html\');' . "\n"
-        . '    return $view;' . "\n  }\n}\n"))
-      throw new strayExceptionFatal('can\'t write in file ' . $params[1] . '.view.php');
+        . "Views extends strayAppsWidgetAViews\n{\n  public function IndexView(strayRoutingRequest" . ' $request' . ")\n"
+        . "  {\n    " . '$render = new strayAppsRenderTemplate($this, \'' . $params[1] . '/index.html\');' . "\n"
+        . '    return $render;' . "\n  }\n}\n"))
+      throw new strayExceptionFatal('can\'t write in file ' . $params[1] . '.views.php');
     fclose($file);
     // -
     echo 'Widget "' . $params[0] . '.' . $params[1] . "\" created !\n";

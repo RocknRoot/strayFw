@@ -40,7 +40,7 @@ final class strayI18n extends strayASingleton
             $this->_languages[] = strstr($file, '.' . strayConfigFile::EXTENSION, true);
         //get default language
         $config = strayConfigInstall::fGetInstance()->GetConfig();
-        $lang = straySession::fGetInstance()->_strayI18nLanguage;
+        $lang = straySession::fGetInstance()->Get('_strayI18nLanguage');
         if (null == $lang || false === $this->SetLanguage($lang))
         {
           if (null == $config['i18n'])
@@ -147,7 +147,7 @@ final class strayI18n extends strayASingleton
     {
       $this->_current = $name;
       if (true === class_exists('straySession'))
-        straySession::fGetInstance()->_strayI18nLanguage = $name;
+        straySession::fGetInstance()->Set('_strayI18nLanguage', $name);
       return true;
     }
     return false;
