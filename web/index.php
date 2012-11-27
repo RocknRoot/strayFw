@@ -7,6 +7,19 @@ define('STRAY_PATH_TO_SCRIPTS', '../scripts/');
 define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 
+// check if dev env
+if (defined('STRAY_ENV') === false)
+{
+  define('STRAY_ENV', (getenv('STRAY_ENV') == 'development' ? 'development' : 'production'));
+}
+
+// include php_error if development
+if (STRAY_ENV === 'development')
+{
+  require STRAY_PATH_TO_LIB . 'vendor/php_error.php';
+  \php_error\reportErrors();
+}
+
 // stray
 $straypath = STRAY_PATH_TO_LIB . 'stray/';
 require $straypath . 'global/require.php';
@@ -16,11 +29,20 @@ require $straypath . 'persistance/require.php';
 require $straypath . 'models/require.php';
 require $straypath . 'models/query/require.php';
 require $straypath . 'routing/require.php';
-require $straypath . 'routing/strayRoutingBootstrap.class.php';
 require $straypath . 'locale/require.php';
 require $straypath . 'apps/require.php';
 require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
+
+// require attended routing
+if (STRAY_ENV === 'development')
+{
+  require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
+}
+else
+{
+  require $straypath . 'routing/strayRoutingBootstrap.class.php';
+}
 
 // run
 strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);
