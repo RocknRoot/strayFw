@@ -79,6 +79,7 @@ class strayExtTwig extends strayASingleton
     if (true === $this->debug)
       $env->addExtension(new Twig_Extension_Debug());
     $env->addFunction('route', new Twig_Function_Function('strayExtTwigRoute'));
+    $env->addFunction('tr', new Twig_Function_Function('strayExtTwigTr'));
     $env->addFunction('url', new Twig_Function_Function('strayExtTwigUrl'));
   }
 
