@@ -26,6 +26,17 @@ class strayPlugins
    */
   public function Init()
   {
+    // install plugins
+    $config = strayConfigInstall::fGetInstance()->GetConfig();
+    if (true === isset($config['plugins']))
+    {
+      $plugins = $config['plugins'];
+      if (true === is_array($plugins))
+        foreach ($plugins as $elem)
+          if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
+              && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
+            require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
+    }
     // app plugins
     $config = strayConfigApp::fGetInstance($this->_request->app)->GetConfig();
     if (true === isset($config['plugins']))
@@ -33,7 +44,7 @@ class strayPlugins
       $plugins = $config['plugins'];
       foreach ($plugins as $elem)
         if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
-            && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
+          && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
           require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
     }
   }

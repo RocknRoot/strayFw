@@ -1,4 +1,6 @@
 tmp: /tmp/stray
+plugins:
+  -
 
 databases:
   global:
