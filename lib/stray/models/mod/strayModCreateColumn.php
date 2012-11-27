@@ -38,6 +38,9 @@ function strayfModCreateColumn(array $schema)
     case 'serial':
       $statement .= $schema['name'] . ' SERIAL';
       break;
+    case 'bigserial':
+      $statement .= $schema['name'] . ' BIGSERIAL';
+      break;
     case 'int':
       $statement .= $schema['name'] . ' INT';
       if (true === isset($schema['default']))
