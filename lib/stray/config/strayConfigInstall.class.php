@@ -25,13 +25,6 @@ final class strayConfigInstall extends strayASingleton
   {
     $this->_config = strayConfigFile::fParse(STRAY_PATH_TO_INSTALL . 'config/settings');
     $this->_routes = strayConfigFile::fParse(STRAY_PATH_TO_INSTALL . 'config/routes');
-    // NoREL connection
-    if (false === empty($this->_config['norel']))
-    {
-      $user = true === isset($this->_config['norel']['user']) ? $this->_config['norel']['user'] : null;
-      $pass = true === isset($this->_config['norel']['pass']) ? $this->_config['norel']['pass'] : null;
-      strayNorel::fGetInstance()->Config($this->_config['norel']['host'], $user, $pass);
-    }
   }
 
   /**
