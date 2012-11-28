@@ -1,13 +1,13 @@
 <?php
 /**
- * @brief NoREL query wrapper.
+ * @brief MongoDB query wrapper.
  * @author nekith@gmail.com
  */
 
-class strayNorelQuery
+class strayMongoQuery
 {
   /**
-   * Norel database name.
+   * Mongo database name.
    * @var string
    */
   private $_db;
@@ -35,7 +35,7 @@ class strayNorelQuery
    */
   public function Fetch(array $filters = null)
   {
-    return strayNorel::fGetInstance()->GetDb($this->_db)->{$this->_struct}->findOne($filters);
+    return strayMongo::fGetInstance()->GetDb($this->_db)->{$this->_struct}->findOne($filters);
   }
 
   /**
@@ -45,7 +45,7 @@ class strayNorelQuery
    */
   public function FetchAll(array $filters = null)
   {
-    return strayNorel::fGetInstance()->GetDb($this->_db)->{$this->_struct}->find($filters);
+    return strayMongo::fGetInstance()->GetDb($this->_db)->{$this->_struct}->find($filters);
   }
 
   /**
@@ -55,7 +55,7 @@ class strayNorelQuery
    */
   public function RemoveOne(array $filters)
   {
-    return strayNorel::fGetInstance()->GetDb($this->_db)->{$this->_struct}->remove($filters, array('justOne' => true));
+    return strayMongo::fGetInstance()->GetDb($this->_db)->{$this->_struct}->remove($filters, array('justOne' => true));
   }
 
   /**
@@ -65,6 +65,6 @@ class strayNorelQuery
    */
   public function Remove(array $filters)
   {
-    return strayNorel::fGetInstance()->GetDb($this->_db)->{$this->_struct}->remove($filters);
+    return strayMongo::fGetInstance()->GetDb($this->_db)->{$this->_struct}->remove($filters);
   }
 }

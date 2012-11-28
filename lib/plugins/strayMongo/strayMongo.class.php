@@ -1,14 +1,14 @@
 <?php
 /**
  * Singleton.
- * @brief NoREL connexion wrapper.
+ * @brief MongoDB connexion wrapper.
  * @author nekith@gmail.com
  */
 
-final class strayNorel extends strayASingleton
+final class strayMongo extends strayASingleton
 {
   /**
-   * NoREL connection object.
+   * MongoDB connection object.
    * @var Mongo
    */
   private $_connection;
@@ -22,10 +22,10 @@ final class strayNorel extends strayASingleton
   }
 
   /**
-   * Config and create NoREL db object.
-   * @param string $host NoREL server address
-   * @param string $user NoREL server username
-   * @param string $pass NoREL server password
+   * Config and create Mongo db object.
+   * @param string $host Mongo server address
+   * @param string $user Mongo server username
+   * @param string $pass Mongo server password
    */
   public function Config($host, $user, $pass)
   {
@@ -39,10 +39,10 @@ final class strayNorel extends strayASingleton
   }
 
   /**
-   * Get a raw NoREL database.
+   * Get a raw Mongo database.
    * Don't use this if you don't know what you are doing.
    * @param string $name database name
-   * @return MongoDB NoREL database
+   * @return MongoDB Mongo database
    */
   public function GetDb($name)
   {

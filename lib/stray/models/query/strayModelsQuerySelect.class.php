@@ -305,7 +305,7 @@ class strayModelsQuerySelect extends strayModelsAQuery
     if (is_array($order) === true)
     {
       foreach ($order as $column => $e)
-        $this->_orderBy .= $key . ' ' . $e . ', ';
+        $this->_orderBy .= $column . ' ' . $e . ', ';
       $this->_orderBy = substr($this->_orderBy, 0, -2);
     }
     else
