@@ -1,11 +1,11 @@
 <?php
 /**
  * Singleton.
- * @brief Dev bootstrap class.
+ * @brief Development bootstrap class.
  * @author nekith@gmail.com
  */
 
-final class strayRoutingBootstrap extends strayASingleton
+final class strayRoutingBootstrap extends strayASingleton implements strayRoutingIBootstrap
 {
   /**
    * Routing request.
