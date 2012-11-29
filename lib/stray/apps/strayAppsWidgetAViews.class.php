@@ -19,7 +19,7 @@ abstract class strayAppsWidgetAViews
   private $_pathWidget;
 
   /**
-   * Construct/
+   * Construct.
    * @param string $pathApp app path
    * @param string $pathWidget widget path
    */
@@ -69,21 +69,25 @@ abstract class strayAppsWidgetAViews
    * Run another view in the same app.
    * @param strayRoutingRequest $request current request object
    * @param string $widget widget name
-   * @param string $action new widget action name
-   * @param array $args new widget action arguments
+   * @param string $view new widget view name
+   * @param array $params new widget action arguments
    * @return string generated content
    */
-  protected function _RunSubView(strayRoutingRequest $request, $widget, $action, array $args = array())
+  protected function _RunSubView(strayRoutingRequest $request, $widget, $view, array $params = array())
   {
     $path = $this->GetPathApp() . '/widgets/' . $widget . '/' . $widget . '.views.php';
     if (false === file_exists($path))
       throw new strayExceptionNotFound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $request->app . '.' . $widget . '" widget');
     require_once $path;
     $type = 'apps' . ucfirst($request->app) . ucfirst($widget) . 'Views';
-    $view = new $type($this->GetPathApp(), $this->GetPathApp() . '/widgets/' . $widget . '/');
-    $render = $view->Run($this->_request);
+    $object = new $type($this->GetPathApp(), $this->GetPathApp() . '/widgets/' . $widget . '/');
+    $newRequest = clone $request;
+    $newRequest->widget = $widget;
+    $newRequest->view = $view;
+    $newRequest->params = $params;
+    $render = $object->Run($newRequest);
     if (!($render instanceof strayAppsARender))
-      throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request) . ')');
+      throw new strayExceptionError('render isn\'t a render (' . var_export($newRequest) . ')');
     return $render->Render();
   }
 }

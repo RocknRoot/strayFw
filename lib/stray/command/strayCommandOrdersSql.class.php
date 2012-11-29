@@ -55,7 +55,7 @@ final class strayCommandOrdersSql
     if (null == $db)
       throw new strayExceptionFatal('can\'t get database object for ' . $name);
     $info = strayConfigDatabase::fGetInstance($name)->Info();
-    $info->last_up = date(strayModelsAMigration::DATE_FORMAT);
+    $info['last_up'] = date(strayModelsAMigration::DATE_FORMAT);
     strayConfigDatabase::fGetInstance($name)->Info($info);
     foreach ($schema as $key => $elem)
     {
@@ -74,12 +74,12 @@ final class strayCommandOrdersSql
     foreach ($schema as $key => $elem)
     {
       // drop table
-      $sql = strayfModRemoveTable($elem->name);
+      $sql = strayfModRemoveTable($elem['name']);
       $ret = $db->Execute($sql);
       if (true !== $ret)
         echo 'sql:build | drop table | SQL notice : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
       // create types
-      foreach ($elem->columns as $col)
+      foreach ($elem['columns'] as $col)
       {
         $sql = strayfModRemoveType($col);
         if (false === empty($sql))
@@ -104,7 +104,7 @@ final class strayCommandOrdersSql
       else
         echo 'sql:build SQL error : modCreateTable empty query' . PHP_EOL;
       // create indexes
-      foreach ($elem->columns as $col)
+      foreach ($elem['columns'] as $col)
       {
         $sql = strayfModCreateIndexes($col);
         if (false === empty($sql))
@@ -118,7 +118,7 @@ final class strayCommandOrdersSql
     // create foreign
     foreach ($schema as $tkey => $elem)
     {
-      if (false === isset($elem->foreign))
+      if (false === isset($elem['foreign']))
       {
         echo 'No foreign key for table "' . $tkey . '"' . PHP_EOL;
         continue;

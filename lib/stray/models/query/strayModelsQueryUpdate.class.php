@@ -51,7 +51,7 @@ class strayModelsQueryUpdate extends strayModelsAQuery
       $query .= ' LIMIT ' . $this->_limit;
     // execute
     $this->_query = $this->_db->GetLink(false)->prepare($query);
-    $result = $this->_query->execute($this->_args->Get());
+    $result = $this->_query->execute($this->_args);
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QueryUpdate fail : ' . $this->_queryError[2] . ' (' . $query . ')');

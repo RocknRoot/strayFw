@@ -11,7 +11,7 @@ abstract class strayFormAModel extends strayFormABasic
    * Associated table instance.
    * @var strayModelsATable
    */
-  protected $_table;
+  public $table;
 
   /**
    * Initialization of the form.
@@ -22,7 +22,7 @@ abstract class strayFormAModel extends strayFormABasic
     foreach ($this->fields as $field)
     {
       if (null == $field->GetValue() && 0 === strpos($field->name, 'm_'))
-        $field->SetValue($this->_table->{'Get' . ucfirst(substr($field->name, 2))}());
+        $field->SetValue($this->table->{'Get' . ucfirst(substr($field->name, 2))}());
     }
   }
 
@@ -41,7 +41,7 @@ abstract class strayFormAModel extends strayFormABasic
     $data = $this->fields;
     if (true === is_array($data))
     {
-      if (true === $this->PreValidate($data))
+      if (true === $this->PreValidate())
       {
         $wrong = false;
         foreach ($data as $key => $elem)
@@ -55,20 +55,20 @@ abstract class strayFormAModel extends strayFormABasic
             if (false === $this->$method($request->post->vars[$elem->name], $elem))
               $wrong = true;
             if (0 === strpos($key, 'm_'))
-              $elem->AddNotice($this->_table->GetErrors()[substr($key, 2)]);
+              $elem->AddNotice($this->table->GetErrors()[substr($key, 2)]);
             }
           elseif (0 === strpos($key, 'm_'))
           {
-            if (true === method_exists($this->_table, $method))
-              if (false === $this->_table->$method($request->post->vars[$elem->name]))
+            if (true === method_exists($this->table, $method))
+              if (false === $this->table->$method($request->post->vars[$elem->name]))
               {
                 $wrong = true;
-                $elem->AddNotice($this->_table->GetErrors()[substr($key, 2)]);
+                $elem->AddNotice($this->table->GetErrors()[substr($key, 2)]);
               }
           }
           $elem->SetValue($request->post->vars[$elem->name]);
         }
-        if (false === $wrong && true === $this->PostValidate($data))
+        if (false === $wrong && true === $this->PostValidate())
           return true;
       }
     }
@@ -77,16 +77,15 @@ abstract class strayFormAModel extends strayFormABasic
 
   /**
    * Save fields data to model object.
-   * @param array $data fields
    */
-  public function SaveToModel(array $data)
+  public function SaveToModel()
   {
-    foreach ($data as $key => $elem)
+    foreach ($this->fields as $key => $elem)
       if (0 === strpos($key, 'm_'))
       {
         $method = 'Set' . ucfirst(substr($key, 2));
-        if (true === method_exists($this->_table, $method))
-          $this->_table->$method($elem->GetValue());
+        if (true === method_exists($this->table, $method))
+          $this->table->$method($elem->GetValue());
       }
   }
 

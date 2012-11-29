@@ -88,4 +88,25 @@ class strayRoutingRequest
   {
     return $this->_method;
   }
+
+  /**
+   * Get requested scheme.
+   * @return string scheme
+   */
+  public function GetScheme()
+  {
+    return parse_url($this->_url, PHP_URL_SCHEME);
+  }
+
+  /**
+   * Get requested domain.
+   * @return string domain
+   */
+  public function GetDomain()
+  {
+    $matches = null;
+    $host = parse_url($this->_url, PHP_URL_HOST);
+    preg_match('/[^\.\/]+\.[^\.\/]+$/', $host, $matches);
+    return strtolower($matches[0]);
+  }
 }

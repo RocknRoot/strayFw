@@ -151,7 +151,7 @@ class strayModelsQuerySelect extends strayModelsAQuery
       // execute
       $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($query);
     }
-    $result = $this->_query->execute($this->_args->Get());
+    $result = $this->_query->execute($this->_args);
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QuerySelect fail : ' . $this->_queryError[2] . ' (' . $query . ')');

@@ -20,7 +20,7 @@ function strayfModCreateForeignKey($fkname, array $table, array $schema)
   }
   $sql = ' ADD CONSTRAINT ' . $fkname . ' FOREIGN KEY ('
     . implode(', ', $colsA) . ') REFERENCES '
-    . $schema[$foreign->table]['name'] . '('
+    . $schema[$foreign['table']]['name'] . '('
     . implode(', ', $colsB) . ')';
   if (true === isset($foreign['update']))
     $sql .= ' ON UPDATE ' . $foreign['update'];

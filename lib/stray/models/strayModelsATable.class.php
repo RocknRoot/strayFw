@@ -296,7 +296,7 @@ abstract class strayModelsATable
       ++$i;
     }
     $select->Execute();
-    return $select->Fetch()->count;
+    return $select->Fetch()['count'];
   }
 
   /**

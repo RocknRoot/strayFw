@@ -34,20 +34,18 @@ abstract class strayFormABasic
 
   /**
    * Called before fields validations.
-   * @param array $data form data
    * @return bool true if valid
    */
-  public function PreValidate(array $data)
+  public function PreValidate()
   {
     return true;
   }
 
   /**
    * Called before fields validations.
-   * @param array $data form data
    * @return bool true if valid
    */
-  public function PostValidate(array $data)
+  public function PostValidate()
   {
     return true;
   }
@@ -62,18 +60,18 @@ abstract class strayFormABasic
     $data = $this->fields;
     if (true === is_array($data))
     {
-      if (true === $this->PreValidate($data))
+      if (true === $this->PreValidate())
       {
         $wrong = false;
         foreach ($data as $key => $elem)
         {
           $method = 'Validate' . ucfirst($key);
           if (true === method_exists($this, $method))
-            if (false === $this->$method($request->post->vars[$elem->id], $elem))
+            if (false === $this->$method($request->post->vars[$elem->name], $elem))
               $wrong = true;
-          $elem->SetValue($request->post->vars[$elem->id]);
+          $elem->SetValue($request->post->vars[$elem->name]);
         }
-        if (false === $wrong && true === $this->PostValidate($data))
+        if (false === $wrong && true === $this->PostValidate())
           return true;
       }
     }

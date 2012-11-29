@@ -23,7 +23,7 @@ function strayExtTwigRoute($route, $args = array())
  */
 function strayExtTwigTr($key, array $args = null)
 {
-  return strayTr($key, $args);
+  return strayfTr($key, $args);
 }
 
 /**
@@ -33,9 +33,7 @@ function strayExtTwigTr($key, array $args = null)
  */
 function strayExtTwigUrl($url)
 {
-  $request = strayRoutingBootstrap::fGetInstance()->GetRequest();
-  $nice = '/' . ltrim($url, '/');
-  if (true === $request->IsDebug())
-    $nice = '/dev.php/' . ltrim($nice, '/');
-  return $nice;
+  if ($url[strlen($url) - 1] == '.')
+    return strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . $url . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
+  return '/' . ltrim($url, '/');
 }

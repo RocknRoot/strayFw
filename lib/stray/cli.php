@@ -17,7 +17,6 @@ define('STRAY_PATH_TO_INSTALL', $base . '../../');
 require 'global/require.php';
 require 'exception/require.php';
 require 'config/require.php';
-require 'persistance/norel/require.php';
 require 'persistance/strayLog.class.php';
 require 'models/require.php';
 require 'models/mod/require.php';
