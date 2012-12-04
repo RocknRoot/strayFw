@@ -1,4 +1,6 @@
 tmp: /tmp/stray
+domainprefix:
+
 plugins:
   -
 
@@ -29,10 +31,6 @@ databases:
         name: errant_global
         user: errant
         pass:
-
-norel:
-  host: localhost
-  db_prefix: test_
 
 i18n:
   default: en

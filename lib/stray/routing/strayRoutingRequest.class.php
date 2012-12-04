@@ -107,6 +107,11 @@ class strayRoutingRequest
     $matches = null;
     $host = parse_url($this->_url, PHP_URL_HOST);
     preg_match('/[^\.\/]+\.[^\.\/]+$/', $host, $matches);
-    return strtolower($matches[0]);
+    $domain = strtolower($matches[0]);
+    if (null != strayConfigInstall::fGetInstance()->GetConfig()['domainprefix'])
+    {
+      $domain = strayConfigInstall::fGetInstance()->GetConfig()['domainprefix'] . '.' . $domain;
+    }
+    return $domain;
   }
 }
