@@ -29,6 +29,7 @@ class strayAppsRenderJSON extends strayAppsARender
    */
   public function Render()
   {
+    header('Content-type: application/json');
     return json_encode($this->_data,  JSON_PRETTY_PRINT);
   }
 }

@@ -1,12 +1,7 @@
-defaults:
-  app: home
-  subdomain: www
-
 routes:
-  home:
-    url: /home
-    app: home
   admin:
     subdomain: admin
     url: /admin
     app: admin
+  home:
+    app: home

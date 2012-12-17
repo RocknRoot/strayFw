@@ -44,34 +44,40 @@ final class strayRouting extends strayASingleton
     if (true === isset($installRoutes['routes']))
     {
       // install routes
+      $defaultApp = null;
       foreach ($installRoutes['routes'] as $route)
       {
         if (false === isset($route['app']))
           throw new strayExceptionError('install routes : no app for route ' . var_export($route, true));
-        if (true === isset($route['subdomain']))
+        if (false === isset($route['subdomain']) && false === isset($route['url']))
+          $defaultApp = $route['app'];
+        else
         {
-          if (0 === stripos($components['host'], $route['subdomain'] . '.'))
+          if (true === isset($route['subdomain']))
           {
-            $request->app = $route['app'];
-            break;
+            if (0 === stripos($components['host'], $route['subdomain'] . '.'))
+            {
+              $request->app = $route['app'];
+              break;
+            }
           }
-        }
-        if (true === isset($route['url']))
-        {
-          if (0 === stripos($components['path'], $route['url']))
+          if (true === isset($route['url']))
           {
-            $request->app = $route['app'];
-            if (1 < strlen($components['path']))
-              $components['path'] = rtrim(substr($route['app'], strlen($components['path'])), '/') . '/';
-            break;
+            if (0 === stripos($components['path'], $route['url']))
+            {
+              $request->app = $route['app'];
+              if (1 < strlen($components['path']))
+                $components['path'] = rtrim(substr($route['app'], strlen($components['path'])), '/') . '/';
+              break;
+            }
           }
         }
       }
       if (null === $request->app)
       {
-        if (false === isset($installRoutes['defaults']) || false === isset($installRoutes['defaults']['app']))
+        if (null == $defaultApp)
           throw new strayExceptionError('install routes : can\'t find default app');
-        $request->app = $installRoutes['defaults']['app'];
+        $request->app = $defaultApp;
       }
       // app routes
       $appRoutes = strayConfigApp::fGetInstance($request->app)->GetRoutes();
