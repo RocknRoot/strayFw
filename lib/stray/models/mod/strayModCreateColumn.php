@@ -46,11 +46,6 @@ function strayfModCreateColumn(array $schema)
       if (true === isset($schema['default']))
         $statement .= ' DEFAULT ' . $schema['default'];
       break;
-    case 'tinyint':
-      $statement .= $schema['name'] . ' TINYINT';
-      if (true === isset($schema['default']))
-        $statement .= ' DEFAULT ' . $schema['default'];
-      break;
     case 'smallint':
       $statement .= $schema['name'] . ' SMALLINT';
       if (true === isset($schema['default']))

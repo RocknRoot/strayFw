@@ -69,7 +69,7 @@ abstract class strayModelsATable
         if (false !== strpos($key, '_column'))
         {
           $name = lcfirst(str_replace('_column', null, $key));
-          if (true === in_array($name, $this->_modified))
+          if (true === array_key_exists($name, $this->_modified) && true === $this->_modified[$name])
           {
             $set[] = $elem['name'] . ' = :' . $elem['name'];
             $update->SetArg($elem['name'], $elem['value']);
