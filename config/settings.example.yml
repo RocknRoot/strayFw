@@ -37,3 +37,6 @@ i18n:
   hosts:
     example.com: en
     exemple.fr: fr
+  locales:
+    en: en_US
+    fr: fr_FR

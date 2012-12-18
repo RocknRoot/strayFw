@@ -148,6 +148,11 @@ final class strayI18n extends strayASingleton
       $this->_current = $name;
       if (true === class_exists('straySession'))
         straySession::fGetInstance()->Set('_strayI18nLanguage', $name);
+      // set locale
+      $config = strayConfigInstall::fGetInstance()->GetConfig();
+      if (true === isset($config['locales']) && true === isset($config['locales'][$name]))
+        if (false === setlocale($config['locales'][$name], LC_ALL))
+          strayLog::fGetInstance()->Error('Locale "' . $config['locales'][$name] . '" for "' . $name . '" isn\'t valid.');
       return true;
     }
     return false;
