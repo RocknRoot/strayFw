@@ -61,6 +61,6 @@ Or add an issue on github ! ;)
 
 ### Vendors
 
-* [Twig](https://github.com/fabpot/Twig 'Twig') is released under the new BSD license. 
-* [PHP-Error](https://github.com/JosephLenton/PHP-Error 'PHP-Error') is released under the BSD license.
+* [Twig](http://twig.sensiolabs.org 'Twig') is released under the new-BSD license. 
+* [PHP-Error](http://phperror.net 'PHP-Error') is released under the new-BSD license.
 
