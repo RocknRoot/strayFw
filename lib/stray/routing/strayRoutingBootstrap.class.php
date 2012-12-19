@@ -53,7 +53,12 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     catch (strayExceptionRedirect $e)
     {
       ob_end_clean();
-      header('Location: http://' . strayRouting::fGetInstance()->GetHost() . '/' . ltrim($e->GetUri(), '/'));
+      $url = $e->GetUri();
+      if ($url[strlen($url) - 1] == '.')
+        $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . (1 == strlen($url) ? null : $url) . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
+      else
+        $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . strayRouting::fGetInstance()->GetHost() . '/' . ltrim($url, '/');
+      header('Location: ' . $url);
       exit();
     }
     catch (strayExceptionNotfound $e)

@@ -19,7 +19,7 @@ final class strayCookies extends strayASingleton
   protected function __construct()
   {
     $this->_vars = array();
-    foreach ($_COOKIES as $key => $e)
+    foreach ($_COOKIE as $key => $e)
       $this->_vars[$key] = $e;
   }
 

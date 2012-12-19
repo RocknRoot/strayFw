@@ -34,6 +34,6 @@ function strayExtTwigTr($key, array $args = null)
 function strayExtTwigUrl($url)
 {
   if ($url[strlen($url) - 1] == '.')
-    return strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . $url . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
+    return strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . (1 == strlen($url) ? null : $url) . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
   return '/' . ltrim($url, '/');
 }

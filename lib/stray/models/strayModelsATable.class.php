@@ -300,6 +300,34 @@ abstract class strayModelsATable
   }
 
   /**
+   * Create a new select query.
+   * @param bool $critical if true, will be executed on write server
+   * @return strayModelsQuerySelect new query object
+   */
+  static public function fQuerySelect($critical = false)
+  {
+    return static::fGetDb()->QuerySelect()->From(static::fGetName());
+  }
+
+  /**
+   * Create a new update query.
+   * @return strayModelsQueryUpdate new query object
+   */
+  static public function fQueryUpdate()
+  {
+    return static::fGetDb()->QueryUpdate()->From(static::fGetName());
+  }
+
+  /**
+   * Create a new delete query.
+   * @return strayModelsQueryDelete new query object
+   */
+  static public function fQueryDelete()
+  {
+    return static::fGetDb()->QueryDelete()->From(static::fGetName());
+  }
+
+  /**
    * Get all columns real names.
    * @return array columns names
    */
