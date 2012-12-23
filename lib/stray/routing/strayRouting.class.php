@@ -81,7 +81,7 @@ final class strayRouting extends strayASingleton
       }
       // app routes
       $appRoutes = strayConfigApp::fGetInstance($request->app)->GetRoutes();
-      if (isset($appRoutes['routes']) === false)
+      if (false === isset($appRoutes['routes']))
         throw new strayExceptionError('app routes : no routes');
       foreach ($appRoutes['routes'] as $route)
       {
@@ -107,6 +107,9 @@ final class strayRouting extends strayASingleton
           }
         }
       }
+      list($widget, $view) = explode('.', $route['view']);
+      $request->widget = $widget;
+      $request->view = $view;
     }
   }
 
