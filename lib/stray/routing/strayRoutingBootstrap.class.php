@@ -54,7 +54,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     {
       ob_end_clean();
       $url = $e->GetUri();
-      if '.' == ($url[strlen($url) - 1])
+      if ('.' == ($url[strlen($url) - 1])
         $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . (1 == strlen($url) ? null : $url) . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
       else
         $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . strayRouting::fGetInstance()->GetHost() . '/' . ltrim($url, '/');
