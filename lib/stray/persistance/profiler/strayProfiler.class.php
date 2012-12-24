@@ -92,9 +92,9 @@ class strayProfiler extends strayASingleton
         $env = strayExtTwig::fGetInstance()->GetEnvironment(STRAY_PATH_TO_LIB . 'stray/persistance/profiler/templates');
         echo strayExtTwig::fGetInstance()->LoadTemplate($env, 'bar.html', array(
             'name' => $this->GetLogDescription('name'),
-            'time_start' => $this->GormatNumber($this->GetTimeStart() * 1000),
-            'time_end' => $this->GormatNumber($this->GetTimeEnd() * 1000),
-            'time_diff' => $this->GormatNumber($this->GetTimeDiff() * 1000),
+            'time_start' => $this->FormatNumber($this->GetTimeStart() * 1000),
+            'time_end' => $this->FormatNumber($this->GetTimeEnd() * 1000),
+            'time_diff' => $this->FormatNumber($this->GetTimeDiff() * 1000),
             'memory_usage' => $this->GetLogDescription('memory_usage'),
             'fw' => array(
                 'is_debug' => $this->GetLogDescription('fw_isDebug'),
@@ -146,7 +146,7 @@ class strayProfiler extends strayASingleton
         }
     }
     
-    private function GormatNumber($number) 
+    private function FormatNumber($number) 
     {
         return number_format($number, 3, '.', ' ');
     }
