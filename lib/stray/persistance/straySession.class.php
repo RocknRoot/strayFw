@@ -25,6 +25,15 @@ final class straySession extends strayASingleton
   }
 
   /**
+   * Get all session vars.
+   * @return array session vars
+   */
+  public function All()
+  {
+      return $this->_vars;
+  }
+  
+  /**
    * Get value of key $name.
    * @param $name key
    * @return value

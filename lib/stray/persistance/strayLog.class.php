@@ -25,12 +25,14 @@ final class strayLog extends strayASingleton
   {
     $this->_Write('[Sys|Warning] ' . $msg);
     if (true === strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug())
-      throw new strayExceptionError('[Sys|Warnin] ' . $msg);
+      throw new strayExceptionError('[Sys|Warning] ' . $msg);
   }
 
   public function SysNotice($msg)
   {
     $this->_Write('[Sys|Notice] ' . $msg);
+    if (true === strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug())
+        strayProfile::fGetInstance()->AddLog(strayProfiler::LOG_LEVEL_SYS_NOTICE, $msg);
   }
 
   public function FwFatal($msg)
@@ -43,6 +45,8 @@ final class strayLog extends strayASingleton
   public function FwDebug($msg)
   {
     $this->_Write('[Fw|Debug] ' . $msg);
+    if (true === strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug())
+        strayProfile::fGetInstance()->AddLog(strayProfiler::LOG_LEVEL_FW_DEBUG, $msg);
   }
 
   public function Error($msg)
@@ -55,5 +59,7 @@ final class strayLog extends strayASingleton
   public function Notice($msg)
   {
     $this->_Write('[User|Notice] ' . $msg);
+    if (true === strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug())
+        strayProfile::fGetInstance()->AddLog(strayProfiler::LOG_LEVEL_USER_NOTICE, $msg);
   }
 }

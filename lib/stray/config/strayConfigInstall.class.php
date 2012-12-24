@@ -35,6 +35,18 @@ final class strayConfigInstall extends strayASingleton
   {
     return $this->_config;
   }
+  
+  /**
+   * Get config tmp path.
+   * @return stray tmp path
+   */
+  public function GetConfigTmp()
+  {
+      $tmp = rtrim($this->_config['tmp'], '/');
+      if ('/' != $tmp[0])
+        $tmp = realpath(STRAY_PATH_TO_INSTALL . $tmp);
+      return $tmp . '/';
+  }
 
   /**
    * Get the routes array.

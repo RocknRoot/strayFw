@@ -11,18 +11,12 @@ class strayExtTwig extends strayASingleton
    * @var array
    */
   private $_envs;
-  /**
-   * Twig debug mode.
-   * @var bool
-   */
-  public $debug;
 
   /**
    * Init Twig.
    */
   public function Init()
   {
-    $this->debug = false;
     require_once STRAY_PATH_TO_LIB . 'vendor/Twig/Autoloader.php';
     Twig_Autoloader::register();
   }
@@ -39,17 +33,14 @@ class strayExtTwig extends strayASingleton
     $dir = rtrim($dir, '/') . '/';
     if (true === is_dir($dir))
     {
-      $config = strayConfigInstall::fGetInstance()->GetConfig();
-      $tmp = rtrim($config['tmp'], '/');
-      if ('/' != $tmp[0])
-        $tmp = realpath(STRAY_PATH_TO_INSTALL . $tmp);
-      if (false === is_dir($tmp . '/twig_compil/'))
-        if (false === mkdir($tmp . '/twig_compil'))
-          throw new strayExceptionError('can\'t mkdir ' . $tmp . '/twig_compil');
+      $tmp = strayConfigInstall::fGetInstance()->GetConfigTmp();
+      if (false === is_dir($tmp . 'twig_compil/'))
+        if (false === mkdir($tmp . 'twig_compil'))
+          throw new strayExceptionError('can\'t mkdir ' . $tmp . 'twig_compil');
       $loader = new Twig_Loader_Filesystem($dir);
       $this->_envs[$dir] = new Twig_Environment($loader, array(
-          'cache' => $tmp . '/twig_compil',
-          'debug' => $this->debug
+          'cache' => $tmp . 'twig_compil',
+          'debug' => strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug()
         ));
       $this->_Extending($this->_envs[$dir]);
       return $this->_envs[$dir];
@@ -76,7 +67,7 @@ class strayExtTwig extends strayASingleton
    */
   private function _Extending(Twig_Environment $env)
   {
-    if (true === $this->debug)
+    if (true === strayRoutingBootstrap::fGetInstance()->GetRequest()->IsDebug())
       $env->addExtension(new Twig_Extension_Debug());
     $env->addFunction('route', new Twig_Function_Function('strayExtTwigRoute'));
     $env->addFunction('tr', new Twig_Function_Function('strayExtTwigTr'));
