@@ -11,7 +11,7 @@ Yes, it's loosely based on Model-View-Controller/Model-View-Adapter architecture
 We don't think it's a revolutionary framework. We just try to do different. Maybe you will like the
 way too.
 
-Documentation is somewhere on the homepage. So... read it !
+Documentation is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
 
 Code is free, new-BSD license. So... fork us !
 
@@ -26,6 +26,11 @@ Code is free, new-BSD license. So... fork us !
 Read the fraktastic manual !
 
 Or add an issue on github ! ;)
+
+## Contributors
+
+* [Nekith](https://github.com/Nekith 'Nekith')
+* [Frédéric Oudry](https://github.com/moafred 'moafred')
 
 ## License
 
