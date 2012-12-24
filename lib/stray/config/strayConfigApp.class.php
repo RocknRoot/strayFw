@@ -66,6 +66,7 @@ final class strayConfigApp extends strayAMultiton
   {
     if (true === isset($this->_config['databases']) && true === is_array($this->_config['databases']))
       foreach ($this->_config['databases'] as $db)
-        strayModelsDatabase::fGetInstance($db);
+        if (null != $db)
+          strayModelsDatabase::fGetInstance($db);
   }
 }
