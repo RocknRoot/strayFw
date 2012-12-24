@@ -50,18 +50,14 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
         throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
       echo $render->Render();
       if (!($render instanceof strayAppsRenderTemplate))
-          strayProfiler::fGetInstance()->needToDisplay = false;
+        strayProfiler::fGetInstance()->needToDisplay = false;
       strayProfiler::fGetInstance()->RequestEnd();
       ob_end_flush();
     }
     catch (strayExceptionRedirect $e)
     {
       ob_end_clean();
-      $url = $e->GetUri();
-      if ('.' == $url[strlen($url) - 1])
-        $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . (1 == strlen($url) ? null : $url) . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
-      else
-        $url = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . strayRouting::fGetInstance()->GetHost() . '/' . ltrim($url, '/');
+      $url = strayRouting::fGenerateNiceUrl($e->GetUri());
       header('Location: ' . $url);
       exit();
     }
