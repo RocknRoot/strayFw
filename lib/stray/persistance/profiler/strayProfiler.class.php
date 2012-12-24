@@ -82,7 +82,7 @@ class strayProfiler extends strayASingleton
     foreach ($_POST as $postKey => $postValue)
       $posts[] = $postKey . ':' . $postValue;
     $this->AddLog(self::LOG_PROFILER, 'request_post', $posts);
-    $this->AddLog(self::LOG_PROFILER, 'session_vars', var_export(straySession::fGetInstance()->All()));
+    $this->AddLog(self::LOG_PROFILER, 'session_vars', var_export(straySession::fGetInstance()->All(), true));
     // if plugin auth
     //$this->AddLog(self::LOG_PROFILER, 'user_isAuthenticated');
     $this->AddLog(self::LOG_PROFILER, 'fw_version', STRAY_VERSION);
@@ -225,7 +225,7 @@ class strayProfiler extends strayASingleton
    */
   public function GetLogDescription($message, $level = self::LOG_PROFILER)
   {
-    return current($this->GetLog($level, $message)['description']);
+    return $this->GetLog($level, $message)['description'][0];
   }
 
   /**
@@ -263,7 +263,7 @@ class strayProfiler extends strayASingleton
   public function GetTimeStart()
   {
     if (null === $this->_timeStart)
-      $this->_timeStart = current($this->GetLog(self::LOG_PROFILER, 'time_start')['description']);
+      $this->_timeStart = $this->GetLog(self::LOG_PROFILER, 'time_start')['description'][0];
     return $this->_timeStart;
   }
 
@@ -274,7 +274,7 @@ class strayProfiler extends strayASingleton
   public function GetTimeEnd()
   {
     if (null === $this->_timeEnd)
-      $this->_timeEnd = current($this->GetLog(self::LOG_PROFILER, 'time_end')['description']);
+      $this->_timeEnd = $this->GetLog(self::LOG_PROFILER, 'time_end')['description'][0];
     return $this->_timeEnd;
   }
 
@@ -285,7 +285,7 @@ class strayProfiler extends strayASingleton
   public function GetTimeDiff()
   {
     if (null === $this->_timeDiff)
-      $this->_timeDiff = current($this->GetLog(self::LOG_PROFILER, 'time_diff')['description']);
+      $this->_timeDiff = $this->GetLog(self::LOG_PROFILER, 'time_diff')['description'][0];
     return $this->_timeDiff;
   }
 

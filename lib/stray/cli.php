@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-define('STRAY_VERSION', '0.1');
-define('STRAY_VERSION_CODE', 'Leoric');
+define('STRAY_VERSION', '0.2');
+define('STRAY_VERSION_CODE', 'The Butcher');
 
 $base = rtrim(dirname(__FILE__), '/') . '/';
 define('STRAY_PATH_TO_APPS', $base . '../../apps/');
