@@ -1,12 +1,10 @@
 #!/usr/bin/env php
 <?php
-/**
- * @brief Start of the command line.
- * @author nekith@gmail.com
- */
+
+define('STRAY_VERSION', '0.1');
+define('STRAY_VERSION_CODE', 'Leoric');
 
 $base = rtrim(dirname(__FILE__), '/') . '/';
-
 define('STRAY_PATH_TO_APPS', $base . '../../apps/');
 define('STRAY_PATH_TO_MODELS', $base . '../../models/');
 define('STRAY_PATH_TO_LIB', $base . '../');

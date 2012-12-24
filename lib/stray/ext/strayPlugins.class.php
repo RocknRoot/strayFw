@@ -33,7 +33,7 @@ class strayPlugins
       $plugins = $config['plugins'];
       if (true === is_array($plugins))
         foreach ($plugins as $elem)
-          if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
+          if (null != $elem &&true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
               && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
             require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
     }
@@ -43,7 +43,7 @@ class strayPlugins
     {
       $plugins = $config['plugins'];
       foreach ($plugins as $elem)
-        if (true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
+        if (null != $elem && true === is_dir(STRAY_PATH_TO_LIB . 'plugins/' . $elem)
           && true === file_exists(STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php'))
           require STRAY_PATH_TO_LIB . 'plugins/' . $elem . '/require.php';
     }
