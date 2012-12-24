@@ -8,13 +8,13 @@ define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 
 // check if dev env
-if (defined('STRAY_ENV') === false)
+if (false === defined('STRAY_ENV'))
 {
-  define('STRAY_ENV', (getenv('STRAY_ENV') == 'development' ? 'development' : 'production'));
+  define('STRAY_ENV', ('development' === getenv('STRAY_ENV') ? 'development' : 'production'));
 }
 
 // include php_error if development
-if (STRAY_ENV === 'development')
+if ('development' === STRAY_ENV)
 {
   require STRAY_PATH_TO_LIB . 'vendor/php_error.php';
   \php_error\reportErrors();
@@ -35,17 +35,16 @@ require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
 
 // require attended routing
-if (STRAY_ENV === 'development')
+if ('development' === STRAY_ENV)
 {
   require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
+  require $straypath . 'persistance/profiler/strayProfiler.class.php';
 }
 else
-{
   require $straypath . 'routing/strayRoutingBootstrap.class.php';
-}
 
 // run
 strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);
-$url = (empty($_SERVER['HTTPS']) === false && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+$url = (false === empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'] || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $url .= $_SERVER['SERVER_NAME'] . str_replace('/index.php', null, $_SERVER['REQUEST_URI']);
 strayRoutingBootstrap::fGetInstance()->Run($url, $_SERVER['REQUEST_METHOD']);
