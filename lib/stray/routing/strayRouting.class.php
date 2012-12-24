@@ -130,4 +130,23 @@ final class strayRouting extends strayASingleton
   {
     return $this->_host;
   }
+
+  /**
+   * Get nice url for specified $url.
+   * @param string $url source url
+   * @return string nice url
+   */
+  static public function fGenerateNiceUrl($url)
+  {
+    $nice = null;
+    if (false !== strpos($url, '.'))
+    {
+      list($subdomain, $url) = explode('.', $url);
+      $nice = strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://';
+      if (null != $subdomain)
+        $nice .= $subdomain . '.';
+      $nice .= strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
+    }
+    return $nice . '/' . ltrim($url, '/');
+  }
 }

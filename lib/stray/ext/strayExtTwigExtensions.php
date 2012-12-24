@@ -12,7 +12,32 @@
  */
 function strayExtTwigRoute($route, $args = array())
 {
-  return null;
+  $app = strayRoutingBootstrap::fGetInstance()->GetRequest()->app;
+  $url = null;
+  if (false !== strpos($route, '.'))
+  {
+    list($app, $route) = explode('.', $route);
+    $routes = strayConfigInstall::fGetInstance()->GetRoutes();
+    $url = $routes['routes'][$app]['subdomain'] . '.';
+  }
+  $routes = strayConfigApp::fGetInstance($app)->GetRoutes();
+  if (null == $routes)
+  {
+    strayLog::fGetInstance()->Error('can\'t find app "' . $app . '" for route view helper');
+    return null;
+  }
+  if (false === isset($routes['routes'][$route]))
+  {
+    strayLog::fGetInstance()->Error('can\'t find route "' . $route . '" for route view helper');
+    return null;
+  }
+  $url .= $routes['routes'][$route]['url'];
+  foreach ($args as $name => $value)
+    $url = preg_replace('/\(\?<' . $name . '>(.*?)\)/', $value, $url);
+  // clear optional parts
+  $url = preg_replace('/\((.*?)\(\?<(\w)+>(.*?)\)(.*?)\)\?/', null, $url);
+  $url = str_replace([ '(', ')', '?' ], null, $url);
+  return strayExtTwigUrl($url);
 }
 
 /**
@@ -33,7 +58,5 @@ function strayExtTwigTr($key, array $args = null)
  */
 function strayExtTwigUrl($url)
 {
-  if ($url[strlen($url) - 1] == '.')
-    return strayRoutingBootstrap::fGetInstance()->GetRequest()->GetScheme() . '://' . (1 == strlen($url) ? null : $url) . strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
-  return '/' . ltrim($url, '/');
+  return strayRouting::fGenerateNiceUrl($url);
 }
