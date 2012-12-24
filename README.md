@@ -64,3 +64,6 @@ Or add an issue on github ! ;)
 * [Twig](http://twig.sensiolabs.org 'Twig') is released under the new-BSD license. 
 * [PHP-Error](http://phperror.net 'PHP-Error') is released under the new-BSD license.
 
+### Media
+
+* Profiler bar icons by [PC.DE](http://www.softicons.com/free-icons/designers/pc.de 'PC.DE') are released under the [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/ 'CC BY 3.0').
