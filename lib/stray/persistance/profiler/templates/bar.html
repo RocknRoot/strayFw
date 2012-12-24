@@ -1,0 +1,102 @@
+<style type="text/css">
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #stray_profilerWrapper {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid #444;
+        color: #444;
+        padding: 4px 0;
+        background: #ffffff; /* Old browsers */
+        background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    }
+    #stray_profilerItems {
+         padding: 5px;
+    }
+    .stray_profilerItem {
+        float: left;
+        padding-right: 7px;
+        margin-right: 4px;
+        border-right: 1px solid #c0c0c0;
+    }
+    .stray_profilerItemRight {
+        float: right;
+        border-right: none;
+        margin-right: 0;
+    }
+    .stray_profilerItemButton {
+        background-color: cornflowerblue;
+        border-radius: 4px;
+        padding: 3px 3px;
+        cursor: pointer;
+    }
+    .stray_profilerItemButton:hover {
+        background-color: #417EEB;
+    }
+    .stray_profilerItem img {
+        vertical-align: top;
+    }
+    .stray_profilerInfo {
+        background-color: white;
+        border-radius: 7px;
+        padding: 0 4px;
+    }
+    .stray_profilerSuccess {
+        color: yellowgreen;
+    }
+    .stray_profilerError {
+        color: orangered;
+    }
+</style>
+
+<div id="stray_profilerWrapper">
+    <div id="stray_profilerItems">
+        <div class="stray_profilerItem">
+            strayFw {{ fw.version }} {{ fw.version_code }}
+        </div>
+        <div class="stray_profilerItem">
+            <img src="media/profiler/page.png" alt="" />
+            {{ app.name }}::{{ page.widget }}::{{ page.view }}
+            
+            <span class="stray_profilerInfo stray_profiler{% if request.status_code == '200' %}Success{% else %}Error{% endif %}">{{ request.status_code }}</span>
+        </div>
+        <div class="stray_profilerItem">
+            <img src="media/profiler/time.png" alt="" />
+            {{ time_diff }}ms
+        </div>
+        <div class="stray_profilerItem">
+            <img src="media/profiler/load.png" alt="" />
+            {{ memory_usage }}ko
+        </div>
+<!--        <div class="stray_profilerItem">
+            <img src="media/profiler/user.png" alt="" />
+            session todo
+        </div>
+        <div class="stray_profilerItem">
+            <img src="media/profiler/database.png" alt="" />
+            database todo
+        </div>
+        <div class="stray_profilerItem stray_profilerItemRight">
+            <img id="stray_profilerLogs" class="stray_profilerItemButton" src="media/profiler/statistics.png" alt="" />
+        </div>
+-->
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="js/jquery-min.1.8.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#stray_profilerLogs').click(function() {
+            
+        });
+    });
+</script>-->

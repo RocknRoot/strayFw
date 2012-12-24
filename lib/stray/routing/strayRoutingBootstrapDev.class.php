@@ -34,6 +34,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     try
     {
       $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
+      strayProfiler::fGetInstance()->RequestStart();
       $this->_LoadExt($this->_request);
       strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
       $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
@@ -48,6 +49,9 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
       if (!($render instanceof strayAppsARender))
         throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
       echo $render->Render();
+      if (!($render instanceof strayAppsRenderTemplate))
+          strayProfiler::fGetInstance()->needToDisplay = false;
+      strayProfiler::fGetInstance()->RequestEnd();
       ob_end_flush();
     }
     catch (strayExceptionRedirect $e)
@@ -69,7 +73,6 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     if (false === $done)
     {
       strayExtTwig::fGetInstance()->Init();
-      strayExtTwig::fGetInstance()->debug = true;
       $plugins = new strayPlugins($request);
       $plugins->Init();
       $done = true;
