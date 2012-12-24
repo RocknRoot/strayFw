@@ -50,7 +50,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
         throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
       echo $render->Render();
       if (!($render instanceof strayAppsRenderTemplate))
-          strayProfiler::fGetInstance()->needToDisplay = false;
+        strayProfiler::fGetInstance()->needToDisplay = false;
       strayProfiler::fGetInstance()->RequestEnd();
       ob_end_flush();
     }
