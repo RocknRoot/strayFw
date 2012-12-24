@@ -1,5 +1,8 @@
 <?php
 
+define('STRAY_VERSION', '0.1');
+define('STRAY_VERSION_CODE', 'Leoric');
+
 define('STRAY_PATH_TO_APPS', '../apps/');
 define('STRAY_PATH_TO_MODELS', '../models/');
 define('STRAY_PATH_TO_LIB', '../lib/');
