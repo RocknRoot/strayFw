@@ -62,16 +62,16 @@
             strayFw {{ fw.version }}-{{ fw.version_code }}
         </div>
         <div class="stray_profilerItem">
-            <img src="media/profiler/page.png" alt="" />
+            <img src="/media/profiler/icons/page.png" alt="" />
             {{ app.name }}.{{ page.widget }}.{{ page.view }}
             <span class="stray_profilerInfo stray_profiler{% if request.status_code == '200' %}Success{% else %}Error{% endif %}">{{ request.status_code }}</span>
         </div>
         <div class="stray_profilerItem">
-            <img src="/media/profiler/time.png" alt="" />
+            <img src="/media/profiler/icons/time.png" alt="" />
             {{ time_diff }} ms
         </div>
         <div class="stray_profilerItem">
-            <img src="/media/profiler/load.png" alt="" />
+            <img src="/media/profiler/icons/load.png" alt="" />
             {{ memory_usage }} ko
         </div>
 <!--        <div class="stray_profilerItem">
