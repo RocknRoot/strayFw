@@ -232,7 +232,7 @@ abstract class strayModelsATable
    * @param bool $critical if true, will be executed on write server
    * @return static model instance
    */
-  static public function fFetch(array $conditions, , $critical = false)
+  static public function fFetch(array $conditions, $critical = false)
   {
     $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
     $select->Select(static::fGetAllRealNameColumns())
