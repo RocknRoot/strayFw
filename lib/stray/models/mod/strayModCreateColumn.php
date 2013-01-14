@@ -68,6 +68,9 @@ function strayfModCreateColumn(array $schema)
     case 'text':
       $statement .= $schema['name'] . ' TEXT';
       break;
+    case 'json':
+      $statement .= $schema['name'] . ' JSON';
+      break;
     case 'blob':
       $statement .= $schema['name'] . ' BLOB';
       break;
