@@ -2321,9 +2321,9 @@
                     $fileLines  = $this->readCodeFile( $srcErrFile, $srcErrLine );
 
                     // load the session, if it's there
-                    if (isset($_COOKIE[session_name()]) && empty($_SESSION)) {
+                    /*if (isset($_COOKIE[session_name()]) && empty($_SESSION)) {
                         session_start();
-                    }
+                    }*/
 
                     $request  = ErrorHandler::getRequestHeaders();
                     $response = ErrorHandler::getResponseHeaders();
