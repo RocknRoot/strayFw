@@ -229,11 +229,12 @@ abstract class strayModelsATable
   /**
    * Fetch one entry satisfying all the specified conditions.
    * @param array $conditions where conditions
+   * @param bool $critical if true, will be executed on write server
    * @return static model instance
    */
-  static public function fFetch(array $conditions)
+  static public function fFetch(array $conditions, , $critical = false)
   {
-    $select = static::fGetDb()->QuerySelect()->From(static::fGetName());
+    $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
     $select->Select(static::fGetAllRealNameColumns())
       ->Limit(1);
     $i = 0;
@@ -254,11 +255,12 @@ abstract class strayModelsATable
    * Fetch all entries satisfying all the specified conditions.
    * @param array $conditions where conditions
    * @param string $order order
+   * @param bool $critical if true, will be executed on write server
    * @return array tab of static model instances
    */
-  static public function fFetchAll(array $conditions = array(), $order = null)
+  static public function fFetchAll(array $conditions = array(), $order = null, $critical = false)
   {
-    $select = static::fGetDb()->QuerySelect()->From(static::fGetName());
+    $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
     $select->Select(static::fGetAllRealNameColumns());
     $i = 0;
     foreach ($conditions as $k => $v)
@@ -282,11 +284,12 @@ abstract class strayModelsATable
   /**
    * Count entries satisfying all the specified conditions.
    * @param array $conditions where conditions
+   * @param bool $critical if true, will be executed on write server
    * @return int count result
    */
-  static public function fCount(array $conditions)
+  static public function fCount(array $conditions, $critical = false)
   {
-    $select = static::fGetDb()->QuerySelect()->From(static::fGetName());
+    $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
     $select->Select(array('count' => 'COUNT(*)'));
     $i = 0;
     foreach ($conditions as $k => $v)
@@ -306,7 +309,7 @@ abstract class strayModelsATable
    */
   static public function fQuerySelect($critical = false)
   {
-    return static::fGetDb()->QuerySelect()->From(static::fGetName());
+    return static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
   }
 
   /**
