@@ -29,6 +29,8 @@ final class strayRouting extends strayASingleton
     $components['method'] = $method;
     if (false === isset($components['path']))
       $components['path'] = '/';
+    else
+      $components['path'] = rtrim($components['path'], '/') . '/';
     $this->_ResolveRoutes($components, $request);
     return $request;
   }
@@ -93,7 +95,7 @@ final class strayRouting extends strayASingleton
         {
           $matches = null;
           if (1 < strlen($route['url']))
-            $route['url'] = rtrim($route['url'], '/');
+            $route['url'] = rtrim($route['url'], '/') . '/';
           if (true === isset($components['path']) && 1 === preg_match('#^' . $route['url'] . '$#', $components['path'], $matches))
           {
             list($widget, $view) = explode('.', $route['view']);

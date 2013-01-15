@@ -76,11 +76,11 @@ class strayProfiler extends strayASingleton
     $this->AddLog(self::LOG_PROFILER, 'request_url', $request->GetUrl());
     $gets = array();
     foreach ($_GET as $getKey => $getValue)
-      $gets[] = $getKey . ':' . $getValue;
+      $gets[] = $getKey . ':' . var_export($getValue, true);
     $this->AddLog(self::LOG_PROFILER, 'request_get', $gets);
     $posts = array();
     foreach ($_POST as $postKey => $postValue)
-      $posts[] = $postKey . ':' . $postValue;
+      $posts[] = $postKey . ':' . var_export($postValue, true);
     $this->AddLog(self::LOG_PROFILER, 'request_post', $posts);
     $this->AddLog(self::LOG_PROFILER, 'session_vars', var_export(straySession::fGetInstance()->All(), true));
     // if plugin auth
