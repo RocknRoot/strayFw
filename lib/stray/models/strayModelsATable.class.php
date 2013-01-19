@@ -78,13 +78,7 @@ abstract class strayModelsATable
         }
       $update->Set(implode(', ', $set));
       $this->_modified = array();
-      $result = $update->Execute();
-      // strayProfiler log
-      if ('development' === STRAY_ENV) {
-        $microtime = microtime() - $startTime;
-        strayProfiler::fGetInstance()->addQueryLog($this->_db->GetAlias() . implode(',', $this->_db->GetServers()), $query, $microtime);
-      }
-      return $result;
+      return $update->Execute();
     }
     else
     {
