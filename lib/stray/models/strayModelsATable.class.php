@@ -48,6 +48,7 @@ abstract class strayModelsATable
    */
   public function Save()
   {
+    $startTime = microtime();
     if (false === $this->_new)
     {
       if (true === $this->_flagDelete)
@@ -77,7 +78,13 @@ abstract class strayModelsATable
         }
       $update->Set(implode(', ', $set));
       $this->_modified = array();
-      return $update->Execute();
+      $result = $update->Execute();
+      // strayProfiler log
+      if ('development' === STRAY_ENV) {
+        $microtime = microtime() - $startTime;
+        strayProfiler::fGetInstance()->addQueryLog($this->_db->GetAlias() . implode(',', $this->_db->GetServers()), $query, $microtime);
+      }
+      return $result;
     }
     else
     {
@@ -131,6 +138,8 @@ abstract class strayModelsATable
         $row = &$this->{'_column' . ucfirst($this->_primary[$i])};
         $row['value'] = $primaries[$row['name']];
       }
+      if ('development' === STRAY_ENV)
+        strayProfiler::fGetInstance()->addQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $arr, microtime() - $startTime);  
       return $ret;
     }
   }

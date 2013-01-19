@@ -241,4 +241,22 @@ class strayModelsDatabase extends strayAMultiton
       return $this->_servers['all']->link->rollBack();
     return $this->_servers['write']->link->rollBack();
   }
+  
+  /**
+   * Return alias
+   * @return type string
+   */
+  public function GetAlias() 
+  {
+    return $this->_alias;
+  }
+  
+  /**
+   * Return servers
+   * @return type array
+   */
+  public function GetServers() 
+  {
+    return $this->_servers;
+  }
 }

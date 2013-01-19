@@ -75,7 +75,7 @@
      * limitation in PHP. It's because if an exception or error is raised,
      * then there is a single point of handling it.
      * 
-     * = INI Options
+     * = INI Optionsva
      * 
      * - php_error.force_disabled When set to a true value (such as on),
      *                            this forces this to be off.
@@ -2321,7 +2321,7 @@
                     $fileLines  = $this->readCodeFile( $srcErrFile, $srcErrLine );
 
                     // load the session, if it's there
-                    if (isset($_COOKIE[session_name()]) && empty($_SESSION)) {
+                    if (isset($_COOKIE[session_name()]) && empty($_SESSION) && null == session_id()) {
                         session_start();
                     }
 

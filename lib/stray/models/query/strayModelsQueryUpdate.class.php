@@ -38,6 +38,7 @@ class strayModelsQueryUpdate extends strayModelsAQuery
    */
   public function Execute()
   {
+    $startTime = microtime();
     $query = 'UPDATE ';
     if (true === $this->_only)
       $query .= 'ONLY ';
@@ -55,6 +56,8 @@ class strayModelsQueryUpdate extends strayModelsAQuery
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QueryUpdate fail : ' . $this->_queryError[2] . ' (' . $query . ')');
+    if ('development' === STRAY_ENV)
+      strayProfiler::fGetInstance()->addQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $this->_args, microtime() - $startTime);  
     return $result;
   }
 

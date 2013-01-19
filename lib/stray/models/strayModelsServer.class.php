@@ -36,4 +36,13 @@ class strayModelsServer
    * @var string
    */
   public $pass;
+  
+  /**
+   * toString
+   * @return type string
+   */
+  public function __toString() {
+    return $this->host . ' ' . $this->port . ' ' . $this->name;
+  }
+  
 }
