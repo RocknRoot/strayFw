@@ -150,7 +150,7 @@ final class strayCommandOrdersModel
       $file = fopen($path, 'w+');
       if (false === fwrite($file, "<?php\n\n"
           . (true === isset($elem['inherits']) ?
-              'require_once STRAY_PATH_TO_MODELS . \'' . $name . '/classes/base/' . ucfirst($elem['inherits']) . ".model.php';\n" : null)
+              'require_once STRAY_PATH_TO_MODELS . \'' . $name . '/classes/base/' . $elem['inherits'] . ".model.php';\n" : null)
           . 'class models' . ucfirst($name) . 'Base' . ucfirst($key)
           . ' extends ' . (true === isset($elem['inherits']) ? 'models' . ucfirst($name) . 'Base' . ucfirst($elem['inherits']) : 'strayModelsATable')
           . "\n{\n" . $properties
@@ -174,7 +174,7 @@ final class strayCommandOrdersModel
       {
         $file = fopen($path, 'w+');
         if (false === fwrite($file, "<?php\n\nrequire_once STRAY_PATH_TO_MODELS . '"
-            . $name . "/classes/base/" . ucfirst($key) . ".model.php';\n\nclass models" . ucfirst($name) . ucfirst($key)
+            . $name . "/classes/base/" . $key . ".model.php';\n\nclass models" . ucfirst($name) . ucfirst($key)
             . ' extends models' . ucfirst($name) . 'Base' . ucfirst($key) . "\n{\n}\n"))
           throw new strayExceptionError('can\'t write in "' . $path . '"');
         fclose($file);
