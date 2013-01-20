@@ -133,7 +133,7 @@ abstract class strayModelsATable
         $row['value'] = $primaries[$row['name']];
       }
       if ('development' === STRAY_ENV)
-        strayProfiler::fGetInstance()->addQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $arr, microtime() - $startTime);  
+        strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $arr, microtime() - $startTime);  
       return $ret;
     }
   }

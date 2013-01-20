@@ -157,7 +157,7 @@ class strayModelsQuerySelect extends strayModelsAQuery
     if ('00000' != $this->_queryError[0]) 
       strayLog::fGetInstance()->Error('QuerySelect fail : ' . $this->_queryError[2] . ' (' . $query . ')');
     if ('development' === STRAY_ENV)
-      strayProfiler::fGetInstance()->addQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $this->_args, microtime() - $startTime);    
+      strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias() . implode(',', $this->fGetDb()->GetServers()), $query->queryString, $this->_args, microtime() - $startTime);    
     return $result;
   }
 
