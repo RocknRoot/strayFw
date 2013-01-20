@@ -52,7 +52,7 @@ class strayModelsQueryDelete extends strayModelsAQuery
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QueryDelete fail : ' . $this->_queryError[2] . ' (' . $query . ')');
     if ('development' == STRAY_ENV)
-      strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias(), $query->queryString, $this->_args, microtime() - $startTime);
+      strayProfiler::fGetInstance()->AddQueryLog($this->_db->GetAlias(), $query, $this->_args, microtime() - $startTime);
     return $result;
   }
 

@@ -1,8 +1,4 @@
 <style type="text/css">
-  body {
-    margin: 0;
-    padding: 0;
-  }
   #stray_profilerWrapper {
     display: none;
     width: 100%;
@@ -10,6 +6,7 @@
     color: #444;
     background-color: #F5F5F5;
     font-size: 13px;
+    height: 29px;
     font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
   }
   #stray_profilerWrapper a {
@@ -22,6 +19,7 @@
     float: left;
     padding: 4px 5px;
     border-right: 1px solid #ddd;
+    height: 22px;
   }
   .stray_profilerItemRight {
     float: right;
@@ -59,7 +57,7 @@
     display: none;
     background-color: #61CAFF;
     position: absolute;
-    margin-top: 20px;
+    margin-top: 26px;
     margin-left: -5px;
     max-width: 50%;
   }
@@ -112,18 +110,18 @@
           <li>Method : <span class="stray_key">{{ request.method }}</span></li>
           <li>HTTP code : <span class="stray_key">{{ request.status_code }}</span></li>
           <li><hr/></li>
-          {% if app.plugins != NULL %}
+          {% if app.plugins %}
           {% for plugin in app.plugins %}
           <li>
             <li class="stray_key">{{ plugin }}</li>
           </li>
           {% endfor %}
           {% else %}
-            <li>No Plugins</li>
+            <li>No plugin</li>
           {% endif %}
         </ul>
       </div>
-      <img class="stray_expand" src="/media/profiler/page.png" alt="" />
+      <img class="stray_expand" src="/media/profiler/icons/page.png" alt="" />
       [{{ request.method }}] {{ app.name }}::{{ page.widget }}::{{ page.view }}
       <span class="stray_profilerInfo stray_profiler{% if request.status_code == '200' %}Success{% else %}Error{% endif %}">{{ request.status_code }}</span>
     </div>
@@ -137,11 +135,11 @@
           {% endfor %}
         </ul>
       </div>
-      <img class="stray_expand" src="/media/profiler/time.png" alt="" />
+      <img class="stray_expand" src="/media/profiler/icons/time.png" alt="" />
       {{ (timer.elapsed*1000)|number_format(3, '.', ',') }}<small>ms</small>
     </div>
     <div class="stray_profilerItem">
-      <img src="/media/profiler/load.png" alt="" />
+      <img src="/media/profiler/icons/load.png" alt="" />
       {{ memory_usage }}ko
     </div>
     <div class="stray_profilerItem">
@@ -158,7 +156,7 @@
           No query logs
         {% endif %}
       </div>
-      <img class="stray_expand" src="/media/profiler/database.png" alt="" />
+      <img class="stray_expand" src="/media/profiler/icons/database.png" alt="" />
       {% if query.count > 0 %}
         {{ query.count }} in {{ (query.time*1000)|number_format(3, '.', ',') }}ms
       {% else %}
@@ -166,11 +164,11 @@
       {% endif %}
     </div>
 <!--    <div class="stray_profilerItem">
-      <img src="/media/profiler/user.png" alt="" />
+      <img src="/media/profiler/icons/user.png" alt="" />
       WIP
     </div>-->
 <!--    <div class="stray_profilerItem stray_profilerItemRight">
-      <img id="stray_profilerLogs" class="stray_profilerItemButton stray_cursor" src="/media/profiler/statistics.png" alt="" />
+      <img id="stray_profilerLogs" class="stray_profilerItemButton stray_cursor" src="/media/profiler/icons/statistics.png" alt="" />
     </div>-->
 
   </div>
