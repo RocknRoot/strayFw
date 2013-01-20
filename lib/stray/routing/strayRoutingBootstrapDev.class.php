@@ -33,6 +33,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     ob_start();
     try
     {
+      $startTime = microtime();
       $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
       strayProfiler::fGetInstance()->RequestStart();
       $this->_LoadExt($this->_request);
@@ -44,12 +45,19 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
       $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
       if (false === class_exists($type))
         require $path;
+      strayProfiler::fGetInstance()->AddTimerRoutingLog(microtime() - $startTime);
+      $startTime = microtime();
       $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);
       $render = $view->Run($this->_request);
+      strayProfiler::fGetInstance()->AddTimerViewLog(microtime() - $startTime);
+      $startTime = microtime();
       if (!($render instanceof strayAppsARender))
         throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
       echo $render->Render();
-      if (!($render instanceof strayAppsRenderTemplate))
+      strayProfiler::fGetInstance()->AddTimerRenderLog(microtime() - $startTime);
+      if (!($render instanceof strayAppsRenderTemplate)
+          && true === empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+          && 'xmlhttprequest' !== strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
         strayProfiler::fGetInstance()->needToDisplay = false;
       strayProfiler::fGetInstance()->RequestEnd();
       ob_end_flush();

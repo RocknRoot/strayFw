@@ -241,4 +241,13 @@ class strayModelsDatabase extends strayAMultiton
       return $this->_servers['all']->link->rollBack();
     return $this->_servers['write']->link->rollBack();
   }
+
+  /**
+   * Return database alias.
+   * @return string database alias
+   */
+  public function GetAlias() 
+  {
+    return $this->_alias;
+  }
 }

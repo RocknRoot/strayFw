@@ -103,6 +103,7 @@ class strayModelsQuerySelect extends strayModelsAQuery
    */
   public function Execute()
   {
+    $startTime = microtime();
     if (null == $this->_query)
     {
       $query = 'SELECT ' . $this->_select . ' FROM ';
@@ -155,6 +156,8 @@ class strayModelsQuerySelect extends strayModelsAQuery
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QuerySelect fail : ' . $this->_queryError[2] . ' (' . $query . ')');
+    if ('development' == STRAY_ENV)
+      strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias(), $query->queryString, $this->_args, microtime() - $startTime);
     return $result;
   }
 
