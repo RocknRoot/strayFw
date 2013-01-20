@@ -73,6 +73,10 @@
     list-style-type: none;
     padding: 2px;
   }
+  .stray_expandWrapper ul li hr {
+    border: 0;
+    border-top: 1px solid #EEE;
+  }
   .stray_expand {
     cursor: pointer;
   }
@@ -94,10 +98,33 @@
           <li>App : <span class="stray_key">{{ app.name }}</span></li>
           <li>Widget : <span class="stray_key">{{ page.widget }}</span></li>
           <li>View : <span class="stray_key">{{ page.view }}</span></li>
+          <li><hr/></li>
+          <li>Routing parameters</li>
+          {% if page.params != NULL %}
+          {% for paramKey, paramValue in page.params %}
+          <li>
+            <li class="stray_key">{{ paramKey }} = {{ paramValue }}</li>
+          </li>
+          {% endfor %}
+          {% else %}
+            <li>None</li>
+          {% endif %}
+          <li>Method : <span class="stray_key">{{ request.method }}</span></li>
+          <li>HTTP code : <span class="stray_key">{{ request.status_code }}</span></li>
+          <li><hr/></li>
+          {% if app.plugins != NULL %}
+          {% for plugin in app.plugins %}
+          <li>
+            <li class="stray_key">{{ plugin }}</li>
+          </li>
+          {% endfor %}
+          {% else %}
+            <li>No Plugins</li>
+          {% endif %}
         </ul>
       </div>
       <img class="stray_expand" src="/media/profiler/page.png" alt="" />
-      {{ app.name }}::{{ page.widget }}::{{ page.view }}
+      [{{ request.method }}] {{ app.name }}::{{ page.widget }}::{{ page.view }}
       <span class="stray_profilerInfo stray_profiler{% if request.status_code == '200' %}Success{% else %}Error{% endif %}">{{ request.status_code }}</span>
     </div>
     <div class="stray_profilerItem">
@@ -157,21 +184,19 @@
     $('body').prepend($('#stray_profilerWrapper'));
     $('#stray_profilerWrapper').show();
     
-    $('.stray_expand').click(function() {
+    $('.stray_expand').hover(function() {
       closeExpand();
-      console.log('Open expand');
       $(this).parent('div').addClass('stray_profilerItemSelected');
+      $(this).prev('.stray_expandWrapper').css('min-width', $(this).parent('.stray_profilerItem').outerWidth());
       $(this).prev('.stray_expandWrapper').show();
     });
   
     $('#stray_profilerLogs').click(function() {
-      console.log('Open profiler logs');
       alert('Work in progress');
     });
   
     function closeExpand()
     {
-      console.log('close expand');
       $('.stray_profilerItemSelected').removeClass('stray_profilerItemSelected');
       $('.stray_expandWrapper').hide();
     }

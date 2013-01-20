@@ -107,7 +107,7 @@ class strayProfiler extends strayASingleton {
   public function Render()
   {
     $env = strayExtTwig::fGetInstance()->GetEnvironment(STRAY_PATH_TO_LIB . 'stray/persistance/profiler/templates');
-    echo strayExtTwig::fGetInstance()->LoadTemplate($env, 'bar.html', array(
+    $infos = array(
         'name' => $this->GetLogDescription('name'),
         'memory_usage' => $this->GetLogDescription('memory_usage'),
         'fw' => array(
@@ -147,7 +147,8 @@ class strayProfiler extends strayASingleton {
             'count' => count($this->GetLogs(self::LOG_QUERY)),
             'logs' => $this->GetLogs(self::LOG_QUERY)
         )
-    ));
+    );
+    echo strayExtTwig::fGetInstance()->LoadTemplate($env, 'bar.html', $infos);
   }
   
   /**
