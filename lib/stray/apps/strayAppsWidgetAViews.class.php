@@ -57,7 +57,7 @@ abstract class strayAppsWidgetAViews
     $method = ucfirst($request->view) . 'View';
     if (false === method_exists($this, $method))
       throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_ACTION, 'can\'t find action '
-      . $request->app . '.' . $request->widget . ':' . $request->view);
+        . $request->app . '.' . $request->widget . ':' . $request->view);
     $args = array($request);
     if (0 != count($request->params))
       $args = array_merge($args, $request->params);
