@@ -26,3 +26,10 @@ require $straypath . 'command/require.php';
 require $straypath . 'apps/require.php';
 require $straypath . 'form/require.php';
 require $straypath . 'ext/require.php';
+
+// plugins
+require STRAY_PATH_TO_LIB . 'plugins/strayMongo/require.php';
+require STRAY_PATH_TO_LIB . 'plugins/strayRegistry/require.php';
+
+// init
+strayMongo::fGetInstance()->Config('127.0.0.1', null, null);
