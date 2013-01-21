@@ -9,6 +9,11 @@ before_script:
   - tar -xzf yaml-1.1.0.tgz
   - sh -c "cd yaml-1.1.0 && phpize && ./configure && make && sudo make install"
   - echo "extension=yaml.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - sh -c "cd .."
+  - wget http://pecl.php.net/get/mongo-1.2.12.tgz
+  - tar -xzf mongo-1.2.12.tgz
+  - sh -c "cd mongo-1.2.12 && phpize && ./configure && make && sudo make install"
+  - echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - psql -c "DROP DATABASE IF EXISTS strayFw_test;" -U postgres
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
   - sh -c "cp config/settings.tests.yml config/settings.yml"
