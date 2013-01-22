@@ -1,201 +1,128 @@
 <style type="text/css">
-  #stray_profilerWrapper {
-    display: none;
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-    color: #444;
-    background-color: #F5F5F5;
-    font-size: 13px;
-    height: 29px;
-    font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
-  }
-  #stray_profilerWrapper a {
-    text-decoration: none;
-  }
-  #stray_profilerItems {
-   
-  }
-  .stray_profilerItem {
-    float: left;
-    padding: 4px 5px;
-    border-right: 1px solid #ddd;
-    height: 22px;
-  }
-  .stray_profilerItemRight {
-    float: right;
-    border-right: none;
-    margin-right: 0;
-  }
-  .stray_profilerItemButton {
-    border-radius: 4px;
-    padding: 3px 3px;
-  }
-  .stray_cursor {
-    cursor: pointer;
-  }
-  .stray_profilerItem img {
-    vertical-align: top;
-  }
-  .stray_profilerItemSelected {
-    background-color: #61CAFF;
-  }
-  .stray_profilerInfo {
-    background-color: white;
-    border-radius: 7px;
-    padding: 0 4px;
-  }
-  .stray_profilerSuccess {
-    color: yellowgreen;
-  }
-  .stray_profilerError {
-    color: orangered;
-  }
-  .stray_profilerItem_expand {
-    color: #0C70B7;
-  }
-  .stray_expandWrapper {
-    display: none;
-    background-color: #61CAFF;
-    position: absolute;
-    margin-top: 26px;
-    margin-left: -5px;
-    max-width: 50%;
-  }
-  .stray_expandWrapper ul {
-    margin: 0;
-    padding: 0;
-    padding: 4px;
-    padding-left: 6px;
-  }
-  .stray_expandWrapper ul li {
-    list-style-type: none;
-    padding: 2px;
-  }
-  .stray_expandWrapper ul li hr {
-    border: 0;
-    border-top: 1px solid #EEE;
-  }
-  .stray_expand {
-    cursor: pointer;
-  }
-  .stray_key {
-    color: white;
-    font-weight: bold;
-  }
+  {% include 'profiler.css' %}
 </style>
 
+<script type="text/javascript">
+  {% include 'profiler.js' %}
+</script>
 
-<div id="stray_profilerWrapper">
+<div id="jqueryNotLoaded">
+  <p>You must add jquery to enable the profiler</p>
+</div>
+
+<div id="stray_profilerWrapper" class="stray_profiler">
   <div id="stray_profilerItems">
     <div class="stray_profilerItem">
-      strayFw {{ fw.version }} {{ fw.version_code }}
+      strayFw {{ PROFILER.fw_version.data.0 }} {{ PROFILER.fw_version_code.data.0 }}
     </div>
-    <div class="stray_profilerItem">
+    <div class="stray_profilerItem stray_expand">
       <div class="stray_expandWrapper">
         <ul>
-          <li>App : <span class="stray_key">{{ app.name }}</span></li>
-          <li>Widget : <span class="stray_key">{{ page.widget }}</span></li>
-          <li>View : <span class="stray_key">{{ page.view }}</span></li>
+          <li>App : <span class="stray_key">{{ PROFILER.app.data.0 }}</span></li>
+          <li>Widget : <span class="stray_key">{{ PROFILER.page_widget.data.0 }}</span></li>
+          <li>View : <span class="stray_key">{{ PROFILER.page_view.data.0 }}</span></li>
           <li><hr/></li>
-          <li>Routing parameters</li>
-          {% if page.params != NULL %}
-          {% for paramKey, paramValue in page.params %}
           <li>
-            <li class="stray_key">{{ paramKey }} = {{ paramValue }}</li>
+            Routing parameters
+            <ul>
+              {% if PROFILER.page_params.data != NULL %}
+              {% for paramkey, paramvalue in PROFILER.page_params.data %}
+              <li class="stray_key">{{ paramkey }} = {{ paramvalue }}</li>
+              {% endfor %}
+              {% else %}
+              <li>None</li>
+              {% endif %}
+            </ul>
           </li>
-          {% endfor %}
-          {% else %}
-            <li>None</li>
-          {% endif %}
-          <li>Method : <span class="stray_key">{{ request.method }}</span></li>
-          <li>HTTP code : <span class="stray_key">{{ request.status_code }}</span></li>
           <li><hr/></li>
-          {% if app.plugins %}
-          {% for plugin in app.plugins %}
           <li>
-            <li class="stray_key">{{ plugin }}</li>
+            FW plugins
+            <ul>
+              {% if PROFILER.fw_plugins %}
+              {% for plugin in PROFILER.fw_plugins %}
+              <li>
+              <li class="stray_key">{{ plugin.data.0 }}</li>
+              </li>
+              {% endfor %}
+              {% else %}
+              <li>No FW plugins</li>
+              {% endif %}
+            </ul>
           </li>
-          {% endfor %}
-          {% else %}
-            <li>No plugin</li>
-          {% endif %}
+          <li>
+            App plugins
+            <ul>
+              {% if PROFILER.app_plugins %}
+              {% for plugin in PROFILER.app_plugins %}
+              <li>
+              <li class="stray_key">{{ plugin.data.0 }}</li>
+              </li>
+              {% endfor %}
+              {% else %}
+              <li>No App plugins</li>
+              {% endif %}
+            </ul>
+          </li>
         </ul>
       </div>
-      <img class="stray_expand" src="/media/profiler/icons/page.png" alt="" />
-      [{{ request.method }}] {{ app.name }}::{{ page.widget }}::{{ page.view }}
-      <span class="stray_profilerInfo stray_profiler{% if request.status_code == '200' %}Success{% else %}Error{% endif %}">{{ request.status_code }}</span>
+      <img src="/media/profiler/icons/page.png" alt="" />
+      [{{ PROFILER.request_method.data.0 }}] {{ PROFILER.app.data.0 }}::{{ PROFILER.page_widget.data.0 }}:{{ PROFILER.page_view.data.0 }}
+      <span class="stray_profilerInfo stray_profiler{% if PROFILER.request_statusCode.data.0 == '200' %}Success{% else %}Error{% endif %}">{{ PROFILER.request_statusCode.data.0 }}</span>
     </div>
-    <div class="stray_profilerItem">
+    <div class="stray_profilerItem stray_expand">
       <div class="stray_expandWrapper">
         <ul>
-          {% for timerlog in timer.logs %}
-          <li>
-            {{ timerlog.message }} : <span class="stray_key">{{ (timerlog.timestamp*1000)|number_format(3, '.', ',') }}ms</span>
+          {% for timerkey, timerlog in TIMER %}
+          <li class="stray_separator">
+            {{ timerkey }} : <span class="stray_key">{{ (timerlog.timestamp*1000)|number_format(3, '.', ',') }}ms / {{ ((timerlog.timestamp/PROFILER.time_elapsed.data.0)*100)|number_format(2, '.', ',') }}%</span>
           </li>
           {% endfor %}
         </ul>
       </div>
-      <img class="stray_expand" src="/media/profiler/icons/time.png" alt="" />
-      {{ (timer.elapsed*1000)|number_format(3, '.', ',') }}<small>ms</small>
+      <img src="/media/profiler/icons/time.png" alt="" />
+      {{ (PROFILER.time_elapsed.data.0 *1000)|number_format(3, '.', ',') }}<small>ms</small>
     </div>
     <div class="stray_profilerItem">
       <img src="/media/profiler/icons/load.png" alt="" />
-      {{ memory_usage }}ko
+      {{ PROFILER.memory_usage.data.0 }}ko
     </div>
-    <div class="stray_profilerItem">
+    <div class="stray_profilerItem stray_expand">
       <div class="stray_expandWrapper">
-        {% if query.count > 0 %}
+        {% if QUERY|length > 0 %}
         <ul>
-          {% for querylog in query.logs %}
-            <li>
-              <small>[<i>{{ querylog.message }}</i> | {{ (querylog.timestamp*1000)|number_format(3, '.', ',') }}ms]</small>  <span class="stray_key">{{ querylog.description.0 }}</span>
-            </li>
+          {% for queryhost, querylog in QUERY %}
+          <li class="stray_separator">
+            <small class="stray_block">[<i>{{ queryhost }}</i> | {{ (querylog.timestamp*1000)|number_format(3, '.', ',') }}ms]</small>  <span class="stray_key">{{ querylog.data.0 }}</span>
+          </li>
           {% endfor %}
-          </ul>
+        </ul>
         {% else %}
-          No query logs
+        No query logs
         {% endif %}
       </div>
-      <img class="stray_expand" src="/media/profiler/icons/database.png" alt="" />
-      {% if query.count > 0 %}
-        {{ query.count }} in {{ (query.time*1000)|number_format(3, '.', ',') }}ms
+      <img src="/media/profiler/icons/database.png" alt="" />
+      {% if QUERY|length > 0 %}
+      {{ PROFILER.query_count.data.0 }} in {{ (PROFILER.query_time.data.0*1000)|number_format(3, '.', ',') }}ms / {{ ((PROFILER.query_time.data.0/PROFILER.time_elapsed.data.0)*100)|number_format(2, '.', ',') }}%
       {% else %}
-        No query logs
+      No query logs
       {% endif %}
     </div>
-<!--    <div class="stray_profilerItem">
-      <img src="/media/profiler/icons/user.png" alt="" />
-      WIP
-    </div>-->
-<!--    <div class="stray_profilerItem stray_profilerItemRight">
-      <img id="stray_profilerLogs" class="stray_profilerItemButton stray_cursor" src="/media/profiler/icons/statistics.png" alt="" />
-    </div>-->
+    <div class="stray_profilerItem stray_expand" id="stray_ajax">
+      <div class="stray_expandWrapper">
+        <ul></ul>
+      </div>
+      <img src="/media/profiler/icons/ajax.png" alt="" />
+      <span class="stray_ajaxStatus">0</span>
+      <span class="stray_ajaxInfo"></span>
+    </div>
+    <!--    <div class="stray_profilerItem">
+          <img src="/media/profiler/icons/user.png" alt="" />
+          WIP
+        </div>-->
+    <!--    <div class="stray_profilerItem stray_profilerItemRight">
+          <img id="stray_profilerLogs" class="stray_profilerItemButton stray_cursor" src="/media/profiler/icons/statistics.png" alt="" />
+        </div>-->
 
   </div>
   <div style="clear: both"></div>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    
-    $('body').prepend($('#stray_profilerWrapper'));
-    $('#stray_profilerWrapper').show();
-    
-    $('.stray_expand').hover(function() {
-      closeExpand();
-      $(this).parent('div').addClass('stray_profilerItemSelected');
-      $(this).prev('.stray_expandWrapper').css('min-width', $(this).parent('.stray_profilerItem').outerWidth());
-      $(this).prev('.stray_expandWrapper').show();
-    });
-  
-    $('#stray_profilerLogs').click(function() {
-      alert('Work in progress');
-    });
-  
-    function closeExpand() {
-      $('.stray_profilerItemSelected').removeClass('stray_profilerItemSelected');
-      $('.stray_expandWrapper').hide();
-    }
-  
-  });
-</script>

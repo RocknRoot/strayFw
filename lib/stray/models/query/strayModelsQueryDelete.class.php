@@ -33,7 +33,7 @@ class strayModelsQueryDelete extends strayModelsAQuery
    */
   public function Execute()
   {
-    $startTime = microtime();
+    $startTime = microtime(true);
     $query = 'DELETE FROM ';
     if (true === $this->_only)
       $query .= 'ONLY ';
@@ -52,7 +52,7 @@ class strayModelsQueryDelete extends strayModelsAQuery
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QueryDelete fail : ' . $this->_queryError[2] . ' (' . $query . ')');
     if ('development' == STRAY_ENV)
-      strayProfiler::fGetInstance()->AddQueryLog($this->_db->GetAlias(), $query, $this->_args, microtime() - $startTime);
+      strayProfiler::fGetInstance()->AddQueryLog($this->_db->GetAlias(), $query, $this->_args, microtime(true) - $startTime);
     return $result;
   }
 
