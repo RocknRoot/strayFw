@@ -25,10 +25,10 @@ class strayProfiler extends strayASingleton
    */
   private $_logs;
   /**
-   * Name of the log file
+   * Log filename.
    * @var string
    */
-  private $_name;
+  private $_logFilename;
 
   /**
    * Construct.
@@ -43,26 +43,26 @@ class strayProfiler extends strayASingleton
   }
 
   /**
-   * Return array of log
-   * @param array
+   * Return array of data from the log file.
+   * @param array log data
    */
   public function _GetArray()
   {
     return json_decode(file_get_contents($this->_GetFileName()), true);
   }
-    
+
   /**
-   * Return filename of log file
-   * @return string
+   * Return log filname.
+   * @return string filename
    */
   private function _GetFileName()
   {
-    return $this->_GetBaseDir() . $this->_name;
+    return $this->_GetBaseDir() . $this->_logFilename;
   }
-  
+
   /**
-   * Return base dir where logs are saved
-   * @return string
+   * Return base dir where logs are saved.
+   * @return string base dir path
    */
   private function _GetBaseDir()
   {
@@ -76,10 +76,11 @@ class strayProfiler extends strayASingleton
   {
     $this->_name = date_create_from_format('U.u', microtime(true))->format('YmdHisu');
     $request = strayRoutingBootstrap::fGetInstance()->GetRequest();
-    $this->AddProfilerLog('id', $this->_name);
+    $this->AddProfilerLog('id', $this->_logFilename);
     $this->AddProfilerLog('php_version', phpversion());
     $this->AddProfilerLog('request_method', $request->GetMethod());
-    $this->AddProfilerLog('request_is_ajax', (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) ? ((!empty($_SERVER['HTTP_X_REQUESTED_WITH']) || 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])) ? true : false) : false);
+    $this->AddProfilerLog('request_is_ajax', (true === isset($_SERVER['HTTP_X_REQUESTED_WITH']) ?
+      (false === empty($_SERVER['HTTP_X_REQUESTED_WITH']) || 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) ? true : false) : false));
     $this->AddProfilerLog('request_statusCode', http_response_code());
     $this->AddProfilerLog('request_headers', apache_request_headers());
     $this->AddProfilerLog('response_headers', apache_response_headers());
@@ -98,9 +99,9 @@ class strayProfiler extends strayASingleton
     $this->AddProfilerLog('fw_version', STRAY_VERSION);
     $this->AddProfilerLog('fw_version_code', STRAY_VERSION_CODE);
     $this->AddProfilerLog('fw_isDebug', $request->IsDebug());
-    $this->AddProfilerLog('fw_plugins', (array) strayConfigInstall::fGetInstance()->GetConfig()['plugins']);
+    $this->AddProfilerLog('fw_plugins', (array)strayConfigInstall::fGetInstance()->GetConfig()['plugins']);
     $this->AddProfilerLog('app', $request->app);
-    $this->AddProfilerLog('app_plugins', (array) strayConfigApp::fGetInstance($request->app)->GetConfig()['plugins']);
+    $this->AddProfilerLog('app_plugins', (array)strayConfigApp::fGetInstance($request->app)->GetConfig()['plugins']);
     $this->AddProfilerLog('page_widget', $request->widget);
     $this->AddProfilerLog('page_view', $request->view);
     $this->AddProfilerLog('page_params', $request->params);
@@ -116,64 +117,70 @@ class strayProfiler extends strayASingleton
     $this->AddProfilerLog('memory_usage', $memoryMg);
     $this->AddProfilerLog('time_end', microtime(true));
     $this->AddProfilerLog('time_elapsed', $this->GetTimeEnd() - $this->GetTimeStart());
-    $this->AddProfilerLog('name', $this->_name);
+    $this->AddProfilerLog('name', $this->_logFilename);
     $this->AddProfilerLog('query_time', $this->_GetQueryTime());
     $this->AddProfilerLog('query_count',  $this->_GetQueryCount());
-    file_put_contents($this->_GetBaseDir() . $this->_name, json_encode($this->_logs));
+    file_put_contents($this->_GetBaseDir() . $this->_logFilename, json_encode($this->_logs));
     if (true === $this->needToDisplay)
       $this->Render();
   }
-  
+
   /**
-   * Render list of recents logs
+   * Render list of recent logs.
    */
   public function RenderLogList()
   {
-    
   }
-  
+
   /**
-   * Render a log
+   * Render one log content.
+   * @param string $name log name
    */
   public function RenderLog($name)
   {
-    $this->_name = $name;
+    $this->_logFilename = $name;
     $this->Render('compact');
   }
-  
+
   /**
-   * Return last log
-   * @return json
+   * Return last log data
+   * @return string JSON data as string
    */
   public function GetLastLog()
   {
     $files = array_reverse($this->_GetLogFiles());
-    if(0 < count($files)) {
+    if (0 < count($files)) 
+    {
       $this->_name = $files[0];
-      return json_encode(array('id' => $this->_name, 'html' => $this->__GetView('compact')));
+      return json_encode(array('id' => $this->_logFilename, 'html' => $this->_GetView('compact')));
     }
     return null;
   }
 
-  private function __GetView($template)
+  /**
+   * Get HTML code for specified template.
+   * @param string $template template name
+   * @return string generated HTML code
+   */
+  private function _GetView($template)
   {
     $env = strayExtTwig::fGetInstance()->GetEnvironment(STRAY_PATH_TO_LIB . 'stray/persistance/profiler/templates');
     return strayExtTwig::fGetInstance()->LoadTemplate($env, $template . '.html', $this->_GetArray());
   }
-  
+
   /**
    * Display the profiler bar.
    */
   public function Render($template = 'bar')
   {
-    echo $this->__GetView($template);
+    echo $this->_GetView($template);
   }
 
   /**
    * Add a profiler log.
    * @param string $msg log message
    * @param string $data log data
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddProfilerLog($msg, $data = null, $microtime = null)
   {
@@ -185,7 +192,7 @@ class strayProfiler extends strayASingleton
    * @param string $msg log message
    * @param string $query query
    * @param string $args query arguments
-   * @param int $microtime query microtime(true)
+   * @param float $microtime query microtime
    */
   public function AddQueryLog($msg, $query, $args = array(), $microtime = null)
   {
@@ -194,7 +201,7 @@ class strayProfiler extends strayASingleton
 
   /**
    * Add routing timer.
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddTimerRoutingLog($microtime)
   {
@@ -203,7 +210,7 @@ class strayProfiler extends strayASingleton
 
   /**
    * Add view timer.
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddTimerViewLog($microtime)
   {
@@ -212,7 +219,7 @@ class strayProfiler extends strayASingleton
 
   /**
    * Add render timer
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddTimerRenderLog($microtime)
   {
@@ -222,7 +229,7 @@ class strayProfiler extends strayASingleton
   /**
    * Add custom timered log.
    * @param string $msg log message
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddTimerLog($msg, $microtime)
   {
@@ -234,13 +241,13 @@ class strayProfiler extends strayASingleton
    * @param enum $level log level
    * @param string $msg log content
    * @param string $data log data
-   * @param int $microtime log microtime(true)
+   * @param float $microtime log microtime
    */
   public function AddLog($level, $msg, $data = null, $microtime = null)
   {
-    $timestamp = (null === $microtime && self::PROFILER !== $level ? microtime(true) : $microtime);
+    $timestamp = (null == $microtime && self::PROFILER !== $level ? microtime(true) : $microtime);
     $data = (false === is_array($data) ? array($data) : $data);
-    if(!isset($this->_logs[$level]))
+    if(false === isset($this->_logs[$level]))
       $this->_logs[$level] = array();
     $this->_logs[$level][$msg] = array(
       'data' => $data,
@@ -256,19 +263,16 @@ class strayProfiler extends strayASingleton
    */
   public function GetLog($level, $msg)
   {
-    foreach ($this->_logs as $logLevel => $logs) {
-      if ($level === $logLevel) {
-        foreach($logs as $message => $data) {
-          if($msg === $message)
+    foreach ($this->_logs as $logLevel => $logs)
+      if ($level === $logLevel)
+        foreach ($logs as $message => $data)
+          if ($msg === $message)
             return $data;
-        }
-      }
-    }
     return null;
   }
 
   /**
-   * Get log data by message and level.
+   * Get one log data by message and level.
    * @param string $msg log content
    * @param enum $level log level
    * @return string log data or null
@@ -280,10 +284,10 @@ class strayProfiler extends strayASingleton
   }
 
   /**
-   * Get all log datas by message and level.
+   * Get all log data by message and level.
    * @param string $msg log content
    * @param enum $level log level
-   * @return array log datas
+   * @return array log data
    */
   public function GetLogDataArray($message, $level = self::PROFILER)
   {
@@ -297,12 +301,12 @@ class strayProfiler extends strayASingleton
    */
   public function GetLogs($level = null)
   {
-    return (null === $level) ? $this->_logs : (isset($this->_logs[$level])) ? $this->_logs[$level] : null;
+    return (null === $level ? $this->_logs : (true === isset($this->_logs[$level]) ? $this->_logs[$level] : null));
   }
 
   /**
-   * Get request start microtime(true).
-   * @return int start microtime(true)
+   * Get request start microtime.
+   * @return float start microtime
    */
   public function GetTimeStart()
   {
@@ -310,8 +314,8 @@ class strayProfiler extends strayASingleton
   }
 
   /**
-   * Get request end microtime(true).
-   * @return int end microtime(true)
+   * Get request end microtime.
+   * @return float end microtime
    */
   public function GetTimeEnd()
   {
@@ -319,17 +323,17 @@ class strayProfiler extends strayASingleton
   }
 
   /**
-   * Get request elapsed microtime(true).
-   * @return int elapsed microtime(true)
+   * Get request elapsed microtime.
+   * @return float elapsed microtime
    */
   public function GetTimeElapsed()
   {
     return $this->GetLogData('time_elapsed');
   }
-  
+
   /**
    * Return time spent for all queries.
-   * @return int microtime(true)
+   * @return float microtime
    */
   private function _GetQueryCount()
   {
@@ -337,13 +341,13 @@ class strayProfiler extends strayASingleton
     $total = 0;
     if (true === is_array($logs))
       foreach ($logs as $host => $queries)
-        $total += count($queries['data']);        
+        $total += count($queries['data']);
     return $total;
   }
-  
+
   /**
    * Return time spent for all queries.
-   * @return int microtime(true)
+   * @return float microtime
    */
   private function _GetQueryTime()
   {
@@ -354,28 +358,29 @@ class strayProfiler extends strayASingleton
         $total += $log['timestamp'];
     return $total;
   }
-  
+
   /**
-   * Return log files names
-   * @return array
+   * Return non-hidden log filesnames.
+   * @return array filenames
    */
   private function _GetLogFiles()
   {
     $files = scandir($this->_GetBaseDir());
     $out = array();
     foreach ($files as $file)
-      if ('.' != $file && '..' != $file)
+      if ('.' != $file[0])
         $out[] = $file;
     return $out;
   }
-    
+
   /**
    * Delete all saved log files.
    */
   private function _DeleteOldLogs()
   {
     $files = $this->_GetLogFiles();
-    if(self::MAX < count($files)) {
+    if (self::MAX < count($files))
+    {
       $filesToDelete = array_splice($files, 0, self::MAX);
       if (0 < count($filesToDelete))
         foreach ($filesToDelete as $fileToDelete)

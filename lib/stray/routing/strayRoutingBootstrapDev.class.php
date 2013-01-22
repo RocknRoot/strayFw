@@ -34,6 +34,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     try
     {
       $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
+      // the ugly stuff
       if(preg_match('#_stray/profiler#', $url)) {
         $twig = strayExtTwig::fGetInstance();
         $twig->Init();
@@ -47,7 +48,9 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
             strayProfiler::fGetInstance()->RenderLogList();
           }
         }
+       // --
       } else {
+        // my basic code
         $startTime = microtime(true);
         strayProfiler::fGetInstance()->RequestStart();
         $this->_LoadExt($this->_request);
@@ -74,6 +77,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
           strayProfiler::fGetInstance()->needToDisplay = false;
         strayProfiler::fGetInstance()->AddTimerRenderLog(microtime(true) - $startTime);
         strayProfiler::fGetInstance()->RequestEnd();
+        // --
       }
       ob_end_flush();
     }
