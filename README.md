@@ -11,7 +11,7 @@ Yes, it's loosely based on Model-View-Adapter architecture. Yes, again. But, aga
 We don't think it's a revolutionary framework. We just try to do different. Maybe you will like the
 way too.
 
-Documentation is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
+User guide is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
 
 Code is free, new-BSD license. So... fork us !
 
