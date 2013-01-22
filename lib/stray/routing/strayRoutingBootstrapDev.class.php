@@ -33,33 +33,48 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
     ob_start();
     try
     {
-      $startTime = microtime();
       $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
-      strayProfiler::fGetInstance()->RequestStart();
-      $this->_LoadExt($this->_request);
-      strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
-      $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
-          . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
-      if (false === file_exists($path))
-        throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
-      $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
-      if (false === class_exists($type))
-        require $path;
-      strayProfiler::fGetInstance()->AddTimerRoutingLog(microtime() - $startTime);
-      $startTime = microtime();
-      $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);
-      $render = $view->Run($this->_request);
-      strayProfiler::fGetInstance()->AddTimerViewLog(microtime() - $startTime);
-      $startTime = microtime();
-      if (!($render instanceof strayAppsARender))
-        throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
-      echo $render->Render();
-      strayProfiler::fGetInstance()->AddTimerRenderLog(microtime() - $startTime);
-      if (!($render instanceof strayAppsRenderTemplate)
-          && true === empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-          && 'xmlhttprequest' !== strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
-        strayProfiler::fGetInstance()->needToDisplay = false;
-      strayProfiler::fGetInstance()->RequestEnd();
+      if(preg_match('#_stray/profiler#', $url)) {
+        $twig = strayExtTwig::fGetInstance();
+        $twig->Init();
+        if(preg_match('#_stray/profiler/last#', $url)) {
+          echo strayProfiler::fGetInstance()->GetLastLog();
+        } else {
+          preg_match('#_stray/profiler/(\d*)#', $url, $profilerParams);
+          if(isset($profilerParams[1])) {
+            strayProfiler::fGetInstance()->RenderLog($profilerParams[1]);
+          } else {
+            strayProfiler::fGetInstance()->RenderLogList();
+          }
+        }
+      } else {
+        $startTime = microtime(true);
+        strayProfiler::fGetInstance()->RequestStart();
+        $this->_LoadExt($this->_request);
+        strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
+        $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
+            . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
+        if (false === file_exists($path))
+          throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
+        $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
+        if (false === class_exists($type))
+          require $path;
+        strayProfiler::fGetInstance()->AddTimerRoutingLog(microtime(true) - $startTime);
+        $startTime = microtime(true);
+        $view = new $type(STRAY_PATH_TO_APPS . $this->_request->app, STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/' . $this->_request->widget);
+        $render = $view->Run($this->_request);
+        strayProfiler::fGetInstance()->AddTimerViewLog(microtime(true) - $startTime);
+        $startTime = microtime(true);
+        if (!($render instanceof strayAppsARender))
+          throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
+        echo $render->Render();
+        if (!($render instanceof strayAppsRenderTemplate)
+            && true === empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+            && 'xmlhttprequest' !== strtolower($_SERVER['HTTP_X_REQUESTED_WITH']))
+          strayProfiler::fGetInstance()->needToDisplay = false;
+        strayProfiler::fGetInstance()->AddTimerRenderLog(microtime(true) - $startTime);
+        strayProfiler::fGetInstance()->RequestEnd();
+      }
       ob_end_flush();
     }
     catch (strayExceptionRedirect $e)

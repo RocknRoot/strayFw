@@ -115,7 +115,7 @@ abstract class strayModelsATable
         $statement .= ' DEFAULT VALUES';
       $statement .= ' RETURNING ' . $primaries . ';';
       $query = static::fGetDb()->GetLink()->prepare($statement);
-      $startTime = microtime();
+      $startTime = microtime(true);
       $ret = $query->execute($arr);
       if (false === $ret)
       {
@@ -133,7 +133,7 @@ abstract class strayModelsATable
         $row['value'] = $primaries[$row['name']];
       }
       if ('development' === STRAY_ENV)
-        strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias(), $query->queryString, $arr, microtime() - $startTime);
+        strayProfiler::fGetInstance()->AddQueryLog($this->fGetDb()->GetAlias(), $query->queryString, $arr, microtime(true) - $startTime);
       return $ret;
     }
   }
