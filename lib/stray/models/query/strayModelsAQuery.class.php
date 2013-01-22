@@ -102,6 +102,17 @@ abstract class strayModelsAQuery
   }
 
   /**
+   * Copy all the external query args except ones that are already set.
+   * @param strayModelsAQuery $query external query
+   */
+  public function CopyArgs(strayModelsAQuery $query)
+  {
+    foreach ($query->_args as $key => $value)
+      if (false === $this->HasArg($key))
+        $this->SetArg($key, $value);
+  }
+
+  /**
    * Clear query.
    */
   public function Clear()

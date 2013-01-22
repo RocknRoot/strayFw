@@ -106,51 +106,8 @@ class strayModelsQuerySelect extends strayModelsAQuery
     $startTime = microtime();
     if (null == $this->_query)
     {
-      $query = 'SELECT ' . $this->_select . ' FROM ';
-      if (true === $this->_only)
-        $query .= 'ONLY '; 
-      $query .= $this->_from;
-      // joins
-      if (true === is_array($this->_innerFrom))
-      {
-        $max = count($this->_innerFrom);
-        for ($i = 0; $i < $max; ++$i)
-          $query .= ' INNER JOIN ' . $this->_innerFrom[$i] . ' ON ' . $this->_innerOn[$i];
-      }
-      if (true === is_array($this->_leftOuterFrom))
-      {
-        $max = count($this->_leftOuterFrom);
-        for ($i = 0; $i < $max; ++$i)
-        $query .= ' LEFT OUTER JOIN ' . $this->_leftOuterFrom[$i] . ' ON '
-            . $this->_leftOuterOn[$i];
-      }
-      elseif (true === is_array($this->_rightOuterFrom))
-      {
-        $max = count($this->_rightOuterFrom);
-        for ($i = 0; $i < $max; ++$i)
-        $query .= ' RIGHT OUTER JOIN ' . $this->_rightOuterFrom[$i] . ' ON '
-            . $this->_rightOuterOn[$i];
-      }
-      elseif (true === is_array($this->_fullOuterFrom))
-      {
-        $max = count($this->_fullOuter);
-        for ($i = 0; $i < $max; ++$i)
-        $query .= ' FULL OUTER JOIN ' . $this->_fullOuterFrom[$i] . ' ON '
-            . $this->_fullOuterOn[$i];
-      }
-      // other clauses
-      if (false === empty($this->_where))
-        $query .= ' WHERE ' . $this->_where;
-      if (false === empty($this->_groupBy))
-        $query .= ' GROUP BY ' . $this->_groupBy;
-      if (false === empty($this->_having))
-        $query .= ' HAVING ' . $this->_having;
-      if (false === empty($this->_orderBy))
-        $query .= ' ORDER BY ' . $this->_orderBy;
-      if (false === empty($this->_limit))
-        $query .= ' LIMIT ' . $this->_limit;
-      // execute
-      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($query);
+      // prepare
+      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($this->__toString());
     }
     $result = $this->_query->execute($this->_args);
     $this->_queryError = $this->_query->errorInfo();
@@ -406,5 +363,57 @@ class strayModelsQuerySelect extends strayModelsAQuery
         $this->_leftOuterFrom, $this->_leftOuterOn, $this->_limit,
         $this->_orderBy, $this->_query, $this->_rightOuterFrom,
         $this->_rightOuterOn, $this->_select, $this->_where);
+  }
+
+  /**
+   * __toString magic method. Doesn't include args.
+   * @return string string value
+   */
+  public function __toString()
+  {
+    $query = 'SELECT ' . $this->_select . ' FROM ';
+    if (true === $this->_only)
+      $query .= 'ONLY '; 
+    $query .= $this->_from;
+    // joins
+    if (true === is_array($this->_innerFrom))
+    {
+      $max = count($this->_innerFrom);
+      for ($i = 0; $i < $max; ++$i)
+        $query .= ' INNER JOIN ' . $this->_innerFrom[$i] . ' ON ' . $this->_innerOn[$i];
+    }
+    if (true === is_array($this->_leftOuterFrom))
+    {
+      $max = count($this->_leftOuterFrom);
+      for ($i = 0; $i < $max; ++$i)
+      $query .= ' LEFT OUTER JOIN ' . $this->_leftOuterFrom[$i] . ' ON '
+          . $this->_leftOuterOn[$i];
+    }
+    elseif (true === is_array($this->_rightOuterFrom))
+    {
+      $max = count($this->_rightOuterFrom);
+      for ($i = 0; $i < $max; ++$i)
+      $query .= ' RIGHT OUTER JOIN ' . $this->_rightOuterFrom[$i] . ' ON '
+          . $this->_rightOuterOn[$i];
+    }
+    elseif (true === is_array($this->_fullOuterFrom))
+    {
+      $max = count($this->_fullOuter);
+      for ($i = 0; $i < $max; ++$i)
+      $query .= ' FULL OUTER JOIN ' . $this->_fullOuterFrom[$i] . ' ON '
+          . $this->_fullOuterOn[$i];
+    }
+    // other clauses
+    if (false === empty($this->_where))
+      $query .= ' WHERE ' . $this->_where;
+    if (false === empty($this->_groupBy))
+      $query .= ' GROUP BY ' . $this->_groupBy;
+    if (false === empty($this->_having))
+      $query .= ' HAVING ' . $this->_having;
+    if (false === empty($this->_orderBy))
+      $query .= ' ORDER BY ' . $this->_orderBy;
+    if (false === empty($this->_limit))
+      $query .= ' LIMIT ' . $this->_limit;
+    return $query;
   }
 }
