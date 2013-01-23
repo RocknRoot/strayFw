@@ -106,8 +106,9 @@ class strayModelsQuerySelect extends strayModelsAQuery
     $startTime = microtime(true);
     if (null == $this->_query)
     {
+      $query = $this->__toString();
       // prepare
-      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($this->__toString());
+      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($query);
     }
     $result = $this->_query->execute($this->_args);
     $this->_queryError = $this->_query->errorInfo();
