@@ -7,18 +7,19 @@
 }
 .stray_profiler {
   font-size: 13px;
+  height: 29px;
   font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
 }
 #stray_profilerWrapper a {
   text-decoration: none;
 }
 #stray_profilerItems {
-
 }
 .stray_profilerItem {
   float: left;
   padding: 4px 5px;
   border-right: 1px solid #ddd;
+  height: 22px;
 }
 .stray_profilerItemRight {
   float: right;
@@ -53,10 +54,11 @@
   color: #0C70B7;
 }
 .stray_expandWrapper {
+  z-index: 999;
   display: none;
   background-color: #61CAFF;
   position: absolute;
-  margin-top: 20px;
+  margin-top: 26px;
   margin-left: -5px;
   max-width: 50%;
   cursor: copy;
@@ -94,10 +96,6 @@
 #jqueryNotLoaded {
   display: none;
 }
-#stray_ajax {
-  float: right;
-  border-left: 1px solid #ddd;
-}
 #stray_ajax .stray_expandWrapper ul {
   display: none;
 }
@@ -106,7 +104,7 @@
 }
 .stray_compactWrapper {
   display: none;
-  background-color: #0C0C0C;
+  background-color: #0c0c0c;
   color: #ECE2DE;
   padding: 10px;
 }
