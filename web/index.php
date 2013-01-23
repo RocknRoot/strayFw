@@ -41,6 +41,7 @@ require $straypath . 'ext/require.php';
 if ('development' === STRAY_ENV)
 {
   require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
+  require $straypath . 'routing/strayRoutingBootstrapDevApp.class.php';
   require $straypath . 'persistance/profiler/strayProfiler.class.php';
 }
 else

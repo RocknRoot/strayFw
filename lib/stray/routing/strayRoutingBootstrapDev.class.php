@@ -30,33 +30,20 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
   public function Run($url, $method)
   {
     ignore_user_abort();
-    ob_start();
     try
     {
+      ob_start();
       $this->_request = strayRouting::fGetInstance()->Route($url, $method, true);
-      // the ugly stuff
-      if(preg_match('#_stray/profiler#', $url)) {
-        $twig = strayExtTwig::fGetInstance();
-        $twig->Init();
-        if(preg_match('#_stray/profiler/last#', $url)) {
-          echo strayProfiler::fGetInstance()->GetLastLog();
-        } else {
-          preg_match('#_stray/profiler/(\d*)#', $url, $profilerParams);
-          if(isset($profilerParams[1])) {
-            strayProfiler::fGetInstance()->RenderLog($profilerParams[1]);
-          } else {
-            strayProfiler::fGetInstance()->RenderLogList();
-          }
-        }
-       // --
-      } else {
-        // my basic code
+      if (true === strayRoutingBootstrapDevApp::fGetInstance()->IsItForMe($url))
+        strayRoutingBootstrapDevApp::fGetInstance()->Run($url, $method);
+      else
+      {
         $startTime = microtime(true);
         strayProfiler::fGetInstance()->RequestStart();
         $this->_LoadExt($this->_request);
         strayConfigApp::fGetInstance($this->_request->app)->PrepareDatabases();
         $path = STRAY_PATH_TO_APPS . $this->_request->app . '/widgets/'
-            . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
+          . $this->_request->widget . '/' . $this->_request->widget . '.views.php';
         if (false === file_exists($path))
           throw new strayExceptionNotfound(strayExceptionNotfound::NOTFOUND_WIDGET, 'can\'t find "' . $this->_request->widget . '"');
         $type = 'apps' . ucfirst($this->_request->app) . ucfirst($this->_request->widget) . 'Views';
@@ -77,7 +64,6 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
           strayProfiler::fGetInstance()->needToDisplay = false;
         strayProfiler::fGetInstance()->AddTimerRenderLog(microtime(true) - $startTime);
         strayProfiler::fGetInstance()->RequestEnd();
-        // --
       }
       ob_end_flush();
     }
