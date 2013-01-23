@@ -39,9 +39,9 @@
             FW plugins
             <ul>
               {% if PROFILER.fw_plugins %}
-              {% for plugin in PROFILER.fw_plugins %}
+              {% for plugin in PROFILER.fw_plugins.data %}
               <li>
-              <li class="stray_key">{{ plugin.data.0 }}</li>
+              <li class="stray_key">{{ plugin }}</li>
               </li>
               {% endfor %}
               {% else %}
@@ -53,9 +53,9 @@
             App plugins
             <ul>
               {% if PROFILER.app_plugins %}
-              {% for plugin in PROFILER.app_plugins %}
+              {% for plugin in PROFILER.app_plugins.data %}
               <li>
-              <li class="stray_key">{{ plugin.data.0 }}</li>
+              <li class="stray_key">{{ plugin }}</li>
               </li>
               {% endfor %}
               {% else %}
