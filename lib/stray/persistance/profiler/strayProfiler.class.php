@@ -74,7 +74,7 @@ class strayProfiler extends strayASingleton
    */
   public function RequestStart()
   {
-    $this->_name = date_create_from_format('U.u', microtime(true))->format('YmdHisu');
+    $this->_logFilename = date_create_from_format('U.u', microtime(true))->format('YmdHisu');
     $request = strayRoutingBootstrap::fGetInstance()->GetRequest();
     $this->AddProfilerLog('id', $this->_logFilename);
     $this->AddProfilerLog('php_version', phpversion());
@@ -151,7 +151,7 @@ class strayProfiler extends strayASingleton
     $files = array_reverse($this->_GetLogFiles());
     if (0 < count($files)) 
     {
-      $this->_name = $files[0];
+      $this->_logFilename = $files[0];
       return json_encode(array('id' => $this->_logFilename, 'html' => $this->_GetView('compact')));
     }
     return null;
