@@ -7,8 +7,10 @@
 }
 .stray_profiler {
   font-size: 13px;
-  height: 29px;
   font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+}
+#stray_version {
+  
 }
 #stray_profilerWrapper a {
   text-decoration: none;
@@ -19,7 +21,7 @@
   float: left;
   padding: 4px 5px;
   border-right: 1px solid #ddd;
-  height: 22px;
+  height: 16px;
 }
 .stray_profilerItemRight {
   float: right;
@@ -34,7 +36,7 @@
   cursor: pointer;
 }
 .stray_profilerItem img {
-  vertical-align: top;
+  vertical-align: text-top;
 }
 .stray_profilerItemSelected {
   background-color: #61CAFF;
@@ -58,20 +60,17 @@
   display: none;
   background-color: #61CAFF;
   position: absolute;
-  margin-top: 26px;
+  margin-top: 20px;
   margin-left: -5px;
-  max-width: 50%;
   cursor: copy;
 }
 .stray_profiler ul {
   margin: 0;
   padding: 0;
-  padding: 4px;
-  padding-left: 6px;
 }
 .stray_profiler ul li {
   list-style-type: none;
-  padding: 4px 2px;
+  padding: 6px 8px;
 }
 .stray_profiler ul li.stray_separator {
   border-top: 1px solid #A1DFFF;
@@ -79,12 +78,15 @@
 .stray_profiler ul li:first-child {
   border-top: none;
 }
-.stray_profiler ul li hr {
+.stray_profiler ul hr {
   border: 0;
-  border-top: 1px solid #EEE;
+  border-top: 1px solid #82E2FF;
 }
 .stray_expand {
   cursor: pointer;
+}
+.stray_expand:hover {
+  background-color: #61CAFF;
 }
 .stray_key {
   color: white;
@@ -96,6 +98,14 @@
 #jqueryNotLoaded {
   display: none;
 }
+#stray_ajax {
+  max-width: 35%;
+}
+#stray_ajax .stray_expandWrapper {
+  max-height: 35%;
+  min-width: 25%;
+  overflow-y: scroll;
+}
 #stray_ajax .stray_expandWrapper ul {
   display: none;
 }
@@ -104,7 +114,27 @@
 }
 .stray_compactWrapper {
   display: none;
-  background-color: #0c0c0c;
-  color: #ECE2DE;
+  background-color: #61CAFF;
   padding: 10px;
+  max-height: 50%;
+  overflow-y: scroll;
+}
+.stray_compactWrapper .stray_expandWrapper {
+  width: auto;
+  height: auto;
+}
+.stray_compactInfo {
+  float: left;
+  width: 28%;
+}
+.stray_compactDatas {
+  float: left;
+  margin-left: 1%;
+  width: 70%;
+}
+.stray_ajaxReport {
+  padding: 2px 0px;
+}
+.stray_ajaxReport:hover {
+  background-color: #99DDFF;
 }
