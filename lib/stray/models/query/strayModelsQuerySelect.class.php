@@ -106,16 +106,15 @@ class strayModelsQuerySelect extends strayModelsAQuery
     $startTime = microtime(true);
     if (null == $this->_query)
     {
-      $query = $this->__toString();
       // prepare
-      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($query);
+      $this->_query = $this->_db->GetLink(!$this->_isCritical)->prepare($this->__toString());
     }
     $result = $this->_query->execute($this->_args);
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
-      strayLog::fGetInstance()->Error('QuerySelect fail : ' . $this->_queryError[2] . ' (' . $query . ')');
+      strayLog::fGetInstance()->Error('QuerySelect fail : ' . $this->_queryError[2] . ' (' . $this->__toString() . ')');
     if ('development' == STRAY_ENV)
-      strayProfiler::fGetInstance()->AddQueryLog($this->_db->GetAlias(), $query, $this->_args, microtime(true) - $startTime);
+      strayProfiler::fGetInstance()->AddQueryLog($this->_db->GetAlias(), $this->__toString(), $this->_args, microtime(true) - $startTime);
     return $result;
   }
 

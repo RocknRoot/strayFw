@@ -79,7 +79,7 @@ final class strayCommandOrdersWidget
     $class = 'apps' . ucfirst($app) . ucfirst($widget) . 'Scripts';
     $obj = new $class(STRAY_PATH_TO_APPS . $app, STRAY_PATH_TO_APPS . $app . '/widgets/' . $widget);
     $script = array_shift($params);
-    echo 'Executing ' . $app . '.' . $widget . ':' . $widget . '...' . PHP_EOL . PHP_EOL;
+    echo 'Executing ' . $app . '.' . $widget . ':' . $script . '...' . PHP_EOL . PHP_EOL;
     $ret = $obj->Run($app, $widget, $script, $params, $options);
     echo PHP_EOL . 'Return : ' . PHP_EOL . PHP_EOL;
     var_dump($ret);
