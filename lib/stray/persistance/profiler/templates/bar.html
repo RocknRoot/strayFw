@@ -1,10 +1,7 @@
 <style type="text/css">
   {% include 'profiler.css' %}
+  {% include 'ext/shCoreRDark.css' %}
 </style>
-
-<script type="text/javascript">
-  {% include 'profiler.js' %}
-</script>
 
 <div id="jqueryNotLoaded">
   <p>You must add jquery to enable the profiler</p>
@@ -12,7 +9,7 @@
 
 <div id="stray_profilerWrapper" class="stray_profiler">
   <div id="stray_profilerItems">
-    <div class="stray_profilerItem">
+    <div class="stray_profilerItem" id="stray_version">
       strayFw {{ PROFILER.fw_version.data.0 }} {{ PROFILER.fw_version_code.data.0 }}
     </div>
     <div class="stray_profilerItem stray_expand">
@@ -21,7 +18,7 @@
           <li>App : <span class="stray_key">{{ PROFILER.app.data.0 }}</span></li>
           <li>Widget : <span class="stray_key">{{ PROFILER.page_widget.data.0 }}</span></li>
           <li>View : <span class="stray_key">{{ PROFILER.page_view.data.0 }}</span></li>
-          <li><hr/></li>
+          <hr/>
           <li>
             Routing parameters
             <ul>
@@ -34,18 +31,18 @@
               {% endif %}
             </ul>
           </li>
-          <li><hr/></li>
+          <hr/>
           <li>
             FW plugins
             <ul>
               {% if PROFILER.fw_plugins %}
-              {% for plugin in PROFILER.fw_plugins.data %}
-              <li>
-              <li class="stray_key">{{ plugin }}</li>
-              </li>
-              {% endfor %}
-              {% else %}
-              <li>No FW plugins</li>
+              {% if app_plugins|length > 0 %}
+                {% for plugin in PROFILER.fw_plugins.data %}
+                <li class="stray_key">{{ plugin }}</li>
+                {% endfor %}
+                {% else %}
+                <li>No FW plugins</li>
+                {% endif %}
               {% endif %}
             </ul>
           </li>
@@ -53,13 +50,13 @@
             App plugins
             <ul>
               {% if PROFILER.app_plugins %}
-              {% for plugin in PROFILER.app_plugins.data %}
-              <li>
-              <li class="stray_key">{{ plugin }}</li>
-              </li>
-              {% endfor %}
-              {% else %}
-              <li>No App plugins</li>
+                {% if app_plugins|length > 0 %}
+                {% for plugin in PROFILER.app_plugins.data %}
+                <li class="stray_key">{{ plugin }}</li>
+                {% endfor %}
+                {% else %}
+                <li>No App plugins</li>
+                {% endif %}
               {% endif %}
             </ul>
           </li>
@@ -84,15 +81,16 @@
     </div>
     <div class="stray_profilerItem">
       <img src="/media/profiler/icons/load.png" alt="" />
-      {{ PROFILER.memory_usage.data.0 }}ko
+      {{ PROFILER.memory_usage.data.0 }}<small>ko</small>
     </div>
     <div class="stray_profilerItem stray_expand">
       <div class="stray_expandWrapper">
         {% if QUERY|length > 0 %}
         <ul>
           {% for queryhost, querylog in QUERY %}
-          <li class="stray_separator">
-            <small class="stray_block">[<i>{{ queryhost }}</i> | {{ (querylog.timestamp*1000)|number_format(3, '.', ',') }}ms]</small>  <span class="stray_key">{{ querylog.data.0 }}</span>
+          <li class="stray_separator stray_query">
+            <small class="stray_block">[<i>{{ queryhost }}</i> | {{ (querylog.timestamp*1000)|number_format(3, '.', ',') }}ms]</small> 
+            <pre class="brush: sql">{{ querylog.data.0 }}</pre>
           </li>
           {% endfor %}
         </ul>
@@ -126,3 +124,10 @@
   </div>
   <div style="clear: both"></div>
 </div>
+
+
+<script type="text/javascript">
+  {% include 'profiler.js' %}
+  {% include 'ext/shCore.js' %}
+  {% include 'ext/shBrushSql.js' %}
+</script>

@@ -196,7 +196,9 @@ class strayProfiler extends strayASingleton
    */
   public function AddQueryLog($msg, $query, $args = array(), $microtime = null)
   {
-    $this->AddLog(self::QUERY, ($msg . ' #' . ($this->_GetQueryCount() + 1)), $query . ' With values' . implode(', ', $args), $microtime);
+    $query = preg_replace('#\)#', ")\n", $query);
+    $query = preg_replace('#;#', ";\n", $query);
+    $this->AddLog(self::QUERY, ($msg . ' #' . ($this->_GetQueryCount() + 1)), $query . "\n With values" . implode(', ', $args), $microtime);
   }
 
   /**
