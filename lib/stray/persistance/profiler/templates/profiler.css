@@ -9,13 +9,8 @@
   font-size: 13px;
   font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
 }
-#stray_version {
-  
-}
 #stray_profilerWrapper a {
   text-decoration: none;
-}
-#stray_profilerItems {
 }
 .stray_profilerItem {
   float: left;
@@ -100,11 +95,6 @@
 }
 #stray_ajax {
   max-width: 35%;
-}
-#stray_ajax .stray_expandWrapper {
-  max-height: 35%;
-  min-width: 25%;
-  overflow-y: scroll;
 }
 #stray_ajax .stray_expandWrapper ul {
   display: none;
