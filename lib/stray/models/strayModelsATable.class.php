@@ -306,6 +306,19 @@ abstract class strayModelsATable
   }
 
   /**
+   * Create a new entry with specified information.
+   * @param array $data new row data (keys must be columns aliases)
+   * @return strayModelsATable new object
+   */
+  static public function fInsert(array $data)
+  {
+    $object = new static();
+    foreach ($data as $name => $value)
+      $object->{'Set' . ucfirst($name)}($value);
+    return $object->Save();
+  }
+
+  /**
    * Create a new select query.
    * @param bool $critical if true, will be executed on write server
    * @return strayModelsQuerySelect new query object
