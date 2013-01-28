@@ -112,6 +112,8 @@ final class strayCommandOrdersModel
         $accessors .= '  public function Get' . ucfirst($colName) . "()\n  {\n";
         if ('string' == $column['type'] || 'char' == $column['type'])
           $accessors .= '    return stripslashes($this->_column' . ucfirst($colName) . "['value']);";
+        elseif ('json' == $column['type'])
+          $accessors .= '    return json_decode($this->_column' . ucfirst($colName) . "['value'], true);";
         else
           $accessors .= '    return $this->_column' . ucfirst($colName) . "['value'];";
         $accessors .= "\n  }\n\n";
@@ -132,9 +134,10 @@ final class strayCommandOrdersModel
           $accessors .= '      if (1 == $value || true === $value)' . PHP_EOL . '        $this->_column'
             . ucfirst($colName) . '[\'value\'] = \'true\';' . PHP_EOL . '      else' . PHP_EOL
             . '        $this->_column' . ucfirst($colName) . '[\'value\'] = \'false\';' . PHP_EOL;
+        elseif ('json' == $column['type'])
+          $accessors .= '      $this->_column' . ucfirst($colName) . '[\'value\'] = json_encode($value);' . PHP_EOL;
         else
-          $accessors .= '      $this->_column'
-            . ucfirst($colName) . '[\'value\'] = $value;' . PHP_EOL;
+          $accessors .= '      $this->_column' . ucfirst($colName) . '[\'value\'] = $value;' . PHP_EOL;
         $accessors .= '      $this->_modified[\'' . $colName . "'] = true;\n"
           . '      return true;' . "\n    }\n"
           . '    return false;' . "\n  }\n\n";
