@@ -10,6 +10,7 @@ class strayProfiler extends strayASingleton
   const LEVEL_FW_DEBUG = 'LEVEL_FW_DEBUG';
   const LEVEL_SYS_NOTICE = 'LEVEL_SYS_NOTICE';
   const LEVEL_USER_NOTICE = 'LEVEL_USER_NOTICE';
+  const LEVEL_DEBUG = 'LEVEL_DEBUG';
   const QUERY = 'QUERY';
   const TIMER = 'TIMER';
   const MAX = 10;
@@ -194,11 +195,23 @@ class strayProfiler extends strayASingleton
    * @param string $args query arguments
    * @param float $microtime query microtime
    */
-  public function AddQueryLog($msg, $query, $args = array(), $microtime = null)
+  public function AddQueryLog($msg, $query, array $args = array(), $microtime = null)
   {
     $query = preg_replace('#\)#', ")\n", $query);
+    $query = preg_replace('#\(#', "\n(", $query);
     $query = preg_replace('#;#', ";\n", $query);
-    $this->AddLog(self::QUERY, ($msg . ' #' . ($this->_GetQueryCount() + 1)), $query . "\n With values" . implode(', ', $args), $microtime);
+    $query = preg_replace('#([A-Z] )([a-z])#', '${1}' . "\n" . ' ${2}', $query);
+    $this->AddLog(self::QUERY, ($msg . ' #' . ($this->_GetQueryCount() + 1)), $query . "\n => WITH VALUES " . implode(', ', $args), $microtime);
+  }
+  
+  /**
+   * Add debug log, use it as well
+   * @param type $msg
+   * @param type $data
+   */
+  public function AddDebugLog($msg, $data = null)
+  {
+    $this->AddLog(self::LEVEL_DEBUG, $msg, $data, microtime(true));
   }
 
   /**

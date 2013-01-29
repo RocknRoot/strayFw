@@ -1,22 +1,24 @@
 #stray_profilerWrapper {
-  display: none;
   width: 100%;
   border-bottom: 1px solid #ccc;
   color: #444;
   background-color: #F5F5F5;
+  min-height: 24px;
+}
+#stray_profilerWrapper a {
+  text-decoration: none;
 }
 .stray_profiler {
   font-size: 13px;
   font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
 }
-#stray_profilerWrapper a {
-  text-decoration: none;
+#stray_profilerItems {
+  display: none;
 }
 .stray_profilerItem {
   float: left;
   padding: 4px 5px;
   border-right: 1px solid #ddd;
-  height: 16px;
 }
 .stray_profilerItemRight {
   float: right;
@@ -26,6 +28,9 @@
 .stray_profilerItemButton {
   border-radius: 4px;
   padding: 3px 3px;
+}
+.strayUpdateAvailable {
+  display: none;
 }
 .stray_cursor {
   cursor: pointer;
@@ -94,7 +99,7 @@
   display: none;
 }
 #stray_ajax {
-  max-width: 35%;
+  min-width: 100px;
 }
 #stray_ajax .stray_expandWrapper ul {
   display: none;
@@ -106,7 +111,7 @@
   display: none;
   background-color: #61CAFF;
   padding: 10px;
-  max-height: 50%;
+  max-height: 52%;
   overflow-y: scroll;
 }
 .stray_compactWrapper .stray_expandWrapper {
@@ -127,4 +132,37 @@
 }
 .stray_ajaxReport:hover {
   background-color: #99DDFF;
+}
+.stray_ajaxStatus {
+  float: right;
+}
+.stray_ajaxStatus span {
+  padding-left: 4px;
+  padding-right: 2px;
+}
+#stray_ajax img {
+  float: left;
+  margin-right: 5px;
+}
+.stray_ajaxStatusSuccess {
+  border-left: 4px solid greenyellow;
+}
+.stray_ajaxStatusNotfound {
+  border-left: 4px solid darkorange;
+}
+.stray_ajaxStatusError {
+  border-left: 4px solid #f00;
+}
+.stray_ajaxClose {
+  position: absolute;
+  width: 20px;
+  right: 34px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+}
+.stray_ajaxClose:hover {
+  background-color: #82E2FF;
 }
