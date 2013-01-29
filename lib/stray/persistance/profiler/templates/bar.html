@@ -9,8 +9,8 @@
 
 <div id="stray_profilerWrapper" class="stray_profiler">
   <div id="stray_profilerItems">
-    <div class="stray_profilerItem" id="stray_version">
-      strayFw {{ PROFILER.fw_version.data.0 }} {{ PROFILER.fw_version_code.data.0 }}
+    <div class="stray_profilerItem stray_cursor" id="stray_version" onClick="window.open('https://github.com/Nekith/strayFw')">
+      <img class="strayUpdateAvailable" src="/media/profiler/icons/refresh.png" />strayFw <span id="strayVersion">{{ PROFILER.fw_version.data.0 }}</span> {{ PROFILER.fw_version_code.data.0 }}
     </div>
     <div class="stray_profilerItem stray_expand">
       <div class="stray_expandWrapper">
@@ -105,22 +105,27 @@
       No query logs
       {% endif %}
     </div>
+    <div class="stray_profilerItem">
+      <img src="/media/profiler/icons/user.png" alt="" />
+      WIP
+    </div>
     <div class="stray_profilerItem stray_expand" id="stray_ajax">
       <div class="stray_expandWrapper">
         <ul></ul>
       </div>
       <img src="/media/profiler/icons/ajax.png" alt="" />
-      <span class="stray_ajaxStatus">0</span>
+      <div class="stray_ajaxStatus">
+        <span class="stray_ajaxStatusCount">0</span>
+        <span class="stray_ajaxStatusSuccess">0</span>
+        <span class="stray_ajaxStatusNotfound">0</span>
+        <span class="stray_ajaxStatusError">0</span>
+      </div>
       <span class="stray_ajaxInfo"></span>
     </div>
-    <!--    <div class="stray_profilerItem">
-          <img src="/media/profiler/icons/user.png" alt="" />
-          WIP
-        </div>-->
-    <!--    <div class="stray_profilerItem stray_profilerItemRight">
-          <img id="stray_profilerLogs" class="stray_profilerItemButton stray_cursor" src="/media/profiler/icons/statistics.png" alt="" />
-        </div>-->
-
+    
+<!--    <div class="stray_profilerItem stray_profilerItemRight">
+      All
+    </div>-->
   </div>
   <div style="clear: both"></div>
 </div>
