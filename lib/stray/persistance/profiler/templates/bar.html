@@ -105,9 +105,18 @@
       No query logs
       {% endif %}
     </div>
-    <div class="stray_profilerItem">
+    <div class="stray_profilerItem stray_expand">
+      <div class="stray_expandWrapper">
+        {% if PROFILER.session_vars.data|length > 0 %}
+        <ul>
+          {% for session_key, session_value in PROFILER.session_vars.data %}
+          <li class="stray_key">{{ session_key }} = {{ session_value }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
       <img src="/media/profiler/icons/user.png" alt="" />
-      WIP
+      {{ PROFILER.session_vars.data|length }}
     </div>
     <div class="stray_profilerItem stray_expand" id="stray_ajax">
       <div class="stray_expandWrapper">

@@ -94,9 +94,6 @@ class strayProfiler extends strayASingleton
     foreach ($_POST as $postKey => $postValue)
       $posts[] = $postKey . ':' . var_export($postValue, true);
     $this->AddProfilerLog('request_post', $posts);
-    $this->AddProfilerLog('session_vars', var_export(straySession::fGetInstance()->All(), true));
-    // if plugin auth
-    //$this->AddProfilerLog('user_isAuthenticated');
     $this->AddProfilerLog('fw_version', STRAY_VERSION);
     $this->AddProfilerLog('fw_version_code', STRAY_VERSION_CODE);
     $this->AddProfilerLog('fw_isDebug', $request->IsDebug());
@@ -115,6 +112,10 @@ class strayProfiler extends strayASingleton
   public function RequestEnd()
   {
     $memoryMg = number_format(memory_get_usage() / 1024, 0, null, ' ');
+    if(0 < count(straySession::fGetInstance()->All()))
+      $this->AddProfilerLog('session_vars', straySession::fGetInstance()->All());
+    // if plugin auth
+    //$this->AddProfilerLog('user_isAuthenticated');
     $this->AddProfilerLog('memory_usage', $memoryMg);
     $this->AddProfilerLog('time_end', microtime(true));
     $this->AddProfilerLog('time_elapsed', $this->GetTimeEnd() - $this->GetTimeStart());
