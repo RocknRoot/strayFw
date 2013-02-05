@@ -116,9 +116,7 @@
         {% endif %}
       </div>
       <img src="/media/profiler/icons/user.png" alt="" />
-      {% if PROFILER.session_vars.data|length == 0 %}
-        No session vars
-      {% endif %} 
+      {{ PROFILER.session_vars.data|length }}
     </div>
     <div class="stray_profilerItem stray_expand" id="stray_ajax">
       <div class="stray_expandWrapper">
