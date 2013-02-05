@@ -112,7 +112,7 @@ class strayProfiler extends strayASingleton
   public function RequestEnd()
   {
     $memoryMg = number_format(memory_get_usage() / 1024, 0, null, ' ');
-    if(0 < count(straySession::fGetInstance()->All()))
+    if (0 < count(straySession::fGetInstance()->All()))
       $this->AddProfilerLog('session_vars', straySession::fGetInstance()->All());
     // if plugin auth
     //$this->AddProfilerLog('user_isAuthenticated');

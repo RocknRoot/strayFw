@@ -168,6 +168,16 @@ final class strayI18n extends strayASingleton
   }
 
   /**
+   * Check if it has specified trad according to current language.
+   * @param string $name trad name
+   * @return bool true if it has
+   */
+  public function __isset($name)
+  {
+    return isset($this->_trads[$name]);
+  }
+
+  /**
    * Get a trad according to current language.
    * @param string $name trad name
    * @return string translation
