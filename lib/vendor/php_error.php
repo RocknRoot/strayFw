@@ -2756,6 +2756,7 @@
                                 iframe.setAttribute('width', '100%');
                                 iframe.setAttribute('height', '100%');
                                 iframe.setAttribute('src', 'about:blank');
+                                iframe.setAttribute('id', 'php_error_iframe');
 
                                 iframe.style.transition =
                                 iframe.style.OTransition =
@@ -2870,7 +2871,8 @@
                                  */
                                 setTimeout( function() {
                                     var body = document.getElementsByTagName('body')[0];
-                                    body.appendChild( iframe );
+                                    if (0 == $('body').find('iframe#php_error_iframe').size())
+                                      body.appendChild( iframe );
                                 }, 1 );
                             }
 

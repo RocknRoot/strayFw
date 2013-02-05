@@ -204,11 +204,11 @@ class strayProfiler extends strayASingleton
     $query = preg_replace('#([A-Z] )([a-z])#', '${1}' . "\n" . ' ${2}', $query);
     $this->AddLog(self::QUERY, ($msg . ' #' . ($this->_GetQueryCount() + 1)), $query . "\n => WITH VALUES " . implode(', ', $args), $microtime);
   }
-  
+
   /**
-   * Add debug log, use it as well
-   * @param type $msg
-   * @param type $data
+   * Add debug log, use it as well.
+   * @param string $msg log message
+   * @param string $data log data
    */
   public function AddDebugLog($msg, $data = null)
   {
