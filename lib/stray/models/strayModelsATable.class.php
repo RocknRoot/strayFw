@@ -217,6 +217,20 @@ abstract class strayModelsATable
   }
 
   /**
+   * Get current model data as array.
+   * @return array data
+   */
+  public function ToArray()
+  {
+    $data = array();
+    $vars = get_object_vars($this);
+    foreach ($vars as $key => $elem)
+      if (false !== strpos($key, '_column'))
+        $data[$elem['name']] = $elem['value'];
+    return $data;
+  }
+
+  /**
    * Convert SQL data to an array of model-table objects.
    * @param array $data SQL data
    * @return array strayModelsATable objects
@@ -233,7 +247,7 @@ abstract class strayModelsATable
    * Fetch one entry satisfying all the specified conditions.
    * @param array $conditions where conditions
    * @param bool $critical if true, will be executed on write server
-   * @return static model instance
+   * @return object model instance
    */
   static public function fFetch(array $conditions, $critical = false)
   {
@@ -249,7 +263,7 @@ abstract class strayModelsATable
     }
     $select->Execute();
     $data = $select->Fetch();
-    if (0 == count($data))
+    if (false === $data)
       return false;
     return new static($data);
   }
@@ -259,7 +273,7 @@ abstract class strayModelsATable
    * @param array $conditions where conditions
    * @param string $order order
    * @param bool $critical if true, will be executed on write server
-   * @return array tab of static model instances
+   * @return array tab of model instances
    */
   static public function fFetchAll(array $conditions = array(), $order = null, $critical = false)
   {

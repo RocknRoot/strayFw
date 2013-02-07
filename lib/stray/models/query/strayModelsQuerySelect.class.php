@@ -41,6 +41,11 @@ class strayModelsQuerySelect extends strayModelsAQuery
    */
   protected $_limit;
   /**
+   * Offset clause.
+   * @var string
+   */
+  protected $_offset;
+  /**
    * Inner join table.
    * @var array
    */
@@ -125,11 +130,11 @@ class strayModelsQuerySelect extends strayModelsAQuery
   public function Fetch()
   {
     if (null == $this->_query)
-      return null;
+      return false;
     $result = $this->_query->fetch(PDO::FETCH_ASSOC);
     if ('00000' == $this->GetErrorState() && true === is_array($result))
       return $result;
-    return array();
+    return null;
   }
 
   /**
@@ -138,10 +143,12 @@ class strayModelsQuerySelect extends strayModelsAQuery
    */
   public function FetchAll()
   {
+    if (null == $this->_query)
+      return false;
     $results = $this->_query->fetchAll(PDO::FETCH_ASSOC);
     if ('00000' == $this->GetErrorState() && true === is_array($results))
       return $results;
-    return array();
+    return null;
   }
 
   /**
@@ -285,6 +292,17 @@ class strayModelsQuerySelect extends strayModelsAQuery
   }
 
   /**
+   * Set offset clause.
+   * @param string $offset offset arguments
+   * @return strayModelsQuerySelect this
+   */
+  public function Offset($offset)
+  {
+    $this->_offset = $offset;
+    return $this;
+  }
+
+  /**
    * Create an inner join.
    * @param string $from inner join table
    * @param string $on inner join condition
@@ -360,7 +378,7 @@ class strayModelsQuerySelect extends strayModelsAQuery
     parent::Clear();
     unset($this->_from, $this->_fullOuterFrom, $this->_fullOuterOn,
         $this->_groupBy, $this->_having, $this->_innerFrom, $this->_innerOn,
-        $this->_leftOuterFrom, $this->_leftOuterOn, $this->_limit,
+        $this->_leftOuterFrom, $this->_leftOuterOn, $this->_limit, $this->_offset,
         $this->_orderBy, $this->_query, $this->_rightOuterFrom,
         $this->_rightOuterOn, $this->_select, $this->_where);
   }
@@ -414,6 +432,8 @@ class strayModelsQuerySelect extends strayModelsAQuery
       $query .= ' ORDER BY ' . $this->_orderBy;
     if (false === empty($this->_limit))
       $query .= ' LIMIT ' . $this->_limit;
+    if (false === empty($this->_offset))
+      $query .= ' OFFSET ' . $this->_offset;
     return $query;
   }
 }

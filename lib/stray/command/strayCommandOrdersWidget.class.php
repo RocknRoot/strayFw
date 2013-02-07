@@ -24,7 +24,7 @@ final class strayCommandOrdersWidget
     if (false === mkdir($path) || false === mkdir(STRAY_PATH_TO_APPS . $params[0] . '/templates/' . $params[1]))
       throw new strayExceptionFatal('can\'t mkdir');
     // files
-    if (false === touch(STRAY_PATH_TO_APPS . $params[0] . '/templates/' . $params[1] . '/index.html'))
+    if (false === touch(STRAY_PATH_TO_APPS . $params[0] . '/templates/' . $params[1] . '/index.html.twig'))
         throw new strayExceptionFatal('can\'t touch (this!)');
     // xxx.controls.php
     $file = fopen($path . '/' . $params[1] . '.controls.php', 'x+');

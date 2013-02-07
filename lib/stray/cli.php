@@ -12,7 +12,7 @@ define('STRAY_PATH_TO_SCRIPTS', $base . '../../scripts/');
 define('STRAY_PATH_TO_WEB', $base . '../../web/');
 define('STRAY_PATH_TO_INSTALL', $base . '../../');
 
-define('STRAY_ENV', 'production');
+define('STRAY_ENV', 'cli');
 
 require 'global/require.php';
 require 'exception/require.php';

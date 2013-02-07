@@ -149,6 +149,43 @@ final class strayRouting extends strayASingleton
         $nice .= $subdomain . '.';
       $nice .= strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
     }
-    return $nice . '/' . ltrim($url, '/');
+    $nice = $nice . '/' . ltrim($url, '/');
+    return preg_replace('/\/+/', '/', $nice);
+  }
+
+  /**
+   * Get nice url for specified $route.
+   * @param string $route route name
+   * @param array $args route args
+   * @return string nice url
+   */
+  static public function fGenerateNiceUrlForRoute($route, $args = array())
+  {
+    $app = strayRoutingBootstrap::fGetInstance()->GetRequest()->app;
+    $url = null;
+    if (false !== strpos($route, '.'))
+    {
+      list($app, $route) = explode('.', $route);
+      $routes = strayConfigInstall::fGetInstance()->GetRoutes();
+      $url = $routes['routes'][$app]['subdomain'] . '.';
+    }
+    $routes = strayConfigApp::fGetInstance($app)->GetRoutes();
+    if (null == $routes)
+    {
+      strayLog::fGetInstance()->Error('can\'t find app "' . $app . '" for route view helper');
+      return null;
+    }
+    if (false === isset($routes['routes'][$route]))
+    {
+      strayLog::fGetInstance()->Error('can\'t find route "' . $route . '" for route view helper');
+      return null;
+    }
+    $url .= $routes['routes'][$route]['url'];
+    foreach ($args as $name => $value)
+      $url = preg_replace('/\(\?<' . $name . '>(.*?)\)/', $value, $url);
+    // clear optional parts
+    $url = preg_replace('/\(\?<(\w)+>(.*?)\)[?*]/', null, $url);
+    $url = str_replace([ '(', ')', '?' ], null, $url);
+    return self::fGenerateNiceUrl(rtrim($url, '/'));
   }
 }
