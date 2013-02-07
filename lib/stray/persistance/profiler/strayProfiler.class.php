@@ -167,7 +167,7 @@ class strayProfiler extends strayASingleton
   private function _GetView($template)
   {
     $env = strayExtTwig::fGetInstance()->GetEnvironment(STRAY_PATH_TO_LIB . 'stray/persistance/profiler/templates');
-    return strayExtTwig::fGetInstance()->LoadTemplate($env, $template . '.html', $this->_GetArray());
+    return strayExtTwig::fGetInstance()->LoadTemplate($env, $template . '.html.twig', $this->_GetArray());
   }
 
   /**
