@@ -75,6 +75,11 @@ final class strayCommandOrdersWidget
     if (false === file_exists($path))
       throw new strayExceptionError('scripts for widget "' . $app . '.' . $widget . '" don\'t exist');
     strayConfigApp::fGetInstance($app)->PrepareDatabases();
+    $fakeRequest = new strayRoutingRequest('/', 'GET');
+    $fakeRequest->app = $app;
+    $fakeRequest->widget = $widget;
+    $plugins = new strayPlugins($fakeRequest);
+    $plugins->Init();
     require $path;
     $class = 'apps' . ucfirst($app) . ucfirst($widget) . 'Scripts';
     $obj = new $class(STRAY_PATH_TO_APPS . $app, STRAY_PATH_TO_APPS . $app . '/widgets/' . $widget);

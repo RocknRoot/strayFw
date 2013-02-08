@@ -9,6 +9,7 @@ class strayExceptionNotfound extends strayException
   const NOTFOUND_APP = 1;
   const NOTFOUND_WIDGET = 2;
   const NOTFOUND_ACTION = 3;
+  const NOTFOUND_SCRIPT = 4;
 
   /**
    * Not found type.

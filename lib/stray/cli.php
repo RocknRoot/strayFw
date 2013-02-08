@@ -25,6 +25,8 @@ require 'models/query/require.php';
 require 'locale/require.php';
 require 'command/require.php';
 require 'apps/strayAppsWidgetAScripts.class.php';
+require 'ext/strayPlugins.class.php';
+require 'routing/require.php';
 
 echo 'Welcome to the Amazing Stray CLI !' . PHP_EOL . PHP_EOL;
 strayConfigInstall::fGetInstance();
