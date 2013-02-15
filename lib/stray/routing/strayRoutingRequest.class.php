@@ -17,6 +17,11 @@ class strayRoutingRequest
    */
   private $_method;
   /**
+   * True if is an AJAX request.
+   * @var bool
+   */
+  private $_ajax;
+  /**
    * App name.
    * @var string
    */
@@ -87,6 +92,15 @@ class strayRoutingRequest
   public function GetMethod()
   {
     return $this->_method;
+  }
+
+  /**
+   * True if is an AJAX request.
+   * @return bool is ajax
+   */
+  public function IsAjax()
+  {
+    return $this->_ajax;
   }
 
   /**

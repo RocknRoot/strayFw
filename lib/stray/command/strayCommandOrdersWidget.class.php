@@ -87,7 +87,6 @@ final class strayCommandOrdersWidget
     echo 'Executing ' . $app . '.' . $widget . ':' . $script . '...' . PHP_EOL . PHP_EOL;
     $ret = $obj->Run($app, $widget, $script, $params, $options);
     echo PHP_EOL . 'Return : ' . PHP_EOL . PHP_EOL;
-    var_dump($ret);
   }
 
   /**

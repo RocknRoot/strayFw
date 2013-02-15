@@ -93,19 +93,23 @@ final class strayRouting extends strayASingleton
           throw new strayExceptionError('app routes : route has no view ' . var_export($route, true));
         if (false === isset($route['method']) || $components['method'] == 'GET' || $route['method'] == $components['method'])
         {
-          $matches = null;
-          if (1 < strlen($route['url']))
-            $route['url'] = rtrim($route['url'], '/') . '/';
-          if (true === isset($components['path']) && 1 === preg_match('#^' . $route['url'] . '$#', $components['path'], $matches))
+          if (false === isset($route['ajax']) || $request->IsAjax() == $route['ajax'])
           {
-            list($widget, $view) = explode('.', $route['view']);
-            $request->widget = $widget;
-            $request->view = $view;
-            array_walk($matches, function($v, $k) use ($request) {
-                if (false === is_numeric($k))
+            $matches = null;
+            if (1 < strlen($route['url']))
+              $route['url'] = rtrim($route['url'], '/') . '/';
+            if (true === isset($components['path']) && 1 === preg_match('#^' . $route['url'] . '$#', $components['path'], $matches))
+            {
+              list($widget, $view) = explode('.', $route['view']);
+              $request->widget = $widget;
+              $request->view = $view;
+              array_walk($matches, function($v, $k) use ($request)
+              {
+                if (false === is_numeric($k) && null != $v)
                   $request->params[$k] = $v;
               });
-            break;
+              break;
+            }
           }
         }
       }
@@ -149,8 +153,7 @@ final class strayRouting extends strayASingleton
         $nice .= $subdomain . '.';
       $nice .= strayRoutingBootstrap::fGetInstance()->GetRequest()->GetDomain();
     }
-    $nice = $nice . '/' . ltrim($url, '/');
-    return preg_replace('/\/+/', '/', $nice);
+    return $nice . '/' . ltrim(preg_replace('/\/+/', '/', $url), '/');
   }
 
   /**
