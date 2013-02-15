@@ -1,7 +1,7 @@
 <?php
 
-define('STRAY_VERSION', '0.2');
-define('STRAY_VERSION_CODE', 'The Butcher');
+define('STRAY_VERSION', '0.3');
+define('STRAY_VERSION_CODE', 'Albrecht');
 
 define('STRAY_PATH_TO_APPS', '../apps/');
 define('STRAY_PATH_TO_MODELS', '../models/');

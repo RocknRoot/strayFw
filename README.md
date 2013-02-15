@@ -5,7 +5,7 @@
 The strayFw is yet another PHP framework which is trying to present few things differently.
 
 * Homepage : http://stray.errant-works.com
-* Version : beta - 0.2-The Butcher
+* Version : beta - 0.3-Albrecht
 
 Yes, it's loosely based on Model-View-Adapter architecture. Yes, again. But, again, we try to change a few things.
 We don't think it's a revolutionary framework. We just try to do different. Maybe you will like the
