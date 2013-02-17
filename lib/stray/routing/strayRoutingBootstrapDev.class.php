@@ -58,7 +58,7 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
         if (!($render instanceof strayAppsARender))
           throw new strayExceptionError('render isn\'t a render (' . var_export($this->_request, true) . ')');
         echo $render->Render();
-        if (!($render instanceof strayAppsRenderTemplate))
+        if (true === $this->_request->IsAjax() || !($render instanceof strayAppsRenderTemplate))
           strayProfiler::fGetInstance()->needToDisplay = false;
         strayProfiler::fGetInstance()->AddTimerRenderLog(microtime(true) - $startTime);
         strayProfiler::fGetInstance()->RequestEnd();

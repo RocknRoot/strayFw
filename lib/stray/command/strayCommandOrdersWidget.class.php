@@ -41,7 +41,7 @@ final class strayCommandOrdersWidget
     if (false === fwrite($file, "<?php\nrequire '" . $params[1] . ".controls.php';\n\nclass apps"
         . ucfirst($params[0]) . ucfirst($params[1])
         . "Views extends strayAppsWidgetAViews\n{\n  public function IndexView(strayRoutingRequest" . ' $request' . ")\n"
-        . "  {\n    " . '$render = new strayAppsRenderTemplate($this, \'' . $params[1] . '/index.html\');' . "\n"
+        . "  {\n    " . '$render = new strayAppsRenderTemplate($this, \'' . $params[1] . '/index.html.twig\');' . "\n"
         . '    return $render;' . "\n  }\n}\n"))
       throw new strayExceptionFatal('can\'t write in file ' . $params[1] . '.views.php');
     fclose($file);
