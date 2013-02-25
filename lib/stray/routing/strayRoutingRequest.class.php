@@ -64,6 +64,7 @@ class strayRoutingRequest
     $this->params = array();
     $this->_url = $url;
     $this->_method = $method;
+    $this->_ajax = (false === empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
     $this->_debug = true === $debug;
   }
 
