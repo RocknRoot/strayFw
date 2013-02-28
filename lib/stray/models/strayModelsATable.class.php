@@ -263,7 +263,7 @@ abstract class strayModelsATable
     }
     $select->Execute();
     $data = $select->Fetch();
-    if (false === $data)
+    if (null == $data)
       return false;
     return new static($data);
   }

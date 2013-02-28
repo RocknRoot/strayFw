@@ -36,9 +36,9 @@ class strayModelsMutationRenameTable extends strayModelsAMutation
       throw new strayExceptionFatal('MutationRenameTable : table is empty');
     if (null == $this->_newTable)
       throw new strayExceptionFatal('MutationRenameTable : new table is empty');
-    $table = $this->_migration->GetSchema()->{$this->_table}->name;
-    $new_table = $this->_migration->GetForwardSchema()->{$this->_newTable}->name;
-    $sql = strayfModRenameTable($table, $new_table);
+    $table = $this->_migration->GetSchema()[$this->_table]['name'];
+    $newTable = $this->_migration->GetForwardSchema()[$this->_newTable]['name'];
+    $sql = strayfModRenameTable($table, $newTable);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationRenameTable SQL error : ' . $ret . ' (' . $sql . ')');
@@ -53,9 +53,9 @@ class strayModelsMutationRenameTable extends strayModelsAMutation
       throw new strayExceptionFatal('MutationRenameTable : table is empty');
     if (null == $this->_newTable)
       throw new strayExceptionFatal('MutationRenameTable : new table is empty');
-    $table = $this->_migration->GetSchema()->{$this->_table}->name;
-    $new_table = $this->_migration->GetForwardSchema()->{$this->_newTable}->name;
-    $sql = strayfModRenameTable($new_table, $table);
+    $table = $this->_migration->GetSchema()[$this->_table]['name'];
+    $newTable = $this->_migration->GetForwardSchema()[$this->_newTable]['name'];
+    $sql = strayfModRenameTable($newTable, $table);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationRenameTable SQL error : ' . $ret . ' (' . $sql . ')');

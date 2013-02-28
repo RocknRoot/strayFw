@@ -156,7 +156,7 @@ abstract class strayModelsAMigration
    */
   public function Execute()
   {
-    foreach ($mutations as $mut)
+    foreach ($this->_mutations as $mut)
       $mut->Execute();
   }
 

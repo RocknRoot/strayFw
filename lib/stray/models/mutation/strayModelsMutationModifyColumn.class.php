@@ -47,9 +47,9 @@ class strayModelsMutationModifyColumn extends strayModelsAMutation
       throw new strayExceptionFatal('MutationModifyColumn : column is empty');
     if (null ==  $this->_newColumn)
       throw new strayExceptionFatal('MutationModifyColumn : new column is empty');
-    $definition = $this->_migration->GetForwardSchema()->{$this->_table}->columns->{$this->_newColumn};
-    $column_name = $this->_migration->GetSchema()->{$this->_table}->columns->{$this->_column}->name;
-    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $column_name, $definition);
+    $definition = $this->_migration->GetForwardSchema()[$this->_table]['columns'][$this->_newColumn];
+    $columnName = $this->_migration->GetSchema()[$this->_table]['columns'][$this->_column]['name'];
+    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $columnName, $definition);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationModifyColumn SQL error : ' . $ret . ' (' . $sql . ')');
@@ -67,8 +67,8 @@ class strayModelsMutationModifyColumn extends strayModelsAMutation
     if (null ==  $this->_newColumn)
       throw new strayExceptionFatal('MutationModifyColumn : new column is empty');
     $schema = $this->_migration->GetSchema()->{$this->_table}->columns->{$this->_column};
-    $column_name = $this->_migration->GetForwardSchema()->{$this->_table}->columns->{$this->_newColumn}->name;
-    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $column_name, $schema);
+    $columnName = $this->_migration->GetForwardSchema()[$this->_table]['columns'][$this->_newColumn]['name'];
+    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $columnName, $schema);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationModifyColumn SQL error : ' . $ret . ' (' . $sql . ')');

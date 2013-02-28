@@ -75,7 +75,10 @@ class strayProfiler extends strayASingleton
    */
   public function RequestStart()
   {
-    $this->_logFilename = date_create_from_format('U.u', microtime(true))->format('YmdHisu');
+    $date = date_create_from_format('U.u', microtime(true));
+    if (false === $date)
+      throw new strayExceptionError('strayProfiler : can\'t generate date');
+    $this->_logFilename = $date->format('YmdHisu');
     $request = strayRoutingBootstrap::fGetInstance()->GetRequest();
     $this->AddProfilerLog('id', $this->_logFilename);
     $this->AddProfilerLog('php_version', phpversion());

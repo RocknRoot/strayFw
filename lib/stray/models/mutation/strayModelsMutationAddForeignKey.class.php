@@ -15,17 +15,17 @@ class strayModelsMutationAddForeignKey extends strayModelsAMutation
    * Foreign key name.
    * @var string
    */
-  protected $_fkname;
+  protected $_fkName;
 
   /**
    * Constructor.
    * @param string $table existing table alias
-   * @param string $fkname foreign key name
+   * @param string $fkName foreign key name
    */
-  public function __construct($table, $fkname)
+  public function __construct($table, $fkName)
   {
     $this->_table = $table;
-    $this->_fkname = $fkname;
+    $this->_fkName = $fkName;
   }
 
   /**
@@ -33,11 +33,11 @@ class strayModelsMutationAddForeignKey extends strayModelsAMutation
    */
   public function Execute()
   {
-    if (null == $this->_fkname)
-      throw new strayExceptionFatal('MutationAddForeignKey : fkname is empty');
+    if (null == $this->_fkName)
+      throw new strayExceptionFatal('MutationAddForeignKey : fkName is empty');
     if (null == $this->_table)
       throw new strayExceptionFatal('MutationAddForeignKey : table is empty');
-    $sql = strayfModCreateForeignKey($this->_fkname, $this->_migration->GetForwardSchema()->{$this->_table}, $this->_migration->GetForwardSchema());
+    $sql = strayfModCreateForeignKey($this->_fkName, $this->_migration->GetForwardSchema()[$this->_table], $this->_migration->GetForwardSchema());
     $sql = 'ALTER TABLE ' . call_user_func(array('Model' . $this->_table, 'fGetName')) . ' ' . $sql . ';';
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
@@ -49,11 +49,11 @@ class strayModelsMutationAddForeignKey extends strayModelsAMutation
    */
   public function Rewind()
   {
-    if (null == $this->_fkname)
-      throw new strayExceptionFatal('MutationAddForeignKey : fkname is empty');
+    if (null == $this->_fkName)
+      throw new strayExceptionFatal('MutationAddForeignKey : fkName is empty');
     if (null == $this->_table)
       throw new strayExceptionFatal('MutationAddForeignKey : table is empty');
-    $sql = strayfModRemoveForeignKey(call_user_func(array('Model' . $this->_table, 'fGetName')), $this->_fkname);
+    $sql = strayfModRemoveForeignKey(call_user_func(array('Model' . $this->_table, 'fGetName')), $this->_fkName);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationAddForeignKey SQL error : ' . $ret . ' (' . $sql . ')');

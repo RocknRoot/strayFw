@@ -163,7 +163,7 @@ final class strayCommandOrdersMigration
     $base_path = STRAY_PATH_TO_MODELS . $params[0] . '/migrations/';
     $rewind_date = strayModelsAMigration::fDateToTime(date(strayModelsAMigration::DATE_FORMAT, 0));
     $rewind_dir = null;
-    $last_date = strayModelsAMigration::fDateToTime(strayConfigDatabase::fGetInstance($params[0])->Info()->last_up);
+    $last_date = strayModelsAMigration::fDateToTime(strayConfigDatabase::fGetInstance($params[0])->Info()['last_up']);
     $handle = opendir($base_path);
     if (false === $handle)
       throw new strayExceptionError('can\'t opendir "' . $base_path . '"');
@@ -197,7 +197,7 @@ final class strayCommandOrdersMigration
     $migration = new $class($params[0], $rewind_dir);
     $migration->Rewind();
     closedir($handle);
-    $info->last_up = date(strayModelsAMigration::DATE_FORMAT, $rewind_date - 1);
+    $info['last_up'] = date(strayModelsAMigration::DATE_FORMAT, $rewind_date - 1);
     strayConfigDatabase::fGetInstance($params[0])->Info($info);
   }
 
