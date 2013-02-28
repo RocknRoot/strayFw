@@ -31,7 +31,7 @@ class strayModelsMutationRemoveTable extends strayModelsAMutation
     if (true === isset($schema[$this->_table]['foreign']))
     {
       $keys = $schema[$this->_table]['foreign'];
-      foreach ($keys as $key => null)
+      foreach ($keys as $key => $null)
       {
         $sql = strayfModRemoveForeignKey($schema[$this->_table]['name'], $key);
         $ret = $this->_migration->GetDb()->Execute($sql);
