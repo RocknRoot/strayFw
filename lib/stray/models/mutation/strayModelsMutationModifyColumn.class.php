@@ -27,13 +27,13 @@ class strayModelsMutationModifyColumn extends strayModelsAMutation
    * Constructor.
    * @param string $table existing table alias
    * @param string $column existing column alias
-   * @param string $new_column new column alias
+   * @param string $newColumn new column alias
    */
-  public function __construct($table, $column, $new_column)
+  public function __construct($table, $column, $newColumn)
   {
     $this->_table = $table;
     $this->_column = $column;
-    $this->_newColumn = $new_column;
+    $this->_newColumn = $newColumn;
   }
 
   /**
@@ -49,7 +49,7 @@ class strayModelsMutationModifyColumn extends strayModelsAMutation
       throw new strayExceptionFatal('MutationModifyColumn : new column is empty');
     $definition = $this->_migration->GetForwardSchema()[$this->_table]['columns'][$this->_newColumn];
     $columnName = $this->_migration->GetSchema()[$this->_table]['columns'][$this->_column]['name'];
-    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $columnName, $definition);
+    $sql = strayfModUpdateColumn($this->_migration->GetSchema()[$this->_table]['name'], $columnName, $definition);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationModifyColumn SQL error : ' . $ret . ' (' . $sql . ')');
@@ -68,7 +68,7 @@ class strayModelsMutationModifyColumn extends strayModelsAMutation
       throw new strayExceptionFatal('MutationModifyColumn : new column is empty');
     $schema = $this->_migration->GetSchema()->{$this->_table}->columns->{$this->_column};
     $columnName = $this->_migration->GetForwardSchema()[$this->_table]['columns'][$this->_newColumn]['name'];
-    $sql = strayfModUpdateColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $columnName, $schema);
+    $sql = strayfModUpdateColumn($this->_migration->GetSchema()[$this->_table]['name'], $columnName, $schema);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationModifyColumn SQL error : ' . $ret . ' (' . $sql . ')');

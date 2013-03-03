@@ -69,7 +69,7 @@ final class strayRouting extends strayASingleton
             {
               $request->app = $route['app'];
               if (1 < strlen($components['path']))
-                $components['path'] = rtrim(substr($route['app'], strlen($components['path'])), '/') . '/';
+                $components['path'] = '/' . ltrim('/', rtrim(substr($components['path'], strlen($route['url'])), '/')) . '/';
               break;
             }
           }
