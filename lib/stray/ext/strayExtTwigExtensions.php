@@ -35,3 +35,13 @@ function strayExtTwigUrl($url)
 {
   return strayRouting::fGenerateNiceUrl($url);
 }
+
+/**
+ * Simple proxy to straySession.
+ * @param string $name key
+ * @return mixed value
+ */
+function strayExtTwigSession($name)
+{
+  return straySession::fGetInstance()->Get($name);
+}

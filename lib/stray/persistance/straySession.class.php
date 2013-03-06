@@ -35,8 +35,8 @@ final class straySession extends strayASingleton
   
   /**
    * Get value of key $name.
-   * @param $name key
-   * @return value
+   * @param string $name key
+   * @return mixed value
    */
   public function Get($name)
   {
@@ -47,7 +47,7 @@ final class straySession extends strayASingleton
 
   /**
    * Check if it contains key $name.
-   * @param $name key
+   * @param string $name key
    * @return bool true if has $name
    */
   public function Has($name)

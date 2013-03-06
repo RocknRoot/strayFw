@@ -72,6 +72,7 @@ class strayExtTwig extends strayASingleton
     $env->addFunction('route', new Twig_Function_Function('strayExtTwigRoute'));
     $env->addFunction('tr', new Twig_Function_Function('strayExtTwigTr'));
     $env->addFunction('url', new Twig_Function_Function('strayExtTwigUrl'));
+    $env->addFunction('session', new Twig_Function_Function('strayExtTwigSession'));
   }
 
   /**
