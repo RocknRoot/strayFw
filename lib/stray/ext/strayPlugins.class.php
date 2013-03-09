@@ -69,9 +69,9 @@ class strayPlugins
     foreach ($all as $p)
     {
       $fnctn = $p . 'fInit';
-      if (true === function_exists($p))
+      if (true === function_exists($fnctn))
       {
-        $p();
+        $fnctn();
       }
     }
   }
