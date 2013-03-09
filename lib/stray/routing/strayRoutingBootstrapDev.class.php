@@ -65,6 +65,12 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
       }
       ob_end_flush();
     }
+    catch (strayExceptionReroute $e)
+    {
+      ob_end_clean();
+      $method = $e->GetMethod();
+      $this->Run($e->GetUri(), (null != $method ? $method : 'GET'));
+    }
     catch (strayExceptionRedirect $e)
     {
       ob_end_clean();
