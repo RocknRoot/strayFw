@@ -86,8 +86,8 @@ class strayProfiler extends strayASingleton
     $this->AddProfilerLog('request_is_ajax', (true === isset($_SERVER['HTTP_X_REQUESTED_WITH']) ?
       (false === empty($_SERVER['HTTP_X_REQUESTED_WITH']) || 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) ? true : false) : false));
     $this->AddProfilerLog('request_statusCode', http_response_code());
-    $this->AddProfilerLog('request_headers', apache_request_headers());
-    $this->AddProfilerLog('response_headers', apache_response_headers());
+    $this->AddProfilerLog('request_headers', getallheaders());
+    $this->AddProfilerLog('response_headers', headers_list());
     $this->AddProfilerLog('request_url', $request->GetUrl());
     $gets = array();
     foreach ($_GET as $getKey => $getValue)
