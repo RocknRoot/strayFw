@@ -52,7 +52,18 @@ class strayModelsQueryUpdate extends strayModelsAQuery
       $query .= ' LIMIT ' . $this->_limit;
     // execute
     $this->_query = $this->_db->GetLink(false)->prepare($query);
-    $result = $this->_query->execute($this->_args);
+    foreach ($this->_args as $k => $v)
+    {
+      $type = PDO::PARAM_STR;
+      if (true === is_int($v))
+        $type = PDO::PARAM_INT;
+      elseif (true === is_bool($v))
+        $type = PDO::PARAM_BOOL;
+      elseif (true === is_null($v))
+        $type = PDO::PARAM_NULL;
+      $this->_query->bindValue($k, $v, $type);
+    }
+    $result = $this->_query->execute();
     $this->_queryError = $this->_query->errorInfo();
     if ('00000' != $this->_queryError[0])
       strayLog::fGetInstance()->Error('QueryUpdate fail : ' . $this->_queryError[2] . ' (' . $query . ')');
