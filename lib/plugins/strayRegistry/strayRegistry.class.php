@@ -24,16 +24,27 @@ final class strayRegistry extends strayASingleton
   /**
    * Get var value. Optionally set it with callable.
    * @param string $name var name
-   * @param Callable $get setter function if var is empty
+   * @param callable $get setter function if var is empty
    * @return mixed var value.
    */
-  public function Get($name, Callable $get = null)
+  public function Get($name, callable $get = null)
   {
     if (true === isset($this->_vars[$name]))
       return $this->_vars[$name];
-    if (null == $get)
+    if (null === $get)
       return null;
     $this->_vars[$name] = $get($name);
     return $this->_vars[$name];
+  }
+  
+  /**
+   * Set var value.
+   * @param string $name var name
+   * @param mixed $value value
+   */
+  public function Set($name, $value)
+  {
+    $this->_vars[$name] = $value;
+    return $value;
   }
 }
