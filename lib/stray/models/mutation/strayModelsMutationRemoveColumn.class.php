@@ -38,7 +38,7 @@ class strayModelsMutationRemoveColumn extends strayModelsAMutation
     if (null ==  $this->_column)
       throw new strayExceptionFatal('MutationRemoveColumn : column is empty');
     $columnName = $this->_migration->GetSchema()[$this->_table]['columns'][$this->_column]['name'];
-    $sql = strayfModRemoveColumn(call_user_func(array('Model' . $this->_table, 'fGetName')), $columnName);
+    $sql = strayfModRemoveColumn($this->_migration->GetSchema()[$this->_table]['name'], $columnName);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationRemoveColumn SQL error : ' . $ret . ' (' . $sql . ')');
@@ -55,7 +55,7 @@ class strayModelsMutationRemoveColumn extends strayModelsAMutation
       throw new strayExceptionFatal('MutationRemoveColumn : column is empty');
     $schema = $this->_migration->GetSchema()[$this->_table]['columns'][$this->_column];
     $sql = strayfModCreateColumn($schema);
-    $sql = 'ALTER TABLE `' . call_user_func(array('Model' . $this->_table, 'fGetName')) . '` ADD COLUMN ' . $sql . ';';
+    $sql = 'ALTER TABLE `' . $this->_migration->GetSchema()[$this->_table]['name'] . '` ADD COLUMN ' . $sql . ';';
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationRemoveColumn SQL error : ' . $ret . ' (' . $sql . ')');

@@ -38,7 +38,7 @@ class strayModelsMutationAddForeignKey extends strayModelsAMutation
     if (null == $this->_table)
       throw new strayExceptionFatal('MutationAddForeignKey : table is empty');
     $sql = strayfModCreateForeignKey($this->_fkName, $this->_migration->GetForwardSchema()[$this->_table], $this->_migration->GetForwardSchema());
-    $sql = 'ALTER TABLE ' . call_user_func(array('Model' . $this->_table, 'fGetName')) . ' ' . $sql . ';';
+    $sql = 'ALTER TABLE ' . $this->_migration->GetForwardSchema()[$this->_table]['name'] . ' ' . $sql . ';';
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationAddForeignKey SQL error : ' . $ret . ' (' . $sql . ')');
@@ -53,7 +53,7 @@ class strayModelsMutationAddForeignKey extends strayModelsAMutation
       throw new strayExceptionFatal('MutationAddForeignKey : fkName is empty');
     if (null == $this->_table)
       throw new strayExceptionFatal('MutationAddForeignKey : table is empty');
-    $sql = strayfModRemoveForeignKey(call_user_func(array('Model' . $this->_table, 'fGetName')), $this->_fkName);
+    $sql = strayfModRemoveForeignKey($this->_migration->GetForwardSchema()[$this->_table]['name'], $this->_fkName);
     $ret = $this->_migration->GetDb()->Execute($sql);
     if (true !== $ret)
       throw new strayExceptionError('MutationAddForeignKey SQL error : ' . $ret . ' (' . $sql . ')');

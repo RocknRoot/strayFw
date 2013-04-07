@@ -14,7 +14,7 @@ class strayExceptionRedirect extends strayException
 
   /**
    * Construct.
-   * @param string $uri uri
+   * @param string $uri URI
    * @param string $message see Exception
    * @param int $code see Exception
    * @param strayException $previous see Exception

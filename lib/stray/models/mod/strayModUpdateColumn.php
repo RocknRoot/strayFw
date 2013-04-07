@@ -9,6 +9,19 @@
 
 function strayfModUpdateColumn($table, $column, array $schema)
 {
-  $statement = 'ALTER TABLE `' . $table . '` CHANGE ' . $column . ' ' . strayfModCreateColumn($schema) . ';';
+  $statement = 'ALTER TABLE ' . $table;
+  if ($column != $schema['name'])
+    $statement .= ' RENAME COLUMN ' . $column . ' TO ' . $schema['name'] . ',';
+  $create = strayfModCreateColumn($schema);
+  $create = substr_replace($create, ' TYPE ', strpos($create, ' '), 1);
+  if (false !== strpos($create, 'NOT NULL'))
+  {
+    $create = str_replace('NOT NULL', null, $create);
+    $statement .= ' ALTER COLUMN ' . $create . ', ALTER COLUMN ' . $schema['name'] . ' SET NOT NULL;';
+  }
+  else
+  {
+    $statement .= ' ALTER COLUMN ' . $create . ';';
+  }
   return $statement;
 }
