@@ -288,10 +288,11 @@ abstract class strayModelsATable
     }
     if (null != $order)
       $select->OrderBy($order);
-    $select->Execute();
+    if (false === $select->Execute())
+      return false;
     $raw = $select->FetchAll();
     if (0 == count($raw))
-      return false;
+      return array();
     $data = array();
     foreach ($raw as $obj)
       $data[] = new static($obj);

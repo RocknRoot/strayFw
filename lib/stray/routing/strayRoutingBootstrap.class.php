@@ -29,7 +29,6 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
    */
   public function Run($url, $method)
   {
-    set_error_handler(array('strayRoutingBootstrap', 'fError'));
     ignore_user_abort();
     ob_start();
     try
@@ -107,26 +106,5 @@ final class strayRoutingBootstrap extends strayASingleton implements strayRoutin
       $plugins->Init();
       $done = true;
     }
-  }
-
-  /**
-   * Error callback for PHP errors.
-   */
-  static public function fError($errno, $errstr, $errfile, $errline)
-  {
-    if (0 != strlen(ob_get_contents()))
-      ob_end_clean();
-    $log = strayLog::fGetInstance();
-    $msg = $errstr . ' . ' . $errfile . ' l' . $errline;
-    switch ($errno)
-    {
-      case E_ERROR:
-        $log->SysError($msg);
-      case E_WARNING:
-        $log->SysWarning($msg);
-      default:
-        $log->SysNotice($msg);
-    }
-    echo 'Internal server error';
   }
 }

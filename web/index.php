@@ -6,7 +6,6 @@ define('STRAY_VERSION_CODE', 'Albrecht');
 define('STRAY_PATH_TO_APPS', '../apps/');
 define('STRAY_PATH_TO_MODELS', '../models/');
 define('STRAY_PATH_TO_LIB', '../lib/');
-define('STRAY_PATH_TO_SCRIPTS', '../scripts/');
 define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 
@@ -32,7 +31,13 @@ if (false === defined('STRAY_ENV'))
 if ('development' === STRAY_ENV)
 {
   require STRAY_PATH_TO_LIB . 'vendor/php_error.php';
-  \php_error\reportErrors();
+  \php_error\reportErrors(array(
+    'application_folders' => array(
+      STRAY_PATH_TO_APPS,
+      STRAY_PATH_TO_MODELS,
+      STRAY_PATH_TO_LIB . 'plugins/'
+    )
+  ));
 }
 
 // stray
