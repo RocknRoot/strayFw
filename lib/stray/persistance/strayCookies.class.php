@@ -82,7 +82,7 @@ final class strayCookies extends strayASingleton
   public function Clear()
   {
     foreach ($this->_vars as $v)
-      setcookie($name, '--', 1);
+      setcookie($v, '--', 1);
     unset($this->_vars);
     $this->_vars = array();
   }

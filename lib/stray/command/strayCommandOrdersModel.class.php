@@ -112,6 +112,8 @@ final class strayCommandOrdersModel
         $accessors .= '  public function Get' . ucfirst($colName) . "()\n  {\n";
         if ('string' == $column['type'] || 'char' == $column['type'])
           $accessors .= '    return stripslashes($this->_column' . ucfirst($colName) . "['value']);";
+        elseif ('bool' == $column['type'])
+          $accessors .= '    return filter_var($this->_column' . ucfirst($colName) . "['value'], FILTER_VALIDATE_BOOLEAN);";
         elseif ('json' == $column['type'])
           $accessors .= '    return json_decode($this->_column' . ucfirst($colName) . "['value'], true);";
         else
