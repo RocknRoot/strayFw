@@ -9,18 +9,6 @@ define('STRAY_PATH_TO_LIB', '../lib/');
 define('STRAY_PATH_TO_WEB', '');
 define('STRAY_PATH_TO_INSTALL', '../');
 
-if (false === function_exists('getallheaders'))
-{
-  function getallheaders()
-  {
-    $headers = null;
-    foreach ($_SERVER as $name => $value)
-      if ('HTTP_' == substr($name, 0, 5))
-        $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-    return $headers;
-  }
-}
-
 // check if dev env
 if (false === defined('STRAY_ENV'))
 {
@@ -62,10 +50,14 @@ if ('development' === STRAY_ENV)
   require $straypath . 'persistance/profiler/strayProfiler.class.php';
 }
 else
+{
   require $straypath . 'routing/strayRoutingBootstrap.class.php';
+}
 
 // run
 strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);
+
 $url = (false === empty($_SERVER['HTTPS']) && 'off' !== $_SERVER['HTTPS'] || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 $url .= $_SERVER['SERVER_NAME'] . str_replace('/index.php', null, $_SERVER['REQUEST_URI']);
+
 strayRoutingBootstrap::fGetInstance()->Run($url, $_SERVER['REQUEST_METHOD']);
