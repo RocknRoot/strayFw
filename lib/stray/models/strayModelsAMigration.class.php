@@ -151,6 +151,18 @@ abstract class strayModelsAMigration
   abstract public function Help();
 
   /**
+   * Custom user code after standard execute.
+   */
+  public function CustomExecute()
+  { }
+
+  /**
+   * Custom user code before standard rewind.
+   */
+  public function CustomRewind()
+  { }
+
+  /**
    * Run the migration.
    * @return bool true if migration went well
    */
@@ -158,6 +170,7 @@ abstract class strayModelsAMigration
   {
     foreach ($this->_mutations as $mut)
       $mut->Execute();
+    $this->CustomExecute();
   }
 
   /**
@@ -166,6 +179,7 @@ abstract class strayModelsAMigration
    */
   public function Rewind()
   {
+    $this->CustomRewind();
     $mutations = array_reverse($this->_mutations);
     foreach ($mutations as $mut)
       $mut->Rewind();
