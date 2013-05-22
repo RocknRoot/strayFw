@@ -34,17 +34,35 @@ class strayModelsDatabase extends strayAMultiton
     $this->_isTransactionning = 0;
     if (true === isset($config['read']))
     {
+      if (true === is_array(current($config['read'])))
+      {
+        $read = $config['read'][mt_rand(0, count($config['read']) - 1)];
+      }
+      else
+      {
+        $read = $config['read'];
+      }
       $server = new strayModelsServer();
-      $server->name = $config->read->name;
-      $server->host = $config->read->server;
-      $server->user = $config->read->user;
-      $server->pass = $config->read->pass;
+      $server->name = $read['name'];
+      $server->host = $read['host'];
+      $server->port = $read['port'];
+      $server->user = $read['user'];
+      $server->pass = $read['pass'];
       $this->_servers['read'] = $server;
+      if (true === is_array(current($config['write'])))
+      {
+        $write = $config['write'][mt_rand(0, count($config['write']) - 1)];
+      }
+      else
+      {
+        $write = $config['write'];
+      }
       $server = new strayModelsServer();
-      $server->name = $config->write->name;
-      $server->host = $config->write->server;
-      $server->user = $config->write->user;
-      $server->pass = $config->write->pass;
+      $server->name = $write['name'];
+      $server->host = $write['host'];
+      $server->port = $write['port'];
+      $server->user = $write['user'];
+      $server->pass = $write['pass'];
       $this->_servers['write'] = $server;
     }
     else if (true === isset($config['host']))
@@ -80,15 +98,24 @@ class strayModelsDatabase extends strayAMultiton
       {
         if (true === isset($this->_servers['all']))
         {
-          $this->_servers['all']->link = new PDO('pgsql:host=' . $this->_servers['all']->host . ';dbname='
-                . $this->_servers['all']->name, $this->_servers['all']->user, $this->_servers['all']->pass);
+          $this->_servers['all']->link = new PDO(
+            'pgsql:host=' . $this->_servers['all']->host . ';dbname=' . $this->_servers['all']->name . (null != $this->_servers['all']->port ? $this->_servers['all']->port : null),
+            $this->_servers['all']->user,
+            $this->_servers['all']->pass
+          );
         }
         else
         {
-          $this->_servers['read']->link = new PDO('pgsql:host=' . $this->_servers['read']->host . ';dbname='
-                . $this->_servers['read']->name, $this->_servers['read']->user, $this->_servers['read']->pass);
-          $this->_servers['write']->link = new PDO('pgsql:host=' . $this->_servers['write']->host . ';dbname='
-                . $this->_servers['write']->name, $this->_servers['write']->user, $this->_servers['write']->pass);
+          $this->_servers['read']->link = new PDO(
+            'pgsql:host=' . $this->_servers['read']->host . ';dbname=' . $this->_servers['read']->name . (null != $this->_servers['read']->port ? $this->_servers['read']->port : null),
+            $this->_servers['read']->user,
+            $this->_servers['read']->pass
+          );
+          $this->_servers['write']->link = new PDO(
+            'pgsql:host=' . $this->_servers['write']->host . ';dbname=' . $this->_servers['write']->name . (null != $this->_servers['write']->port ? $this->_servers['write']->port : null),
+            $this->_servers['write']->user,
+            $this->_servers['write']->pass
+          );
         }
       }
       catch (PDOException $e)
