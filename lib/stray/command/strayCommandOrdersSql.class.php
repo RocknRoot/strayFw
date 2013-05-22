@@ -86,11 +86,11 @@ final class strayCommandOrdersSql
         {
           $ret = $db->Execute($sql);
           if (true !== $ret)
-            echo 'sql:build | create type | SQL notice : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
+            echo 'sql:build | drop type | SQL notice : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
           $sql = strayfModCreateType($col);
           $ret = $db->Execute($sql);
           if (true !== $ret)
-            echo 'sql:build SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
+            echo 'sql:build | create type | SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
         }
       }
       // create table
@@ -99,10 +99,12 @@ final class strayCommandOrdersSql
       {
         $ret = $db->Execute($sql);
         if (true !== $ret)
-          echo 'sql:build SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
+          echo 'sql:build | create table | SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
       }
       else
-        echo 'sql:build SQL error : modCreateTable empty query' . PHP_EOL;
+      {
+        echo 'sql:build | create table | empty query' . PHP_EOL;
+      }
       // create indexes
       foreach ($elem['columns'] as $col)
       {
@@ -111,7 +113,7 @@ final class strayCommandOrdersSql
         {
           $ret = $db->Execute($sql);
           if (true !== $ret)
-            echo 'sql:build SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
+            echo 'sql:build | create indexes | SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
         }
       }
     }
@@ -119,14 +121,11 @@ final class strayCommandOrdersSql
     foreach ($schema as $tkey => $elem)
     {
       if (false === isset($elem['foreign']))
-      {
-        echo 'No foreign key for table "' . $tkey . '"' . PHP_EOL;
         continue;
-      }
       $sql = strayfModCreateForeignKeys($elem, $schema);
       $ret = $db->Execute($sql);
       if (true !== $ret)
-        echo 'sql:build SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
+        echo 'sql:build | create foreign | SQL error : ' . $ret . ' (' . $sql . ')' . PHP_EOL;
     }
     echo 'SQL tables for database "' . $name . '" have been created!' . PHP_EOL;
   }
