@@ -91,7 +91,7 @@ final class strayRouting extends strayASingleton
           throw new strayExceptionError('app routes : route has no url ' . var_export($route, true));
         if (false === isset($route['view']))
           throw new strayExceptionError('app routes : route has no view ' . var_export($route, true));
-        if (false === isset($route['method']) || $components['method'] == 'GET' || $route['method'] == $components['method'])
+        if (false === isset($route['method']) || $route['method'] == $components['method'])
         {
           if (false === isset($route['ajax']) || $request->IsAjax() == $route['ajax'])
           {

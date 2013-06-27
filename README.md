@@ -27,11 +27,6 @@ Read the fraktastic manual !
 
 Or add an issue on github ! ;)
 
-## Contributors
-
-* [Nekith](https://github.com/Nekith 'Nekith')
-* [Frédéric Oudry](https://github.com/moafred 'moafred')
-
 ## License
 
 ### strayFw
