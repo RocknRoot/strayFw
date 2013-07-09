@@ -269,11 +269,36 @@ abstract class strayModelsATable
   }
 
   /**
+   * Fetch one entry satisfying all the specified conditions.
+   * @param array $conditions where conditions
+   * @param bool $critical if true, will be executed on write server
+   * @return array row data
+   */
+  static public function fFetchArray(array $conditions, $critical = false)
+  {
+    $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
+    $select->Select(static::fGetAllAliasColumns())
+      ->Limit(1);
+    $i = 0;
+    foreach ($conditions as $k => $v)
+    {
+      $select->Where($k . ' = :cond_' . $i);
+      $select->SetArg('cond_' . $i, $v);
+      ++$i;
+    }
+    $select->Execute();
+    $data = $select->Fetch();
+    if (null == $data)
+      return false;
+    return $data;
+  }
+
+  /**
    * Fetch all entries satisfying all the specified conditions.
    * @param array $conditions where conditions
    * @param string $order order
    * @param bool $critical if true, will be executed on write server
-   * @return array tab of model instances
+   * @return object[] array of model instances
    */
   static public function fFetchAll(array $conditions = array(), $order = null, $critical = false)
   {
@@ -296,6 +321,34 @@ abstract class strayModelsATable
     $data = array();
     foreach ($raw as $obj)
       $data[] = new static($obj);
+    return $data;
+  }
+
+  /**
+   * Fetch all entries satisfying all the specified conditions.
+   * @param array $conditions where conditions
+   * @param string $order order
+   * @param bool $critical if true, will be executed on write server
+   * @return array[] array of row data
+   */
+  static public function fFetchAllArray(array $conditions = array(), $order = null, $critical = false)
+  {
+    $select = static::fGetDb()->QuerySelect($critical)->From(static::fGetName());
+    $select->Select(static::fGetAllRealNameColumns());
+    $i = 0;
+    foreach ($conditions as $k => $v)
+    {
+      $select->Where($k . ' = :cond_' . $i);
+      $select->SetArg('cond_' . $i, $v);
+      ++$i;
+    }
+    if (null != $order)
+      $select->OrderBy($order);
+    if (false === $select->Execute())
+      return false;
+    $data = $select->FetchAll();
+    if (0 == count($raw))
+      return array();
     return $data;
   }
 
