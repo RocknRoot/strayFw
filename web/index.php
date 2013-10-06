@@ -24,7 +24,8 @@ if ('development' === STRAY_ENV)
       STRAY_PATH_TO_APPS,
       STRAY_PATH_TO_MODELS,
       STRAY_PATH_TO_LIB . 'plugins/'
-    )
+    ),
+    'background_text' => 'strayFw'
   ));
 }
 
