@@ -95,6 +95,8 @@ final class strayCommandOrdersModel
       $accessors = null;
       $allColumns = "  static public function fGetAllRealNameColumns()\n  {\n    return array(";
       $allColumnsAlias = "  static public function fGetAllAliasColumns()\n  {\n    return array(";
+      if (false === isset($elem['columns']))
+        throw new strayExceptionError('model "' . $key . '" doesn\'t have any column');
       foreach ($elem['columns'] as $colName => $column)
       {
         $properties .= '  protected $_column' . ucfirst($colName) . ";\n"

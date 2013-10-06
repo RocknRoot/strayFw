@@ -13,8 +13,7 @@
 /**
  * Compiles a node to PHP code.
  *
- * @package    twig
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Compiler implements Twig_CompilerInterface
 {
@@ -181,11 +180,12 @@ class Twig_Compiler implements Twig_CompilerInterface
             $this->raw($value ? 'true' : 'false');
         } elseif (is_array($value)) {
             $this->raw('array(');
-            $i = 0;
+            $first = true;
             foreach ($value as $key => $value) {
-                if ($i++) {
+                if (!$first) {
                     $this->raw(', ');
                 }
+                $first = false;
                 $this->repr($key);
                 $this->raw(' => ');
                 $this->repr($value);

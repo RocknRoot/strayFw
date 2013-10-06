@@ -13,8 +13,7 @@
 /**
  * Default parser implementation.
  *
- * @package twig
- * @author  Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Parser implements Twig_ParserInterface
 {
@@ -50,7 +49,7 @@ class Twig_Parser implements Twig_ParserInterface
 
     public function getVarName()
     {
-        return sprintf('__internal_%s', hash('sha1', uniqid(mt_rand(), true), false));
+        return sprintf('__internal_%s', hash('sha256', uniqid(mt_rand(), true), false));
     }
 
     public function getFilename()
@@ -247,7 +246,7 @@ class Twig_Parser implements Twig_ParserInterface
         return $this->blocks[$name];
     }
 
-    public function setBlock($name, $value)
+    public function setBlock($name, Twig_Node_Block $value)
     {
         $this->blocks[$name] = new Twig_Node_Body(array($value), array(), $value->getLine());
     }
