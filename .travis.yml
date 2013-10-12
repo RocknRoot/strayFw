@@ -1,8 +1,7 @@
 language: php
 php:
   - 5.4
-services:
-  - mongodb
+  - 5.5
 
 before_script:
   - wget http://pecl.php.net/get/yaml-1.1.0.tgz
