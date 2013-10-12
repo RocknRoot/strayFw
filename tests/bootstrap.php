@@ -29,6 +29,3 @@ require $straypath . 'ext/require.php';
 
 // plugins
 require STRAY_PATH_TO_LIB . 'plugins/strayRegistry/require.php';
-
-// init
-strayMongo::fGetInstance()->Config('127.0.0.1', null, null);
