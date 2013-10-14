@@ -1,5 +1,4 @@
-/config/routes.yml
-/config/settings.yml
+settings.yml
 info.yml
 /web/robots.txt
 /tmp

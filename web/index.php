@@ -1,59 +1,20 @@
 <?php
 
-define('STRAY_VERSION', '0.3');
-define('STRAY_VERSION_CODE', 'Albrecht');
+define('STRAY_VERSION', '0.4');
+define('STRAY_VERSION_CODE', 'Marius');
 
-define('STRAY_PATH_TO_APPS', '../apps/');
-define('STRAY_PATH_TO_MODELS', '../models/');
-define('STRAY_PATH_TO_LIB', '../lib/');
-define('STRAY_PATH_TO_WEB', '');
-define('STRAY_PATH_TO_INSTALL', '../');
+define('STRAY_PATH_ROOT', '../');
+define('STRAY_PATH_APPS', '../apps/');
+define('STRAY_PATH_VENDOR', '../vendor/');
+define('STRAY_PATH_WEB', '');
 
-// check if dev env
-if (false === defined('STRAY_ENV'))
-{
-  define('STRAY_ENV', ('development' === getenv('STRAY_ENV') ? 'development' : 'production'));
+define('STRAY_IS_CLI', false);
+
+if (false === defined('STRAY_ENV')) {
+    define('STRAY_ENV', ('development' === getenv('STRAY_ENV') ? 'development' : 'production'));
 }
 
-// include php_error if development
-if ('development' === STRAY_ENV)
-{
-  require STRAY_PATH_TO_LIB . 'vendor/php_error.php';
-  \php_error\reportErrors(array(
-    'application_folders' => array(
-      STRAY_PATH_TO_APPS,
-      STRAY_PATH_TO_MODELS,
-      STRAY_PATH_TO_LIB . 'plugins/'
-    ),
-    'background_text' => 'strayFw'
-  ));
-}
-
-// stray
-$straypath = STRAY_PATH_TO_LIB . 'stray/';
-require $straypath . 'global/require.php';
-require $straypath . 'exception/require.php';
-require $straypath . 'config/require.php';
-require $straypath . 'persistance/require.php';
-require $straypath . 'models/require.php';
-require $straypath . 'models/query/require.php';
-require $straypath . 'routing/require.php';
-require $straypath . 'locale/require.php';
-require $straypath . 'apps/require.php';
-require $straypath . 'form/require.php';
-require $straypath . 'ext/require.php';
-
-// require attended routing
-if ('development' === STRAY_ENV)
-{
-  require $straypath . 'routing/strayRoutingBootstrapDev.class.php';
-  require $straypath . 'routing/strayRoutingBootstrapDevApp.class.php';
-  require $straypath . 'persistance/profiler/strayProfiler.class.php';
-}
-else
-{
-  require $straypath . 'routing/strayRoutingBootstrap.class.php';
-}
+require STRAY_PATH_VENDOR . 'ErrantWorks/StrayFw/init.php';
 
 // run
 strayRouting::fGetInstance()->SetHost($_SERVER['SERVER_NAME']);

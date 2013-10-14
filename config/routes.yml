@@ -1,7 +1,0 @@
-routes:
-  admin:
-    subdomain: admin
-    url: /admin
-    app: admin
-  home:
-    app: home
