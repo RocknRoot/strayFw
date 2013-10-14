@@ -5,5 +5,5 @@ use ErrantWorks\StrayFw\Bootstrap;
 // plugins
 // Bootstrap::registerLib('ErrantWorks\\Registry');
 
-// apps
+// applications
 // Bootstrap::registerApp('BadassInc\\DemoSite');

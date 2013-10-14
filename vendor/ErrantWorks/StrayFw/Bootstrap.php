@@ -16,6 +16,13 @@ use ErrantWorks\StrayFw\Exception\UnknownNamespace;
 abstract class Bootstrap
 {
     /**
+     * True if class has already been initialized.
+     *
+     * @var bool
+     */
+    private static $isInit = false;
+
+    /**
      * Namespace-path hash.
      *
      * @var string[]
@@ -23,12 +30,23 @@ abstract class Bootstrap
     protected static $namespaces;
 
     /**
+     * Registered applications.
+     *
+     * @var string[]
+     */
+    protected static $applications;
+
+    /**
      * Initialize properties and register autoloader static method.
      */
     public static function init()
     {
-        $namespaces = array();
-        spl_autoload_register(__CLASS__ . '::loadClass');
+        if (self::$isInit === false) {
+            $namespaces = array();
+            $applications = array();
+            spl_autoload_register(__CLASS__ . '::loadClass');
+            self::$isInit = true;
+        }
     }
 
     /**
@@ -39,6 +57,9 @@ abstract class Bootstrap
      */
     public static function loadClass($className)
     {
+        if (self::$isInit === false) {
+            throw new BadUse('bootstrap doesn\'t seem to have been initialized');
+        }
         $fileName = null;
         if (($namespacePos = strripos($className, '\\')) !== false) {
             $namespace = substr($className, 0, $namespacePos);
@@ -71,12 +92,26 @@ abstract class Bootstrap
         require $fileName;
     }
 
+    /**
+     * Add a namespace to the recognized ones.
+     * Use this for files in the _apps_ directory.
+     *
+     * @param string $namespace new namespace
+     * @param string $path custom files path if needed
+     */
     public static function registerApp($namespace, $path = null)
     {
+        $namespace = rtrim($namespace, '\\');
+        if ($path == null) {
+            $path = STRAY_PATH_APPS . str_replace('_', DIRECTORY_SEPARATOR,
+                str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
+        }
+        self::$namespaces[$namespace] = $path;
     }
 
     /**
      * Add a namespace to the recognized ones.
+     * Use this for files in the _vendor_ directory.
      *
      * @param string $namespace new namespace
      * @param string $path custom files path if needed
@@ -96,16 +131,16 @@ abstract class Bootstrap
      */
     public static function run()
     {
-        if (isset(self::$namespaces) === false) {
-            throw new BadUse('bootstrap doesn\'t seem to have been initialized');
-        }
-        if (count(self::$namespaces) == 0) {
-            throw new BadUse('no namespace has been registered');
+        if (self::$isInit === false) {
+            throw new BadUse('Bootstrap doesn\'t seem to have been initialized');
         }
         if (STRAY_IS_CLI === true) {
         } else {
             if (STRAY_ENV === 'development') {
                 Debug\ErrorPage::init();
+            }
+            if (count(self::$applications) == 0) {
+                throw new BadUse('no application has been registered');
             }
         }
     }

@@ -13,7 +13,7 @@ namespace ErrantWorks\StrayFw\Debug;
 abstract class ErrorPage
 {
     /**
-     * True if debug error page has already been initialized.
+     * True if class has already been initialized.
      *
      * @var bool
      */
@@ -51,8 +51,9 @@ abstract class ErrorPage
      */
     public static function addData($title, array $data)
     {
-        if (self::$isInit === true) {
-            self::$prettyPageHandler->AddDataTable($title, $data);
+        if (self::$isInit === false) {
+            throw new BadUse('error page doesn\'t seem to have been initialized');
         }
+        self::$prettyPageHandler->AddDataTable($title, $data);
     }
 }
