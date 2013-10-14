@@ -2,6 +2,7 @@
 
 namespace ErrantWorks\StrayFw;
 
+use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\UnknownNamespace;
 
 /**
@@ -16,16 +17,26 @@ abstract class Bootstrap
 {
     /**
      * Namespace-path hash.
+     *
      * @var string[]
      */
     protected static $namespaces;
 
+    /**
+     * Initialize properties and register autoloader static method.
+     */
     public static function init()
     {
         $namespaces = array();
         spl_autoload_register(__CLASS__ . '::loadClass');
     }
 
+    /**
+     * Autoloader registered function.
+     * Try to require a file according to the needed class.
+     *
+     * @param string $className needed class name
+     */
     public static function loadClass($className)
     {
         $fileName = null;
@@ -48,6 +59,12 @@ abstract class Bootstrap
             $fileName = self::$namespaces[$namespace]
                 . str_replace('\\', DIRECTORY_SEPARATOR, $subNamespaces);
             $className = substr($className, $namespacePos + 1);
+        } else {
+            $namespace = substr($className, 0, stripos($className, '_') + 1);
+            if (isset(self::$namespaces[$namespace]) === true) {
+                $fileName = self::$namespaces[$namespace];
+                $className = substr($className, stripos($className, '_') + 1);
+            }
         }
         $fileName .= DIRECTORY_SEPARATOR
             . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
@@ -58,6 +75,12 @@ abstract class Bootstrap
     {
     }
 
+    /**
+     * Add a namespace to the recognized ones.
+     *
+     * @param string $namespace new namespace
+     * @param string $path custom files path if needed
+     */
     public static function registerLib($namespace, $path = null)
     {
         $namespace = rtrim($namespace, '\\');
@@ -68,14 +91,21 @@ abstract class Bootstrap
         self::$namespaces[$namespace] = $path;
     }
 
+    /**
+     * Launch the application. Bootstrap need to be init beforehand.
+     */
     public static function run()
     {
+        if (isset(self::$namespaces) === false) {
+            throw new BadUse('bootstrap doesn\'t seem to have been initialized');
+        }
+        if (count(self::$namespaces) == 0) {
+            throw new BadUse('no namespace has been registered');
+        }
         if (STRAY_IS_CLI === true) {
         } else {
             if (STRAY_ENV === 'development') {
-                $whoops = new \Whoops\Run();
-                $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
-                $whoops->register();
+                Debug\ErrorPage::init();
             }
         }
     }
