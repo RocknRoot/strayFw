@@ -54,7 +54,7 @@ abstract class Bootstrap
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
             self::registerLib('ErrantWorks\\StrayFw');
-            if (defined(STRAY_IS_CLI) === true && STRAY_IS_CLI === true) {
+            if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
             } else {
                 Http::init();
@@ -164,7 +164,7 @@ abstract class Bootstrap
                 // TODO log
             }
         }
-        if (defined(STRAY_IS_CLI) === true && STRAY_IS_CLI === true) {
+        if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
             Console::run();
         } else {
             if (STRAY_ENV === 'development') {
