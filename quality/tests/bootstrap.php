@@ -1,31 +1,22 @@
 <?php
 
-$base = rtrim(dirname(__FILE__), '/') . '/';
+define('STRAY_VERSION', '0.4');
+define('STRAY_VERSION_CODE', 'Marius');
 
-define('STRAY_PATH_TO_APPS', $base . '../apps/');
-define('STRAY_PATH_TO_MODELS', $base . '../models/');
-define('STRAY_PATH_TO_LIB', $base . '../lib/');
-define('STRAY_PATH_TO_SCRIPTS', $base . '../scripts/');
-define('STRAY_PATH_TO_WEB', $base . '../web/');
-define('STRAY_PATH_TO_INSTALL', $base . '../');
+define('STRAY_PATH_ROOT', __DIR__ . '/../../');
+define('STRAY_PATH_APPS', __DIR__ . '/../../apps/');
+define('STRAY_PATH_VENDOR', __DIR__ . '/../../vendor/');
 
-// stray
-$straypath = STRAY_PATH_TO_LIB . 'stray/';
-require $straypath . 'global/require.php';
-require $straypath . 'exception/require.php';
-require $straypath . 'config/require.php';
-require $straypath . 'persistance/require.php';
-require $straypath . 'models/require.php';
-require $straypath . 'models/mod/require.php';
-require $straypath . 'models/mutation/require.php';
-require $straypath . 'models/query/require.php';
-require $straypath . 'routing/require.php';
-require $straypath . 'routing/strayRoutingBootstrap.class.php';
-require $straypath . 'locale/require.php';
-require $straypath . 'command/require.php';
-require $straypath . 'apps/require.php';
-require $straypath . 'form/require.php';
-require $straypath . 'ext/require.php';
+if (false === defined('STRAY_ENV')) {
+    define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
+}
 
-// plugins
-require STRAY_PATH_TO_LIB . 'plugins/strayRegistry/require.php';
+require STRAY_PATH_VENDOR . 'ErrantWorks/StrayFw/Bootstrap.php';
+
+use ErrantWorks\StrayFw\Bootstrap;
+
+Bootstrap::init();
+
+Bootstrap::registerLib('Symfony\\Component\\Yaml');
+Bootstrap::registerLib('Twig_', STRAY_PATH_VENDOR . 'Twig/Twig');
+Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');

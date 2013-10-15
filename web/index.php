@@ -7,8 +7,6 @@ define('STRAY_PATH_ROOT', __DIR__ . '/../');
 define('STRAY_PATH_APPS', __DIR__ . '/../apps/');
 define('STRAY_PATH_VENDOR', __DIR__ . '/../vendor/');
 
-define('STRAY_IS_CLI', false);
-
 if (false === defined('STRAY_ENV')) {
     define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
 }
