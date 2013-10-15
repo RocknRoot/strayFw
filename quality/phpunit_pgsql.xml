@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="quality/tests/bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
 
     <php>
         <var name="db_dsn" value="pgsql:dbname=strayFw_test;host=localhost"/>
@@ -10,7 +10,7 @@
 
     <testsuites>
         <testsuite name="strayTestSuite">
-            <directory suffix=".php">quality/tests</directory>
+            <directory suffix=".php">tests</directory>
         </testsuite>
     </testsuites>
 
