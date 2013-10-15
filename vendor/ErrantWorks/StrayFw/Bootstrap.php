@@ -157,9 +157,9 @@ abstract class Bootstrap
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
         }
-        foreach (self::$applications as $name) {
-            if (file_exists(self::$namespaces[$name] . DIRECTORY_SEPARATOR . 'init.php') === true) {
-                require self::$namespaces[$name] . DIRECTORY_SEPARATOR . 'init.php';
+        foreach (self::$namespaces as $name => $path) {
+            if (file_exists($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
+                require $path . DIRECTORY_SEPARATOR . 'init.php';
             } else {
                 // TODO log
             }
