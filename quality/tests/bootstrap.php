@@ -11,12 +11,12 @@ if (false === defined('STRAY_ENV')) {
     define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
 }
 
-require STRAY_PATH_VENDOR . 'ErrantWorks/StrayFw/Bootstrap.php';
+require STRAY_PATH_VENDOR . 'ErrantWorks/StrayFw/run.php';
 
-use ErrantWorks\StrayFw\Bootstrap;
+/*use ErrantWorks\StrayFw\Bootstrap;
 
 Bootstrap::init();
 
 Bootstrap::registerLib('Symfony\\Component\\Yaml');
 Bootstrap::registerLib('Twig_', STRAY_PATH_VENDOR . 'Twig/Twig');
-Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');
+Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');*/

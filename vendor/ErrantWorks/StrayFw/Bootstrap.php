@@ -56,7 +56,7 @@ abstract class Bootstrap
             self::registerLib('ErrantWorks\\StrayFw');
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
-            } else {
+            } else if (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 Http::init();
             }
         }
@@ -166,7 +166,7 @@ abstract class Bootstrap
         }
         if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
             Console::run();
-        } else {
+        } else if (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
             if (STRAY_ENV === 'development') {
                 Debug\ErrorPage::init();
             }
