@@ -5,7 +5,7 @@
 The strayFw is a PHP framework trying to be modern without following fashion.
 
 * Homepage : http://stray.errant-works.com
-* Version : beta - 0.3-Albrecht
+* Version : beta - 0.4-Marius
 
 It's loosely based on Model-View-Adapter architecture.
 
@@ -19,9 +19,10 @@ Code is free, new-BSD license. So... fork us !
 
 * Running web server handling PHP
 * PHP 5.4.x
-* The included dependencies :
+* These included dependencies :
     * [Twig](http://twig.sensiolabs.org/ 'Twig homepage')
     * [Symfony YAML Component](http://symfony.com/doc/current/components/yaml/introduction.html 'The YAML Component')
+    * In development environment : [Whoops](http://filp.github.io/whoops/ 'Whoops homepage')
 
 For installation help, [check this page](http://stray.errant-works.com/guide/installation 'user guide - installation').
 
@@ -39,4 +40,4 @@ Or add an issue on github ! ;)
     * [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md 'PSR-2')
     * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3')
 
-* It doesn't use Composer/Packagist but you can easily add it (due to the PSR-0 compliance).
+* It doesn't use Composer/Packagist but you can easily add it.
