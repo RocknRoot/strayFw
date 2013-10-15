@@ -13,4 +13,4 @@ before_script:
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
   - sh -c "cp config/settings.tests.yml config/settings.yml"
 
-script: phpunit --configuration .phpunit_pgsql.xml --coverage-text
+script: phpunit --configuration quality/phpunit_pgsql.xml --coverage-text

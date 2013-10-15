@@ -6,7 +6,6 @@ use ErrantWorks\StrayFw\Bootstrap;
 
 Bootstrap::init();
 
-Bootstrap::registerLib('ErrantWorks\\StrayFw');
 Bootstrap::registerLib('Symfony\\Component\\Yaml');
 Bootstrap::registerLib('Twig_', STRAY_PATH_VENDOR . 'Twig/Twig');
 

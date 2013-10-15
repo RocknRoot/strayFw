@@ -5,10 +5,10 @@ namespace ErrantWorks\StrayFw\Exception;
 use ErrantWorks\StrayFw\Exception\Exception;
 
 /**
- * Exception thrown when the framework hasn't been correctly initialized.
+ * Exception thrown when a route has an invalid definition.
  *
  * @author Nekith <nekith@errant-works.com>
  */
-class BadUse extends Exception
+class InvalidRouteDefinition extends Exception
 {
 }

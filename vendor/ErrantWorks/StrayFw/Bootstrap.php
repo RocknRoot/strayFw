@@ -2,8 +2,10 @@
 
 namespace ErrantWorks\StrayFw;
 
+use ErrantWorks\StrayFw\Console\Console;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\UnknownNamespace;
+use ErrantWorks\StrayFw\Http\Http;
 
 /**
  * First loaded framework class, taking care of autoloading
@@ -18,6 +20,7 @@ abstract class Bootstrap
     /**
      * True if class has already been initialized.
      *
+     * @static
      * @var bool
      */
     private static $isInit = false;
@@ -25,6 +28,7 @@ abstract class Bootstrap
     /**
      * Namespace-path hash.
      *
+     * @static
      * @var string[]
      */
     protected static $namespaces;
@@ -32,12 +36,15 @@ abstract class Bootstrap
     /**
      * Registered applications.
      *
+     * @static
      * @var string[]
      */
     protected static $applications;
 
     /**
      * Initialize properties and register autoloader static method.
+     *
+     * @static
      */
     public static function init()
     {
@@ -46,6 +53,12 @@ abstract class Bootstrap
             $applications = array();
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
+            self::registerLib('ErrantWorks\\StrayFw');
+            if (STRAY_IS_CLI === true) {
+                Console::init();
+            } else {
+                Http::init();
+            }
         }
     }
 
@@ -53,6 +66,9 @@ abstract class Bootstrap
      * Autoloader registered function.
      * Try to require a file according to the needed class.
      *
+     * @static
+     * @throws BadUse if bootstrap isn't initialized
+     * @throws UnknownNamespace if needed namespace can't be found
      * @param string $className needed class name
      */
     public static function loadClass($className)
@@ -80,8 +96,8 @@ abstract class Bootstrap
             $fileName = self::$namespaces[$namespace]
                 . str_replace('\\', DIRECTORY_SEPARATOR, $subNamespaces);
             $className = substr($className, $namespacePos + 1);
-        } else {
-            $namespace = substr($className, 0, stripos($className, '_') + 1);
+        } else if (($namespacePos = strripos($className, '_')) !== false) {
+            $namespace = substr($className, 0, $namespacePos + 1);
             if (isset(self::$namespaces[$namespace]) === true) {
                 $fileName = self::$namespaces[$namespace];
                 $className = substr($className, stripos($className, '_') + 1);
@@ -96,6 +112,7 @@ abstract class Bootstrap
      * Add a namespace to the recognized ones.
      * Use this for files in the _apps_ directory.
      *
+     * @static
      * @param string $namespace new namespace
      * @param string $path custom files path if needed
      */
@@ -107,12 +124,14 @@ abstract class Bootstrap
                 str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
         }
         self::$namespaces[$namespace] = $path;
+        self::$applications[] = $namespace;
     }
 
     /**
      * Add a namespace to the recognized ones.
      * Use this for files in the _vendor_ directory.
      *
+     * @static
      * @param string $namespace new namespace
      * @param string $path custom files path if needed
      */
@@ -127,14 +146,26 @@ abstract class Bootstrap
     }
 
     /**
-     * Launch the application. Bootstrap need to be init beforehand.
+     * Launch the logic stuff. Bootstrap need to be initialized beforehand.
+     *
+     * @throws BadUse if bootstrap isn't initialized
+     * @throws BadUse if no application is registered
+     * @static
      */
     public static function run()
     {
         if (self::$isInit === false) {
-            throw new BadUse('Bootstrap doesn\'t seem to have been initialized');
+            throw new BadUse('bootstrap doesn\'t seem to have been initialized');
+        }
+        foreach (self::$applications as $name) {
+            if (file_exists(self::$namespaces[$name] . DIRECTORY_SEPARATOR . 'init.php') === true) {
+                require self::$namespaces[$name] . DIRECTORY_SEPARATOR . 'init.php';
+            } else {
+                // TODO log
+            }
         }
         if (STRAY_IS_CLI === true) {
+            Console::run();
         } else {
             if (STRAY_ENV === 'development') {
                 Debug\ErrorPage::init();
@@ -142,6 +173,7 @@ abstract class Bootstrap
             if (count(self::$applications) == 0) {
                 throw new BadUse('no application has been registered');
             }
+            Http::run();
         }
     }
 }
