@@ -43,6 +43,9 @@ abstract class Twig
      * Get environment for specified templates directory.
      *
      * @static
+     * @throws InvalidDirectory if directory can't be identified
+     * @throws BadUse if tmp path hasn't been defined
+     * @throws BadUse if tmp directory isn't writable
      * @param string $dir template directory
      * @return Twig_Environment corresponding environment
      */
@@ -53,32 +56,36 @@ abstract class Twig
             if (is_dir($dir) === false) {
                 throw new InvalidDirectory('invalid templates directory "' . $dir . '"');
             }
-            $settings = Config::get(STRAY_PATH_ROOT . 'settings.yml');
+            $settings = Config::getSettings();
             if (empty($settings['tmp']) === true) {
-                throw new BadUse('tmp directory hasn\'t been defined in settings.yml');
+                throw new BadUse('tmp directory hasn\'t been defined in installation settings');
             }
-            if (is_dir($settings['tmp'] . 'twig_compil/') == false) {
-                if (mkdir($settings['tmp'] . 'twig_compil') === false) {
+            $tmp = rtrim($settings['tmp'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            if ($tmp[0] != DIRECTORY_SEPARATOR) {
+                $tmp = STRAY_PATH_ROOT . $tmp;
+            }
+            if (is_dir($tmp . 'twig_compil/') == false) {
+                if (mkdir($tmp . 'twig_compil') === false) {
                     throw new BadUse('tmp directory doesn\'t seem to be writable');
                 }
             }
-            $loader = new Twig_Loader_Filesystem($dir);
-            self::$environments[$dir] = new Twig_Environment($loader, array(
-                'cache' => $settings['tmp'] . 'twig_compil',
+            $loader = new \Twig_Loader_Filesystem($dir);
+            self::$environments[$dir] = new \Twig_Environment($loader, array(
+                'cache' => $tmp . 'twig_compil',
                 'debug' => (STRAY_ENV === 'development')
             ));
             if (STRAY_ENV === 'development') {
-                self::$environments[$dir]->addExtension(new Twig_Extension_Debug());
+                self::$environments[$dir]->addExtension(new \Twig_Extension_Debug());
             }
-            self::$environments[$dir]->addFunction('route', new Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::route'));
-            self::$environments[$dir]->addFunction('tr', new Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::tr'));
-            self::$environments[$dir]->addFunction('url', new Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::url'));
-            self::$environments[$dir]->addFunction('session', new Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::session'));
+            self::$environments[$dir]->addFunction('route', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::route'));
+            self::$environments[$dir]->addFunction('tr', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::tr'));
+            self::$environments[$dir]->addFunction('url', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::url'));
+            self::$environments[$dir]->addFunction('session', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::session'));
             foreach (self::$extensions as $ext) {
                 self::$environments[$dir]->addExtension(new $ext);
             }
             foreach (self::$functions as $label => $name) {
-                self::$environments[$dir]->addFunction($label, new Twig_Function_Function($name));
+                self::$environments[$dir]->addFunction($label, new \Twig_Function_Function($name));
             }
         }
         return self::$environments[$dir];
@@ -112,7 +119,7 @@ abstract class Twig
         if (isset(self::$functions[$label]) === false) {
             self::$functions[$label] = $functionName;
             foreach (self::$environments as $env) {
-                $env->addFunction($label, new Twig_Function_Function($functionName));
+                $env->addFunction($label, new \Twig_Function_Function($functionName));
             }
         }
     }

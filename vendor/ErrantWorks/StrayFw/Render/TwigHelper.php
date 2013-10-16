@@ -2,8 +2,10 @@
 
 namespace ErrantWorks\StrayFw\Render;
 
+use ErrantWorks\StrayFw\Http\Helper as HttpHelper;
+
 /**
- * strayFw extensions for Twig.
+ * Proxy class for Twig additional functions.
  *
  * @abstract
  *
@@ -21,7 +23,7 @@ abstract class TwigHelper
      */
     public static function route($route, $args = array())
     {
-        // TODO
+        return HttpHelper::niceUrlForRoute($route, $args);
     }
 
     public static function tr($key, $args = array())
@@ -29,9 +31,16 @@ abstract class TwigHelper
         // TODO
     }
 
+    /**
+     * Get nice URL.
+     *
+     * @static
+     * @param string $url raw URL
+     * @return string nice URL
+     */
     public static function url($url)
     {
-        // TODO
+        return HttpHelper::niceUrl($url);
     }
 
     public static function session($name)

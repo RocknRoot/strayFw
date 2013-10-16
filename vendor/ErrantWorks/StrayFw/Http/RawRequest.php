@@ -71,9 +71,9 @@ class RawRequest
     public function __construct()
     {
         if (empty($_SERVER['HTTPS']) === false && $_SERVER['HTTPS'] !== 'off') {
-            $this->scheme = 'https://';
+            $this->scheme = 'https';
         } else {
-            $this->scheme = 'http://';
+            $this->scheme = 'http';
         }
         $this->host = $_SERVER['SERVER_NAME'];
         $this->subDomain = substr($this->host, 0, stripos($this->host, '.'));

@@ -2,6 +2,8 @@
 
 namespace ErrantWorks\StrayFw\Http;
 
+use ErrantWorks\StrayFw\Exception\BadUse;
+use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
 use ErrantWorks\StrayFw\Http\RawRequest;
 use ErrantWorks\StrayFw\Render\RenderInterface;
@@ -40,7 +42,7 @@ abstract class Http
     /**
      * Registed routes.
      *
-     * @var string[]
+     * @var array[]
      */
     protected static $routes;
 
@@ -63,11 +65,12 @@ abstract class Http
      *
      * @static
      * @throws BadUse if http isn't initialized
+     * @throws NotARender if object returned by action doesn't implement RenderInterface
      */
     public static function run()
     {
         if (self::$isInit === false) {
-            throw new BadUse('Http doesn\'t seem to have been initialized');
+            throw new BadUse('http doesn\'t seem to have been initialized');
         }
         self::$request = new Request(self::$rawRequest, self::$routes);
         $class = self::$request->getClass();
@@ -92,14 +95,22 @@ abstract class Http
      *
      * @static
      * @throws BadUse if http isn't initialized
-     * @param string $fileName routes file name
+     * @throws InvalidDirectory if directory can't be identified
+     * @param string $dir application root directory
+     * @param string $file routes file name
      */
-    public static function registerRoutes($fileName)
+    public static function registerRoutes($dir, $file)
     {
         if (self::$isInit === false) {
-            throw new BadUse('Http doesn\'t seem to have been initialized');
+            throw new BadUse('http doesn\'t seem to have been initialized');
         }
-        self::$routes[] = $fileName;
+        if (is_dir($dir) === false) {
+            throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
+        }
+        self::$routes[] = array(
+            'dir' => $dir,
+            'file' => $file
+        );
     }
 
     /**

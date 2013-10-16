@@ -7,7 +7,8 @@ use ErrantWorks\StrayFw\Bootstrap;
 Bootstrap::init();
 
 Bootstrap::registerLib('Symfony\\Component\\Yaml');
-Bootstrap::registerLib('Twig_', STRAY_PATH_VENDOR . 'Twig/Twig');
+require STRAY_PATH_VENDOR . 'Twig/Twig/Autoloader.php';
+\Twig_Autoloader::register();
 
 if (STRAY_ENV === 'development') {
     Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');

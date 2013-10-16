@@ -31,6 +31,9 @@ class RenderJson implements RenderInterface
     public function render()
     {
         header('Content-type: application/json');
-        return json_encode($this->args, JSON_PRETTY_PRINT);
+        if (STRAY_ENV === 'development') {
+            return json_encode($this->args, JSON_PRETTY_PRINT);
+        }
+        return json_encode($this->args);
     }
 }

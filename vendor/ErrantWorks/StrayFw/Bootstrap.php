@@ -96,16 +96,11 @@ abstract class Bootstrap
             $fileName = self::$namespaces[$namespace]
                 . str_replace('\\', DIRECTORY_SEPARATOR, $subNamespaces);
             $className = substr($className, $namespacePos + 1);
-        } else if (($namespacePos = strripos($className, '_')) !== false) {
-            $namespace = substr($className, 0, $namespacePos + 1);
-            if (isset(self::$namespaces[$namespace]) === true) {
-                $fileName = self::$namespaces[$namespace];
-                $className = substr($className, stripos($className, '_') + 1);
-            }
         }
-        $fileName .= DIRECTORY_SEPARATOR
-            . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        require $fileName;
+        if ($fileName != null) {
+            $fileName .= DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+            require $fileName;
+        }
     }
 
     /**

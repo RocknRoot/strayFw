@@ -3,7 +3,8 @@
 namespace ErrantWorks\StrayFw\Http;
 
 use ErrantWorks\StrayFw\Config;
-use ErrantWorks\StrayFw\Exception\NoRouteMatches;
+use ErrantWorks\StrayFw\Exception\InvalidRouteDefinition;
+use ErrantWorks\StrayFw\Exception\RouteNotFound;
 use ErrantWorks\StrayFw\Http\RawRequest;
 
 /**
@@ -19,6 +20,13 @@ class Request
      * @var RawRequest
      */
     protected $rawRequest;
+
+    /**
+     * Current route file name.
+     *
+     * @param string
+     */
+    protected $file;
 
     /**
      * Current route name.
@@ -51,6 +59,8 @@ class Request
     /**
      * Parse raw request and choose a route.
      *
+     * @throws InvalidRouteDefinition if a route has an invalid definition
+     * @throws RouteNotFound if no route matches the request
      * @param RawRequest $rawRequest base raw request
      * @param array[] $routeFiles registered route files
      */
@@ -58,7 +68,7 @@ class Request
     {
         $this->rawRequest = $rawRequest;
         foreach ($routeFiles as $file) {
-            $routes = Config::get($file);
+            $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
             if (empty($routes['sub_domain']) === false && $routes['sub_domain'] != $this->rawRequest->getSubDomain()) {
                 continue;
             }
@@ -78,13 +88,15 @@ class Request
                         }
                         $matches = null;
                         if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                            $this->dir = rtrim($file['dir'], DIRECTORY_SEPARATOR);
+                            $this->file = DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR);
                             $this->route = $routeName;
                             list($this->class, $this->action) = explode('.', $routeInfo['action']);
                             if (isset($routes['namespace']) === true) {
                                 $this->class = rtrim($routes['namespace'], '\\') . '\\' . ltrim($this->class, '\\');
                             }
                             foreach ($matches as $k => $v) {
-                                if (is_numeric($k) && $v != null) {
+                                if (is_numeric($k) === false && $v != null) {
                                     $this->args[$k] = $v;
                                 }
                             }
@@ -97,7 +109,7 @@ class Request
             }
         }
         if ($this->route == null) {
-            throw new NoRouteMatches('no route matches this : ' . print_r($this->rawRequest, true));
+            throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
         }
     }
 
@@ -109,6 +121,26 @@ class Request
     public function getRawRequest()
     {
         return $this->rawRequest;
+    }
+
+    /**
+     * Get current route dir name.
+     *
+     * @return string
+     */
+    public function getDir()
+    {
+        return $this->dir;
+    }
+
+    /**
+     * Get current route file name.
+     *
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
