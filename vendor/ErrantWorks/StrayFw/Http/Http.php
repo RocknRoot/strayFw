@@ -5,7 +5,9 @@ namespace ErrantWorks\StrayFw\Http;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
+use ErrantWorks\StrayFw\Http\Cookies;
 use ErrantWorks\StrayFw\Http\RawRequest;
+use ErrantWorks\StrayFw\Http\Session;
 use ErrantWorks\StrayFw\Render\RenderInterface;
 
 /**
@@ -47,7 +49,7 @@ abstract class Http
     protected static $routes;
 
     /**
-     * Init inner states according to current HTTP request.
+     * Initialize inner states according to current HTTP request.
      *
      * @static
      */
@@ -57,6 +59,7 @@ abstract class Http
             self::$rawRequest = new RawRequest();
             self::$routes = array();
             self::$isInit = true;
+            Session::init();
         }
     }
 

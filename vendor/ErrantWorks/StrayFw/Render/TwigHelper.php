@@ -17,13 +17,14 @@ abstract class TwigHelper
      * Get nice URL for specified route.
      *
      * @static
+     * @param Request $request current request
      * @param string $route route name
      * @param array $args route arguments
      * @return string nice URL
      */
-    public static function route($route, $args = array())
+    public static function route(Request $request, $route, $args = array())
     {
-        return HttpHelper::niceUrlForRoute($route, $args);
+        return HttpHelper::niceUrlForRoute($request, $route, $args);
     }
 
     public static function tr($key, $args = array())

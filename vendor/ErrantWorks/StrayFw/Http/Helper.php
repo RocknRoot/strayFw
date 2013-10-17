@@ -64,17 +64,18 @@ abstract class Helper
      *
      * @static
      * @throws RouteNotFound if needed route can't be found
+     * @param Request $request current request
      * @param string $route route name
      * @param array $args route arguments
      * @return string nice URL
      */
-    public static function niceUrlForRoute($route, $args = array())
+    public static function niceUrlForRoute(Request $request, $route, $args = array())
     {
         $file = null;
         $url = null;
         if (($pos = stripos($route, '.')) !== false) {
         } else {
-            $file = Http::getRequest()->getFile();
+            $file = $request->getFile();
         }
         $routes = Config::get($file);
         if (isset($routes['routes'][$route]) === false) {
