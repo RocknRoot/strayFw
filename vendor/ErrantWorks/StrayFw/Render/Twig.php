@@ -44,9 +44,9 @@ abstract class Twig
      *
      * @static
      * @throws InvalidDirectory if directory can't be identified
-     * @throws BadUse if tmp path hasn't been defined
-     * @throws BadUse if tmp directory isn't writable
-     * @param string $dir template directory
+     * @throws BadUse           if tmp path hasn't been defined
+     * @throws BadUse           if tmp directory isn't writable
+     * @param  string           $dir template directory
      * @return Twig_Environment corresponding environment
      */
     public static function getEnv($dir)
@@ -88,6 +88,7 @@ abstract class Twig
                 self::$environments[$dir]->addFunction($label, new \Twig_Function_Function($name));
             }
         }
+
         return self::$environments[$dir];
     }
 
@@ -111,7 +112,7 @@ abstract class Twig
      * Add a function to Twig environments.
      *
      * @static
-     * @param string $label function name in Twig templates
+     * @param string $label       function name in Twig templates
      * @param string $functioName function name
      */
     public static function addFunction($label, $functionName)

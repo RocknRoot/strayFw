@@ -41,8 +41,8 @@ class Config
      * @static
      * @throws FileNotReadable if file can't be opened
      * @throws FileNotParsable if file can't be parsed
-     * @param string $fileName file name
-     * @return string file content
+     * @param  string          $fileName file name
+     * @return string          file content
      */
     public static function get($fileName)
     {
@@ -57,6 +57,7 @@ class Config
             }
             self::$files[$fileName] = $content;
         }
+
         return self::$files[$fileName];
     }
 }

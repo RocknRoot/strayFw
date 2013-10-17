@@ -4,7 +4,7 @@ php:
   - 5.5
 
 before_script:
-  - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
+  - git clone git://github.com/squizlabs/PHP_CodeSniffer.git
   - psql -c "DROP DATABASE IF EXISTS strayFw_test;" -U postgres
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
   - sh -c "cp quality/settings.tests.yml settings.yml"

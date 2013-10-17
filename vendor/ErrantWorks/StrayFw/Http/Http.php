@@ -5,7 +5,6 @@ namespace ErrantWorks\StrayFw\Http;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
-use ErrantWorks\StrayFw\Http\Cookies;
 use ErrantWorks\StrayFw\Http\RawRequest;
 use ErrantWorks\StrayFw\Http\Session;
 use ErrantWorks\StrayFw\Render\RenderInterface;
@@ -67,7 +66,7 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
-     * @throws BadUse if http isn't initialized
+     * @throws BadUse     if http isn't initialized
      * @throws NotARender if object returned by action doesn't implement RenderInterface
      */
     public static function run()
@@ -97,10 +96,10 @@ abstract class Http
      * Add routes to be considered.
      *
      * @static
-     * @throws BadUse if http isn't initialized
+     * @throws BadUse           if http isn't initialized
      * @throws InvalidDirectory if directory can't be identified
-     * @param string $dir application root directory
-     * @param string $file routes file name
+     * @param  string           $dir  application root directory
+     * @param  string           $file routes file name
      */
     public static function registerRoutes($dir, $file)
     {

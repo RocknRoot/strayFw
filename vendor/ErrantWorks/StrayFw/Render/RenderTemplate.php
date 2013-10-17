@@ -32,9 +32,9 @@ class RenderTemplate implements RenderInterface
     /**
      * Construct render with base arguments.
      *
-     * @param Request $request associated request
-     * @param string $fileName template file name
-     * @param array $args base arguments
+     * @param Request $request  associated request
+     * @param string  $fileName template file name
+     * @param array   $args     base arguments
      */
     public function __construct(Request $request, $fileName, array $args = array())
     {
@@ -52,6 +52,7 @@ class RenderTemplate implements RenderInterface
     {
         $env = Twig::getEnv($this->request->getDir());
         $template = $env->loadTemplate($this->fileName);
+
         return $template->render($this->args);
     }
 }

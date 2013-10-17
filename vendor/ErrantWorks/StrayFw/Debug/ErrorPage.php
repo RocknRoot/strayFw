@@ -47,8 +47,8 @@ abstract class ErrorPage
      * Add additionnal info in case of error page is displayed.
      *
      * @throws BadUse if error page isn't initialized
-     * @param string $title data group title
-     * @param array $data data that will be displayed
+     * @param  string $title data group title
+     * @param  array  $data  data that will be displayed
      */
     public static function addData($title, array $data)
     {

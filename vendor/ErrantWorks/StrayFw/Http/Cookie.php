@@ -15,7 +15,7 @@ abstract class Cookie
      * Get a cookie value by its key.
      *
      * @static
-     * @param string $name key
+     * @param  string $name key
      * @return mixed
      */
     public static function get($name)
@@ -23,6 +23,7 @@ abstract class Cookie
         if (isset($_COOKIE[$name]) === false) {
             return null;
         }
+
         return $_COOKIE[$name];
     }
 
@@ -30,7 +31,7 @@ abstract class Cookie
      * Check if a cookie is set.
      *
      * @static
-     * @param string $name key
+     * @param  string $name key
      * @return bool
      */
     public static function has($name)
@@ -42,10 +43,10 @@ abstract class Cookie
      * Set a cookie.
      *
      * @static
-     * @param string $name key
-     * @param string $value new value
-     * @param int $expire expiration timestamp
-     * @param string $path cookie path
+     * @param string $name   key
+     * @param string $value  new value
+     * @param int    $expire expiration timestamp
+     * @param string $path   cookie path
      */
     public static function set($name, $value, $expire = 0, $path = null)
     {

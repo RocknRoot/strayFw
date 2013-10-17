@@ -34,6 +34,7 @@ class RenderJson implements RenderInterface
         if (STRAY_ENV === 'development') {
             return json_encode($this->args, JSON_PRETTY_PRINT);
         }
+
         return json_encode($this->args);
     }
 }

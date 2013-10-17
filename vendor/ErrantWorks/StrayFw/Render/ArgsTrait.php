@@ -19,7 +19,7 @@ trait ArgsTrait
     /**
      * True if arg is set.
      *
-     * @param string $name arg name
+     * @param  string $name arg name
      * @return bool
      */
     public function hasArg($name)
@@ -30,22 +30,23 @@ trait ArgsTrait
     /**
      * Get set arg.
      *
-     * @param string $name arg name
-     * @return mixed arg value
+     * @param  string $name arg name
+     * @return mixed  arg value
      */
     public function getArg($name)
     {
         if ($this->has($name) === false) {
             return null;
         }
+
         return $this->args[$name];
     }
 
     /**
      * Set arg.
      *
-     * @param string $name arg name
-     * @param mixed $value arg value
+     * @param string $name  arg name
+     * @param mixed  $value arg value
      */
     public function setArg($name, $value)
     {

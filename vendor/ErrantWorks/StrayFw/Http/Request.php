@@ -60,9 +60,9 @@ class Request
      * Parse raw request and choose a route.
      *
      * @throws InvalidRouteDefinition if a route has an invalid definition
-     * @throws RouteNotFound if no route matches the request
-     * @param RawRequest $rawRequest base raw request
-     * @param array[] $routeFiles registered route files
+     * @throws RouteNotFound          if no route matches the request
+     * @param  RawRequest             $rawRequest base raw request
+     * @param  array[]                $routeFiles registered route files
      */
     public function __construct(RawRequest $rawRequest, array $routeFiles)
     {

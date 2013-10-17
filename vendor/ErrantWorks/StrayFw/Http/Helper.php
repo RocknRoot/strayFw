@@ -20,8 +20,8 @@ abstract class Helper
      * Extract domain from raw request.
      *
      * @static
-     * @param RawRequest $rawRequest base raw request
-     * @return string domain
+     * @param  RawRequest $rawRequest base raw request
+     * @return string     domain
      */
     public static function extractDomain(RawRequest $rawRequest)
     {
@@ -32,6 +32,7 @@ abstract class Helper
         if (empty($settings['domain_prefix']) === false) {
             $domain = $settings['domain_prefix'] . '.' . $domain;
         }
+
         return $domain;
     }
 
@@ -39,7 +40,7 @@ abstract class Helper
      * Get nice URL.
      *
      * @static
-     * @param string $url raw URL
+     * @param  string $url raw URL
      * @return string nice URL
      */
     public static function niceUrl($url)
@@ -56,6 +57,7 @@ abstract class Helper
         } else {
             $file = Http::getRequest()->getFile();
         }
+
         return $nice . '/' . ltrim(preg_replace('/\/+/', '/', $url), '/');
     }
 
@@ -64,10 +66,10 @@ abstract class Helper
      *
      * @static
      * @throws RouteNotFound if needed route can't be found
-     * @param Request $request current request
-     * @param string $route route name
-     * @param array $args route arguments
-     * @return string nice URL
+     * @param  Request       $request current request
+     * @param  string        $route   route name
+     * @param  array         $args    route arguments
+     * @return string        nice URL
      */
     public static function niceUrlForRoute(Request $request, $route, $args = array())
     {
@@ -87,6 +89,7 @@ abstract class Helper
         }
         $url = preg_replace('/\(\?<(\w)+>(.*?)\)[?*]/', null, $url);
         $url = str_replace([ '(', ')', '?' ], null, $url);
+
         return self::niceUrl(rtrim($url, '/'));
     }
 }

@@ -56,7 +56,7 @@ abstract class Bootstrap
             self::registerLib('ErrantWorks\\StrayFw');
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
-            } else if (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
+            } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 Http::init();
             }
         }
@@ -67,9 +67,9 @@ abstract class Bootstrap
      * Try to require a file according to the needed class.
      *
      * @static
-     * @throws BadUse if bootstrap isn't initialized
+     * @throws BadUse           if bootstrap isn't initialized
      * @throws UnknownNamespace if needed namespace can't be found
-     * @param string $className needed class name
+     * @param  string           $className needed class name
      */
     public static function loadClass($className)
     {
@@ -109,7 +109,7 @@ abstract class Bootstrap
      *
      * @static
      * @param string $namespace new namespace
-     * @param string $path custom files path if needed
+     * @param string $path      custom files path if needed
      */
     public static function registerApp($namespace, $path = null)
     {
@@ -128,7 +128,7 @@ abstract class Bootstrap
      *
      * @static
      * @param string $namespace new namespace
-     * @param string $path custom files path if needed
+     * @param string $path      custom files path if needed
      */
     public static function registerLib($namespace, $path = null)
     {
@@ -161,7 +161,7 @@ abstract class Bootstrap
         }
         if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
             Console::run();
-        } else if (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
+        } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
             if (STRAY_ENV === 'development') {
                 Debug\ErrorPage::init();
             }

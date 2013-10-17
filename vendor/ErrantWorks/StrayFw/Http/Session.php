@@ -38,7 +38,7 @@ abstract class Session
      * Get a session variable value by its key.
      *
      * @static
-     * @param string $name key
+     * @param  string $name key
      * @return mixed
      */
     public static function get($name)
@@ -46,6 +46,7 @@ abstract class Session
         if (isset($_SESSION[$name]) === false) {
             return null;
         }
+
         return $_SESSION[$name];
     }
 
@@ -53,7 +54,7 @@ abstract class Session
      * Check if a session variable is set.
      *
      * @static
-     * @param string $name key
+     * @param  string $name key
      * @return bool
      */
     public static function has($name)
@@ -65,7 +66,7 @@ abstract class Session
      * Set a session variable.
      *
      * @static
-     * @param string $name key
+     * @param string $name  key
      * @param string $value new value
      */
     public static function set($name, $value)

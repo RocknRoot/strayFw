@@ -2,4 +2,4 @@
 
 phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
 
-php php-cs-fixer.phar fix . --dry-run
+php PHP_CodeSniffer/scripts/phpcs --standard=quality/cs_ruleset.xml vendor/ErrantWorks
