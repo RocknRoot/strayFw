@@ -6,6 +6,7 @@ use ErrantWorks\StrayFw\Bootstrap;
 
 Bootstrap::init();
 
+Bootstrap::registerLib('Psr\\Log');
 Bootstrap::registerLib('Symfony\\Component\\Yaml');
 require STRAY_PATH_VENDOR . 'Twig/Twig/Autoloader.php';
 \Twig_Autoloader::register();

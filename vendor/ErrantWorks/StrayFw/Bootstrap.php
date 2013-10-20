@@ -6,6 +6,7 @@ use ErrantWorks\StrayFw\Console\Console;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\UnknownNamespace;
 use ErrantWorks\StrayFw\Http\Http;
+use ErrantWorks\StrayFw\Logger;
 
 /**
  * First loaded framework class, taking care of autoloading
@@ -156,7 +157,7 @@ abstract class Bootstrap
             if (file_exists($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
                 require $path . DIRECTORY_SEPARATOR . 'init.php';
             } else {
-                // TODO log
+                Logger::get()->notice('namespace "' . $name . '" doesn\'t have an init.php');
             }
         }
         if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
