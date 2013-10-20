@@ -7,6 +7,7 @@ use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
 use ErrantWorks\StrayFw\Http\RawRequest;
 use ErrantWorks\StrayFw\Http\Session;
+use ErrantWorks\StrayFw\Locale\Locale;
 use ErrantWorks\StrayFw\Render\RenderInterface;
 
 /**
@@ -59,6 +60,7 @@ abstract class Http
             self::$routes = array();
             self::$isInit = true;
             Session::init();
+            Locale::init(self::$rawRequest);
         }
     }
 

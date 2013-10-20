@@ -78,7 +78,7 @@ class RawRequest
         $this->host = $_SERVER['SERVER_NAME'];
         $this->subDomain = substr($this->host, 0, stripos($this->host, '.'));
         $this->query = str_replace('/index.php', null, $_SERVER['REQUEST_URI']);
-        if (($pos = stripos($this->query, '?')) != false) {
+        if (($pos = stripos($this->query, '?')) !== false) {
             $this->query = substr($this->query, 0, stripos($this->query, '?'));
         }
         $this->query = rtrim($this->query, '/') . '/';

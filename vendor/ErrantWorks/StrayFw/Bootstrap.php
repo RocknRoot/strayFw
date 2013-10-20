@@ -50,14 +50,22 @@ abstract class Bootstrap
     public static function init()
     {
         if (self::$isInit === false) {
-            $namespaces = array();
-            $applications = array();
+            self::$namespaces = array();
+            self::$applications = array();
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
+            self::registerLib('Psr\\Log');
+            self::registerLib('Symfony\\Component\\Yaml');
             self::registerLib('ErrantWorks\\StrayFw');
+            if (STRAY_ENV === 'development') {
+                Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');
+            }
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
+                if (STRAY_ENV === 'development') {
+                    Debug\ErrorPage::init();
+                }
                 Http::init();
             }
         }
@@ -156,16 +164,13 @@ abstract class Bootstrap
         foreach (self::$namespaces as $name => $path) {
             if (file_exists($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
                 require $path . DIRECTORY_SEPARATOR . 'init.php';
-            } else {
+            } elseif (stripos($path, 'vendor') === false || stripos($path, 'vendor') == strlen($path) - strlen('vendor')) {
                 Logger::get()->notice('namespace "' . $name . '" doesn\'t have an init.php');
             }
         }
         if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
             Console::run();
         } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
-            if (STRAY_ENV === 'development') {
-                Debug\ErrorPage::init();
-            }
             if (count(self::$applications) == 0) {
                 throw new BadUse('no application has been registered');
             }

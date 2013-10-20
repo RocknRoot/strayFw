@@ -17,8 +17,8 @@ Code is free, new-BSD license. So... fork us !
 
 ## Requirements
 
-* Running web server handling PHP
 * PHP >= 5.4
+* If you're using the Locale namespace, PECL intl extension >= 1.0.0
 * These included dependencies :
     * [Twig](http://twig.sensiolabs.org/ 'Twig homepage')
     * [Symfony YAML Component](http://symfony.com/doc/current/components/yaml/introduction.html 'The YAML Component')

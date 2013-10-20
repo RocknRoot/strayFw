@@ -1,5 +1,6 @@
 {
   "filp/whoops": "1.0.8",
+  "psr/log": "1.0.0",
   "symfony/yaml": "2.3.6",
   "twig/twig": "1.14.0"
 }

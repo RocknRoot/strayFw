@@ -64,6 +64,6 @@ class Logger extends AbstractLogger
         foreach ($context as $key => $value) {
             $message = str_replace('{' . $key . '}', $value, $message);
         }
-        error_log($message);
+        error_log('[' . $level . '] ' . $message);
     }
 }

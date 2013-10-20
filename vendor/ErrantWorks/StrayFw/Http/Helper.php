@@ -8,7 +8,7 @@ use ErrantWorks\StrayFw\Http\Http;
 use ErrantWorks\StrayFw\Http\RawRequest;
 
 /**
- * Useful functions for the user.
+ * Useful functions for the framework users.
  *
  * @abstract
  *

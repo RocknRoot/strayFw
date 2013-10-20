@@ -3,6 +3,8 @@
 namespace ErrantWorks\StrayFw\Render;
 
 use ErrantWorks\StrayFw\Http\Helper as HttpHelper;
+use ErrantWorks\StrayFw\Http\Session;
+use ErrantWorks\StrayFw\Locale\Locale;
 
 /**
  * Proxy class for Twig additional functions.
@@ -27,9 +29,17 @@ abstract class TwigHelper
         return HttpHelper::niceUrlForRoute($request, $route, $args);
     }
 
+    /**
+     * Get a translation from loaded files.
+     *
+     * @static
+     * @param  string $key  translation key
+     * @param  array  $args translation arguments values
+     * @return string translated content
+     */
     public static function tr($key, $args = array())
     {
-        // TODO
+        return Locale::translate($key, $args);
     }
 
     /**
@@ -44,8 +54,15 @@ abstract class TwigHelper
         return HttpHelper::niceUrl($url);
     }
 
+    /**
+     * Get a session variable value by its key.
+     *
+     * @static
+     * @param  string $name key
+     * @return mixed
+     */
     public static function session($name)
     {
-        // TODO
+        return Session::get($name);
     }
 }
