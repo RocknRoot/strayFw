@@ -138,4 +138,27 @@ abstract class Locale
 
         return $section[$key];
     }
+
+    /**
+     * Set current language. Should be IETF language tag compliant.
+     *
+     * @static
+     * @param string $language
+     */
+    public static function setCurrentLanguage($language)
+    {
+        self::$currentLanguage = $language;
+        Session::set('_stray_language', self::$currentLanguage);
+    }
+
+    /**
+     * Get current language. Should be IETF language tag compliant.
+     *
+     * @static
+     * @return string
+     */
+    public static function getCurrentLanguage()
+    {
+        return self::$currentLanguage;
+    }
 }
