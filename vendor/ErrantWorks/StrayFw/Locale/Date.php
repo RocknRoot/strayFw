@@ -35,8 +35,8 @@ class Date
     /**
      * Set a custom format.
      *
-     * @param string $format new pattern to use
-     * @return bool true on success
+     * @param  string $format new pattern to use
+     * @return bool   true on success
      */
     public function setPattern($format)
     {
@@ -46,7 +46,7 @@ class Date
     /**
      * Formats the time value as a localized string.
      *
-     * @param mixed $time value to format
+     * @param  mixed  $time value to format
      * @return string formatted string
      */
     public function format($time)

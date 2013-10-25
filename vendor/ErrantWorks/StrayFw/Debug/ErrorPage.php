@@ -2,6 +2,10 @@
 
 namespace ErrantWorks\StrayFw\Debug;
 
+use Whoops\Handler\JsonResponseHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
+
 /**
  * Handle error page displayed if an error is raised or uncaught exception is thrown.
  * Isn't initialized in production environement.
@@ -15,6 +19,7 @@ abstract class ErrorPage
     /**
      * True if class has already been initialized.
      *
+     * @static
      * @var bool
      */
     private static $isInit = false;
@@ -22,21 +27,25 @@ abstract class ErrorPage
     /**
      * Whoops error page handler.
      *
+     * @static
      * @var \Whoops\Handler\PrettyPageHandler
      */
     protected static $prettyPageHandler;
 
     /**
      * Init Whoops handlers.
+     * You souldn't call it yourself.
      * Don't call this in production environment.
+     *
+     * @static
      */
     public static function init()
     {
         if (self::$isInit === false) {
-            self::$prettyPageHandler = new \Whoops\Handler\PrettyPageHandler();
+            self::$prettyPageHandler = new PrettyPageHandler();
             self::$prettyPageHandler->setPageTitle('I just broke a string... - strayFw');
-            $whoops = new \Whoops\Run();
-            $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler());
+            $whoops = new Run();
+            $whoops->pushHandler(new JsonResponseHandler());
             $whoops->pushHandler(self::$prettyPageHandler);
             $whoops->register();
             self::$isInit = true;
@@ -46,15 +55,14 @@ abstract class ErrorPage
     /**
      * Add additionnal info in case of error page is displayed.
      *
-     * @throws BadUse if error page isn't initialized
+     * @static
      * @param  string $title data group title
      * @param  array  $data  data that will be displayed
      */
     public static function addData($title, array $data)
     {
-        if (self::$isInit === false) {
-            throw new BadUse('error page doesn\'t seem to have been initialized');
+        if (self::$isInit === true) {
+            self::$prettyPageHandler->AddDataTable($title, $data);
         }
-        self::$prettyPageHandler->AddDataTable($title, $data);
     }
 }

@@ -58,12 +58,14 @@ abstract class Bootstrap
             self::registerLib('Symfony\\Component\\Yaml');
             self::registerLib('ErrantWorks\\StrayFw');
             if (STRAY_ENV === 'development') {
+                Bootstrap::registerLib('DebugBar', STRAY_PATH_VENDOR . 'Maximebf/DebugBar');
                 Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');
             }
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 if (STRAY_ENV === 'development') {
+                    Debug\Bar::init();
                     Debug\ErrorPage::init();
                 }
                 Http::init();
@@ -88,11 +90,11 @@ abstract class Bootstrap
         $fileName = null;
         if (($namespacePos = strripos($className, '\\')) !== false) {
             $namespace = substr($className, 0, $namespacePos);
-            $subNamespaces = null;
+            $subNamespaces = array();
             while ($fileName === null && $namespace != null) {
                 if (isset(self::$namespaces[$namespace]) === false) {
                     $subNamespacePos = strripos($namespace, '\\');
-                    $subNamespaces .= substr($namespace, $subNamespacePos);
+                    $subNamespaces[] = substr($namespace, $subNamespacePos);
                     $namespace = substr($namespace, 0, $subNamespacePos);
                 } else {
                     $fileName = self::$namespaces[$namespace];
@@ -103,7 +105,7 @@ abstract class Bootstrap
                     . substr($className, 0, $namespacePos) . '"');
             }
             $fileName = self::$namespaces[$namespace]
-                . str_replace('\\', DIRECTORY_SEPARATOR, $subNamespaces);
+                . str_replace('\\', DIRECTORY_SEPARATOR, implode(null, array_reverse($subNamespaces)));
             $className = substr($className, $namespacePos + 1);
         }
         if ($fileName != null) {

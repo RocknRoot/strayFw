@@ -16,6 +16,33 @@ use ErrantWorks\StrayFw\Locale\Locale;
 abstract class TwigHelper
 {
     /**
+     * Display framework HTML body content.
+     *
+     * @static
+     * @return string
+     */
+    public static function fwBody()
+    {
+        if (STRAY_ENV === 'development') {
+            echo \ErrantWorks\StrayFw\Debug\Bar::getBody();
+        }
+    }
+
+    /**
+     * Display framework HTML head content.
+     *
+     * @static
+     * @return string
+     */
+    public static function fwHead()
+    {
+        echo '<script type="text/javascript" src="/js/lib/jquery.js"></script>' . PHP_EOL;
+        if (STRAY_ENV === 'development') {
+            echo \ErrantWorks\StrayFw\Debug\Bar::getHead();
+        }
+    }
+
+    /**
      * Get nice URL for specified route.
      *
      * @static

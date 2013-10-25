@@ -70,13 +70,19 @@ abstract class Twig
                 }
             }
             $loader = new \Twig_Loader_Filesystem($dir);
-            self::$environments[$dir] = new \Twig_Environment($loader, array(
+            $env = new \Twig_Environment($loader, array(
                 'cache' => $tmp . 'twig_compil',
                 'debug' => (STRAY_ENV === 'development')
             ));
             if (STRAY_ENV === 'development') {
+                $env = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
+            }
+            self::$environments[$dir] = $env;
+            if (STRAY_ENV === 'development') {
                 self::$environments[$dir]->addExtension(new \Twig_Extension_Debug());
             }
+            self::$environments[$dir]->addFunction('fwBody', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::fwBody'));
+            self::$environments[$dir]->addFunction('fwHead', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::fwHead'));
             self::$environments[$dir]->addFunction('route', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::route'));
             self::$environments[$dir]->addFunction('tr', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::tr'));
             self::$environments[$dir]->addFunction('url', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::url'));
