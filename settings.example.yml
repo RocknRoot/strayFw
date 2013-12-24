@@ -7,3 +7,9 @@ locale:
     hosts:
 
 databases:
+    alias:
+        host:
+        port:
+        name:
+        user:
+        pass:

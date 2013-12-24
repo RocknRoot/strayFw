@@ -23,6 +23,13 @@ class RenderTemplate implements RenderInterface
     protected $request;
 
     /**
+     * Templates files directory.
+     *
+     * @var string
+     */
+    protected $templatesDir;
+
+    /**
      * Template file name.
      *
      * @var string
@@ -33,13 +40,15 @@ class RenderTemplate implements RenderInterface
      * Construct render with base arguments.
      *
      * @param Request $request  associated request
+     * @param string  $templatesDir templates directory
      * @param string  $fileName template file name
      * @param array   $args     base arguments
      */
-    public function __construct(Request $request, $fileName, array $args = array())
+    public function __construct(Request $request, $templatesDir, $fileName, array $args = array())
     {
         $this->args = $args;
         $this->request = $request;
+        $this->templatesDir = ltrim(rtrim($templatesDir, DIRECTORY_SEPARATOR), DIRECTORY_SEPARATOR);
         $this->fileName = $fileName;
     }
 
@@ -50,7 +59,7 @@ class RenderTemplate implements RenderInterface
      */
     public function render()
     {
-        $env = Twig::getEnv($this->request->getDir());
+        $env = Twig::getEnv($this->request->getDir() . DIRECTORY_SEPARATOR . $this->templatesDir);
         $template = $env->loadTemplate($this->fileName);
 
         return $template->render($this->args);

@@ -77,7 +77,7 @@ abstract class Helper
         $url = null;
         if (($pos = stripos($route, '.')) !== false) {
         } else {
-            $file = $request->getFile();
+            $file = $request->getDir() . $request->getFile();
         }
         $routes = Config::get($file);
         if (isset($routes['routes'][$route]) === false) {
