@@ -42,7 +42,7 @@ class Database
      *
      * @throws DatabaseNotFound if database parameters in settings can't be found
      * @throws DatabaseNotFound if database parameters in settings aren't well formatted
-     * @param string $alias database alias
+     * @param  string           $alias database alias
      */
     protected function __construct($alias)
     {
@@ -106,13 +106,14 @@ class Database
     {
         if ($this->isConnected() === false) {
             try {
-                $getDsn = function(array $info) {
+                $getDsn = function (array $info) {
                     $dsn = 'pgsql:host=';
                     $dsn .= (isset($info['host']) === true ? $info['host'] : 'localhost') . ';';
                     if (isset($info['port']) === true) {
                         $dsn .= 'port=' . $info['port'] . ';';
                     }
                     $dsn .= 'dbname=' . $info['name'] . ';';
+
                     return $dsn;
                 };
                 if (isset($this->servers['all']) === true) {
@@ -153,6 +154,7 @@ class Database
         if (isset($this->servers['all']) === true) {
             return isset($this->servers['all']['link']);
         }
+
         return isset($this->servers['read']['link']) && isset($this->servers['write']['link']);
     }
 
@@ -172,6 +174,7 @@ class Database
         if ($this->transactionLevel >= 1) {
             return $this->servers['write']['link'];
         }
+
         return $this->servers['read']['link'];
     }
 
@@ -188,6 +191,7 @@ class Database
         if (isset($this->servers['all']) === true) {
             return $this->servers['all']['link'];
         }
+
         return $this->servers['write']['link'];
     }
 
@@ -206,11 +210,13 @@ class Database
             if (isset($this->servers['all']) === true) {
                 return $this->servers['all']['link']->beginTransaction();
             }
+
             return $this->servers['write']['link']->beginTransaction();
         }
         if (isset($this->servers['all']) === true) {
             return $this->servers['all']['link']->exec('SAVEPOINT LEVEL' . $this->transactionLevel);
         }
+
         return $this->servers['write']['link']->exec('SAVEPOINT LEVEL' . $this->transactionLevel);
     }
 
@@ -230,13 +236,16 @@ class Database
                 if (isset($this->servers['all']) === true) {
                     return $this->servers['all']['link']->commit();
                 }
+
                 return $this->servers['write']['link']->commit();
             }
             if (isset($this->servers['all']) === true) {
                 return $this->servers['all']['link']->exec('RELEASE SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
             }
+
             return $this->servers['write']['link']->exec('RELEASE SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
         }
+
         return false;
     }
 
@@ -256,13 +265,16 @@ class Database
                 if (isset($this->servers['all']) === true) {
                     return $this->servers['all']['link']->rollBack();
                 }
+
                 return $this->servers['write']['link']->rollBack();
             }
             if (isset($this->servers['all']) === true) {
                 return $this->servers['all']['link']->exec('ROLLBACK TO SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
             }
+
             return $this->servers['write']['link']->exec('ROLLBACK TO SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
         }
+
         return false;
     }
 
@@ -279,14 +291,15 @@ class Database
      *
      * @static
      * @throws DatabaseNotFound if database isn't registered
-     * @param string $alias requested database alias
-     * @return Database instance
+     * @param  string           $alias requested database alias
+     * @return Database         instance
      */
     public static function get($alias)
     {
         if (in_array($alias, self::$databases) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');
         }
+
         return self::$databases[$alias];
     }
 

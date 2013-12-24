@@ -39,10 +39,10 @@ class RenderTemplate implements RenderInterface
     /**
      * Construct render with base arguments.
      *
-     * @param Request $request  associated request
+     * @param Request $request      associated request
      * @param string  $templatesDir templates directory
-     * @param string  $fileName template file name
-     * @param array   $args     base arguments
+     * @param string  $fileName     template file name
+     * @param array   $args         base arguments
      */
     public function __construct(Request $request, $templatesDir, $fileName, array $args = array())
     {

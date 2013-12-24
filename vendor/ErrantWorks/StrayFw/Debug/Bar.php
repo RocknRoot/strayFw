@@ -50,7 +50,7 @@ abstract class Bar
      * Add additionnal info in the debug bar.
      *
      * @static
-     * @param  string $message info message
+     * @param string $message info message
      */
     public static function addMessage($message)
     {
@@ -83,10 +83,11 @@ abstract class Bar
         if (self::$isInit === true) {
             $files = [ 'debugbar', 'openhandler', 'widgets' ];
             $res = null;
-            array_walk($files, function($name) use(&$res) {
+            array_walk($files, function ($name) use (&$res) {
                 $res .= '<link rel="stylesheet" type="text/css" href="/css/_debug/' . $name . '.css">' . PHP_EOL;
                 $res .= '<script type="text/javascript" src="/js/_debug/' . $name . '.js"></script>' . PHP_EOL;
             });
+
             return $res;
         }
     }
