@@ -81,11 +81,13 @@ abstract class Locale
      * @static
      * @throws BadUse           if locale isn't initialized
      * @throws InvalidDirectory if directory can't be identified
-     * @param  string           $dir    translations directory path
-     * @param  string           $prefix prefix for all translations from this directory
+     * @param  string           $baseDir    application directory path
+     * @param  string           $localesDir translations directory path
+     * @param  string           $prefix     prefix for all translations from this directory
      */
-    public static function registerTranslations($dir, $prefix = null)
+    public static function registerTranslations($baseDir, $localesDir, $prefix = null)
     {
+        $dir = $baseDir . DIRECTORY_SEPARATOR . $localesDir;
         if (self::$isInit === false) {
             throw new BadUse('locale doesn\'t seem to have been initialized');
         }
