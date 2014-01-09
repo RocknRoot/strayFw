@@ -164,7 +164,7 @@ abstract class Bootstrap
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
         }
         foreach (self::$namespaces as $name => $path) {
-            if (file_exists($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
+            if (is_readable($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
                 require $path . DIRECTORY_SEPARATOR . 'init.php';
             } elseif (stripos($path, 'vendor') === false || stripos($path, 'vendor') == strlen($path) - strlen('vendor')) {
                 Logger::get()->notice('namespace "' . $name . '" doesn\'t have an init.php');

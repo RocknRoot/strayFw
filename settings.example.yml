@@ -8,6 +8,7 @@ locale:
 
 databases:
     alias:
+        provider:
         host:
         port:
         name:

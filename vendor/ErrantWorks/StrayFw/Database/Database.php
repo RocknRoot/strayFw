@@ -14,11 +14,33 @@ use ErrantWorks\StrayFw\Exception\ExternalLink;
 class Database
 {
     /**
+     * Registered databases.
+     *
+     * @static
+     * @var array[]
+     */
+    protected static $databases = array();
+
+    /**
      * Database alias.
      *
      * @var string
      */
     protected $alias;
+
+    /**
+     * Provider's classes namespace.
+     *
+     * @var string
+     */
+    protected $providerNamespace;
+
+    /**
+     * Provider's instance.
+     *
+     * @var Provider\Database
+     */
+    protected $providerDatabase;
 
     /**
      * Servers info.
@@ -41,7 +63,8 @@ class Database
      * Construct a new database representation.
      *
      * @throws DatabaseNotFound if database parameters in settings can't be found
-     * @throws DatabaseNotFound if database parameters in settings aren't well formatted
+     * @throws BadUse if database parameters in settings aren't well formatted
+     * @throws BadUse if database parameters in settings miss provider
      * @param  string           $alias database alias
      */
     protected function __construct($alias)
@@ -53,6 +76,12 @@ class Database
             throw new DatabaseNotFound('database "' . $alias . '" parameters can\'t be found in settings.yml');
         }
         $config = $settings['databases'][$alias];
+        if (isset($config['provider']) === false) {
+            throw new BadUse('database "' . $alias . '" parameters in settings.yml miss provider');
+        }
+        $this->providerNamespace = __NAMESPACE__ . '\\' . $config['provider'];
+        $database = $this->providerNamespace . '\\Database';
+        $this->providerDatabase = new $database();
         if (isset($config['host']) === true) {
             $info = array();
             $info['host'] = $config['host'];
@@ -106,24 +135,14 @@ class Database
     {
         if ($this->isConnected() === false) {
             try {
-                $getDsn = function (array $info) {
-                    $dsn = 'pgsql:host=';
-                    $dsn .= (isset($info['host']) === true ? $info['host'] : 'localhost') . ';';
-                    if (isset($info['port']) === true) {
-                        $dsn .= 'port=' . $info['port'] . ';';
-                    }
-                    $dsn .= 'dbname=' . $info['name'] . ';';
-
-                    return $dsn;
-                };
                 if (isset($this->servers['all']) === true) {
-                    $dsn = $getDsn($this->servers['all']);
-                    $this->servers['all']['link'] = new PDO($dsn, $this->servers['all']['user'], $this->servers['all']['pass']);
+                    $dsn = $this->providerDatabase->getDsn($this->servers['all']);
+                    $this->servers['all']['link'] = new \PDO($dsn, $this->servers['all']['user'], $this->servers['all']['pass']);
                 } else {
-                    $dsn = $getDsn($this->servers['read']);
-                    $this->servers['read']['link'] = new PDO($dsn, $this->servers['read']['user'], $this->servers['read']['pass']);
-                    $dsn = $getDsn($this->servers['write']);
-                    $this->servers['write']['link'] = new PDO($dsn, $this->servers['write']['user'], $this->servers['write']['pass']);
+                    $dsn = $this->providerDatabase->getDsn($this->servers['read']);
+                    $this->servers['read']['link'] = new \PDO($dsn, $this->servers['read']['user'], $this->servers['read']['pass']);
+                    $dsn = $this->providerDatabase->getDsn($this->servers['write']);
+                    $this->servers['write']['link'] = new \PDO($dsn, $this->servers['write']['user'], $this->servers['write']['pass']);
                 }
             } catch (\PDOException $e) {
                 throw new ExternalLink('can\'t connect to database (' . $e->getMessage() . ')');
@@ -159,9 +178,9 @@ class Database
     }
 
     /**
-     * Get PDO link.
+     * Get link.
      *
-     * @return PDO instance
+     * @return mixed link info
      */
     public function getLink()
     {
@@ -179,9 +198,9 @@ class Database
     }
 
     /**
-     * Get master server PDO link.
+     * Get master server link.
      *
-     * @return PDO instance
+     * @return mixed link info
      */
     public function getMasterLink()
     {
@@ -207,17 +226,9 @@ class Database
         }
         ++$this->transactionLevel;
         if ($this->transactionLevel == 1) {
-            if (isset($this->servers['all']) === true) {
-                return $this->servers['all']['link']->beginTransaction();
-            }
-
-            return $this->servers['write']['link']->beginTransaction();
+            return $this->providerDatabase->beginTransaction($this->GetMasterLink());
         }
-        if (isset($this->servers['all']) === true) {
-            return $this->servers['all']['link']->exec('SAVEPOINT LEVEL' . $this->transactionLevel);
-        }
-
-        return $this->servers['write']['link']->exec('SAVEPOINT LEVEL' . $this->transactionLevel);
+        return $this->providerDatabase->savePoint($this->GetMasterLink(), 'LEVEL' . ($this->transactionLevel - 1));
     }
 
     /**
@@ -233,17 +244,9 @@ class Database
         if ($this->transactionLevel > 0) {
             --$this->transactionLevel;
             if ($this->transactionLevel == 0) {
-                if (isset($this->servers['all']) === true) {
-                    return $this->servers['all']['link']->commit();
-                }
-
-                return $this->servers['write']['link']->commit();
+                return $this->providerDatabase->commit($this->GetMasterLink());
             }
-            if (isset($this->servers['all']) === true) {
-                return $this->servers['all']['link']->exec('RELEASE SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
-            }
-
-            return $this->servers['write']['link']->exec('RELEASE SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
+            return $this->providerDatabase->releaseSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
 
         return false;
@@ -262,29 +265,13 @@ class Database
         if ($this->transactionLevel > 0) {
             --$this->transactionLevel;
             if ($this->transactionLevel == 0) {
-                if (isset($this->servers['all']) === true) {
-                    return $this->servers['all']['link']->rollBack();
-                }
-
-                return $this->servers['write']['link']->rollBack();
+                return $this->providerDatabase->rollBack($this->GetMasterLink());
             }
-            if (isset($this->servers['all']) === true) {
-                return $this->servers['all']['link']->exec('ROLLBACK TO SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
-            }
-
-            return $this->servers['write']['link']->exec('ROLLBACK TO SAVEPOINT LEVEL' . ($this->transactionLevel + 1));
+            return $this->providerDatabase->rollBackSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
 
         return false;
     }
-
-    /**
-     * Registered databases.
-     *
-     * @static
-     * @var array
-     */
-    protected static $databases = array();
 
     /**
      * Get a database instance aliased as requested.
@@ -296,7 +283,7 @@ class Database
      */
     public static function get($alias)
     {
-        if (in_array($alias, self::$databases) === false) {
+        if (isset(self::$databases[$alias]) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');
         }
 
@@ -307,11 +294,11 @@ class Database
      * Register a new database.
      *
      * @static
-     * @param string $fileName database alias
+     * @param string $alias database alias
      */
     public static function registerDatabase($alias)
     {
-        if (in_array($alias, self::$databases) === false) {
+        if (isset(self::$databases[$alias]) === false) {
             self::$databases[$alias] = new static($alias);
         }
     }

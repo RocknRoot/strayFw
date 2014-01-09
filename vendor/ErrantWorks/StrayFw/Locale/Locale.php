@@ -98,7 +98,7 @@ abstract class Locale
         if (($pos = strpos($language, '_')) !== false) {
             $language = substr($language, 0, $pos);
         }
-        if (file_exists($dir . DIRECTORY_SEPARATOR . $language . '.yml') === true) {
+        if (is_readable($dir . DIRECTORY_SEPARATOR . $language . '.yml') === true) {
             $newOnes = Config::get($dir . DIRECTORY_SEPARATOR . $language . '.yml');
             if (is_array($newOnes) === true) {
                 if ($prefix != null) {
