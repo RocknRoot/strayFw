@@ -63,8 +63,8 @@ class Database
      * Construct a new database representation.
      *
      * @throws DatabaseNotFound if database parameters in settings can't be found
-     * @throws BadUse if database parameters in settings aren't well formatted
-     * @throws BadUse if database parameters in settings miss provider
+     * @throws BadUse           if database parameters in settings aren't well formatted
+     * @throws BadUse           if database parameters in settings miss provider
      * @param  string           $alias database alias
      */
     protected function __construct($alias)
@@ -228,6 +228,7 @@ class Database
         if ($this->transactionLevel == 1) {
             return $this->providerDatabase->beginTransaction($this->GetMasterLink());
         }
+
         return $this->providerDatabase->savePoint($this->GetMasterLink(), 'LEVEL' . ($this->transactionLevel - 1));
     }
 
@@ -246,6 +247,7 @@ class Database
             if ($this->transactionLevel == 0) {
                 return $this->providerDatabase->commit($this->GetMasterLink());
             }
+
             return $this->providerDatabase->releaseSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
 
@@ -267,6 +269,7 @@ class Database
             if ($this->transactionLevel == 0) {
                 return $this->providerDatabase->rollBack($this->GetMasterLink());
             }
+
             return $this->providerDatabase->rollBackSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
 

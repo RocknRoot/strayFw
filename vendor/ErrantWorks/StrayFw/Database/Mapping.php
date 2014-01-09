@@ -2,7 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Database;
 
-use ErrantWorks\StrayFw\Config;
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\FileNotReadable;
 
@@ -28,11 +27,11 @@ class Mapping
      * @throws InvalidDirectory if directory $dir can't be indentified
      * @throws InvalidDirectory if directory $modelsDir can't be indentified
      * @throws InvalidDirectory if directory $modelsBaseDir can't be indentified
-     * @throws FileNotReadable if file $configFile is not readable
-     * @param string $dir application root directory
-     * @param string $configFile mapping configuration file
-     * @param string $modelsDir user models directory
-     * @param string $modelsBaseDir generated models directory
+     * @throws FileNotReadable  if file $configFile is not readable
+     * @param  string           $dir           application root directory
+     * @param  string           $configFile    mapping configuration file
+     * @param  string           $modelsDir     user models directory
+     * @param  string           $modelsBaseDir generated models directory
      */
     public static function registerMapping($dir, $configFile, $modelsDir, $modelsBaseDir)
     {
