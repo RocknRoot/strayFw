@@ -15,6 +15,10 @@ class PDOCollector extends DataCollector implements Renderable
     
     protected $timeCollector;
 
+    protected $renderSqlWithParams = false;
+
+    protected $sqlQuotationChar = '<>';
+
     /**
      * @param TraceablePDO $pdo
      * @param TimeDataCollector $timeCollector
@@ -25,6 +29,27 @@ class PDOCollector extends DataCollector implements Renderable
         if ($pdo !== null) {
             $this->addConnection($pdo, 'default');
         }
+    }
+
+    /**
+     * Renders the SQL of traced statements with params embeded
+     * 
+     * @param boolean $enabled
+     */
+    public function setRenderSqlWithParams($enabled = true, $quotationChar = '<>')
+    {
+        $this->renderSqlWithParams = $enabled;
+        $this->sqlQuotationChar = $quotationChar;
+    }
+
+    public function isSqlRenderedWithParams()
+    {
+        return $this->renderSqlWithParams;
+    }
+
+    public function getSqlQuotationChar()
+    {
+        return $this->sqlQuotationChar;
     }
 
     /**
@@ -92,7 +117,7 @@ class PDOCollector extends DataCollector implements Renderable
         $stmts = array();
         foreach ($pdo->getExecutedStatements() as $stmt) {
             $stmts[] = array(
-                'sql' => $stmt->getSql(),
+                'sql' => $this->renderSqlWithParams ? $stmt->getSqlWithParams($this->sqlQuotationChar) : $stmt->getSql(),
                 'row_count' => $stmt->getRowCount(),
                 'stmt_id' => $stmt->getPreparedId(),
                 'prepared_stmt' => $stmt->getSql(),
@@ -136,6 +161,7 @@ class PDOCollector extends DataCollector implements Renderable
     {
         return array(
             "database" => array(
+                "icon" => "inbox",
                 "widget" => "PhpDebugBar.Widgets.SQLQueriesWidget",
                 "map" => "pdo",
                 "default" => "[]"
