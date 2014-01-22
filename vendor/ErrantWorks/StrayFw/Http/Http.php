@@ -2,7 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Http;
 
-use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
 use ErrantWorks\StrayFw\Http\RawRequest;
@@ -68,29 +67,27 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
-     * @throws BadUse     if http isn't initialized
      * @throws NotARender if object returned by action doesn't implement RenderInterface
      */
     public static function run()
     {
-        if (self::$isInit === false) {
-            throw new BadUse('http doesn\'t seem to have been initialized');
-        }
-        self::$request = new Request(self::$rawRequest, self::$routes);
-        $class = self::$request->getClass();
-        $action = self::$request->getAction() . 'Action';
-        try {
-            ob_start();
-            $object = new $class();
-            $render = $object->$action(self::$request);
-            if (!($render instanceof RenderInterface)) {
-                throw new NotARender('"' . $class . '.' . $action . '" returned a non RenderInterface implementing object');
+        if (self::$isInit === true) {
+            self::$request = new Request(self::$rawRequest, self::$routes);
+            $class = self::$request->getClass();
+            $action = self::$request->getAction() . 'Action';
+            try {
+                ob_start();
+                $object = new $class();
+                $render = $object->$action(self::$request);
+                if (!($render instanceof RenderInterface)) {
+                    throw new NotARender('"' . $class . '.' . $action . '" returned a non RenderInterface implementing object');
+                }
+                echo $render->render();
+                ob_end_flush();
+            } catch (Exception $e) {
+                ob_end_clean();
+                throw $e;
             }
-            echo $render->render();
-            ob_end_flush();
-        } catch (Exception $e) {
-            ob_end_clean();
-            throw $e;
         }
     }
 
@@ -98,23 +95,21 @@ abstract class Http
      * Add routes to be considered.
      *
      * @static
-     * @throws BadUse           if http isn't initialized
      * @throws InvalidDirectory if directory can't be identified
      * @param  string           $dir  application root directory
      * @param  string           $file routes file name
      */
     public static function registerRoutes($dir, $file)
     {
-        if (self::$isInit === false) {
-            throw new BadUse('http doesn\'t seem to have been initialized');
+        if (self::$isInit === true) {
+            if (is_dir($dir) === false) {
+                throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
+            }
+            self::$routes[] = array(
+                'dir' => $dir,
+                'file' => $file
+            );
         }
-        if (is_dir($dir) === false) {
-            throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-        }
-        self::$routes[] = array(
-            'dir' => $dir,
-            'file' => $file
-        );
     }
 
     /**

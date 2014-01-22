@@ -22,6 +22,13 @@ class Request
     protected $rawRequest;
 
     /**
+     * Get current route base dir path.
+     *
+     * @param string
+     */
+    protected $dir;
+
+    /**
      * Current route file name.
      *
      * @param string
@@ -74,7 +81,7 @@ class Request
             }
             foreach ($routes['routes'] as $routeName => $routeInfo) {
                 if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
-                    throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['fileName']
+                    throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']
                         . '" has invalid definition');
                 }
                 if (isset($routeInfo['method']) === false || $routeInfo['method'] == $this->rawRequest->getMethod()) {
@@ -124,7 +131,7 @@ class Request
     }
 
     /**
-     * Get current route dir name.
+     * Get current route base dir name.
      *
      * @return string
      */

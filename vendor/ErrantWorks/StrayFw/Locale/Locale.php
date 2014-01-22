@@ -79,7 +79,6 @@ abstract class Locale
      * Load translations from directory according to current language.
      *
      * @static
-     * @throws BadUse           if locale isn't initialized
      * @throws InvalidDirectory if directory can't be identified
      * @param  string           $baseDir    application directory path
      * @param  string           $localesDir translations directory path
@@ -87,27 +86,26 @@ abstract class Locale
      */
     public static function registerTranslations($baseDir, $localesDir, $prefix = null)
     {
-        $dir = $baseDir . DIRECTORY_SEPARATOR . $localesDir;
-        if (self::$isInit === false) {
-            throw new BadUse('locale doesn\'t seem to have been initialized');
-        }
-        if (is_dir($dir) === false) {
-            throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-        }
-        $language = self::$currentLanguage;
-        if (($pos = strpos($language, '_')) !== false) {
-            $language = substr($language, 0, $pos);
-        }
-        if (is_readable($dir . DIRECTORY_SEPARATOR . $language . '.yml') === true) {
-            $newOnes = Config::get($dir . DIRECTORY_SEPARATOR . $language . '.yml');
-            if (is_array($newOnes) === true) {
-                if ($prefix != null) {
-                    $newOnes = array($prefix => $newOnes);
-                }
-                self::$translations = array_merge(self::$translations, $newOnes);
+        if (self::$isInit === true) {
+            $dir = $baseDir . DIRECTORY_SEPARATOR . $localesDir;
+            if (is_dir($dir) === false) {
+                throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
             }
-        } else {
-            Logger::get()->notice('can\'t find language "' . $language . '" in directory "' . $dir . '"');
+            $language = self::$currentLanguage;
+            if (($pos = strpos($language, '_')) !== false) {
+                $language = substr($language, 0, $pos);
+            }
+            if (is_readable($dir . DIRECTORY_SEPARATOR . $language . '.yml') === true) {
+                $newOnes = Config::get($dir . DIRECTORY_SEPARATOR . $language . '.yml');
+                if (is_array($newOnes) === true) {
+                    if ($prefix != null) {
+                        $newOnes = array($prefix => $newOnes);
+                    }
+                    self::$translations = array_merge(self::$translations, $newOnes);
+                }
+            } else {
+                Logger::get()->notice('can\'t find language "' . $language . '" in directory "' . $dir . '"');
+            }
         }
     }
 
