@@ -2,6 +2,6 @@
   "filp/whoops": "1.0.8",
   "maximebf/debugbar": "1.7.1",
   "psr/log": "1.0.0",
-  "symfony/yaml": "2.3.6",
+  "symfony/yaml": "2.4.1",
   "twig/twig": "1.15.0"
 }
