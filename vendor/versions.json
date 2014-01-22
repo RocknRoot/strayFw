@@ -3,5 +3,5 @@
   "maximebf/debugbar": "1.7.1",
   "psr/log": "1.0.0",
   "symfony/yaml": "2.3.6",
-  "twig/twig": "1.14.0"
+  "twig/twig": "1.15.0"
 }
