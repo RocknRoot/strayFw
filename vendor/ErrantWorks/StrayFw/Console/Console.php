@@ -46,7 +46,6 @@ abstract class Console
         if (self::$isInit === false) {
             self::$routes = array();
             self::$isInit = true;
-            self::registerRoutes(__DIR__, 'console.yml');
         }
     }
 

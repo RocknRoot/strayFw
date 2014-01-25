@@ -1,0 +1,13 @@
+namespace: ErrantWorks\StrayFw\Database
+
+routes:
+
+    database_mapping_list:
+        path: db/mapping/list
+        help: db/mapping/list - list registered mappings
+        action: Console.list
+
+    database_mapping_generate:
+        path: db/mapping/generate
+        help: db/mapping/generate mapping_name - generate base models
+        action: Console.generate

@@ -277,6 +277,19 @@ class Database
     }
 
     /**
+     * Register a new database.
+     *
+     * @static
+     * @param string $alias database alias
+     */
+    public static function registerDatabase($alias)
+    {
+        if (isset(self::$databases[$alias]) === false) {
+            self::$databases[$alias] = new static($alias);
+        }
+    }
+
+    /**
      * Get a database instance aliased as requested.
      *
      * @static
@@ -291,18 +304,5 @@ class Database
         }
 
         return self::$databases[$alias];
-    }
-
-    /**
-     * Register a new database.
-     *
-     * @static
-     * @param string $alias database alias
-     */
-    public static function registerDatabase($alias)
-    {
-        if (isset(self::$databases[$alias]) === false) {
-            self::$databases[$alias] = new static($alias);
-        }
     }
 }

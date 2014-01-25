@@ -65,7 +65,6 @@ class Request
         global $argv;
         $cli = $argv;
         array_shift($cli);
-        $this->fillWithDefaultRoute();
         if (count($cli) > 0) {
             foreach ($routeFiles as $file) {
                 $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
@@ -87,11 +86,17 @@ class Request
                             $this->args = array();
                         }
                     }
+                    if ($this->route != null) {
+                        break;
+                    }
                 }
                 if ($this->route != null) {
                     break;
                 }
             }
+        }
+        if ($this->route == null) {
+            $this->fillWithDefaultRoute();
         }
     }
 
