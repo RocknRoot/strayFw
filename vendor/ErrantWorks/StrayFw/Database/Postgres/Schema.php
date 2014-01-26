@@ -21,7 +21,7 @@ class Schema extends ProviderSchema
     /**
      * Build data structures.
      *
-     * @throws DatabaseError if a SQL query fails
+     * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if a model has no field
      * @throws InvalidSchemaDefinition if an enum-typed field has no values defined
      */
@@ -261,7 +261,7 @@ class Schema extends ProviderSchema
             }
 
             $allFieldsRealNames = substr($allFieldsRealNames, 0, -2) . ");\n    }\n\n";
-            $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n";
+            $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n\n";
             $constructor .= $constructorDefaults . "    }\n\n";
 
             $mapping = Mapping::get($this->mapping);
@@ -283,8 +283,8 @@ class Schema extends ProviderSchema
             }
             $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
             $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
-            $content .= '    const PRIMARY = [ \'' . implode('\', \'', $primary) . "' ];\n\n";
             $content .= $properties . $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
+            $content .= "    public static function getPrimary()\n    {\n        return array('" . implode('\', \'', $primary) . "');\n    }\n";
             $content .= "}";
             if (fwrite($file, $content) === false) {
                 throw new FileNotWritable('can\'t write in "' . $path . '"');

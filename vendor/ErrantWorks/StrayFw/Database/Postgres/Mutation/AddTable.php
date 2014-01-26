@@ -20,11 +20,11 @@ class AddTable extends Mutation
      * Prepare and return according PDO statement.
      *
      * @throws InvalidSchemaDefinition if a model has no field
-     * @param Database $database database
-     * @param string $tableName table real name
-     * @param string $modelName model name
-     * @param array $tableDefinition table definition
-     * @return PDOStatement $statement prepared query
+     * @param  Database                $database        database
+     * @param  string                  $tableName       table real name
+     * @param  string                  $modelName       model name
+     * @param  array                   $tableDefinition table definition
+     * @return PDOStatement            $statement prepared query
      */
     public static function statement(Database $database, $tableName, $modelName, array $tableDefinition)
     {
@@ -53,6 +53,7 @@ class AddTable extends Mutation
         }
         $sql = substr($sql, 0, -2) . ')';
         $statement = $database->getLink()->prepare($sql);
+
         return $statement;
     }
 }

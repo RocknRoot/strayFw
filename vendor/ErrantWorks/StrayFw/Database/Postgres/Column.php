@@ -18,8 +18,8 @@ abstract class Column
      *
      * @throws InvalidSchemaDefinition if default value aren't well typed
      * @throws InvalidSchemaDefinition if a field has an unknown type
-     * @param string $fieldName field real name
-     * @param array $definition field definition
+     * @param  string                  $fieldName  field real name
+     * @param  array                   $definition field definition
      */
     public static function generateDefinition($fieldName, array $definition)
     {
@@ -126,6 +126,7 @@ abstract class Column
         if (isset($definition['notnull']) === false || $definition['notnull'] === true) {
             $sql .= ' NOT NULL';
         }
+
         return $sql;
     }
 }

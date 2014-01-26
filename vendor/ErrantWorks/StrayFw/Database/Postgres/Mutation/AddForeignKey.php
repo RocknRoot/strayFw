@@ -16,12 +16,12 @@ class AddForeignKey extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param Database $database database
-     * @param array $definition schema definition
-     * @param string $modelName model name
-     * @param string $tableName table real name
-     * @param string $foreignName foreign key name
-     * @param string $foreignTableName foreign table real name
+     * @param  Database     $database         database
+     * @param  array        $definition       schema definition
+     * @param  string       $modelName        model name
+     * @param  string       $tableName        table real name
+     * @param  string       $foreignName      foreign key name
+     * @param  string       $foreignTableName foreign table real name
      * @return PDOStatement $statement prepared query
      */
     public static function statement(Database $database, array $definition, $modelName, $tableName, $foreignName, $foreignTableName)
@@ -51,6 +51,7 @@ class AddForeignKey extends Mutation
             $sql .= ' ON DELETE ' . strtoupper($foreignDefinition['delete']);
         }
         $statement = $database->getLink()->prepare($sql);
+
         return $statement;
     }
 }

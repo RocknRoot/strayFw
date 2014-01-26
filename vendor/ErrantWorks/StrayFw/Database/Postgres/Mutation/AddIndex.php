@@ -16,11 +16,11 @@ class AddIndex extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param Database $database database
-     * @param string $modelName model name
-     * @param string $tableName table real name
-     * @param array $tableDefinition table definition
-     * @param string $indexName index name
+     * @param  Database     $database        database
+     * @param  string       $modelName       model name
+     * @param  string       $tableName       table real name
+     * @param  array        $tableDefinition table definition
+     * @param  string       $indexName       index name
      * @return PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $modelName, $tableName, array $tableDefinition, $indexName)
@@ -35,6 +35,7 @@ class AddIndex extends Mutation
             }
         }
         $statement = $database->getLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . implode(', ', $indexes) . ')');
+
         return $statement;
     }
 }

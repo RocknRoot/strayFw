@@ -15,13 +15,14 @@ class DeleteEnum extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param Database $database database
-     * @param string $type type name
+     * @param  Database     $database database
+     * @param  string       $type     type name
      * @return PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $type)
     {
         $statement = $database->getLink()->prepare('DROP TYPE IF EXISTS t_' . $type);
+
         return $statement;
     }
 }
