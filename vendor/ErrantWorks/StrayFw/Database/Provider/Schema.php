@@ -67,7 +67,15 @@ abstract class Schema
     }
 
     /**
+     * Build data structures.
+     *
+     * @abstract
+     */
+    abstract public function build();
+
+    /**
      * Generate base models.
+     *
      * @abstract
      */
     abstract public function generateModels();
@@ -85,6 +93,16 @@ abstract class Schema
         }
 
         return $this->definition;
+    }
+
+    /**
+     * Get mapping name this schema is embedded in.
+     *
+     * @return string mapping name
+     */
+    public function getMapping()
+    {
+        return $this->mapping;
     }
 
     /**

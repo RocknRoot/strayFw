@@ -14,6 +14,25 @@ use ErrantWorks\StrayFw\Database\Provider\Schema;
 class Console
 {
     /**
+     * Build data structures.
+     *
+     * @param Request $request current CLI request
+     */
+    public function buildAction(Request $request)
+    {
+        if (count($request->getArgs()) != 1) {
+            echo 'Wrong parameters.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
+        } else {
+            $mapping = $request->getArgs()[0];
+            echo 'Are you sure you want to delete all existing tables and data for mapping "' . $mapping . '" ? [y/n] : ';
+            if (fgetc(STDIN) == 'y') {
+                $schema = Schema::getSchema($mapping);
+                $schema->build();
+            }
+        }
+    }
+
+    /**
      * List registered mappings.
      *
      * @param Request $request current CLI request

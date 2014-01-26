@@ -65,5 +65,8 @@ class Logger extends AbstractLogger
             $message = str_replace('{' . $key . '}', $value, $message);
         }
         error_log('[' . $level . '] ' . $message);
+        if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
+            echo '[' . $level . '] ' . $message . PHP_EOL;
+        }
     }
 }

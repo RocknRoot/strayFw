@@ -2,6 +2,11 @@ namespace: ErrantWorks\StrayFw\Database
 
 routes:
 
+    database_build:
+        path: db/build
+        help: db/build mapping_name - build data structures
+        action: Console.build
+
     database_mapping_list:
         path: db/mapping/list
         help: db/mapping/list - list registered mappings

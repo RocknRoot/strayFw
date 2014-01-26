@@ -14,13 +14,6 @@ use ErrantWorks\StrayFw\Database\Provider\Model as ProviderModel;
 abstract class Model extends ProviderModel
 {
     /**
-     * Aliases of primary columns.
-     *
-     * @var string[]
-     */
-    protected $primary;
-
-    /**
      * Aliases of modified columns values.
      *
      * @var string[]
