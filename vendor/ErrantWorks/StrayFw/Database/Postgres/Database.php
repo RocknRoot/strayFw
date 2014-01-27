@@ -6,7 +6,7 @@ use ErrantWorks\StrayFw\Database\Provider\Database as ProviderDatabase;
 
 /**
  * PostgreSQL database helper.
- * User code shouldn't use this class directly, nor the entire Postgres namespace.
+ * User code shouldn't use this class directly.
  *
  * @author Nekith <nekith@errant-works.com>
  */

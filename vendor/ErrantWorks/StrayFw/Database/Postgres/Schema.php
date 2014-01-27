@@ -12,7 +12,7 @@ use ErrantWorks\StrayFw\Exception\InvalidSchemaDefinition;
 
 /**
  * Schema representation class for PostgreSQL ones.
- * User code shouldn't use this class directly, nor the entire Postgres namespace.
+ * User code shouldn't use this class directly.
  *
  * @author Nekith <nekith@errant-works.com>
  */
@@ -141,7 +141,7 @@ class Schema extends ProviderSchema
             $uses = array();
             $primary = array();
             $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
-            $constructorDefaults = '        if ($fetch == null) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
+            $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
             $properties = null;
             $accessors = null;
             $allFieldsRealNames = "    public static function getAllFieldsRealNames()\n    {\n        return array(";
@@ -177,7 +177,7 @@ class Schema extends ProviderSchema
                 }
                 $properties .= PHP_EOL;
 
-                $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'name\' => \'' . $fieldRealName . '\', \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
+                $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
                 $constructorDefaults .= '        if (empty($fetch[\'' . $fieldRealName . "']) === false) {\n            ";
                 $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
                 $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
@@ -254,7 +254,7 @@ class Schema extends ProviderSchema
                         if (isset($linkedModel['fields']) === false || isset($linkedModel['fields'][$to]) === false) {
                             throw new InvalidSchemaDefinition('building link : model "' . $linkDefinition['model'] . '" has no field named "' . $to . '"');
                         }
-                        $links[] = ucfirst($linkDefinition['model']) . '::FIELD_' . Helper::codifyName($to) . ' => $this->get' . ucfirst($from) . '()';
+                        $links[] = '\'' . $to . '\' => $this->get' . ucfirst($from) . '()';
                     }
                     $accessors .= implode(', ', $links) . " ]);\n    }\n\n";
                 }
