@@ -35,9 +35,14 @@ Vendors
 Twig is released under the new-BSD license.
 http://twig.sensiolabs.org
 
+The Symfony YAML Component is released under the MIT license.
+http://symfony.com
 
-PHP-Error is released under the new-BSD license.
-http://phperror.net
+PSR Log is released under the MIT license.
+https://github.com/php-fig/log
 
-Profiler bar icons by PC.DE are released under the Creative Commons BY 3.0.
-http://www.softicons.com/free-icons/designers/pc.de
+PHP Debug Bar is released under the MIT license.
+http://phpdebugbar.com
+
+whoops is released under the MIT license.
+http://filp.github.io/whoops

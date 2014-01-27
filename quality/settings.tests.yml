@@ -1,0 +1,10 @@
+tmp: tmp
+domain_prefix:
+
+databases:
+    global:
+        host: localhost
+        port:
+        name: postgres
+        user: postgres
+        pass:

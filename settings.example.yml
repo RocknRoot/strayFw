@@ -1,0 +1,16 @@
+tmp:
+
+domain_prefix:
+
+locale:
+    default:
+    hosts:
+
+databases:
+    alias:
+        provider:
+        host:
+        port:
+        name:
+        user:
+        pass:
