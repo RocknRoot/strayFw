@@ -3,6 +3,7 @@
 namespace ErrantWorks\StrayFw\Database;
 
 use ErrantWorks\StrayFw\Config;
+use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\DatabaseNotFound;
 use ErrantWorks\StrayFw\Exception\ExternalLink;
 

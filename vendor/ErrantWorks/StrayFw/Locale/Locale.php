@@ -4,6 +4,7 @@ namespace ErrantWorks\StrayFw\Locale;
 
 use ErrantWorks\StrayFw\Config;
 use ErrantWorks\StrayFw\Exception\BadUse;
+use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Http\Helper as HttpHelper;
 use ErrantWorks\StrayFw\Http\RawRequest;
 use ErrantWorks\StrayFw\Http\Session;
