@@ -22,8 +22,7 @@ class AddEnum extends Mutation
      */
     public static function statement(Database $database, $type, array $values)
     {
-        $statement = $database->getLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(:values)');
-        $statement->bindValue('values', '\'' . implode('\', \'', $values) . '\'');
+        $statement = $database->getLink()->prepare('CREATE TYPE t_' . $type . ' AS ENUM(\'' . implode('\', \'', $values) . '\')');
 
         return $statement;
     }
