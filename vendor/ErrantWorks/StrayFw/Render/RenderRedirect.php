@@ -2,6 +2,7 @@
 
 namespace ErrantWorks\StrayFw\Render;
 
+use ErrantWorks\StrayFw\Http\Request;
 use ErrantWorks\StrayFw\Render\ArgsTrait;
 
 /**

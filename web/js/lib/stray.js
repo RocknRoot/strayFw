@@ -2,7 +2,6 @@ function StrayJs() {
 
   var _this = this;
   this.components = { };
-  this.events = { };
   this.messages = { };
 
   /*
@@ -10,17 +9,12 @@ function StrayJs() {
    */
 
   this.componentRegister = function(object) {
-    if ("object" !== typeof object) {
-      console.log("Parameter must be an object.");
-    }
-    else if (false === object.hasOwnProperty('name')) {
-      console.log("Component must have a 'name' property.");
-    }
-    else if (this.components[object.name]) {
-      console.log("There's realdy a component with this name.");
-    }
-    else {
-      this.components[object.name] = object;
+    if (typeof object === "object") {
+      if (object.hasOwnProperty("name") === true) {
+        if (this.components[object.name] == null) {
+          this.components[object.name] = object;
+        }
+      }
     }
   };
 

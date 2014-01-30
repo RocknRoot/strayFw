@@ -91,6 +91,7 @@ abstract class Model extends ProviderModel
                 $status = $insertQuery->execute();
 
                 if ($status === true) {
+                    $this->modified = array();
                     $rows = $insertQuery->getStatement()->fetch(\PDO::FETCH_ASSOC);
                     $imax = count($rows);
                     for ($i = 0; $i < $imax; $i++) {

@@ -61,6 +61,9 @@ class RenderTemplate implements RenderInterface
     {
         $env = Twig::getEnv($this->request->getDir() . DIRECTORY_SEPARATOR . $this->templatesDir);
         $template = $env->loadTemplate($this->fileName);
+        if (isset($this->args['request']) === false) {
+            $this->args['request'] = $this->request;
+        }
 
         return $template->render($this->args);
     }

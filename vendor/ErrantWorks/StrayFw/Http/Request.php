@@ -84,7 +84,7 @@ class Request
                     throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']
                         . '" has invalid definition');
                 }
-                if (isset($routeInfo['method']) === false || $routeInfo['method'] == $this->rawRequest->getMethod()) {
+                if (isset($routeInfo['method']) === false || strtolower($routeInfo['method']) == strtolower($this->rawRequest->getMethod())) {
                     if (isset($routeInfo['ajax']) === false || $routeInfo['ajax'] == $this->rawRequest->isAjax()) {
                         $path = $routeInfo['path'];
                         if (empty($routes['uri']) === false) {

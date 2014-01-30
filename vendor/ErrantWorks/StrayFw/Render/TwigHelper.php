@@ -3,6 +3,7 @@
 namespace ErrantWorks\StrayFw\Render;
 
 use ErrantWorks\StrayFw\Http\Helper as HttpHelper;
+use ErrantWorks\StrayFw\Http\Request;
 use ErrantWorks\StrayFw\Http\Session;
 use ErrantWorks\StrayFw\Locale\Locale;
 
