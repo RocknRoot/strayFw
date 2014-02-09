@@ -121,6 +121,14 @@ class Request
     }
 
     /**
+     * Magic method for object cloning.
+     */
+    public function __clone()
+    {
+        $this->rawRequest = clone $this->rawRequest;
+    }
+
+    /**
      * Get associated raw request.
      *
      * @return RawRequest
@@ -188,5 +196,19 @@ class Request
     public function getArgs()
     {
         return $this->args;
+    }
+
+    /**
+     * For this request instance.
+     *
+     * @param  array   $args new request arguments
+     * @return Request new request instance
+     */
+    public function fork(array $args)
+    {
+        $request = clone $this;
+        $request->args = $args;
+
+        return $request;
     }
 }

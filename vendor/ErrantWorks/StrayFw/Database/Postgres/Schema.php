@@ -138,7 +138,6 @@ class Schema extends ProviderSchema
     {
         $definition = $this->getDefinition();
         foreach ($definition as $modelName => $modelDefinition) {
-            $uses = array();
             $primary = array();
             $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
             $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
@@ -240,12 +239,9 @@ class Schema extends ProviderSchema
                     if (isset($definition[$linkDefinition['model']]) === false) {
                         throw new InvalidSchemaDefinition('unknown model for link "' . $linkName . '" of model "' . $modelName . '"');
                     }
-                    if (in_array($linkDefinition['model'], $uses) === false) {
-                        $uses['_User' . ucfirst($linkDefinition['model'])] = ucfirst($linkDefinition['model']);
-                    }
                     $linkedModel = $definition[$linkDefinition['model']];
                     $accessors .= '    public function getLinked' . ucfirst($linkName) . "()\n    {\n        ";
-                    $accessors .= 'return _User' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
+                    $accessors .= 'return Models\\' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
                     $links = array();
                     foreach ($linkDefinition['fields'] as $from => $to) {
                         if (isset($modelDefinition['fields'][$from]) === false) {
@@ -278,13 +274,6 @@ class Schema extends ProviderSchema
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
             $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse ErrantWorks\StrayFw\Database\Postgres\Model;\n";
-            foreach ($uses as $key => $foreign) {
-                $content .= 'use ' . rtrim($mapping['config']['models']['namespace'], '\\') . '\\' . $foreign;
-                if (is_numeric($key) === false) {
-                    $content .= ' AS ' . $key;
-                }
-                $content .= ";\n";
-            }
             $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
             $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
             $content .= $properties . $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;

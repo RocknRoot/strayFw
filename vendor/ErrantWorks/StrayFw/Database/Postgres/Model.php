@@ -203,10 +203,10 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all entities satisfying the specified conditions.
      *
-     * @param  array        $conditions where conditions
-     * @param  array|string $order      order clause
-     * @param  bool         $critical   if true, will be executed on write server
-     * @return array        rows data
+     * @param  array $conditions where conditions
+     * @param  array $order      order clause
+     * @param  bool  $critical   if true, will be executed on write server
+     * @return array rows data
      */
     public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
     {
@@ -222,8 +222,13 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if ($orderBy != null) {
-            $selectQuery->orderBy($orderBy);
+        if (count($orderBy) > 0) {
+            $orders = array();
+            foreach ($orderBy as $key => $value) {
+                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = strtoupper(ucfirst($value));
+            }
+            $selectQuery->orderBy($orders);
         }
         if ($selectQuery->execute() === false) {
             return false;
