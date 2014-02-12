@@ -66,17 +66,16 @@ class Request
     /**
      * Parse raw request and choose a route.
      *
-     * @throws InvalidRouteDefinition if a route has an invalid definition
-     * @throws RouteNotFound          if no route matches the request
-     * @param  RawRequest             $rawRequest base raw request
-     * @param  array[]                $routeFiles registered route files
+     * @throws RouteNotFound if no route matches the request
+     * @param  RawRequest    $rawRequest base raw request
+     * @param  array[]       $routeFiles registered route files
      */
     public function __construct(RawRequest $rawRequest, array $routeFiles)
     {
         $this->rawRequest = $rawRequest;
         foreach ($routeFiles as $file) {
             $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-            if (empty($routes['sub_domain']) === false && $routes['sub_domain'] != $this->rawRequest->getSubDomain()) {
+            if (isset($routes['sub_domain']) === true && $routes['sub_domain'] != $this->rawRequest->getSubDomain()) {
                 continue;
             }
             foreach ($routes['routes'] as $routeName => $routeInfo) {

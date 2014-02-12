@@ -150,6 +150,7 @@ abstract class Locale
     {
         self::$currentLanguage = $language;
         Session::set('_stray_language', self::$currentLanguage);
+        setlocale(LC_ALL, $language);
     }
 
     /**
