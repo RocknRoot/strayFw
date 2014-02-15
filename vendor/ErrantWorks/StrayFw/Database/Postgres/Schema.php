@@ -109,6 +109,13 @@ class Schema extends ProviderSchema
         }
 
         foreach ($definition as $modelName => $modelDefinition) {
+            $tableName = null;
+            if (isset($modelDefinition['name']) === true) {
+                $tableName = $modelDefinition['name'];
+            } else {
+                $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+            }
+
             if (isset($modelDefinition['links']) === true) {
                 foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
                     $foreignTableName = null;
@@ -123,6 +130,8 @@ class Schema extends ProviderSchema
                     }
                 }
             }
+
+            echo 'Links on ' . $modelName . ' - Done' . PHP_EOL;
         }
     }
 
