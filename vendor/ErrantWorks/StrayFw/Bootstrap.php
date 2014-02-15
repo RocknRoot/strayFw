@@ -167,7 +167,7 @@ abstract class Bootstrap
             if (is_readable($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
                 require $path . DIRECTORY_SEPARATOR . 'init.php';
             } elseif (stripos($path, 'vendor') === false || stripos($path, 'vendor') == strlen($path) - strlen('vendor')) {
-                Logger::get()->notice('namespace "' . $name . '" doesn\'t have an init.php');
+                Logger::get()->error('namespace "' . $name . '" doesn\'t have an init.php');
             }
         }
         if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {

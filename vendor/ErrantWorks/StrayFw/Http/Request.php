@@ -66,56 +66,81 @@ class Request
     /**
      * Parse raw request and choose a route.
      *
-     * @throws RouteNotFound if no route matches the request
-     * @param  RawRequest    $rawRequest base raw request
-     * @param  array[]       $routeFiles registered route files
+     * @throws RouteNotFound          if no route matches the request
+     * @param  RawRequest             $rawRequest base raw request
+     * @param  array[]                $routeFiles registered route files
      */
     public function __construct(RawRequest $rawRequest, array $routeFiles)
     {
         $this->rawRequest = $rawRequest;
         foreach ($routeFiles as $file) {
             $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-            if (isset($routes['sub_domain']) === true && $routes['sub_domain'] != $this->rawRequest->getSubDomain()) {
+            if ($this->rawRequest->getSubDomain() != null && (isset($routes['sub_domain']) === false || $routes['sub_domain'] != $this->rawRequest->getSubDomain())) {
                 continue;
             }
-            foreach ($routes['routes'] as $routeName => $routeInfo) {
-                if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
-                    throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']
-                        . '" has invalid definition');
-                }
-                if (isset($routeInfo['method']) === false || strtolower($routeInfo['method']) == strtolower($this->rawRequest->getMethod())) {
-                    if (isset($routeInfo['ajax']) === false || $routeInfo['ajax'] == $this->rawRequest->isAjax()) {
-                        $path = $routeInfo['path'];
-                        if (empty($routes['uri']) === false) {
-                            $path = '/' . ltrim(rtrim($routes['uri'], '/'), '/') . $path;
-                        }
-                        if (strlen($routeInfo['path']) > 1) {
-                            $path = rtrim($path, '/') . '/';
-                        }
-                        $matches = null;
-                        if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
-                            $this->dir = rtrim($file['dir'], DIRECTORY_SEPARATOR);
-                            $this->file = DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR);
-                            $this->route = $routeName;
-                            list($this->class, $this->action) = explode('.', $routeInfo['action']);
-                            if (isset($routes['namespace']) === true) {
-                                $this->class = rtrim($routes['namespace'], '\\') . '\\' . ltrim($this->class, '\\');
-                            }
-                            foreach ($matches as $k => $v) {
-                                if (is_numeric($k) === false && $v != null) {
-                                    $this->args[$k] = $v;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            $this->parseRoutesFile($routes, $file);
             if ($this->route != null) {
                 break;
             }
         }
         if ($this->route == null) {
-            throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
+            foreach ($routeFiles as $file) {
+                $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
+                if (isset($routes['sub_domain']) === true) {
+                    continue;
+                }
+                $this->parseRoutesFile($routes, $file);
+                if ($this->route != null) {
+                    break;
+                }
+            }
+            if ($this->route == null) {
+                throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
+            }
+        }
+    }
+
+    /**
+     * Parse a single file routes.
+     *
+     * @throws RouteNotFound          if no route matches the request
+     * @param  RawRequest             $rawRequest base raw request
+     * @param  array[]                $routes routes
+     * @param  string                 $file file
+     */
+    protected function parseRoutesFile(array $routes, array $file)
+    {
+        foreach ($routes['routes'] as $routeName => $routeInfo) {
+            if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
+                throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']
+                    . '" has invalid definition');
+            }
+            if (isset($routeInfo['method']) === false || strtolower($routeInfo['method']) == strtolower($this->rawRequest->getMethod())) {
+                if (isset($routeInfo['ajax']) === false || $routeInfo['ajax'] == $this->rawRequest->isAjax()) {
+                    $path = $routeInfo['path'];
+                    if (empty($routes['uri']) === false) {
+                        $path = '/' . ltrim(rtrim($routes['uri'], '/'), '/') . $path;
+                    }
+                    if (strlen($routeInfo['path']) > 1) {
+                        $path = rtrim($path, '/');
+                    }
+                    $matches = null;
+                    if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                        $this->dir = rtrim($file['dir'], DIRECTORY_SEPARATOR);
+                        $this->file = DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR);
+                        $this->route = $routeName;
+                        list($this->class, $this->action) = explode('.', $routeInfo['action']);
+                        if (isset($routes['namespace']) === true) {
+                            $this->class = rtrim($routes['namespace'], '\\') . '\\' . ltrim($this->class, '\\');
+                        }
+                        foreach ($matches as $k => $v) {
+                            if (is_numeric($k) === false && $v != null) {
+                                $this->args[$k] = $v;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -90,7 +90,10 @@ class RawRequest
         if (($pos = stripos($this->query, '?')) !== false) {
             $this->query = substr($this->query, 0, stripos($this->query, '?'));
         }
-        $this->query = rtrim($this->query, '/') . '/';
+        $this->query = rtrim($this->query, '/');
+        if (strlen($this->query) == 0) {
+            $this->query = '/';
+        }
         $this->method = $_SERVER['REQUEST_METHOD'];
         if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) === false && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $this->isAjax = true;
