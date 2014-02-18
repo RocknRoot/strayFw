@@ -1,0 +1,29 @@
+{
+    "name": "errant-works/stray-fw",
+    "type": "library",
+    "description": "A PHP web framework for rock 'n' rollers.",
+    "keywords": [ "framework" ],
+    "homepage": "http://github.com/ErrantWorks/strayFw",
+    "license": "New BSD License",
+    "authors": [
+        {
+            "name": "Nekith",
+            "email": "nekith@gmail.com",
+            "homepage": "http://nekith.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "filp/whoops": "~1.0",
+        "maximebf/debugbar": "~1.9",
+        "psr/log": "~1.0",
+        "symfony/yaml": "~2.4",
+        "twig/twig": "~1.15"
+    },
+    "autoload": {
+        "psr-0": {
+            "ErrantWorks\\StrayFw": "src"
+        }
+    }
+}
