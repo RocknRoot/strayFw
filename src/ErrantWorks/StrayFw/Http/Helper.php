@@ -4,8 +4,6 @@ namespace ErrantWorks\StrayFw\Http;
 
 use ErrantWorks\StrayFw\Config;
 use ErrantWorks\StrayFw\Exception\RouteNotFound;
-use ErrantWorks\StrayFw\Http\Http;
-use ErrantWorks\StrayFw\Http\RawRequest;
 
 /**
  * Useful functions for the framework users.

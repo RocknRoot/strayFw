@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Locale;
 
-use ErrantWorks\StrayFw\Locale\Locale;
-
 /**
  * Date localization class.
  *

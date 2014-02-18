@@ -3,8 +3,6 @@
 namespace ErrantWorks\StrayFw\Console;
 
 use ErrantWorks\StrayFw\Config;
-use ErrantWorks\StrayFw\Console\Console;
-use ErrantWorks\StrayFw\Console\Request;
 
 /**
  * Basic actions for console.

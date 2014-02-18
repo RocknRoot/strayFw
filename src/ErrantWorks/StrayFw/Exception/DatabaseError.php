@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Exception;
 
-use ErrantWorks\StrayFw\Exception\Exception;
-
 /**
  * Exception thrown when an operation on a database fails.
  *

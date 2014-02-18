@@ -3,8 +3,6 @@
 namespace ErrantWorks\StrayFw\Database\Postgres\Query;
 
 use ErrantWorks\StrayFw\Database\Database;
-use ErrantWorks\StrayFw\Database\Postgres\Query\Query;
-use ErrantWorks\StrayFw\Database\Postgres\Query\Condition;
 use ErrantWorks\StrayFw\Exception\AppException;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Logger;
@@ -127,7 +125,7 @@ class Select extends Query
      * Execute the constructed query.
      *
      * @throws AppException on SQL error
-     * @return bool true if the query is successfully executed
+     * @return bool         true if the query is successfully executed
      */
     public function execute()
     {

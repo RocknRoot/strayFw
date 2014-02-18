@@ -3,7 +3,6 @@
 namespace ErrantWorks\StrayFw\Database;
 
 use ErrantWorks\StrayFw\Console\Request;
-use ErrantWorks\StrayFw\Database\Mapping;
 use ErrantWorks\StrayFw\Database\Provider\Schema;
 
 /**

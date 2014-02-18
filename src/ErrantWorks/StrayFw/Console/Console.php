@@ -2,7 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Console;
 
-use ErrantWorks\StrayFw\Console\Request;
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 
 /**

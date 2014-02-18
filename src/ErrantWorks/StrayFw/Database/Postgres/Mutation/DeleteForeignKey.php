@@ -3,7 +3,6 @@
 namespace ErrantWorks\StrayFw\Database\Postgres\Mutation;
 
 use ErrantWorks\StrayFw\Database\Database;
-use ErrantWorks\StrayFw\Database\Postgres\Mutation\Mutation;
 
 /**
  * Representation for foreign key deletion operations.

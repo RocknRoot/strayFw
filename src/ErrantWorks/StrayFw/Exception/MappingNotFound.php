@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Exception;
 
-use ErrantWorks\StrayFw\Exception\Exception;
-
 /**
  * Exception thrown when no mapping is aliased as requested.
  *

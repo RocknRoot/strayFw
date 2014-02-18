@@ -5,7 +5,6 @@ namespace ErrantWorks\StrayFw\Http;
 use ErrantWorks\StrayFw\Config;
 use ErrantWorks\StrayFw\Exception\InvalidRouteDefinition;
 use ErrantWorks\StrayFw\Exception\RouteNotFound;
-use ErrantWorks\StrayFw\Http\RawRequest;
 
 /**
  * Routed data from raw request.
@@ -66,9 +65,9 @@ class Request
     /**
      * Parse raw request and choose a route.
      *
-     * @throws RouteNotFound          if no route matches the request
-     * @param  RawRequest             $rawRequest base raw request
-     * @param  array[]                $routeFiles registered route files
+     * @throws RouteNotFound if no route matches the request
+     * @param  RawRequest    $rawRequest base raw request
+     * @param  array[]       $routeFiles registered route files
      */
     public function __construct(RawRequest $rawRequest, array $routeFiles)
     {
@@ -103,10 +102,10 @@ class Request
     /**
      * Parse a single file routes.
      *
-     * @throws RouteNotFound          if no route matches the request
-     * @param  RawRequest             $rawRequest base raw request
-     * @param  array[]                $routes routes
-     * @param  string                 $file file
+     * @throws RouteNotFound if no route matches the request
+     * @param  RawRequest    $rawRequest base raw request
+     * @param  array[]       $routes     routes
+     * @param  string        $file       file
      */
     protected function parseRoutesFile(array $routes, array $file)
     {

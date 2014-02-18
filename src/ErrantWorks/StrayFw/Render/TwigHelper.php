@@ -6,6 +6,7 @@ use ErrantWorks\StrayFw\Http\Helper as HttpHelper;
 use ErrantWorks\StrayFw\Http\Request;
 use ErrantWorks\StrayFw\Http\Session;
 use ErrantWorks\StrayFw\Locale\Locale;
+use ErrantWorks\StrayFw\Locale\Date;
 
 /**
  * Proxy class for Twig additional functions.
@@ -80,6 +81,25 @@ abstract class TwigHelper
     public static function url($url)
     {
         return HttpHelper::niceUrl($url);
+    }
+
+    /**
+     * Get a localized date from a time stamp.
+     *
+     * @static
+     * @param  int|string $time   time stamp or 'now'
+     * @param  string     $format date format
+     * @return string     localized formatted date
+     */
+    public static function localizedDate($time, $format)
+    {
+        if ($time === 'now') {
+            $time = time();
+        }
+        $date = new Date();
+        $date->setPattern($format);
+
+        return $date->format($time);
     }
 
     /**

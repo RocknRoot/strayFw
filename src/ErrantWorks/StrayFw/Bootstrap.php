@@ -6,7 +6,6 @@ use ErrantWorks\StrayFw\Console\Console;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Exception\UnknownNamespace;
 use ErrantWorks\StrayFw\Http\Http;
-use ErrantWorks\StrayFw\Logger;
 
 /**
  * First loaded framework class, taking care of autoloading

@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Render;
 
-use ErrantWorks\StrayFw\Render\ArgsTrait;
-
 /**
  * JSON render class, useful for AJAX requests.
  *

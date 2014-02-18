@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Render;
 
-use ErrantWorks\StrayFw\Render\ArgsTrait;
-
 /**
  * HTTP redirect render.
  *

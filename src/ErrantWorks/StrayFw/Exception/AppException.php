@@ -2,8 +2,6 @@
 
 namespace ErrantWorks\StrayFw\Exception;
 
-use ErrantWorks\StrayFw\Exception\Exception;
-
 /**
  * Exception when an exception in application logic is thrown.
  *

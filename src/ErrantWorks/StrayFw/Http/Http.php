@@ -4,8 +4,6 @@ namespace ErrantWorks\StrayFw\Http;
 
 use ErrantWorks\StrayFw\Exception\InvalidDirectory;
 use ErrantWorks\StrayFw\Exception\NotARender;
-use ErrantWorks\StrayFw\Http\RawRequest;
-use ErrantWorks\StrayFw\Http\Session;
 use ErrantWorks\StrayFw\Locale\Locale;
 use ErrantWorks\StrayFw\Render\RenderInterface;
 

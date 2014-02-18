@@ -6,7 +6,6 @@ use ErrantWorks\StrayFw\Logger;
 use ErrantWorks\StrayFw\Database\Database;
 use ErrantWorks\StrayFw\Database\Helper;
 use ErrantWorks\StrayFw\Database\Postgres\Column;
-use ErrantWorks\StrayFw\Database\Postgres\Mutation\Mutation;
 use ErrantWorks\StrayFw\Exception\InvalidSchemaDefinition;
 
 /**
