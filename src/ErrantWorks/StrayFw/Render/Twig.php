@@ -86,6 +86,7 @@ abstract class Twig
             self::$environments[$dir]->addFunction('route', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::route'));
             self::$environments[$dir]->addFunction('tr', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::tr'));
             self::$environments[$dir]->addFunction('url', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::url'));
+            self::$environments[$dir]->addFunction('localizedDate', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::localizedDate'));
             self::$environments[$dir]->addFunction('session', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::session'));
             foreach (self::$extensions as $ext) {
                 self::$environments[$dir]->addExtension(new $ext);
