@@ -83,7 +83,7 @@ class Database
         $this->providerNamespace = __NAMESPACE__ . '\\' . $config['provider'];
         $database = $this->providerNamespace . '\\Database';
         $this->providerDatabase = new $database();
-        if (isset($config['host']) === true) {
+        if (isset($config['name']) === true) {
             $info = array();
             $info['host'] = $config['host'];
             $info['port'] = $config['port'];

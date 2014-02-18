@@ -4,6 +4,7 @@ namespace ErrantWorks\StrayFw\Database\Postgres\Query;
 
 use ErrantWorks\StrayFw\Database\Database;
 use ErrantWorks\StrayFw\Database\Postgres\Query\Query;
+use ErrantWorks\StrayFw\Exception\AppException;
 use ErrantWorks\StrayFw\Exception\BadUse;
 use ErrantWorks\StrayFw\Logger;
 
@@ -38,6 +39,7 @@ class Insert extends Query
     /**
      * Execute the constructed query.
      *
+     * @throws AppException on SQL error
      * @return bool true if the query is successfully executed
      */
     public function execute()
@@ -60,6 +62,9 @@ class Insert extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
+            if (STRAY_ENV === 'development') {
+                throw new AppException('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
+            }
         }
 
         return $result;
