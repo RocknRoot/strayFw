@@ -286,12 +286,16 @@ class Select extends Query
     /**
      * Set group by clause.
      *
-     * @param  string $groupBy group by clause
-     * @return Select this
+     * @param  array|string $groupBy group by clause
+     * @return Select       this
      */
     public function groupBy($groupBy)
     {
-        $this->groupBy = $groupBy;
+        if (is_array($groupBy) === true) {
+            $this->groupBy = '\'' . implode('\', \'', $groupBy) . '\'';
+        } else {
+            $this->groupBy = $groupBy;
+        }
 
         return $this;
     }
