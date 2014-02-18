@@ -62,7 +62,12 @@ class Condition
         }
         $sql = '(';
         reset($tree);
-        if (key($tree) == 'OR') {
+        if (is_numeric($key) === true) {
+            foreach ($tree as $elem) {
+                $sql .= $elem ' AND ';
+            }
+            $sql = substr($sql, 0, -5);
+        } elseif (key($tree) === 'OR') {
             foreach ($tree as $value) {
                 if (is_array($value) === true) {
                     $sql .= $this->toSqlLevel($value);
@@ -72,7 +77,7 @@ class Condition
                 $sql .= ' OR ';
             }
             $sql = substr($sql, 0, -4);
-        } elseif (key($tree) == 'AND') {
+        } elseif (key($tree) === 'AND') {
             foreach ($tree as $value) {
                 if (is_array($value) === true) {
                     $sql .= $this->toSqlLevel($value);
