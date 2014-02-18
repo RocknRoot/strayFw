@@ -63,6 +63,8 @@ abstract class Bootstrap
             }
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
+                Console::registerRoutes(__DIR__ . DIRECTORY_SEPARATOR . 'Console', 'console.yml');
+                Console::registerRoutes(__DIR__ . DIRECTORY_SEPARATOR . 'Database', 'console.yml');
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 if (STRAY_ENV === 'development') {
                     Debug\Bar::init();
