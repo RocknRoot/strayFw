@@ -105,7 +105,7 @@ abstract class Twig
      * @static
      * @param Twig_Extension $extension instance
      */
-    public static function addExtension($extension)
+    public static function addExtension(\Twig_Extension $extension)
     {
         self::$extensions[] = $extension;
         foreach (self::$environments as $env) {
