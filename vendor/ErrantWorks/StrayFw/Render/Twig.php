@@ -27,7 +27,7 @@ abstract class Twig
      * Registered extensions.
      *
      * @static
-     * @var string[]
+     * @var Twig_Extension[]
      */
     protected static $extensions = array();
 
@@ -88,7 +88,7 @@ abstract class Twig
             self::$environments[$dir]->addFunction('url', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::url'));
             self::$environments[$dir]->addFunction('session', new \Twig_Function_Function('\\ErrantWorks\\StrayFw\\Render\\TwigHelper::session'));
             foreach (self::$extensions as $ext) {
-                self::$environments[$dir]->addExtension(new $ext);
+                self::$environments[$dir]->addExtension($ext);
             }
             foreach (self::$functions as $label => $name) {
                 self::$environments[$dir]->addFunction($label, new \Twig_Function_Function($name));
@@ -102,15 +102,13 @@ abstract class Twig
      * Add an extension to Twig environments.
      *
      * @static
-     * @param string $className extension class name
+     * @param Twig_Extension $extension instance
      */
-    public static function addExtension($className)
+    public static function addExtension($extension)
     {
-        if (array_search($className, self::$extensions) === false) {
-            self::$extensions[] = $className;
-            foreach (self::$environments as $env) {
-                $env->addExtension(new $className());
-            }
+        self::$extensions[] = $extension;
+        foreach (self::$environments as $env) {
+            $env->addExtension($extension);
         }
     }
 
