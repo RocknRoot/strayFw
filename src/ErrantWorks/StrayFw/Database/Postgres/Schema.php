@@ -105,17 +105,6 @@ class Schema extends ProviderSchema
                 }
             }
 
-            echo $modelName . ' - Done' . PHP_EOL;
-        }
-
-        foreach ($definition as $modelName => $modelDefinition) {
-            $tableName = null;
-            if (isset($modelDefinition['name']) === true) {
-                $tableName = $modelDefinition['name'];
-            } else {
-                $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
-            }
-
             if (isset($modelDefinition['links']) === true) {
                 foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
                     $foreignTableName = null;
@@ -131,7 +120,7 @@ class Schema extends ProviderSchema
                 }
             }
 
-            echo 'Links on ' . $modelName . ' - Done' . PHP_EOL;
+            echo $modelName . ' - Done' . PHP_EOL;
         }
     }
 
@@ -149,7 +138,6 @@ class Schema extends ProviderSchema
     {
         $definition = $this->getDefinition();
         foreach ($definition as $modelName => $modelDefinition) {
-            $uses = array();
             $primary = array();
             $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
             $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
@@ -233,7 +221,11 @@ class Schema extends ProviderSchema
                     $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = (bool) $value;';
                     break;
                 case 'json':
-                    $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = json_encode($value);';
+                    $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
+                    $accessors .= '            $this->fieldData[\'value\'] = $value;' . PHP_EOL;
+                    $accessors .= '        } else {' . PHP_EOL;
+                    $accessors .= '            $this->fieldData[\'value\'] = json_encode($value);' . PHP_EOL;
+                    $accessors .= '        }' . PHP_EOL;
                     break;
                 default:
                     $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = $value;';
@@ -251,12 +243,9 @@ class Schema extends ProviderSchema
                     if (isset($definition[$linkDefinition['model']]) === false) {
                         throw new InvalidSchemaDefinition('unknown model for link "' . $linkName . '" of model "' . $modelName . '"');
                     }
-                    if (in_array($linkDefinition['model'], $uses) === false) {
-                        $uses['_User' . ucfirst($linkDefinition['model'])] = ucfirst($linkDefinition['model']);
-                    }
                     $linkedModel = $definition[$linkDefinition['model']];
                     $accessors .= '    public function getLinked' . ucfirst($linkName) . "()\n    {\n        ";
-                    $accessors .= 'return _User' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
+                    $accessors .= 'return Models\\' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
                     $links = array();
                     foreach ($linkDefinition['fields'] as $from => $to) {
                         if (isset($modelDefinition['fields'][$from]) === false) {
@@ -273,9 +262,7 @@ class Schema extends ProviderSchema
 
             $allFieldsRealNames = substr($allFieldsRealNames, 0, -2) . ");\n    }\n\n";
             $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n\n";
-            $constructor .= $constructorDefaults;
-            $constructor .= PHP_EOL . '        $this->modified = array();' . PHP_EOL;
-            $constructor .= "    }\n\n";
+            $constructor .= $constructorDefaults . "    }\n\n";
 
             $mapping = Mapping::get($this->mapping);
 
@@ -291,13 +278,6 @@ class Schema extends ProviderSchema
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
             $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse ErrantWorks\StrayFw\Database\Postgres\Model;\n";
-            foreach ($uses as $key => $foreign) {
-                $content .= 'use ' . rtrim($mapping['config']['models']['namespace'], '\\') . '\\' . $foreign;
-                if (is_numeric($key) === false) {
-                    $content .= ' AS ' . $key;
-                }
-                $content .= ";\n";
-            }
             $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
             $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
             $content .= $properties . $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
