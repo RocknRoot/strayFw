@@ -7,9 +7,7 @@ The strayFw is a PHP framework trying to be modern without following fashion.
 * Homepage : http://stray.errant-works.com
 * Version : beta - 0.4-Marius
 
-It's loosely based on Model-View-Adapter architecture.
-
-Some intro stuff yet to be written. Now, I need to code, marketing incoming.
+This repository is the package one. If you want to start a new project, you need to download that one: http://github.com/ErrantWorks/strayFw-Skeleton
 
 User guide is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
 
