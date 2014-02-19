@@ -53,13 +53,6 @@ abstract class Bootstrap
             self::$applications = array();
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
-            self::registerLib('Psr\\Log');
-            self::registerLib('Symfony\\Component\\Yaml');
-            self::registerLib('ErrantWorks\\StrayFw');
-            if (STRAY_ENV === 'development') {
-                Bootstrap::registerLib('DebugBar', STRAY_PATH_VENDOR . 'Maximebf/DebugBar');
-                Bootstrap::registerLib('Whoops', STRAY_PATH_VENDOR . 'Filp/Whoops');
-            }
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
                 Console::registerRoutes(__DIR__ . DIRECTORY_SEPARATOR . 'Console', 'console.yml');

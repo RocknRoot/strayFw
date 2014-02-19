@@ -62,9 +62,9 @@ class Condition
         }
         $sql = '(';
         reset($tree);
-        if (is_numeric($key) === true) {
+        if (is_numeric(key($tree)) === true) {
             foreach ($tree as $elem) {
-                $sql .= $elem ' AND ';
+                $sql .= $elem . ' AND ';
             }
             $sql = substr($sql, 0, -5);
         } elseif (key($tree) === 'OR') {
