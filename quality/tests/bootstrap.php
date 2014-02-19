@@ -17,7 +17,3 @@ use ErrantWorks\StrayFw\Bootstrap;
 use ErrantWorks\StrayFw\Console\Console;
 
 Bootstrap::init();
-
-require STRAY_PATH_ROOT . 'init.php';
-
-Bootstrap::run();
