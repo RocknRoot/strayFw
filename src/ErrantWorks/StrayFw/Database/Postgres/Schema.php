@@ -222,9 +222,9 @@ class Schema extends ProviderSchema
                     break;
                 case 'json':
                     $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
-                    $accessors .= '            $this->fieldData[\'value\'] = $value;' . PHP_EOL;
+                    $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = $value;' . PHP_EOL;
                     $accessors .= '        } else {' . PHP_EOL;
-                    $accessors .= '            $this->fieldData[\'value\'] = json_encode($value);' . PHP_EOL;
+                    $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = json_encode($value);' . PHP_EOL;
                     $accessors .= '        }' . PHP_EOL;
                     break;
                 default:
