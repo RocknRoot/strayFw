@@ -181,7 +181,11 @@ class Schema extends ProviderSchema
                 $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
                 $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
                 if (isset($fieldDefinition['default']) === true) {
-                    $constructorDefaults .= '\'' . $fieldDefinition['default'] . '\'';
+                    if(is_bool($fieldDefinition['default']) === true) {
+                        $constructorDefaults .= ($fieldDefinition['default'] === true) ? 'true' : 'false';
+                    } else {
+                        $constructorDefaults .= '\'' . $fieldDefinition['default'] . '\'';
+                    }
                 } else {
                     $constructorDefaults .= 'null';
                 }
