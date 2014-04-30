@@ -64,6 +64,13 @@ class Select extends Query
     protected $orderBy;
 
     /**
+     * Distinct clause.
+     *
+     * @var string
+     */
+    protected $distinct;
+
+    /**
      * Limit clause.
      *
      * @var string
@@ -191,7 +198,11 @@ class Select extends Query
      */
     public function toSql()
     {
-        $sql = 'SELECT ' . ($this->select != null ? $this->select : '*') . ' ';
+        $sql = 'SELECT ';
+        if ($this->distinct != null) {
+            $sql .= 'DISTINCT ON (' . $this->distinct . ') ';
+        }
+        $sql .= ($this->select != null ? $this->select : '*') . ' ';
         if (empty($this->from) === true) {
             throw new BadUse('from clause has not been defined (' . print_r($this, true) . ')');
         }
@@ -322,13 +333,26 @@ class Select extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = null;
-            foreach ($orderBy as $key => $elem) {
-                $this->orderBy .= $key . ' ' . $elem . ', ';
-            }
-            $this->orderBy = substr($this->orderBy, 0, -2);
+            $this->orderBy = implode(', ', $orderBy);
         } else {
             $this->orderBy = $orderBy;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set distinct on clause.
+     *
+     * @param  array|string $distinct distinct on clause
+     * @return Select       this
+     */
+    public function distinct($distinct)
+    {
+        if (is_array($distinct) === true) {
+            $this->distinct = implode(', ', $distinct);
+        } else {
+            $this->distinct = $distinct;
         }
 
         return $this;
