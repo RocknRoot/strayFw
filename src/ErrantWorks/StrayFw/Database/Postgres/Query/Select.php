@@ -333,7 +333,11 @@ class Select extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = implode(', ', $orderBy);
+            $this->orderBy = null;
+            foreach ($orderBy as $key => $elem) {
+                $this->orderBy .= $key . ' ' . $elem . ', ';
+            }
+            $this->orderBy = substr($this->orderBy, 0, -2);
         } else {
             $this->orderBy = $orderBy;
         }

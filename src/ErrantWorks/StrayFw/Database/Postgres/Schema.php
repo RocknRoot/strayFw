@@ -266,7 +266,9 @@ class Schema extends ProviderSchema
 
             $allFieldsRealNames = substr($allFieldsRealNames, 0, -2) . ");\n    }\n\n";
             $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n\n";
-            $constructor .= $constructorDefaults . "    }\n\n";
+            $constructor .= $constructorDefaults;
+            $constructor .= PHP_EOL . '        $this->modified = array();' . PHP_EOL;
+            $constructor .= "    }\n\n";
 
             $mapping = Mapping::get($this->mapping);
 
