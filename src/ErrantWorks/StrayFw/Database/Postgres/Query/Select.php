@@ -292,7 +292,7 @@ class Select extends Query
     public function groupBy($groupBy)
     {
         if (is_array($groupBy) === true) {
-            $this->groupBy = '\'' . implode('\', \'', $groupBy) . '\'';
+            $this->groupBy = implode(', ', $groupBy);
         } else {
             $this->groupBy = $groupBy;
         }
