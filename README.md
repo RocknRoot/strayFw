@@ -5,9 +5,9 @@
 The strayFw is a PHP framework trying to be modern without following fashion.
 
 * Homepage : http://stray.errant-works.com
-* Version : beta - 0.4-Marius
+* Version : beta - 0.4.2-Marius
 
-This repository is the package one. If you want to start a new project, you need to download that one: https://github.com/ErrantWorks/strayFw-Skeleton/tree/0.4.0
+This repository is the package one. If you want to start a new project, you need to download that one: https://github.com/ErrantWorks/strayFw-Skeleton
 
 User guide is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
 
