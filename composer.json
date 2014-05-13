@@ -25,5 +25,10 @@
         "psr-0": {
             "ErrantWorks\\StrayFw": "src"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "cp vendor/errant-works/stray-fw/index.php web/index.php"
+        ]
     }
 }
