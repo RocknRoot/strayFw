@@ -13,8 +13,8 @@ define('STRAY_ENV', 'production');
 
 require STRAY_PATH_VENDOR . 'autoload.php';
 
-use ErrantWorks\StrayFw\Bootstrap;
-use ErrantWorks\StrayFw\Console\Console;
+use RocknRoot\StrayFw\Bootstrap;
+use RocknRoot\StrayFw\Console\Console;
 
 Bootstrap::init();
 

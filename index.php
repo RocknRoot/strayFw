@@ -15,7 +15,7 @@ if (false === defined('STRAY_ENV')) {
 
 require STRAY_PATH_VENDOR . 'autoload.php';
 
-use ErrantWorks\StrayFw\Bootstrap;
+use RocknRoot\StrayFw\Bootstrap;
 
 Bootstrap::init();
 

@@ -1,0 +1,8 @@
+namespace: RocknRoot\StrayFw\Console
+
+routes:
+
+    console_help:
+        path: help
+        help: help - strayFw console help screen.
+        action: Controller.help

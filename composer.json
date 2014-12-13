@@ -1,14 +1,14 @@
 {
-    "name": "errant-works/stray-fw",
+    "name": "rocknroot/stray-fw",
     "type": "library",
     "description": "A PHP web framework for rock 'n' rollers.",
     "keywords": [ "framework" ],
-    "homepage": "http://github.com/ErrantWorks/strayFw",
-    "license": "New BSD License",
+    "homepage": "http://github.com/RocknRoot/strayFw",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Nekith",
-            "email": "nekith@gmail.com",
+            "email": "nekith@errant-works.com",
             "homepage": "http://nekith.com",
             "role": "Developer"
         }
@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-0": {
-            "ErrantWorks\\StrayFw": "src"
+            "RocknRoot\\StrayFw": "src"
         }
     }
 }
