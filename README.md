@@ -4,12 +4,12 @@
 
 The strayFw is a PHP framework trying to be modern without following fashion.
 
-* Homepage : http://stray.errant-works.com
-* Version : beta - 0.4.2-Marius
+* Homepage : ???
+* Version : beta - 0.4.3-Marius
 
 This repository is the package one. If you want to start a new project, you need to download that one: https://github.com/RocknRoot/strayFw-Skeleton
 
-User guide is [somewhere](http://stray.errant-works.com/guide 'user guide') on the homepage. So... read it !
+User guide is ??somewhere?? on the homepage. So... read it !
 
 Code is free, new-BSD license. So... fork us !
 
@@ -18,7 +18,7 @@ Code is free, new-BSD license. So... fork us !
 * PHP >= 5.4
 * If you're using the Locale namespace, PECL intl extension >= 1.0.0
 
-For installation help, [check this page](http://stray.errant-works.com/guide/installation 'user guide - installation').
+For installation help, ??check this page??.
 
 ## Need help ?
 
