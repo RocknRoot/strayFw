@@ -9,7 +9,9 @@ define('STRAY_PATH_VENDOR', __DIR__ . '/../vendor/');
 
 define('STRAY_IS_HTTP', true);
 
-if (false === defined('STRAY_ENV')) {
+if (php_sapi_name() == 'cli-server') {
+    define('STRAY_ENV', 'development');
+} else if (false === defined('STRAY_ENV')) {
     define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
 }
 

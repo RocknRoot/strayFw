@@ -38,8 +38,8 @@ abstract class TwigHelper
      */
     public static function fwHead()
     {
-        echo '<script type="text/javascript" src="/js/lib/jquery.js"></script>' . PHP_EOL;
         if (STRAY_ENV === 'development') {
+            echo '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>' . PHP_EOL;
             echo \RocknRoot\StrayFw\Debug\Bar::getHead();
         }
     }
