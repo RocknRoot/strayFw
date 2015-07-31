@@ -4,5 +4,6 @@ routes:
 
     console_help:
         path: help
-        help: help - strayFw console help screen.
+        usage: help
+        help: this screen
         action: Controller.help
