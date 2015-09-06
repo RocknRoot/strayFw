@@ -336,7 +336,7 @@ class Schema extends ProviderSchema
             $consts .= '    const FIELD_' . strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
 
             $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
-            $constructorDefaults .= '        if (empty($fetch[\'' . $fieldRealName . "']) === false) {\n            ";
+            $constructorDefaults .= '        if (in_array(\'' . $fieldRealName . '\', $fetch) === true) {' . "\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
             if (isset($fieldDefinition['default']) === true) {
