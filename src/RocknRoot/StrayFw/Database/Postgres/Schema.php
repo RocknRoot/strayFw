@@ -74,7 +74,7 @@ class Schema extends ProviderSchema
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
-t s
+
         $enumRealName = null;
         if (isset($enumDefinition['name']) === true) {
             $enumRealName = $enumDefinition['name'];
