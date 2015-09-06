@@ -30,6 +30,7 @@ class Schema extends ProviderSchema
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
+
         foreach ($definition as $modelName => $modelDefinition) {
             if (isset($modelDefinition['links']) === false) {
                 continue;
@@ -51,6 +52,37 @@ class Schema extends ProviderSchema
                 }
             }
         }
+
+        foreach ($definition as $modelName => $modelDefinition) {
+            if (isset($modelDefinition['type']) === false || $modelDefinition['type'] === 'model') {
+                $tableName = null;
+                if (isset($modelDefinition['name']) === true) {
+                    $tableName = $modelDefinition['name'];
+                } else {
+                    $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+                }
+                $statement = Mutation\DeleteTable::statement($database, $tableName);
+                if ($statement->execute() == false) {
+                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                }
+            }
+        }
+        foreach ($definition as $modelName => $modelDefinition) {
+            if (isset($modelDefinition['type']) === true && $modelDefinition['type'] === 'enum') {
+                $modelRealName = null;
+                if (isset($modelDefinition['name']) === true) {
+                    $modelRealName = $modelDefinition['name'];
+                } else {
+                    $modelRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+                }
+                $statement = Mutation\DeleteEnum::statement($database, $modelRealName);
+                if ($statement->execute() == false) {
+                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                }
+
+            }
+        }
+
         foreach ($definition as $modelName => $modelDefinition) {
             if (isset($modelDefinition['type']) === true && $modelDefinition['type'] === 'enum') {
                 $this->buildEnum($modelName, $modelDefinition);
@@ -80,11 +112,6 @@ class Schema extends ProviderSchema
             $enumRealName = $enumDefinition['name'];
         } else {
             $enumRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($enumName);
-        }
-
-        $statement = Mutation\DeleteEnum::statement($database, $enumRealName);
-        if ($statement->execute() == false) {
-            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
         }
 
         if (isset($enumDefinition['values']) === false) {
@@ -127,11 +154,6 @@ class Schema extends ProviderSchema
             $tableName = $modelDefinition['name'];
         } else {
             $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
-        }
-
-        $statement = Mutation\DeleteTable::statement($database, $tableName);
-        if ($statement->execute() == false) {
-            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
         }
 
         if (isset($modelDefinition['fields']) === false) {
