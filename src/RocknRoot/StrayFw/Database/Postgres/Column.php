@@ -14,41 +14,41 @@ use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
 abstract class Column
 {
     /**
-     * Generate a column SQL definition.
+     * Generate a column SQL fieldDefinition.
      *
      * @throws InvalidSchemaDefinition if default value aren't well typed
      * @throws InvalidSchemaDefinition if a field has an unknown type
-     * @param  array                   $schema          schema definition
+     * @param  array                   $schema          schema fieldDefinition
      * @param  string                  $mapping         mapping name
      * @param  string                  $fieldAlias      field alias name
      * @param  string                  $fieldName       field real name
-     * @param  array                   $fieldDefinition field definition
+     * @param  array                   $fieldDefinition field fieldDefinition
      */
     public static function generateDefinition(array $schema, $mapping, $fieldAlias, $fieldName, array $fieldDefinition)
     {
         $sql = $fieldName . ' ';
-        switch ($definition['type']) {
+        switch ($fieldDefinition['type']) {
         case 'bool':
             $sql .= 'BOOL';
-            if (isset($definition['default']) === true) {
-                if (is_bool($definition['default']) === false) {
+            if (isset($fieldDefinition['default']) === true) {
+                if (is_bool($fieldDefinition['default']) === false) {
                     throw new InvalidSchemaDefinition('default value for "' . $fieldName . '" isn\'t a boolean');
                 }
-                $sql .= ' DEFAULT ' . ($definition['default'] === true ? 'TRUE' : 'FALSE');
+                $sql .= ' DEFAULT ' . ($fieldDefinition['default'] === true ? 'TRUE' : 'FALSE');
             }
             break;
 
         case 'char':
-            $sql .= 'CHAR(' . (isset($definition['size']) === true ? $definition['size'] : 45) . ')';
-            if (isset($definition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+            $sql .= 'CHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
             }
             break;
 
         case 'string':
-            $sql .= 'VARCHAR(' . (isset($definition['size']) === true ? $definition['size'] : 45) . ')';
-            if (isset($definition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+            $sql .= 'VARCHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
             }
             break;
 
@@ -62,32 +62,32 @@ abstract class Column
 
         case 'int':
             $sql .= 'INT';
-            if (isset($definition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
             }
             break;
 
         case 'smallint':
             $sql .= 'SMALLINT';
-            if (isset($definition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
             }
             break;
 
         case 'float':
             $sql .= 'FLOAT';
-            if (isset($definition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
             }
             break;
 
         case 'timestamp':
             $sql .= 'TIMESTAMP';
-            if (isset($definition['default']) === true) {
-                if ($definition['default'] == 'now') {
+            if (isset($fieldDefinition['default']) === true) {
+                if ($fieldDefinition['default'] == 'now') {
                     $sql .= ' DEFAULT CURRENT_TIMESTAMP';
                 } else {
-                    $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
                 }
             }
             break;
@@ -106,15 +106,15 @@ abstract class Column
 
         case 'bit':
             $sql .= 'BIT';
-            if (isset($definition['size']) === true) {
-                $sql .= '(' . $definition['size'] . ')';
+            if (isset($fieldDefinition['size']) === true) {
+                $sql .= '(' . $fieldDefinition['size'] . ')';
             }
             break;
 
         case 'bitstring':
             $sql .= 'BIT VARYING';
-            if (isset($definition['size']) === true) {
-                $sql .= '(' . $definition['size'] . ')';
+            if (isset($fieldDefinition['size']) === true) {
+                $sql .= '(' . $fieldDefinition['size'] . ')';
             }
             break;
 
@@ -136,7 +136,7 @@ abstract class Column
             throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type');
             break;
         }
-        if (isset($definition['notnull']) === false || $definition['notnull'] === true) {
+        if (isset($fieldDefinition['notnull']) === false || $fieldDefinition['notnull'] === true) {
             $sql .= ' NOT NULL';
         }
 
