@@ -225,6 +225,32 @@ class Request
     }
 
     /**
+     * Retrieve an input var from, in this order of priority:
+     *  * POST vars
+     *  * route args
+     *  * GET vars
+     *  * $default
+     *
+     * @param string $name input searched
+     * @param mixed $default returned value if nothing is found
+     * @return mixed found value or default
+     */
+    public function input($name, $default = null)
+    {
+        if (isset($this->rawRequest->getPostVars()[$name]) === true) {
+            return $this->rawRequest->getPostVars()[$name];
+        }
+        if (isset($this->args[$name]) === true) {
+            return $this->args[$name];
+        }
+        if (isset($this->rawRequest->getGetVars()[$name]) === true) {
+            return $this->rawRequest->getGetVars()[$name];
+        }
+
+        return $default;
+    }
+
+    /**
      * For this request instance.
      *
      * @param  array   $args new request arguments
