@@ -88,7 +88,7 @@ class Schema extends ProviderSchema
         }
 
         if (isset($enumDefinition['values']) === false) {
-            throw new InvalidSchemaDefinition('enum "' . $enumName. '" has no value');
+            throw new InvalidSchemaDefinition('enum "' . $enumName . '" has no value');
         }
 
         $values = array();
