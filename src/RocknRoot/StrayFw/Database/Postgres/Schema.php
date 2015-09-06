@@ -74,7 +74,7 @@ class Schema extends ProviderSchema
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
-
+t s
         $enumRealName = null;
         if (isset($enumDefinition['name']) === true) {
             $enumRealName = $enumDefinition['name'];
@@ -87,8 +87,8 @@ class Schema extends ProviderSchema
             throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
         }
 
-        if (isset($modelDefinition['values']) === false) {
-            throw new InvalidSchemaDefinition('enum "' . $modelName . '" has no value');
+        if (isset($enumDefinition['values']) === false) {
+            throw new InvalidSchemaDefinition('enum "' . $enumName. '" has no value');
         }
 
         $values = array();
