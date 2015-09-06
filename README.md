@@ -38,4 +38,4 @@ Or add an issue on github ! ;)
 ## Coding standards
 
     $ curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-    $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw
+    $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw --level=psr2 --fixers=extra_empty_lines,remove_lines_between_uses,return,single_array_no_trailing_comma,spaces_before_semicolon,spaces_cast,unused_use,whitespacy_lines,concat_with_spaces,ordered_use

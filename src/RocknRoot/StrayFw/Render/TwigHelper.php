@@ -5,8 +5,8 @@ namespace RocknRoot\StrayFw\Render;
 use RocknRoot\StrayFw\Http\Helper as HttpHelper;
 use RocknRoot\StrayFw\Http\Request;
 use RocknRoot\StrayFw\Http\Session;
-use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Locale\Date;
+use RocknRoot\StrayFw\Locale\Locale;
 
 /**
  * Proxy class for Twig additional functions.

@@ -3,11 +3,11 @@
 namespace RocknRoot\StrayFw\Database;
 
 use RocknRoot\StrayFw\Config;
-use RocknRoot\StrayFw\Logger;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
 use RocknRoot\StrayFw\Exception\MappingNotFound;
+use RocknRoot\StrayFw\Logger;
 
 /**
  * Mapping representation class.

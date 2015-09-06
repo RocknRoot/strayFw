@@ -93,6 +93,7 @@ abstract class Enum
                 }
             }
         }
+
         return static::$array;
     }
 

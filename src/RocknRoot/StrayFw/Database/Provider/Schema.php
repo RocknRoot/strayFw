@@ -3,9 +3,9 @@
 namespace RocknRoot\StrayFw\Database\Provider;
 
 use RocknRoot\StrayFw\Config;
+use RocknRoot\StrayFw\Database\Mapping;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
-use RocknRoot\StrayFw\Database\Mapping;
 
 /**
  * Schema representation parent class for all providers.

@@ -2,10 +2,10 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres;
 
+use RocknRoot\StrayFw\Database\Database as GlobalDatabase;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Mapping;
 use RocknRoot\StrayFw\Database\Provider\Schema as ProviderSchema;
-use RocknRoot\StrayFw\Database\Database as GlobalDatabase;
 use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
@@ -273,7 +273,7 @@ class Schema extends ProviderSchema
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
             if (isset($fieldDefinition['default']) === true) {
-                if(is_bool($fieldDefinition['default']) === true) {
+                if (is_bool($fieldDefinition['default']) === true) {
                     $constructorDefaults .= ($fieldDefinition['default'] === true) ? 'true' : 'false';
                 } else {
                     $constructorDefaults .= '\'' . $fieldDefinition['default'] . '\'';
@@ -310,7 +310,7 @@ class Schema extends ProviderSchema
             $accessors .= '    public function set' . ucfirst($fieldName) . '($value)' . "\n    {\n        ";
             if ($fieldDefinition['type'] == 'bool') {
                 $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = (bool) $value;';
-            } else if ($fieldDefinition['type'] == 'json') {
+            } elseif ($fieldDefinition['type'] == 'json') {
                 $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
                 $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = $value;' . PHP_EOL;
                 $accessors .= '        } else {' . PHP_EOL;
