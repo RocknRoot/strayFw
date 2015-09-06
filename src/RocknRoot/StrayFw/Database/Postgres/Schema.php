@@ -71,6 +71,8 @@ class Schema extends ProviderSchema
      */
     private function buildEnum($enumName, array $enumDefinition)
     {
+        $database = GlobalDatabase::get($mapping['config']['database']);
+
         $enumRealName = null;
         if (isset($enumDefinition['name']) === true) {
             $enumRealName = $enumDefinition['name'];
@@ -114,6 +116,8 @@ class Schema extends ProviderSchema
      */
     private function buildModel($modelName, array $modelDefinition)
     {
+        $database = GlobalDatabase::get($mapping['config']['database']);
+
         $tableName = null;
         if (isset($modelDefinition['name']) === true) {
             $tableName = $modelDefinition['name'];
