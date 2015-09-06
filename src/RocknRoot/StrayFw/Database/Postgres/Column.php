@@ -122,17 +122,17 @@ abstract class Column
             if (isset($schema[$fieldName]) === true) {
                 if (isset($schema[$fieldName]['type']) === true) {
                     if ($schema[$fieldName]['type'] == 'enum') {
-                        $enumRealName = null
+                        $enumRealName = null;
                         if (isset($schema[$fieldName]['name']) === true) {
                             $enumRealName = $schema[$fieldName]['name'];
                         } else {
                             $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($fieldAlias);
                         }
                         $sql .= $enumRealName;
+                        break;
                     }
                 }
             }
-            $sql .= 't_' . $fieldName;
             throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type');
             break;
         }
