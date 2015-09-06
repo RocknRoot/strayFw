@@ -92,7 +92,7 @@ class Schema extends ProviderSchema
         }
 
         $values = array();
-        foreach ($modelDefinition['values'] as $valueName => $valueAlias) {
+        foreach ($enumDefinition['values'] as $valueName => $valueAlias) {
             $valueRealName = null;
             if (is_string($valueName) === true) {
                 $valueRealName = $valueName;
