@@ -71,6 +71,8 @@ class Schema extends ProviderSchema
      */
     private function buildEnum($enumName, array $enumDefinition)
     {
+        $mapping = Mapping::get($this->mapping);
+        $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
 
         $enumRealName = null;
@@ -116,6 +118,8 @@ class Schema extends ProviderSchema
      */
     private function buildModel($modelName, array $modelDefinition)
     {
+        $mapping = Mapping::get($this->mapping);
+        $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
 
         $tableName = null;
