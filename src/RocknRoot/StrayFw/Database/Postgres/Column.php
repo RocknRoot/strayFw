@@ -18,10 +18,13 @@ abstract class Column
      *
      * @throws InvalidSchemaDefinition if default value aren't well typed
      * @throws InvalidSchemaDefinition if a field has an unknown type
-     * @param  string                  $fieldName  field real name
-     * @param  array                   $definition field definition
+     * @param  array                   $schema          schema definition
+     * @param  string                  $mapping         mapping name
+     * @param  string                  $fieldAlias      field alias name
+     * @param  string                  $fieldName       field real name
+     * @param  array                   $fieldDefinition field definition
      */
-    public static function generateDefinition($fieldName, array $definition)
+    public static function generateDefinition(array $schema, $mapping, $fieldAlias, $fieldName, array $fieldDefinition)
     {
         $sql = $fieldName . ' ';
         switch ($definition['type']) {
@@ -47,10 +50,6 @@ abstract class Column
             if (isset($definition['default']) === true) {
                 $sql .= ' DEFAULT \'' . $definition['default'] . '\'';
             }
-            break;
-
-        case 'enum':
-            $sql .= 't_' . $fieldName;
             break;
 
         case 'serial':
@@ -120,6 +119,20 @@ abstract class Column
             break;
 
         default:
+            if (isset($schema[$fieldName]) === true) {
+                if (isset($schema[$fieldName]['type']) === true) {
+                    if ($schema[$fieldName]['type'] == 'enum') {
+                        $enumRealName = null
+                        if (isset($schema[$fieldName]['name']) === true) {
+                            $enumRealName = $schema[$fieldName]['name'];
+                        } else {
+                            $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($fieldAlias);
+                        }
+                        $sql .= $enumRealName;
+                    }
+                }
+            }
+            $sql .= 't_' . $fieldName;
             throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type');
             break;
         }

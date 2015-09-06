@@ -20,12 +20,14 @@ class AddTable extends Mutation
      *
      * @throws InvalidSchemaDefinition if a model has no field
      * @param  Database                $database        database
+     * @param  array                   $schema          schema definition
+     * @param  string                  $mapping         mapping name
      * @param  string                  $tableName       table real name
      * @param  string                  $modelName       model name
      * @param  array                   $tableDefinition table definition
-     * @return PDOStatement            $statement prepared query
+     * @return PDOStatement            $statement       prepared query
      */
-    public static function statement(Database $database, $tableName, $modelName, array $tableDefinition)
+    public static function statement(Database $database, array $schema, $mapping, $tableName, $modelName, array $tableDefinition)
     {
         $sql = 'CREATE TABLE ' . $tableName . ' (';
         if (isset($tableDefinition['fields']) === false) {
@@ -39,7 +41,7 @@ class AddTable extends Mutation
             } else {
                 $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
             }
-            $sql .= Column::generateDefinition($fieldRealName, $fieldDefinition);
+            $sql .= Column::generateDefinition($schema, $mapping, $fieldName, $fieldRealName, $fieldDefinition);
             if (isset($fieldDefinition['primary']) === true && $fieldDefinition['primary'] === true) {
                 $primary[] = $fieldRealName;
             }

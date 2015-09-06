@@ -30,7 +30,6 @@ class Schema extends ProviderSchema
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
         $database = GlobalDatabase::get($mapping['config']['database']);
-
         foreach ($definition as $modelName => $modelDefinition) {
             if (isset($modelDefinition['links']) === false) {
                 continue;
@@ -52,76 +51,114 @@ class Schema extends ProviderSchema
                 }
             }
         }
-
         foreach ($definition as $modelName => $modelDefinition) {
-            $tableName = null;
-            if (isset($modelDefinition['name']) === true) {
-                $tableName = $modelDefinition['name'];
-            } else {
-                $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+            if (isset($modelDefinition['type']) === true && $modelDefinition['type'] === 'enum') {
+                $this->buildEnum($modelName, $modelDefinition);
             }
-
-            $statement = Mutation\DeleteTable::statement($database, $tableName);
-            if ($statement->execute() == false) {
-                throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-            }
-
-            if (isset($modelDefinition['fields']) === false) {
-                throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
-            }
-            foreach ($modelDefinition['fields'] as $fieldName => $fieldDefinition) {
-                if ($fieldDefinition['type'] == 'enum') {
-                    if (isset($fieldDefinition['values']) === false) {
-                        throw new InvalidSchemaDefinition('enum-typed field "' . $fieldName . '" of model "' . $modelName . '" has no values defined');
-                    }
-                    $fieldRealName = null;
-                    if (isset($fieldDefinition['name']) === true) {
-                        $fieldRealName = $fieldDefinition['name'];
-                    } else {
-                        $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
-                    }
-                    $statement = Mutation\DeleteEnum::statement($database, $fieldRealName);
-                    if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-                    }
-                    $statement = Mutation\AddEnum::statement($database, $fieldRealName, $fieldDefinition['values']);
-                    if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-                    }
-                }
-            }
-
-            $statement = Mutation\AddTable::statement($database, $tableName, $modelName, $modelDefinition);
-            if ($statement->execute() == false) {
-                throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-            }
-
-            if (isset($modelDefinition['indexes']) === true) {
-                foreach ($modelDefinition['indexes'] as $indexName => $indexDefinition) {
-                    $statement = Mutation\AddIndex::statement($database, $modelName, $tableName, $modelDefinition, $indexName);
-                    if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-                    }
-                }
-            }
-
-            if (isset($modelDefinition['links']) === true) {
-                foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
-                    $foreignTableName = null;
-                    if (isset($definition[$foreignDefinition['model']]['name']) === true) {
-                        $foreignTableName = $definition[$foreignDefinition['model']]['name'];
-                    } else {
-                        $foreignTableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($foreignDefinition['model']);
-                    }
-                    $statement = Mutation\AddForeignKey::statement($database, $definition, $modelName, $tableName, $foreignName, $foreignTableName);
-                    if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-                    }
-                }
-            }
-
-            echo $modelName . ' - Done' . PHP_EOL;
         }
+        foreach ($definition as $modelName => $modelDefinition) {
+            if (isset($modelDefinition['type']) === false || $modelDefinition['type'] === 'model') {
+                $this->buildModel($modelName, $modelDefinition);
+            }
+        }
+    }
+
+    /**
+     * Build an enum.
+     *
+     * @throws DatabaseError           if a SQL query fails
+     * @throws InvalidSchemaDefinition if an enum has no value
+     */
+    private function buildEnum($enumName, array $enumDefinition)
+    {
+        $enumRealName = null
+        if (isset($enumDefinition['name']) === true) {
+            $enumRealName = $enumDefinition['name'];
+        } else {
+            $enumRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($enumName);
+        }
+
+        $statement = Mutation\DeleteEnum::statement($database, $enumRealName);
+        if ($statement->execute() == false) {
+            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+        }
+
+        if (isset($modelDefinition['values']) === false) {
+            throw new InvalidSchemaDefinition('enum "' . $modelName . '" has no value');
+        }
+
+        $values = array();
+        foreach ($modelDefinition['values'] as $valueName => $valueAlias) {
+            $valueRealName = null;
+            if (is_string($valueName) === true) {
+                $valueRealName = $valueName;
+            } else {
+                $valueRealName = Helper::codifyName($enumName) . '_' . Helper::codifyName($valueAlias);
+            }
+            $values[] = $valueRealName;
+        }
+
+        $statement = Mutation\AddEnum::statement($database, $enumRealName, $values);
+        if ($statement->execute() == false) {
+            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+        }
+
+        echo $enumName . ' - Done' . PHP_EOL;
+    }
+
+    /**
+     * Build a model.
+     *
+     * @throws DatabaseError           if a SQL query fails
+     * @throws InvalidSchemaDefinition if a model has no field
+     */
+    private function buildModel($modelName, array $modelDefinition)
+    {
+        $tableName = null;
+        if (isset($modelDefinition['name']) === true) {
+            $tableName = $modelDefinition['name'];
+        } else {
+            $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+        }
+
+        $statement = Mutation\DeleteTable::statement($database, $tableName);
+        if ($statement->execute() == false) {
+            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+        }
+
+        if (isset($modelDefinition['fields']) === false) {
+            throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
+        }
+        $statement = Mutation\AddTable::statement($database, $this->getDefinition(), $this->mapping, $tableName, $modelName, $modelDefinition);
+        if ($statement->execute() == false) {
+            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+        }
+
+        if (isset($modelDefinition['indexes']) === true) {
+            foreach ($modelDefinition['indexes'] as $indexName => $indexDefinition) {
+                $statement = Mutation\AddIndex::statement($database, $modelName, $tableName, $modelDefinition, $indexName);
+                if ($statement->execute() == false) {
+                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                }
+            }
+        }
+
+        if (isset($modelDefinition['links']) === true) {
+            foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
+                $foreignTableName = null;
+                if (isset($definition[$foreignDefinition['model']]['name']) === true) {
+                    $foreignTableName = $definition[$foreignDefinition['model']]['name'];
+                } else {
+                    $foreignTableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($foreignDefinition['model']);
+                }
+                $statement = Mutation\AddForeignKey::statement($database, $definition, $modelName, $tableName, $foreignName, $foreignTableName);
+                if ($statement->execute() == false) {
+                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                }
+            }
+        }
+
+        echo $modelName . ' - Done' . PHP_EOL;
     }
 
     /**
