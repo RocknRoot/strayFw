@@ -71,7 +71,7 @@ class Schema extends ProviderSchema
      */
     private function buildEnum($enumName, array $enumDefinition)
     {
-        $enumRealName = null
+        $enumRealName = null;
         if (isset($enumDefinition['name']) === true) {
             $enumRealName = $enumDefinition['name'];
         } else {
