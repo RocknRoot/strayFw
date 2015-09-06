@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres;
 
+use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
 
 /**
@@ -119,18 +120,17 @@ abstract class Column
             break;
 
         default:
-            if (isset($schema[$fieldName]) === true) {
-                if (isset($schema[$fieldName]['type']) === true) {
-                    if ($schema[$fieldName]['type'] == 'enum') {
-                        $enumRealName = null;
-                        if (isset($schema[$fieldName]['name']) === true) {
-                            $enumRealName = $schema[$fieldName]['name'];
-                        } else {
-                            $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($fieldAlias);
-                        }
-                        $sql .= $enumRealName;
-                        break;
+            $type = $fieldDefinition['type'];
+            if (isset($schema[$type]) === true) {
+                if ($schema[$type]['type'] == 'enum') {
+                    $enumRealName = null;
+                    if (isset($schema[$type]['name']) === true) {
+                        $enumRealName = $schema[$type]['name'];
+                    } else {
+                        $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($type);
                     }
+                    $sql .= $enumRealName;
+                    break;
                 }
             }
             throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type');
