@@ -125,193 +125,277 @@ class Schema extends ProviderSchema
     }
 
     /**
-     * Generate base models.
+     * Generate SQL entities' representing classes.
      *
-     * @throws InvalidSchemaDefinition if a model has no field
-     * @throws InvalidSchemaDefinition if an enum-typed field has no values defined
-     * @throws InvalidSchemaDefinition if a model is linked to an unknown model
-     * @throws InvalidSchemaDefinition if, while building a link, a model has an unknown needed field
-     * @throws FileNotWritable         if base model file can't be opened with write permission
-     * @throws FileNotWritable         if model file can't be opened with write permission
+     * @see generateEnum
+     * @see generateModel
      */
     public function generateModels()
     {
         $definition = $this->getDefinition();
         foreach ($definition as $modelName => $modelDefinition) {
-            $primary = array();
-            $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
-            $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
-            $properties = null;
-            $accessors = null;
-            $allFieldsRealNames = "    public static function getAllFieldsRealNames()\n    {\n        return array(";
-            $allFieldsAliases = "    public static function getAllFieldsAliases()\n    {\n        return array(";
-
-            $modelRealName = null;
-            if (isset($modelDefinition['name']) === true) {
-                $modelRealName = $modelDefinition['name'];
+            $type = 'model';
+            if (isset($modelDefinition['type']) === true && in_array($modelDefinition['type'], [ 'enum', 'model' ]) === true) {
+                $type = $modelDefinition['type'];
+            }
+            if ($type == 'enum') {
+                $this->generateEnum($modelName, $modelDefinition);
             } else {
-                $modelRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+                $this->generateModel($modelName, $modelDefinition);
             }
+        }
+    }
 
-            if (isset($modelDefinition['fields']) === false) {
-                throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
-            }
-            foreach ($modelDefinition['fields'] as $fieldName => $fieldDefinition) {
-                $fieldRealName = null;
-                if (isset($fieldDefinition['name']) === true) {
-                    $fieldRealName = $fieldDefinition['name'];
-                } else {
-                    $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
-                }
+    /**
+     * Generate classes for a enum.
+     *
+     * @param string $enumName enum alias
+     * @param array $enumDefinition enum definition from a schema file
+     * @throws InvalidSchemaDefinition if an enum has no values defined
+     * @throws FileNotWritable         if a base file can't be opened with write permission
+     * @throws FileNotWritable         if a user file can't be opened with write permission
+     */
+    private function generateEnum($enumName, array $enumDefinition)
+    {
+        $definition = $this->getDefinition();
+        $consts = null;
 
-                $properties .= '    protected $field' .  ucfirst($fieldName) . ";\n";
-                $properties .= '    const FIELD_' . strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
-                if ($fieldDefinition['type'] == 'enum') {
-                    if (isset($fieldDefinition['values']) === false) {
-                        throw new InvalidSchemaDefinition('enum-typed field "' . $fieldName . '" of model "' . $modelName . '" has no values defined');
-                    }
-                    foreach ($fieldDefinition['values'] as $value) {
-                        $properties .= '    const ' . strtoupper(Helper::codifyName($fieldName)) . '_' . strtoupper(Helper::codifyName($value)) . ' = \'' . $value . "';\n";
-                    }
-                }
-                $properties .= PHP_EOL;
+        $enumRealName = null;
+        if (isset($enumDefinition['name']) === true) {
+            $enumRealName = $enumDefinition['name'];
+        } else {
+            $enumRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($enumName);
+        }
 
-                $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
-                $constructorDefaults .= '        if (empty($fetch[\'' . $fieldRealName . "']) === false) {\n            ";
-                $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
-                $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
-                if (isset($fieldDefinition['default']) === true) {
-                    if(is_bool($fieldDefinition['default']) === true) {
-                        $constructorDefaults .= ($fieldDefinition['default'] === true) ? 'true' : 'false';
-                    } else {
-                        $constructorDefaults .= '\'' . $fieldDefinition['default'] . '\'';
-                    }
-                } else {
-                    $constructorDefaults .= 'null';
-                }
-                $constructorDefaults .= ");\n        }\n";
-
-                if (isset($fieldDefinition['primary']) === true && $fieldDefinition['primary'] === true) {
-                    $primary[] = $fieldName;
-                }
-
-                $accessors .= '    public function get' . ucfirst($fieldName) . "()\n    {\n        ";
-                switch ($fieldDefinition['type']) {
-                    case 'string':
-                        $accessors .= 'return stripslashes($this->field' . ucfirst($fieldName) . '[\'value\']);';
-                        break;
-                    case 'char':
-                        $accessors .= 'return stripslashes($this->field' . ucfirst($fieldName) . '[\'value\']);';
-                        break;
-                    case 'bool':
-                        $accessors .= 'return filter_var($this->field' . ucfirst($fieldName) . '[\'value\'], FILTER_VALIDATE_BOOLEAN);';
-                        break;
-                    case 'json':
-                        $accessors .= 'return json_decode($this->field' . ucfirst($fieldName) . '[\'value\'], true);';
-                        break;
-                    default:
-                        $accessors .= 'return $this->field' . ucfirst($fieldName) . '[\'value\'];';
-                        break;
-                }
-                $accessors .= "\n    }\n\n";
-
-                $accessors .= '    public function set' . ucfirst($fieldName) . '($value)' . "\n    {\n        ";
-                switch ($fieldDefinition['type']) {
-                case 'enum':
-                    $accessors .= 'if (in_array($value, array(\'' . implode('\', \'', $fieldDefinition['values']) . '\')) === false) {' . "\n            return false;\n        }";
-                    $accessors .= '        $this->field' . ucfirst($fieldName) . '[\'value\'] = $value;';
-                    break;
-                case 'bool':
-                    $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = (bool) $value;';
-                    break;
-                case 'json':
-                    $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
-                    $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = $value;' . PHP_EOL;
-                    $accessors .= '        } else {' . PHP_EOL;
-                    $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = json_encode($value);' . PHP_EOL;
-                    $accessors .= '        }' . PHP_EOL;
-                    break;
-                default:
-                    $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = $value;';
-                    break;
-                }
-                $accessors .= PHP_EOL . '        $this->modified[\'' . $fieldName . '\'] = true;';
-                $accessors .= "\n        return true;\n    }\n\n";
-
-                $allFieldsRealNames .= '\'' . $modelRealName . '.' . $fieldRealName . '\', ';
-                $allFieldsAliases .= '\'' . $fieldName . '\', ';
-            }
-
-            if (isset($modelDefinition['links']) === true) {
-                foreach ($modelDefinition['links'] as $linkName => $linkDefinition) {
-                    if (isset($definition[$linkDefinition['model']]) === false) {
-                        throw new InvalidSchemaDefinition('unknown model for link "' . $linkName . '" of model "' . $modelName . '"');
-                    }
-                    $linkedModel = $definition[$linkDefinition['model']];
-                    $accessors .= '    public function getLinked' . ucfirst($linkName) . "()\n    {\n        ";
-                    $accessors .= 'return Models\\' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
-                    $links = array();
-                    foreach ($linkDefinition['fields'] as $from => $to) {
-                        if (isset($modelDefinition['fields'][$from]) === false) {
-                            throw new InvalidSchemaDefinition('building link : model "' . $modelName . '" has no field named "' . $from . '"');
-                        }
-                        if (isset($linkedModel['fields']) === false || isset($linkedModel['fields'][$to]) === false) {
-                            throw new InvalidSchemaDefinition('building link : model "' . $linkDefinition['model'] . '" has no field named "' . $to . '"');
-                        }
-                        $links[] = '\'' . $to . '\' => $this->get' . ucfirst($from) . '()';
-                    }
-                    $accessors .= implode(', ', $links) . " ]);\n    }\n\n";
-                }
-            }
-
-            $allFieldsRealNames = substr($allFieldsRealNames, 0, -2) . ");\n    }\n\n";
-            $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n\n";
-            $constructor .= $constructorDefaults;
-            $constructor .= PHP_EOL . '        $this->modified = array();' . PHP_EOL;
-            $constructor .= "    }\n\n";
-
-            $mapping = Mapping::get($this->mapping);
-
-            $path = null;
-            if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-                $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (isset($enumDefinition['values']) === false) {
+            throw new InvalidSchemaDefinition('enum "' . $enumName . '" has no value');
+        }
+        foreach ($enumDefinition['values'] as $valueName => $valueAlias) {
+            $valueRealName = null;
+            if (is_string($valueName) === true) {
+                $valueRealName = $valueName;
             } else {
-                $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                $valueRealName = Helper::codifyName($enumName) . '_' . Helper::codifyName($valueAlias);
             }
-            $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($modelName) . '.php';
+            $consts .= '    const VALUE_' . strtoupper(Helper::codifyName($valueAlias)) . ' = \'' . $enumRealName . '.' . $valueRealName . "';\n";
+        }
+
+        $mapping = Mapping::get($this->mapping);
+
+        $path = null;
+        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
+            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        } else {
+            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        }
+        $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
+        $file = fopen($path, 'w+');
+        if ($file === false) {
+            throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
+        }
+        $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
+        $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
+        $content .= "\nclass " . ucfirst($enumName) . " extends Enum\n{\n";
+        $content .= '    const NAME = \'' . $enumRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
+        $content .= $consts . "\n}";
+        if (fwrite($file, $content) === false) {
+            throw new FileNotWritable('can\'t write in "' . $path . '"');
+        }
+        fclose($file);
+
+        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
+            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        } else {
+            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        }
+        $path .= ucfirst($enumName) . '.php';
+        if (file_exists($path) === false) {
             $file = fopen($path, 'w+');
             if ($file === false) {
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
-            $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
-            $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
-            $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
-            $content .= $properties . $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
-            $content .= "    public static function getPrimary()\n    {\n        return array('" . implode('\', \'', $primary) . "');\n    }\n";
-            $content .= "}";
+            $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($enumName) . " as BaseEnum;\n\nclass " . ucfirst($enumName) . " extends BaseEnum\n{\n}";
             if (fwrite($file, $content) === false) {
                 throw new FileNotWritable('can\'t write in "' . $path . '"');
             }
-            fclose($file);
-
-            if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-                $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-            } else {
-                $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-            }
-            $path .= ucfirst($modelName) . '.php';
-            if (file_exists($path) === false) {
-                $file = fopen($path, 'w+');
-                if ($file === false) {
-                    throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
-                }
-                $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
-                if (fwrite($file, $content) === false) {
-                    throw new FileNotWritable('can\'t write in "' . $path . '"');
-                }
-            }
-
-            echo $modelName . ' - Done' . PHP_EOL;
         }
+
+        echo $enumName . ' - Done' . PHP_EOL;
+    }
+
+    /**
+     * Generate classes for a model.
+     *
+     * @param string $modelName model alias
+     * @param array $modelDefinition model definition from a schema file
+     * @throws InvalidSchemaDefinition if a model has no field
+     * @throws InvalidSchemaDefinition if a model is linked to an unknown enum
+     * @throws InvalidSchemaDefinition if a model is linked to an unknown model
+     * @throws InvalidSchemaDefinition if, while building a link, a model has an unknown needed field
+     * @throws FileNotWritable         if a base file can't be opened with write permission
+     * @throws FileNotWritable         if a user file can't be opened with write permission
+     */
+    private function generateModel($modelName, array $modelDefinition)
+    {
+        $definition = $this->getDefinition();
+        $primary = array();
+        $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
+        $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
+        $consts = null;
+        $properties = null;
+        $accessors = null;
+        $allFieldsRealNames = "    public static function getAllFieldsRealNames()\n    {\n        return array(";
+        $allFieldsAliases = "    public static function getAllFieldsAliases()\n    {\n        return array(";
+
+        $modelRealName = null;
+        if (isset($modelDefinition['name']) === true) {
+            $modelRealName = $modelDefinition['name'];
+        } else {
+            $modelRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+        }
+
+        if (isset($modelDefinition['fields']) === false) {
+            throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
+        }
+        foreach ($modelDefinition['fields'] as $fieldName => $fieldDefinition) {
+            $fieldRealName = null;
+            if (isset($fieldDefinition['name']) === true) {
+                $fieldRealName = $fieldDefinition['name'];
+            } else {
+                $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
+            }
+
+            $properties .= '    protected $field' .  ucfirst($fieldName) . ";\n";
+            $consts .= '    const FIELD_' . strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
+
+            $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
+            $constructorDefaults .= '        if (empty($fetch[\'' . $fieldRealName . "']) === false) {\n            ";
+            $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
+            $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
+            if (isset($fieldDefinition['default']) === true) {
+                if(is_bool($fieldDefinition['default']) === true) {
+                    $constructorDefaults .= ($fieldDefinition['default'] === true) ? 'true' : 'false';
+                } else {
+                    $constructorDefaults .= '\'' . $fieldDefinition['default'] . '\'';
+                }
+            } else {
+                $constructorDefaults .= 'null';
+            }
+            $constructorDefaults .= ");\n        }\n";
+
+            if (isset($fieldDefinition['primary']) === true && $fieldDefinition['primary'] === true) {
+                $primary[] = $fieldName;
+            }
+
+            $accessors .= '    public function get' . ucfirst($fieldName) . "()\n    {\n        ";
+            switch ($fieldDefinition['type']) {
+                case 'string':
+                    $accessors .= 'return stripslashes($this->field' . ucfirst($fieldName) . '[\'value\']);';
+                    break;
+                case 'char':
+                    $accessors .= 'return stripslashes($this->field' . ucfirst($fieldName) . '[\'value\']);';
+                    break;
+                case 'bool':
+                    $accessors .= 'return filter_var($this->field' . ucfirst($fieldName) . '[\'value\'], FILTER_VALIDATE_BOOLEAN);';
+                    break;
+                case 'json':
+                    $accessors .= 'return json_decode($this->field' . ucfirst($fieldName) . '[\'value\'], true);';
+                    break;
+                default:
+                    $accessors .= 'return $this->field' . ucfirst($fieldName) . '[\'value\'];';
+                    break;
+            }
+            $accessors .= "\n    }\n\n";
+
+            $accessors .= '    public function set' . ucfirst($fieldName) . '($value)' . "\n    {\n        ";
+            if ($fieldDefinition['type'] == 'bool') {
+                $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = (bool) $value;';
+            } else if ($fieldDefinition['type'] == 'json') {
+                $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
+                $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = $value;' . PHP_EOL;
+                $accessors .= '        } else {' . PHP_EOL;
+                $accessors .= '            $this->field' . ucfirst($fieldName) . '[\'value\'] = json_encode($value);' . PHP_EOL;
+                $accessors .= '        }' . PHP_EOL;
+            } else {
+                $accessors .= '$this->field' . ucfirst($fieldName) . '[\'value\'] = $value;';
+            }
+            $accessors .= PHP_EOL . '        $this->modified[\'' . $fieldName . '\'] = true;';
+            $accessors .= "\n        return true;\n    }\n\n";
+
+            $allFieldsRealNames .= '\'' . $modelRealName . '.' . $fieldRealName . '\', ';
+            $allFieldsAliases .= '\'' . $fieldName . '\', ';
+        }
+
+        if (isset($modelDefinition['links']) === true) {
+            foreach ($modelDefinition['links'] as $linkName => $linkDefinition) {
+                if (isset($definition[$linkDefinition['model']]) === false) {
+                    throw new InvalidSchemaDefinition('unknown model for link "' . $linkName . '" of model "' . $modelName . '"');
+                }
+                $linkedModel = $definition[$linkDefinition['model']];
+                $accessors .= '    public function getLinked' . ucfirst($linkName) . "()\n    {\n        ";
+                $accessors .= 'return Models\\' . ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
+                $links = array();
+                foreach ($linkDefinition['fields'] as $from => $to) {
+                    if (isset($modelDefinition['fields'][$from]) === false) {
+                        throw new InvalidSchemaDefinition('building link : model "' . $modelName . '" has no field named "' . $from . '"');
+                    }
+                    if (isset($linkedModel['fields']) === false || isset($linkedModel['fields'][$to]) === false) {
+                        throw new InvalidSchemaDefinition('building link : model "' . $linkDefinition['model'] . '" has no field named "' . $to . '"');
+                    }
+                    $links[] = '\'' . $to . '\' => $this->get' . ucfirst($from) . '()';
+                }
+                $accessors .= implode(', ', $links) . " ]);\n    }\n\n";
+            }
+        }
+
+        $allFieldsRealNames = substr($allFieldsRealNames, 0, -2) . ");\n    }\n\n";
+        $allFieldsAliases = substr($allFieldsAliases, 0, -2) . ");\n    }\n\n";
+        $constructor .= $constructorDefaults;
+        $constructor .= PHP_EOL . '        $this->modified = array();' . PHP_EOL;
+        $constructor .= "    }\n\n";
+
+        $mapping = Mapping::get($this->mapping);
+
+        $path = null;
+        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
+            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        } else {
+            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        }
+        $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($modelName) . '.php';
+        $file = fopen($path, 'w+');
+        if ($file === false) {
+            throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
+        }
+        $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
+        $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
+        $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
+        $content .= PHP_EOL . $consts . PHP_EOL . $properties . PHP_EOL;
+        $content .= $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
+        $content .= "    public static function getPrimary()\n    {\n        return array('" . implode('\', \'', $primary) . "');\n    }\n";
+        $content .= "}";
+        if (fwrite($file, $content) === false) {
+            throw new FileNotWritable('can\'t write in "' . $path . '"');
+        }
+        fclose($file);
+
+        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
+            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        } else {
+            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        }
+        $path .= ucfirst($modelName) . '.php';
+        if (file_exists($path) === false) {
+            $file = fopen($path, 'w+');
+            if ($file === false) {
+                throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
+            }
+            $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
+            if (fwrite($file, $content) === false) {
+                throw new FileNotWritable('can\'t write in "' . $path . '"');
+            }
+        }
+
+        echo $modelName . ' - Done' . PHP_EOL;
     }
 }

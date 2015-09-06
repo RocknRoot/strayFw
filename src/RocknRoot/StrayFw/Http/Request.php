@@ -109,6 +109,9 @@ class Request
      */
     protected function parseRoutesFile(array $routes, array $file)
     {
+        if (isset($routes['routes']) === false || count($routes['routes']) == 0) {
+            throw new InvalidRouteDefinition('"' . $file['file'] . '" has no routes');
+        }
         foreach ($routes['routes'] as $routeName => $routeInfo) {
             if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
                 throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']

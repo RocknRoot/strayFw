@@ -5,7 +5,7 @@
 The strayFw is a PHP framework trying to be modern without following fashion.
 
 * Homepage : ???
-* Version : beta - 0.4.3-Marius
+* Version : beta - 0.4.4-Marius
 
 This repository is the package one. If you want to start a new project, you need to download that one: https://github.com/RocknRoot/strayFw-Skeleton
 
@@ -34,3 +34,8 @@ Or add an issue on github ! ;)
     * [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md 'PSR-2')
     * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3')
     * [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md 'PSR-4')
+
+## Coding standards
+
+    $ curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
+    $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw
