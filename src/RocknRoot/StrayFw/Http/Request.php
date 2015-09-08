@@ -249,18 +249,4 @@ class Request
 
         return $default;
     }
-
-    /**
-     * For this request instance.
-     *
-     * @param  array   $args new request arguments
-     * @return Request new request instance
-     */
-    public function fork(array $args)
-    {
-        $request = clone $this;
-        $request->args = $args;
-
-        return $request;
-    }
 }
