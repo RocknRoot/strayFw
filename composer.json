@@ -20,7 +20,7 @@
         "twig/twig": "~1.21"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "RocknRoot\\StrayFw": "src"
         }
     }
