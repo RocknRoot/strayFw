@@ -76,9 +76,24 @@ abstract class Http
             try {
                 ob_start();
                 $object = new $class();
-                $render = $object->$action(self::$request);
-                if (!($render instanceof RenderInterface)) {
-                    throw new NotARender('"' . $class . '.' . $action . '" returned a non RenderInterface implementing object');
+                $render = null;
+                if (method_exists($object, 'before') === true) {
+                    $res = $object->before(self::$request);
+                    if ($res instanceof RenderInterface) {
+                        $render = $res;
+                    }
+                }
+                if ($render === null) {
+                    $render = $object->$action(self::$request);
+                    if (!($render instanceof RenderInterface)) {
+                        throw new NotARender('"' . $class . '.' . $action . '" returned a non RenderInterface implementing object');
+                    }
+                    if (method_exists($object, 'after') === true) {
+                        $res = $object->after(self::$request, $render);
+                        if ($res instanceof RenderInterface) {
+                            $render = $res;
+                        }
+                    }
                 }
                 echo $render->render();
                 ob_end_flush();
