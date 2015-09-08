@@ -26,7 +26,9 @@ Read the fraktastic manual !
 
 Or add an issue on github ! ;)
 
-## Technical considerations
+## Contribute
+
+### Technical considerations
 
 * The framework follows these standards :
     * [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md 'PSR-0')
@@ -35,7 +37,7 @@ Or add an issue on github ! ;)
     * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3')
     * [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md 'PSR-4')
 
-## Coding standards
+### Coding standards
 
     $ curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
     $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw --level=psr2 --fixers=extra_empty_lines,remove_lines_between_uses,return,single_array_no_trailing_comma,spaces_before_semicolon,spaces_cast,unused_use,whitespacy_lines,concat_with_spaces,ordered_use
