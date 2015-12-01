@@ -82,6 +82,18 @@ abstract class Column
             }
             break;
 
+        case 'numeric':
+        case 'decimal':
+            $sql .= 'NUMERIC';
+            if (isset($fieldDefinition['precision']) === true) {
+                $sql .= '(' . $fieldDefinition['precision'];
+                if (isset($fieldDefinition['scale']) === true) {
+                    $sql .= ', ' . $fieldDefinition['scale'];
+                }
+                $sql .= ')';
+            }
+            break;
+
         case 'timestamp':
             $sql .= 'TIMESTAMP';
             if (isset($fieldDefinition['default']) === true) {
