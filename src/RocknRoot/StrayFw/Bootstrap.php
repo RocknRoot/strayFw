@@ -128,24 +128,6 @@ abstract class Bootstrap
     }
 
     /**
-     * Add a namespace to the recognized ones.
-     * Use this for files in the _vendor_ directory.
-     *
-     * @static
-     * @param string $namespace new namespace
-     * @param string $path      custom files path if needed
-     */
-    public static function registerLib($namespace, $path = null)
-    {
-        $namespace = rtrim($namespace, '\\');
-        if ($path == null) {
-            $path = STRAY_PATH_VENDOR . str_replace('_', DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
-        }
-        self::$namespaces[$namespace] = $path;
-    }
-
-    /**
      * Launch the logic stuff. Bootstrap need to be initialized beforehand.
      *
      * @throws BadUse if bootstrap isn't initialized
