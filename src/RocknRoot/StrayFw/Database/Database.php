@@ -80,7 +80,10 @@ class Database
         if (isset($config['provider']) === false) {
             throw new BadUse('database "' . $alias . '" parameters in settings.yml miss provider');
         }
-        $this->providerNamespace = __NAMESPACE__ . '\\' . $config['provider'];
+        $this->providerNamespace = $config['provider'];
+        if ($this->providerNamespace[0] != '\\') {
+            $this->providerNamespace = __NAMESPACE__ . '\\' . $this->providerNamespace;
+        }
         $database = $this->providerNamespace . '\\Database';
         $this->providerDatabase = new $database();
         if (isset($config['name']) === true) {
