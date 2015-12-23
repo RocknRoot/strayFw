@@ -56,6 +56,8 @@ class Request
      */
     public function __construct(array $routes)
     {
+        $this->before = array();
+        $this->after = array();
         global $argv;
         $cli = $argv;
         array_shift($cli);

@@ -27,6 +27,13 @@ abstract class Console
     protected static $namespace;
 
     /**
+     * Registed routes.
+     *
+     * @var array[]
+     */
+    protected static $routes;
+
+    /**
      * Current request.
      *
      * @var Request
@@ -34,11 +41,11 @@ abstract class Console
     protected static $request;
 
     /**
-     * Registed routes.
+     * Current controllers.
      *
-     * @var array[]
+     * @var object[]
      */
-    protected static $routes;
+    protected static $controllers;
 
     /**
      * Initialize inner states according.
@@ -62,11 +69,32 @@ abstract class Console
     {
         if (self::$isInit === true) {
             self::$request = new Request(self::$routes);
-            $class = self::$request->getClass();
-            $action = self::$request->getAction() . 'Action';
-            $object = new $class();
-            $object->$action(self::$request);
+            self::$controllers = array();
+            $before = self::$request->getBefore();
+            foreach ($before as $b) {
+                runAction($b['class'], $b['action']);
+            }
+            runAction(self::$request->getClass(), self::$request->getAction());
+            $after = self::$request->getAfter();
+            foreach ($after as $a) {
+                runAction($a['class'], $b['action']);
+            }
         }
+    }
+
+    /**
+     * Launch one action after ensuring controller exists.
+     *
+     * @static
+     * @param  string           $class class name
+     * @param  string           $action action name
+     */
+    private static function runAction($class, $action)
+    {
+        if (isset(self::$controllers[$class]) === false) {
+            self::$controllers[$class] = new $class();
+        }
+        self::$controllers[$class]->$action(self::$request);
     }
 
     /**
