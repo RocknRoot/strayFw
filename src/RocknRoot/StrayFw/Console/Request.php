@@ -13,27 +13,6 @@ use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
 class Request
 {
     /**
-     * Get current route base dir path.
-     *
-     * @param string
-     */
-    protected $dir;
-
-    /**
-     * Current route file name.
-     *
-     * @param string
-     */
-    protected $file;
-
-    /**
-     * Current route name.
-     *
-     * @param string
-     */
-    protected $route;
-
-    /**
      * Route class name.
      *
      * @param string
@@ -55,47 +34,73 @@ class Request
     protected $args;
 
     /**
+     * Matching before hooks.
+     *
+     * @param string[]
+     */
+    protected $before;
+
+    /**
+     * Matching after hooks.
+     *
+     * @param string[]
+     */
+    protected $after;
+
+
+    /**
      * Parse executed command and choose a route.
      *
      * @throws InvalidRouteDefinition if a route has an invalid definition
-     * @param  array[]                $routeFiles registered route files
+     * @param  array[]                $routes registered routes
      */
-    public function __construct(array $routeFiles)
+    public function __construct(array $routes)
     {
         global $argv;
         $cli = $argv;
         array_shift($cli);
         if (count($cli) > 0) {
-            foreach ($routeFiles as $file) {
-                $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-                foreach ($routes['routes'] as $routeName => $routeInfo) {
-                    if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
-                        throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file'] . '" has invalid definition');
-                    }
-                    if ($cli[0] == $routeInfo['path']) {
-                        $this->dir = rtrim($file['dir'], DIRECTORY_SEPARATOR);
-                        $this->file = DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR);
-                        $this->route = $routeName;
-                        list($this->class, $this->action) = explode('.', $routeInfo['action']);
-                        if (isset($routes['namespace']) === true) {
-                            $this->class = rtrim($routes['namespace'], '\\') . '\\' . ltrim($this->class, '\\');
-                        }
-                        array_shift($cli);
-                        $this->args = $cli;
-                        if (is_array($this->args) === false) {
-                            $this->args = array();
-                        }
-                    }
-                    if ($this->route != null) {
-                        break;
-                    }
+            $cmd = ltrim(rtrim($cli[0], '/'), '/');
+            foreach ($routes as $route) {
+                if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
+                    throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file'] . '" has invalid definition');
                 }
-                if ($this->route != null) {
-                    break;
+                if ($route['type'] == 'before') {
+                    if (stripos($cmd, $route['path']) === 0) {
+                        list($class, $action) = explode('.', $route['action']);
+                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $class = rtrim($route['namespace'], '\\') . '\\' . $class);
+                        }
+                        $this->before[] = array(
+                            'class' => $class,
+                            'action' => $action
+                        );
+                    }
+                } else if ($route['type'] == 'after') {
+                    if (stripos($cmd, $route['path']) === 0) {
+                        list($class, $action) = explode('.', $route['action']);
+                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                        }
+                        $this->after[] = array(
+                            'class' => $class,
+                            'action' => $action
+                        );
+                    }
+                } else if ($this->class == null && $cmd == $route['path']) {
+                    list($this->class, $this->action) = explode('.', $route['action']);
+                    if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                        $this->class = rtrim($route['namespace'], '\\') . '\\' . $class);
+                    }
+                    array_shift($cli);
+                    $this->args = $cli;
+                    if (is_array($this->args) === false) {
+                        $this->args = array();
+                    }
                 }
             }
         }
-        if ($this->route == null) {
+        if ($this->class == null) {
             $this->fillWithDefaultRoute();
         }
     }
@@ -105,42 +110,9 @@ class Request
      */
     private function fillWithDefaultRoute()
     {
-        $this->dir = __DIR__;
-        $this->file = DIRECTORY_SEPARATOR . 'console.yml';
-        $this->route = 'console_help';
         $this->class = 'RocknRoot\\StrayFw\\Console\\Controller';
         $this->action = 'help';
         $this->args = array();
-    }
-
-    /**
-     * Get current route base dir path.
-     *
-     * @return string
-     */
-    public function getDir()
-    {
-        return $this->dir;
-    }
-
-    /**
-     * Get current route file name.
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Get current route name.
-     *
-     * @return string
-     */
-    public function getRoute()
-    {
-        return $this->route;
     }
 
     /**
@@ -171,5 +143,25 @@ class Request
     public function getArgs()
     {
         return $this->args;
+    }
+
+    /**
+     * Matching before hooks.
+     *
+     * @param string[]
+     */
+    public function getBefore()
+    {
+        return $this->before;
+    }
+
+    /**
+     * Matching after hooks.
+     *
+     * @param string[]
+     */
+    public function getAfter()
+    {
+        return $this->after;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace RocknRoot\StrayFw\Console;
 
-use RocknRoot\StrayFw\Exception\InvalidDirectory;
-
 /**
  * Bootstrapping class for CLI requests.
  *
@@ -20,6 +18,13 @@ abstract class Console
      * @var bool
      */
     private static $isInit = false;
+
+    /**
+     * Current namespace prefix.
+     *
+     * @var string
+     */
+    protected static $namespace;
 
     /**
      * Current request.
@@ -65,22 +70,81 @@ abstract class Console
     }
 
     /**
-     * Add routes to be considered.
+     * Set namespace prefix for incoming routes.
      *
      * @static
-     * @throws InvalidDirectory if directory can't be identified
-     * @param  string           $dir  application root directory
-     * @param  string           $file routes file name
+     * @param  string           $namespace namespace prefix
      */
-    public static function registerRoutes($dir, $file)
+    public static function namespacePrefix($namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * Add route to be considered.
+     *
+     * @static
+     * @param  string           $path   route path
+     * @param  string           $usage  how to use it, for help screen
+     * @param  string           $help   route description, for help screen
+     * @param  string           $action class and method to call
+     */
+    public static function route($path, $usage, $help, $action)
     {
         if (self::$isInit === true) {
-            if (is_dir($dir) === false) {
-                throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-            }
             self::$routes[] = array(
-                'dir' => $dir,
-                'file' => $file
+                'type' => 'route',
+                'path' => $path,
+                'usage' => $usage,
+                'help' => $help,
+                'action' => $action,
+                'namespace' => $this->namespace
+            );
+        }
+    }
+
+    /**
+     * Add before hook to be considered.
+     *
+     * @static
+     * @param  string           $path   route path
+     * @param  string           $usage  how to use it, for help screen
+     * @param  string           $help   route description, for help screen
+     * @param  string           $action class and method to call
+     */
+    public static function before($path, $usage, $help, $action)
+    {
+        if (self::$isInit === true) {
+            self::$routes[] = array(
+                'type' => 'before',
+                'path' => $path,
+                'usage' => $usage,
+                'help' => $help,
+                'action' => $action,
+                'namespace' => $this->namespace
+            );
+        }
+    }
+
+    /**
+     * Add after hook to be considered.
+     *
+     * @static
+     * @param  string           $path   route path
+     * @param  string           $usage  how to use it, for help screen
+     * @param  string           $help   route description, for help screen
+     * @param  string           $action class and method to call
+     */
+    public static function after($path, $usage, $help, $action)
+    {
+        if (self::$isInit === true) {
+            self::$routes[] = array(
+                'type' => 'after',
+                'path' => $path,
+                'usage' => $usage,
+                'help' => $help,
+                'action' => $action,
+                'namespace' => $this->namespace
             );
         }
     }
