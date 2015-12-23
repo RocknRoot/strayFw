@@ -79,7 +79,6 @@ class Schema extends ProviderSchema
                 if ($statement->execute() == false) {
                     throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
                 }
-
             }
         }
 
