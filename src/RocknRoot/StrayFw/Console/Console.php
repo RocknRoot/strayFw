@@ -75,7 +75,7 @@ abstract class Console
      * @static
      * @param  string           $namespace namespace prefix
      */
-    public static function namespacePrefix($namespace)
+    public static function prefix($namespace)
     {
         self::$namespace = $namespace;
     }

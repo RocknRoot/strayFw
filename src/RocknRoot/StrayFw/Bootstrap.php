@@ -55,13 +55,12 @@ abstract class Bootstrap
             self::$isInit = true;
             if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
                 Console::init();
-                Console::namespacePrefix('\\RocknRoot\\StrayFw\\Console');
+                Console::prefix('\\RocknRoot\\StrayFw\\Console');
                 Console::route('help', 'help', 'this screen', 'Controller.help');
-                Console::namespacePrefix('\\RocknRoot\\StrayFw\\Database');
+                Console::prefix('\\RocknRoot\\StrayFw\\Database');
                 Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
                 Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.list');
                 Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
-                Console::registerRoutes(__DIR__ . DIRECTORY_SEPARATOR . 'Console', 'console.yml');
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 if (STRAY_ENV === 'development') {
                     Debug\Bar::init();
