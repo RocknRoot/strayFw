@@ -77,7 +77,7 @@ abstract class Console
      */
     public static function namespacePrefix($namespace)
     {
-        $this->namespace = $namespace;
+        self::$namespace = $namespace;
     }
 
     /**
