@@ -76,8 +76,8 @@ abstract class Cookie
     public static function clear()
     {
         $keys = array_keys($_COOKIE);
-        for ($i = 0; $i < count($keys); $i++) {
-            setcookie($keys[$i], null, time() - 1);
+        foreach ($keys as $key) {
+            setcookie($key, null, time() - 1);
         }
     }
 }
