@@ -198,7 +198,7 @@ abstract class Http
                 'action' => $action,
                 'namespace' => self::$namespace,
                 'subdomain' => self::$subdomain,
-                'url' => self::$url
+                'uri' => self::$uri
             );
         }
     }
@@ -221,7 +221,7 @@ abstract class Http
                 'action' => $action,
                 'namespace' => self::$namespace,
                 'subdomain' => self::$subdomain,
-                'url' => self::$url
+                'uri' => self::$uri
             );
         }
     }
