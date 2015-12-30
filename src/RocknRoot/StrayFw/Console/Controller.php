@@ -18,18 +18,14 @@ class Controller
      */
     public function help(Request $request)
     {
-        $files = Console::getRoutes();
+        $routes = Console::getRoutes();
         echo 'strayFw console help screen' . PHP_EOL . 'Available actions :' . PHP_EOL . PHP_EOL;
-        foreach ($files as $file) {
-            $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-            foreach ($routes['routes'] as $route) {
-                echo $route['usage'] . PHP_EOL;
-                if (isset($route['help']) != null) {
-                    echo '    ' . $route['help'];
-                }
-                echo PHP_EOL . PHP_EOL;
+        foreach ($routes as $route) {
+            echo $route['usage'] . PHP_EOL;
+            if (isset($route['help']) != null) {
+                echo '    ' . $route['help'];
             }
-            echo PHP_EOL;
+            echo PHP_EOL . PHP_EOL;
         }
     }
 }

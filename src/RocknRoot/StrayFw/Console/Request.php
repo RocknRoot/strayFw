@@ -91,7 +91,7 @@ class Request
                     if ($cmd == $route['path']) {
                         list($this->class, $this->action) = explode('.', $route['action']);
                         if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
                         }
                         array_shift($cli);
                         $this->args = $cli;

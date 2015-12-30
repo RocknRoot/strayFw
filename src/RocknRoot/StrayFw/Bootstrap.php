@@ -59,7 +59,7 @@ abstract class Bootstrap
                 Console::route('help', 'help', 'this screen', 'Controller.help');
                 Console::prefix('\\RocknRoot\\StrayFw\\Database');
                 Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
-                Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.list');
+                Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.mappings');
                 Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 if (STRAY_ENV === 'development') {

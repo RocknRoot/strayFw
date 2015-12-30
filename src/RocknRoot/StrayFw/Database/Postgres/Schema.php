@@ -248,7 +248,7 @@ class Schema extends ProviderSchema
 
         $mapping = Mapping::get($this->mapping);
 
-        $path = $mapping['config']['models']['path'];
+        $path = rtrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
         $file = fopen($path, 'w+');
         if ($file === false) {
@@ -264,7 +264,7 @@ class Schema extends ProviderSchema
         }
         fclose($file);
 
-        $path = $mapping['config']['models']['path'];
+        $path = rtrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= ucfirst($enumName) . '.php';
         if (file_exists($path) === false) {
             $file = fopen($path, 'w+');
@@ -413,7 +413,7 @@ class Schema extends ProviderSchema
 
         $mapping = Mapping::get($this->mapping);
 
-        $path = $mapping['config']['models']['path'];
+        $path = rtrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($modelName) . '.php';
         $file = fopen($path, 'w+');
         if ($file === false) {
@@ -431,14 +431,14 @@ class Schema extends ProviderSchema
         }
         fclose($file);
 
-        $path = $mapping['config']['models']['path'];
+        $path = rtrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= ucfirst($modelName) . '.php';
         if (file_exists($path) === false) {
             $file = fopen($path, 'w+');
             if ($file === false) {
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
-            $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
+            $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
             if (fwrite($file, $content) === false) {
                 throw new FileNotWritable('can\'t write in "' . $path . '"');
             }

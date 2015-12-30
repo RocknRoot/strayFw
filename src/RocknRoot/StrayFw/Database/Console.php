@@ -36,7 +36,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function list(Request $request)
+    public function mappings(Request $request)
     {
         $mappings = Mapping::getMappings();
         echo 'mapping - database - models path' . PHP_EOL;

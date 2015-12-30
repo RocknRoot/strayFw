@@ -33,30 +33,19 @@ abstract class Schema
     /**
      * Construct a new schema representation class.
      *
-     * @throws InvalidDirectory if directory $dir can't be indentified
      * @throws InvalidDirectory if directory $modelsDir can't be indentified
-     * @throws InvalidDirectory if directory $modelsBaseDir can't be indentified
-     * @throws InvalidDirectory if directory Base in $modelsBaseDir can't be indentified
-     * @throws FileNotReadable  if file $configFile is not readable
+     * @throws InvalidDirectory if directory Base in $modelsDir can't be indentified
+     * @throws FileNotReadable  if schema file is not readable
      * @param  string           $mapping mapping name
      */
     public function __construct($mapping)
     {
         $this->mapping = $mapping;
         $data = Mapping::get($mapping);
-        $dir = rtrim($data['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $file = ltrim($data['config']['schema'], DIRECTORY_SEPARATOR);
-        $modelsDir = null;
-        if ($data['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-            $modelsDir = rtrim($data['config']['models']['path'], DIRECTORY_SEPARATOR);
-        } else {
-            $modelsDir = $dir . rtrim($data['config']['models']['path'], DIRECTORY_SEPARATOR);
-        }
-        if (is_dir($dir) === false) {
-            throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-        }
-        if (is_readable($dir . $file) === false) {
-            throw new FileNotReadable('file "' . $dir . $file . '" isn\'t readable');
+        $file = $data['config']['schema'];
+        $modelsDir = $data['config']['models']['path'];
+        if (is_readable($file) === false) {
+            throw new FileNotReadable('file "' . $file . '" isn\'t readable');
         }
         if (is_dir($modelsDir) === false) {
             throw new InvalidDirectory('directory "' . $modelsDir . '" can\'t be identified');
@@ -89,7 +78,7 @@ abstract class Schema
     {
         if ($this->definition == null) {
             $data = Mapping::get($this->mapping);
-            $this->definition = Config::get(rtrim($data['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($data['config']['schema'], DIRECTORY_SEPARATOR));
+            $this->definition = Config::get($data['config']['schema']);
         }
 
         return $this->definition;
@@ -114,8 +103,7 @@ abstract class Schema
     public static function getSchema($mapping)
     {
         $data = Mapping::get($mapping);
-        $namespace = substr(__NAMESPACE__, 0, strripos(__NAMESPACE__, '\\'));
-        $class = $namespace . '\\' . rtrim(ucfirst($data['config']['provider']), '\\') . '\\Schema';
+        $class = rtrim(ucfirst($data['config']['provider']), '\\') . '\\Schema';
 
         return new $class($mapping);
     }
