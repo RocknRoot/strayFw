@@ -109,13 +109,15 @@ abstract class Http
                 ob_start();
                 $before = self::$request->getBefore();
                 foreach ($before as $b) {
-                    runAction($b['class'], $b['action']);
+                    self::runAction($b['class'], $b['action']);
                 }
                 if (self::$request->hasEnded() === false) {
-                    runAction(self::$request->getClass(), self::$request->getAction());
-                    $after = self::$request->getAfter();
-                    foreach ($after as $a) {
-                        runAction($a['class'], $a['action']);
+                    self::runAction(self::$request->getClass(), self::$request->getAction());
+                    if (self::$request->hasEnded() === false) {
+                        $after = self::$request->getAfter();
+                        foreach ($after as $a) {
+                            self::runAction($a['class'], $a['action']);
+                        }
                     }
                 }
                 echo self::$response->getRender()->render();
@@ -139,7 +141,7 @@ abstract class Http
         if (isset(self::$controllers[$class]) === false) {
             self::$controllers[$class] = new $class();
         }
-        self::$controllers[$class]->action(self::$request, self::$response);
+        self::$controllers[$class]->$action(self::$request, self::$response);
     }
 
     /**
@@ -192,7 +194,7 @@ abstract class Http
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
-                'type' => 'route',
+                'type' => 'before',
                 'method' => $method,
                 'path' => $path,
                 'action' => $action,
@@ -215,7 +217,7 @@ abstract class Http
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
-                'type' => 'route',
+                'type' => 'after',
                 'method' => $method,
                 'path' => $path,
                 'action' => $action,

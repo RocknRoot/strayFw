@@ -72,13 +72,15 @@ abstract class Console
             self::$controllers = array();
             $before = self::$request->getBefore();
             foreach ($before as $b) {
-                runAction($b['class'], $b['action']);
+                self::runAction($b['class'], $b['action']);
             }
             if (self::$request->hasEnded() === false) {
-                runAction(self::$request->getClass(), self::$request->getAction());
-                $after = self::$request->getAfter();
-                foreach ($after as $a) {
-                    runAction($a['class'], $a['action']);
+                self::runAction(self::$request->getClass(), self::$request->getAction());
+                if (self::$request->hasEnded() === false) {
+                    $after = self::$request->getAfter();
+                    foreach ($after as $a) {
+                        self::runAction($a['class'], $a['action']);
+                    }
                 }
             }
         }

@@ -2,6 +2,8 @@
 
 namespace RocknRoot\StrayFw\Http;
 
+use RocknRoot\StrayFw\Render\RenderInterface;
+
 /**
  * Response class for HTTP requests.
  *
@@ -49,6 +51,6 @@ class Response
      */
     public function setRender(RenderInterface $render)
     {
-        $this->render = render;
+        $this->render = $render;
     }
 }

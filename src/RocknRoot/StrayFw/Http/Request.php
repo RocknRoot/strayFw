@@ -73,18 +73,20 @@ class Request
     public function __construct(RawRequest $rawRequest, array $routes)
     {
         $this->rawRequest = $rawRequest;
+        $this->before = array();
+        $this->after = array();
         $this->hasEnded = false;
         if (count($routes) == 0) {
             throw new InvalidRouteDefinition('there is no route');
         }
         foreach ($routes as $route) {
-            if ($this->rawRequest->getSubDomain() != null && (isset($route['sub_domain']) === false || $route['sub_domain'] != $this->rawRequest->getSubDomain())) {
+            if ($this->rawRequest->getSubDomain() != null && (isset($route['subdomain']) === false || $route['subdomain'] != $this->rawRequest->getSubDomain())) {
                 continue;
             }
             if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
                 throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
             }
-            if (isset($route['method']) === false || strtolower($route['method']) == strtolower($this->rawRequest->getMethod())) {
+            if (isset($route['method']) === false || strtolower($route['method']) === 'all' || strtolower($route['method']) == strtolower($this->rawRequest->getMethod())) {
                 if (isset($route['ajax']) === false || $route['ajax'] == $this->rawRequest->isAjax()) {
                     $path = $route['path'];
                     if (empty($route['uri']) === false) {
