@@ -3,7 +3,9 @@
 namespace RocknRoot\StrayFw\Http;
 
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
+use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
+use RocknRoot\StrayFw\Render\RenderInterface;
 
 /**
  * Bootstrapping class for HTTP requests.
@@ -98,6 +100,7 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
+     * @throws NotARender if response->render is a non RenderInterface implementing object
      */
     public static function run()
     {
@@ -119,6 +122,9 @@ abstract class Http
                             self::runAction($a['class'], $a['action']);
                         }
                     }
+                }
+                if (!(self::$response->getRender() instanceof RenderInterface)) {
+                    throw new NotARender('response->render is a non RenderInterface implementing object');
                 }
                 echo self::$response->getRender()->render();
                 ob_end_flush();
