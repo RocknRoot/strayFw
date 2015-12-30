@@ -4,8 +4,6 @@ namespace RocknRoot\StrayFw\Database;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\BadUse;
-use RocknRoot\StrayFw\Exception\FileNotReadable;
-use RocknRoot\StrayFw\Exception\InvalidDirectory;
 use RocknRoot\StrayFw\Exception\MappingNotFound;
 use RocknRoot\StrayFw\Logger;
 
@@ -28,27 +26,16 @@ class Mapping
      * Register a new mapping.
      *
      * @static
-     * @throws InvalidDirectory if directory $dir can't be indentified
-     * @throws FileNotReadable  if file $configFile is not readable
-     * @param  string           $dir        application root directory
-     * @param  string           $configFile mapping configuration file
+     * @param  string           $config mapping configuration
      */
-    public static function registerMapping($dir, $configFile)
+    public static function registerMapping(array $config)
     {
-        if (is_dir($dir) === false) {
-            throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-        }
-        if (is_readable($dir . DIRECTORY_SEPARATOR . $configFile) === false) {
-            throw new FileNotReadable('file "' . $dir . DIRECTORY_SEPARATOR . $configFile . '" isn\'t readable');
-        }
-        $config = Config::get(rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($configFile, DIRECTORY_SEPARATOR));
         self::validateConfig($config);
         if (isset(self::$mappings[$config['name']]) === false) {
-            self::$mappings[$config['name']] =  array(
-                'dir' => $dir,
-                'file' => $configFile,
+            self::$mappings[$config['name']] = array(
                 'config' => $config
             );
+            Database::registerDatabase($config['database']);
         } else {
             Logger::get()->warning('mapping with name "' . $config['name'] . '" was already set');
         }

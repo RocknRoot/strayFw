@@ -78,7 +78,7 @@ class Request
                     if (stripos($cmd, $route['path']) === 0) {
                         list($class, $action) = explode('.', $route['action']);
                         if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = rtrim($route['namespace'], '\\') . '\\' . $class);
+                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
                         }
                         $a = [ 'class' => $class, 'action' => $action ];
                         if ($route['type'] == 'before') {
@@ -91,7 +91,7 @@ class Request
                     if ($cmd == $route['path']) {
                         list($this->class, $this->action) = explode('.', $route['action']);
                         if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $class);
+                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $class;
                         }
                         array_shift($cli);
                         $this->args = $cli;

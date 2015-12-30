@@ -17,7 +17,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function buildAction(Request $request)
+    public function build(Request $request)
     {
         if (count($request->getArgs()) != 1) {
             echo 'Wrong parameters.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
@@ -36,12 +36,12 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function listAction(Request $request)
+    public function list(Request $request)
     {
         $mappings = Mapping::getMappings();
-        echo 'mapping - database - mapping configuration file path' . PHP_EOL;
+        echo 'mapping - database - models path' . PHP_EOL;
         foreach ($mappings as $mapping) {
-            echo $mapping['config']['name'] . ' - ' . $mapping['config']['database'] . ' - ' . rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['file'], DIRECTORY_SEPARATOR) . PHP_EOL;
+            echo $mapping['config']['name'] . ' - ' . $mapping['config']['database'] . ' - ' . $mapping['config']['models']['path'] . PHP_EOL;
         }
     }
 
@@ -50,7 +50,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function generateAction(Request $request)
+    public function generate(Request $request)
     {
         if (count($request->getArgs()) != 1) {
             echo 'Wrong parameters.' . PHP_EOL . 'Usage : db/model/generate mapping_name' . PHP_EOL;

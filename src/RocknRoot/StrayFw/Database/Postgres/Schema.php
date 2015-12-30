@@ -248,12 +248,7 @@ class Schema extends ProviderSchema
 
         $mapping = Mapping::get($this->mapping);
 
-        $path = null;
-        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        } else {
-            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        }
+        $path = $mapping['config']['models']['path'];
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
         $file = fopen($path, 'w+');
         if ($file === false) {
@@ -269,11 +264,7 @@ class Schema extends ProviderSchema
         }
         fclose($file);
 
-        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        } else {
-            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        }
+        $path = $mapping['config']['models']['path'];
         $path .= ucfirst($enumName) . '.php';
         if (file_exists($path) === false) {
             $file = fopen($path, 'w+');
@@ -422,12 +413,7 @@ class Schema extends ProviderSchema
 
         $mapping = Mapping::get($this->mapping);
 
-        $path = null;
-        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        } else {
-            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        }
+        $path = $mapping['config']['models']['path'];
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($modelName) . '.php';
         $file = fopen($path, 'w+');
         if ($file === false) {
@@ -445,11 +431,7 @@ class Schema extends ProviderSchema
         }
         fclose($file);
 
-        if ($mapping['config']['models']['path'][0] == DIRECTORY_SEPARATOR) {
-            $path = ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        } else {
-            $path = rtrim($mapping['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($mapping['config']['models']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        }
+        $path = $mapping['config']['models']['path'];
         $path .= ucfirst($modelName) . '.php';
         if (file_exists($path) === false) {
             $file = fopen($path, 'w+');

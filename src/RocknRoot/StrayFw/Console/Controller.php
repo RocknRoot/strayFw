@@ -16,7 +16,7 @@ class Controller
      *
      * @param Request $request current request
      */
-    public function helpAction(Request $request)
+    public function help(Request $request)
     {
         $files = Console::getRoutes();
         echo 'strayFw console help screen' . PHP_EOL . 'Available actions :' . PHP_EOL . PHP_EOL;
