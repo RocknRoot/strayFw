@@ -143,21 +143,6 @@ abstract class Http
     }
 
     /**
-     * Launch one action after ensuring controller exists.
-     *
-     * @static
-     * @param  string           $class class name
-     * @param  string           $action action name
-     */
-    private static function runAction($class, $action)
-    {
-        if (isset(self::$controllers[$class]) === false) {
-            self::$controllers[$class] = new $class();
-        }
-        self::$controllers[$class]->$action(self::$request);
-    }
-
-    /**
      * Set namespace, subdomain and url prefixes for incoming routes.
      *
      * @static
