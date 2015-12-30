@@ -3,9 +3,7 @@
 namespace RocknRoot\StrayFw\Http;
 
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
-use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
-use RocknRoot\StrayFw\Render\RenderInterface;
 
 /**
  * Bootstrapping class for HTTP requests.
@@ -25,6 +23,34 @@ abstract class Http
     private static $isInit = false;
 
     /**
+     * Current namespace prefix.
+     *
+     * @var string
+     */
+    protected static $namespace;
+
+    /**
+     * Current subdomain prefix.
+     *
+     * @var string
+     */
+    protected static $subdomain;
+
+    /**
+     * Current URI prefix.
+     *
+     * @var string
+     */
+    protected static $uri;
+
+    /**
+     * Registed routes.
+     *
+     * @var array[]
+     */
+    protected static $routes;
+
+    /**
      * Current raw request.
      *
      * @var RawRequest
@@ -39,11 +65,18 @@ abstract class Http
     protected static $request;
 
     /**
-     * Registed routes.
+     * Current render.
      *
-     * @var array[]
+     * @var Response
      */
-    protected static $routes;
+    protected static $response;
+
+    /**
+     * Current controllers.
+     *
+     * @var object[]
+     */
+    protected static $controllers;
 
     /**
      * Initialize inner states according to current HTTP request.
@@ -65,37 +98,27 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
-     * @throws NotARender if object returned by action doesn't implement RenderInterface
      */
     public static function run()
     {
         if (self::$isInit === true) {
             self::$request = new Request(self::$rawRequest, self::$routes);
-            $class = self::$request->getClass();
-            $action = self::$request->getAction() . 'Action';
+            self::$controllers = array();
+            self::$response = new Response();
             try {
                 ob_start();
-                $object = new $class();
-                $render = null;
-                if (method_exists($object, 'before') === true) {
-                    $res = $object->before(self::$request);
-                    if ($res instanceof RenderInterface) {
-                        $render = $res;
+                $before = self::$request->getBefore();
+                foreach ($before as $b) {
+                    runAction($b['class'], $b['action']);
+                }
+                if (self::$request->hasEnded() === false) {
+                    runAction(self::$request->getClass(), self::$request->getAction());
+                    $after = self::$request->getAfter();
+                    foreach ($after as $a) {
+                        runAction($a['class'], $a['action']);
                     }
                 }
-                if ($render === null) {
-                    $render = $object->$action(self::$request);
-                    if (!($render instanceof RenderInterface)) {
-                        throw new NotARender('"' . $class . '.' . $action . '" returned a non RenderInterface implementing object');
-                    }
-                    if (method_exists($object, 'after') === true) {
-                        $res = $object->after(self::$request, $render);
-                        if ($res instanceof RenderInterface) {
-                            $render = $res;
-                        }
-                    }
-                }
-                echo $render->render();
+                echo self::$response->getRender()->render();
                 ob_end_flush();
             } catch (Exception $e) {
                 ob_end_clean();
@@ -105,24 +128,127 @@ abstract class Http
     }
 
     /**
-     * Add routes to be considered.
+     * Launch one action after ensuring controller exists.
      *
      * @static
-     * @throws InvalidDirectory if directory can't be identified
-     * @param  string           $dir  application root directory
-     * @param  string           $file routes file name
+     * @param string    $class class name
+     * @param string    $action action name
      */
-    public static function registerRoutes($dir, $file)
+    protected static function runAction($class, $action)
+    {
+        if (isset(self::$controllers[$class]) === false) {
+            self::$controllers[$class] = new $class();
+        }
+        self::$controllers[$class]->action(self::$request, self::$response);
+    }
+
+    /**
+     * Launch one action after ensuring controller exists.
+     *
+     * @static
+     * @param  string           $class class name
+     * @param  string           $action action name
+     */
+    private static function runAction($class, $action)
+    {
+        if (isset(self::$controllers[$class]) === false) {
+            self::$controllers[$class] = new $class();
+        }
+        self::$controllers[$class]->$action(self::$request);
+    }
+
+    /**
+     * Set namespace, subdomain and url prefixes for incoming routes.
+     *
+     * @static
+     * @param  string           $namespace namespace prefix
+     * @param  string           $subdomain subdomain prefix
+     * @param  string           $uri uri prefix
+     */
+    public static function prefix($namespace, $subdomain = null, $uri = null)
+    {
+        self::$namespace = $namespace;
+        self::$subdomain = $subdomain;
+        self::$uri = $uri;
+    }
+
+    /**
+     * Add route to be considered.
+     *
+     * @static
+     * @param  string           $method route HTTP method
+     * @param  string           $path   route path
+     * @param  string           $action class and method to call
+     */
+    public static function route($method, $path, $action)
     {
         if (self::$isInit === true) {
-            if (is_dir($dir) === false) {
-                throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
-            }
             self::$routes[] = array(
-                'dir' => $dir,
-                'file' => $file
+                'type' => 'route',
+                'method' => $method,
+                'path' => $path,
+                'action' => $action,
+                'namespace' => self::$namespace,
+                'subdomain' => self::$subdomain,
+                'uri' => self::$uri
             );
         }
+    }
+
+    /**
+     * Add before hook to be considered.
+     *
+     * @static
+     * @param  string           $method route HTTP method
+     * @param  string           $path   route path
+     * @param  string           $action class and method to call
+     */
+    public static function before($method, $path, $action)
+    {
+        if (self::$isInit === true) {
+            self::$routes[] = array(
+                'type' => 'route',
+                'method' => $method,
+                'path' => $path,
+                'action' => $action,
+                'namespace' => self::$namespace,
+                'subdomain' => self::$subdomain,
+                'url' => self::$url
+            );
+        }
+    }
+
+    /**
+     * Add before hook to be considered.
+     *
+     * @static
+     * @param  string           $method route HTTP method
+     * @param  string           $path   route path
+     * @param  string           $action class and method to call
+     */
+    public static function after($method, $path, $action)
+    {
+        if (self::$isInit === true) {
+            self::$routes[] = array(
+                'type' => 'route',
+                'method' => $method,
+                'path' => $path,
+                'action' => $action,
+                'namespace' => self::$namespace,
+                'subdomain' => self::$subdomain,
+                'url' => self::$url
+            );
+        }
+    }
+
+    /**
+     * Get all registered routes.
+     *
+     * @return array[] all routes
+     */
+    public static function getRoutes()
+    {
+        return self::$routes;
     }
 
     /**

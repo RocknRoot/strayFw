@@ -47,6 +47,12 @@ class Request
      */
     protected $after;
 
+    /**
+     * True if route needs to stop early.
+     *
+     * @param bool
+     */
+    protected $hasEnded;
 
     /**
      * Parse executed command and choose a route.
@@ -58,6 +64,7 @@ class Request
     {
         $this->before = array();
         $this->after = array();
+        $this->hasEnded = false;
         global $argv;
         $cli = $argv;
         array_shift($cli);
@@ -67,37 +74,30 @@ class Request
                 if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
                     throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file'] . '" has invalid definition');
                 }
-                if ($route['type'] == 'before') {
+                if ($route['type'] == 'before' || $route['type'] == 'after') {
                     if (stripos($cmd, $route['path']) === 0) {
                         list($class, $action) = explode('.', $route['action']);
                         if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
                             $class = rtrim($route['namespace'], '\\') . '\\' . $class);
                         }
-                        $this->before[] = array(
-                            'class' => $class,
-                            'action' => $action
-                        );
-                    }
-                } else if ($route['type'] == 'after') {
-                    if (stripos($cmd, $route['path']) === 0) {
-                        list($class, $action) = explode('.', $route['action']);
-                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                        $a = [ 'class' => $class, 'action' => $action ];
+                        if ($route['type'] == 'before') {
+                            $this->before[] = $a;
+                        } else {
+                            $this->after[] = $a;
                         }
-                        $this->after[] = array(
-                            'class' => $class,
-                            'action' => $action
-                        );
                     }
-                } else if ($this->class == null && $cmd == $route['path']) {
-                    list($this->class, $this->action) = explode('.', $route['action']);
-                    if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                        $this->class = rtrim($route['namespace'], '\\') . '\\' . $class);
-                    }
-                    array_shift($cli);
-                    $this->args = $cli;
-                    if (is_array($this->args) === false) {
-                        $this->args = array();
+                } else if ($this->class == null) {
+                    if ($cmd == $route['path']) {
+                        list($this->class, $this->action) = explode('.', $route['action']);
+                        if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $class);
+                        }
+                        array_shift($cli);
+                        $this->args = $cli;
+                        if (is_array($this->args) === false) {
+                            $this->args = array();
+                        }
                     }
                 }
             }
@@ -165,5 +165,27 @@ class Request
     public function getAfter()
     {
         return $this->after;
+    }
+
+    /**
+     * Set the request to end early.
+     *
+     * @return bool previous value
+     */
+    public function end()
+    {
+        $v = $this->hasEnded;
+        $this->hasEnded = true;
+        return $v;
+    }
+
+    /**
+     * True if route needs to stop early.
+     *
+     * @return bool
+     */
+    public function hasEnded()
+    {
+        return $this->hasEnded;
     }
 }

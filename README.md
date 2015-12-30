@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RocknRoot/strayFw.png?branch=master)](https://travis-ci.org/RocknRoot/strayFw)
 
-The strayFw is a PHP framework trying to be modern without following fashion.
+strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
 
 * Homepage : ???
 * Version : beta - 0.4.4-Marius

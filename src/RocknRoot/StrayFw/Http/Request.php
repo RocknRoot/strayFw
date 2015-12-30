@@ -2,7 +2,6 @@
 
 namespace RocknRoot\StrayFw\Http;
 
-use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
 use RocknRoot\StrayFw\Exception\RouteNotFound;
 
@@ -19,27 +18,6 @@ class Request
      * @var RawRequest
      */
     protected $rawRequest;
-
-    /**
-     * Get current route base dir path.
-     *
-     * @param string
-     */
-    protected $dir;
-
-    /**
-     * Current route file name.
-     *
-     * @param string
-     */
-    protected $file;
-
-    /**
-     * Current route name.
-     *
-     * @param string
-     */
-    protected $route;
 
     /**
      * Route class name.
@@ -63,86 +41,90 @@ class Request
     protected $args;
 
     /**
-     * Parse raw request and choose a route.
+     * Matching before hooks.
      *
-     * @throws RouteNotFound if no route matches the request
-     * @param  RawRequest    $rawRequest base raw request
-     * @param  array[]       $routeFiles registered route files
+     * @param string[]
      */
-    public function __construct(RawRequest $rawRequest, array $routeFiles)
-    {
-        $this->rawRequest = $rawRequest;
-        foreach ($routeFiles as $file) {
-            $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-            if ($this->rawRequest->getSubDomain() != null && (isset($routes['sub_domain']) === false || $routes['sub_domain'] != $this->rawRequest->getSubDomain())) {
-                continue;
-            }
-            $this->parseRoutesFile($routes, $file);
-            if ($this->route != null) {
-                break;
-            }
-        }
-        if ($this->route == null) {
-            foreach ($routeFiles as $file) {
-                $routes = Config::get(rtrim($file['dir'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR));
-                if (isset($routes['sub_domain']) === true) {
-                    continue;
-                }
-                $this->parseRoutesFile($routes, $file);
-                if ($this->route != null) {
-                    break;
-                }
-            }
-            if ($this->route == null) {
-                throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
-            }
-        }
-    }
+    protected $before;
 
     /**
-     * Parse a single file routes.
+     * Matching after hooks.
      *
+     * @param string[]
+     */
+    protected $after;
+
+    /**
+     * True if route needs to stop early.
+     *
+     * @param bool
+     */
+    protected $hasEnded;
+
+    /**
+     * Parse raw request and choose a route.
+     *
+     * @throws InvalidRouteDefinition if there is no route
+     * @throws InvalidRouteDefinition if a route has an invalid definition
      * @throws RouteNotFound if no route matches the request
      * @param  RawRequest    $rawRequest base raw request
-     * @param  array[]       $routes     routes
-     * @param  string        $file       file
+     * @param  array[]       $routes registered routes
      */
-    protected function parseRoutesFile(array $routes, array $file)
+    public function __construct(RawRequest $rawRequest, array $routes)
     {
-        if (isset($routes['routes']) === false || count($routes['routes']) == 0) {
-            throw new InvalidRouteDefinition('"' . $file['file'] . '" has no routes');
+        $this->rawRequest = $rawRequest;
+        $this->hasEnded = false;
+        if (count($routes) == 0) {
+            throw new InvalidRouteDefinition('there is no route');
         }
-        foreach ($routes['routes'] as $routeName => $routeInfo) {
-            if (isset($routeInfo['path']) === false || isset($routeInfo['action']) === false || strpos($routeInfo['action'], '.') === false) {
-                throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file']
-                    . '" has invalid definition');
+        foreach ($routes as $route) {
+            if ($this->rawRequest->getSubDomain() != null && (isset($route['sub_domain']) === false || $route['sub_domain'] != $this->rawRequest->getSubDomain())) {
+                continue;
             }
-            if (isset($routeInfo['method']) === false || strtolower($routeInfo['method']) == strtolower($this->rawRequest->getMethod())) {
-                if (isset($routeInfo['ajax']) === false || $routeInfo['ajax'] == $this->rawRequest->isAjax()) {
-                    $path = $routeInfo['path'];
-                    if (empty($routes['uri']) === false) {
-                        $path = '/' . ltrim(rtrim($routes['uri'], '/'), '/') . $path;
+            if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
+                throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
+            }
+            if (isset($route['method']) === false || strtolower($route['method']) == strtolower($this->rawRequest->getMethod())) {
+                if (isset($route['ajax']) === false || $route['ajax'] == $this->rawRequest->isAjax()) {
+                    $path = $route['path'];
+                    if (empty($route['uri']) === false) {
+                        $path = '/' . ltrim(rtrim($route['uri'], '/'), '/') . $path;
                     }
-                    if (strlen($routeInfo['path']) > 1) {
+                    if (strlen($route['path']) > 1) {
                         $path = rtrim($path, '/');
                     }
                     $matches = null;
-                    if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
-                        $this->dir = rtrim($file['dir'], DIRECTORY_SEPARATOR);
-                        $this->file = DIRECTORY_SEPARATOR . ltrim($file['file'], DIRECTORY_SEPARATOR);
-                        $this->route = $routeName;
-                        list($this->class, $this->action) = explode('.', $routeInfo['action']);
-                        if (isset($routes['namespace']) === true) {
-                            $this->class = rtrim($routes['namespace'], '\\') . '\\' . ltrim($this->class, '\\');
+                    if ($route['type'] == 'before' || $route['type'] == 'after') {
+                        if (preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
+                            list($class, $action) = explode('.', $route['action']);
+                            if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                            }
+                            $a = [ 'class' => $class, 'action' => $action ];
+                            if ($route['type'] == 'before') {
+                                $this->before[] = $a;
+                            } else {
+                                $this->after[] = $a;
+                            }
                         }
-                        foreach ($matches as $k => $v) {
-                            if (is_numeric($k) === false && $v != null) {
-                                $this->args[$k] = $v;
+                    } else {
+                        if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                            list($this->class, $this->action) = explode('.', $route['action']);
+                            if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                            }
+                            foreach ($matches as $k => $v) {
+                                if (is_numeric($k) === false && $v != null) {
+                                    $this->args[$k] = $v;
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+        if ($this->class == null) {
+            throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
         }
     }
 
@@ -162,36 +144,6 @@ class Request
     public function getRawRequest()
     {
         return $this->rawRequest;
-    }
-
-    /**
-     * Get current route base dir name.
-     *
-     * @return string
-     */
-    public function getDir()
-    {
-        return $this->dir;
-    }
-
-    /**
-     * Get current route file name.
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Get current route name.
-     *
-     * @return string
-     */
-    public function getRoute()
-    {
-        return $this->route;
     }
 
     /**
@@ -222,6 +174,49 @@ class Request
     public function getArgs()
     {
         return $this->args;
+    }
+
+    /**
+     * Matching before hooks.
+     *
+     * @param string[]
+     */
+    public function getBefore()
+    {
+        return $this->before;
+    }
+
+    /**
+     * Matching after hooks.
+     *
+     * @param string[]
+     */
+    public function getAfter()
+    {
+        return $this->after;
+    }
+
+    /**
+     * Set the request to end early.
+     *
+     * @return bool previous value
+     */
+    public function end()
+    {
+        $v = $this->hasEnded;
+        $this->hasEnded = true;
+
+        return $v;
+    }
+
+    /**
+     * True if route needs to stop early.
+     *
+     * @return bool
+     */
+    public function hasEnded()
+    {
+        return $this->hasEnded;
     }
 
     /**

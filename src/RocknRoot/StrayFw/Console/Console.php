@@ -74,10 +74,12 @@ abstract class Console
             foreach ($before as $b) {
                 runAction($b['class'], $b['action']);
             }
-            runAction(self::$request->getClass(), self::$request->getAction());
-            $after = self::$request->getAfter();
-            foreach ($after as $a) {
-                runAction($a['class'], $b['action']);
+            if (self::$request->hasEnded() === false) {
+                runAction(self::$request->getClass(), self::$request->getAction());
+                $after = self::$request->getAfter();
+                foreach ($after as $a) {
+                    runAction($a['class'], $a['action']);
+                }
             }
         }
     }
@@ -89,7 +91,7 @@ abstract class Console
      * @param  string           $class class name
      * @param  string           $action action name
      */
-    private static function runAction($class, $action)
+    protected static function runAction($class, $action)
     {
         if (isset(self::$controllers[$class]) === false) {
             self::$controllers[$class] = new $class();
@@ -126,7 +128,7 @@ abstract class Console
                 'usage' => $usage,
                 'help' => $help,
                 'action' => $action,
-                'namespace' => $this->namespace
+                'namespace' => self::$namespace
             );
         }
     }
@@ -149,7 +151,7 @@ abstract class Console
                 'usage' => $usage,
                 'help' => $help,
                 'action' => $action,
-                'namespace' => $this->namespace
+                'namespace' => self::$namespace
             );
         }
     }
@@ -172,7 +174,7 @@ abstract class Console
                 'usage' => $usage,
                 'help' => $help,
                 'action' => $action,
-                'namespace' => $this->namespace
+                'namespace' => self::$namespace
             );
         }
     }
