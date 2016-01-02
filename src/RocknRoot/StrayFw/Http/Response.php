@@ -45,12 +45,14 @@ class Response
     }
 
     /**
-     * Set render object.
+     * Set render and status.
      *
      * @param RenderInterface $render render object
+     * @param int $status status code
      */
-    public function setRender(RenderInterface $render)
+    public function render(RenderInterface $render, $status = 200)
     {
         $this->render = $render;
+        $this->status = $status;
     }
 }

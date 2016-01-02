@@ -2,7 +2,6 @@
 
 namespace RocknRoot\StrayFw\Http;
 
-use RocknRoot\StrayFw\Exception\InvalidDirectory;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;
