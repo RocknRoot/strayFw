@@ -2,8 +2,6 @@
 
 namespace RocknRoot\StrayFw\Console;
 
-use RocknRoot\StrayFw\Config;
-
 /**
  * Basic actions for console.
  *
@@ -20,10 +18,15 @@ class Controller
     {
         $routes = Console::getRoutes();
         echo 'strayFw console help screen' . PHP_EOL . 'Available actions :' . PHP_EOL . PHP_EOL;
+        $namespace = null;
         foreach ($routes as $route) {
-            echo $route['usage'] . PHP_EOL;
+            if ($namespace != $route['namespace']) {
+                $namespace = $route['namespace'];
+                echo $namespace . PHP_EOL . PHP_EOL;
+            }
+            echo '    ' . $route['usage'] . PHP_EOL;
             if (isset($route['help']) != null) {
-                echo '    ' . $route['help'];
+                echo '        ' . $route['help'];
             }
             echo PHP_EOL . PHP_EOL;
         }
