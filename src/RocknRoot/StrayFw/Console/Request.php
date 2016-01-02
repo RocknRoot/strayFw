@@ -2,7 +2,6 @@
 
 namespace RocknRoot\StrayFw\Console;
 
-use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
 
 /**
@@ -87,7 +86,7 @@ class Request
                             $this->after[] = $a;
                         }
                     }
-                } else if ($this->class == null) {
+                } elseif ($this->class == null) {
                     if ($cmd == $route['path']) {
                         list($this->class, $this->action) = explode('.', $route['action']);
                         if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
@@ -176,6 +175,7 @@ class Request
     {
         $v = $this->hasEnded;
         $this->hasEnded = true;
+
         return $v;
     }
 

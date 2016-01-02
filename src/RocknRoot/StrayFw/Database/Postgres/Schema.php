@@ -92,6 +92,29 @@ class Schema extends ProviderSchema
                 $this->buildModel($modelName, $modelDefinition);
             }
         }
+
+        foreach ($definition as $modelName => $modelDefinition) {
+            if ((isset($modelDefinition['type']) === false || $modelDefinition['type'] === 'model') && isset($modelDefinition['links']) === true) {
+                foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
+                    $tableName = null;
+                    if (isset($modelDefinition['name']) === true) {
+                        $tableName = $modelDefinition['name'];
+                    } else {
+                        $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
+                    }
+                    $foreignTableName = null;
+                    if (isset($definition[$foreignDefinition['model']]['name']) === true) {
+                        $foreignTableName = $definition[$foreignDefinition['model']]['name'];
+                    } else {
+                        $foreignTableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($foreignDefinition['model']);
+                    }
+                    $statement = Mutation\AddForeignKey::statement($database, $definition, $modelName, $tableName, $foreignName, $foreignTableName);
+                    if ($statement->execute() == false) {
+                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -172,21 +195,6 @@ class Schema extends ProviderSchema
             }
         }
 
-        if (isset($modelDefinition['links']) === true) {
-            foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
-                $foreignTableName = null;
-                if (isset($definition[$foreignDefinition['model']]['name']) === true) {
-                    $foreignTableName = $definition[$foreignDefinition['model']]['name'];
-                } else {
-                    $foreignTableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($foreignDefinition['model']);
-                }
-                $statement = Mutation\AddForeignKey::statement($database, $definition, $modelName, $tableName, $foreignName, $foreignTableName);
-                if ($statement->execute() == false) {
-                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
-                }
-            }
-        }
-
         echo $modelName . ' - Done' . PHP_EOL;
     }
 
@@ -255,7 +263,7 @@ class Schema extends ProviderSchema
             throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
         }
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
-        $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
+        $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
         $content .= "\nclass " . ucfirst($enumName) . " extends Enum\n{\n";
         $content .= '    const NAME = \'' . $enumRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
         $content .= $consts . "\n}";
@@ -271,7 +279,7 @@ class Schema extends ProviderSchema
             if ($file === false) {
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
-            $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($enumName) . " as BaseEnum;\n\nclass " . ucfirst($enumName) . " extends BaseEnum\n{\n}";
+            $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($enumName) . " as BaseEnum;\n\nclass " . ucfirst($enumName) . " extends BaseEnum\n{\n}";
             if (fwrite($file, $content) === false) {
                 throw new FileNotWritable('can\'t write in "' . $path . '"');
             }
@@ -326,7 +334,7 @@ class Schema extends ProviderSchema
             $consts .= '    const FIELD_' . strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
 
             $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
-            $constructorDefaults .= '        if (in_array(\'' . $fieldRealName . '\', $fetch) === true) {' . "\n            ";
+            $constructorDefaults .= '        if (isset($fetch[\'' . $fieldRealName . '\']) === true) {' . "\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';
             if (isset($fieldDefinition['default']) === true) {
@@ -419,7 +427,7 @@ class Schema extends ProviderSchema
         if ($file === false) {
             throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
         }
-        $content = "<?php\n\nnamespace " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
+        $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
         $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
         $content .= '    const NAME = \'' . $modelRealName . "';\n    const DATABASE = '" . $mapping['config']['database'] . "';\n";
         $content .= PHP_EOL . $consts . PHP_EOL . $properties . PHP_EOL;
