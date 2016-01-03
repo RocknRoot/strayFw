@@ -80,7 +80,7 @@ class Request
             throw new InvalidRouteDefinition('there is no route');
         }
         foreach ($routes as $route) {
-            if ($this->rawRequest->getSubDomain() != null && (isset($route['subdomain']) === false || $route['subdomain'] != $this->rawRequest->getSubDomain())) {
+            if (isset($route['subdomain']) === true && ($this->rawRequest->getSubDomain() != null && $route['subdomain'] != $this->rawRequest->getSubDomain())) {
                 continue;
             }
             if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
