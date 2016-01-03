@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Http;
 
+use RockRoot\StrayFw\Controllers;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;
@@ -111,14 +112,20 @@ abstract class Http
                 ob_start();
                 $before = self::$request->getBefore();
                 foreach ($before as $b) {
-                    self::runAction($b['class'], $b['action']);
+                    $controller = Controllers::get($b['class']);
+                    $action = $b['action'];
+                    $controller->$action(self::$request, self::$response);
                 }
                 if (self::$request->hasEnded() === false) {
-                    self::runAction(self::$request->getClass(), self::$request->getAction());
+                    $controller = Controllers::get(self::$request->getClass());
+                    $action = self::$request->getAction();
+                    $controller->$action(self::$request, self::$response);
                     if (self::$request->hasEnded() === false) {
                         $after = self::$request->getAfter();
                         foreach ($after as $a) {
-                            self::runAction($a['class'], $a['action']);
+                            $controller = Controllers::get($a['class']);
+                            $action = $a['action'];
+                            $controller->$action(self::$request, self::$response);
                         }
                     }
                 }
@@ -132,21 +139,6 @@ abstract class Http
                 throw $e;
             }
         }
-    }
-
-    /**
-     * Launch one action after ensuring controller exists.
-     *
-     * @static
-     * @param string    $class class name
-     * @param string    $action action name
-     */
-    protected static function runAction($class, $action)
-    {
-        if (isset(self::$controllers[$class]) === false) {
-            self::$controllers[$class] = new $class();
-        }
-        self::$controllers[$class]->$action(self::$request, self::$response);
     }
 
     /**
