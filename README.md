@@ -1,7 +1,6 @@
 # strayFw
 
 [![Join the chat at https://gitter.im/RocknRoot/strayFw](https://badges.gitter.im/RocknRoot/strayFw.svg)](https://gitter.im/RocknRoot/strayFw?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build Status](https://travis-ci.org/RocknRoot/strayFw.png?branch=master)](https://travis-ci.org/RocknRoot/strayFw)
 
 strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
