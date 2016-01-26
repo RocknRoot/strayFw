@@ -2,7 +2,7 @@
 
 namespace RocknRoot\StrayFw\Http;
 
-use RockRoot\StrayFw\Controllers;
+use RocknRoot\StrayFw\Controllers;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;

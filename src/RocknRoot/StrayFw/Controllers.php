@@ -26,9 +26,10 @@ class Controllers
      */
     public static function get($class)
     {
-        if (isset($controllers[$class]) === false) {
-            $controllers[$class] = new $class();
+        if (isset(self::$controllers[$class]) === false) {
+            self::$controllers[$class] = new $class();
         }
-        return $controllers[$class];
+
+        return self::$controllers[$class];
     }
 }

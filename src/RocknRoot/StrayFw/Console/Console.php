@@ -2,6 +2,8 @@
 
 namespace RocknRoot\StrayFw\Console;
 
+use RocknRoot\StrayFw\Controllers;
+
 /**
  * Bootstrapping class for CLI requests.
  *

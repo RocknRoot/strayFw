@@ -135,6 +135,39 @@ abstract class Model extends ProviderModel
     }
 
     /**
+     * Get field values as associative array (alias => value).
+     *
+     * @return array values
+     */
+    public function toArray()
+    {
+        $values = array();
+        foreach (static::getAllFieldsAliases() as $name) {
+            $field = $this->{'field' . ucfirst($name)};
+            $values[$name] = $field['value'];
+        }
+
+        return $values;
+    }
+
+    /**
+     * Get field values as associative array (real names => value).
+     *
+     * @return array values
+     */
+    public function toRealNamesArray()
+    {
+        $values = array();
+        foreach (static::getAllFieldsAliases() as $name) {
+            $field = $this->{'field' . ucfirst($name)};
+            $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($name)));
+            $values[$realName] = $field['value'];
+        }
+
+        return $values;
+    }
+
+    /**
      * Fetch one entity satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
