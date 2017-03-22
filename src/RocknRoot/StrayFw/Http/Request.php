@@ -62,6 +62,14 @@ class Request
     protected $hasEnded;
 
     /**
+     * Request data.
+     *
+     * @var array
+     */
+    public $data;
+
+
+    /**
      * Parse raw request and choose a route.
      *
      * @throws InvalidRouteDefinition if there is no route
@@ -76,6 +84,7 @@ class Request
         $this->before = array();
         $this->after = array();
         $this->hasEnded = false;
+        $this->data = [];
         if (count($routes) == 0) {
             throw new InvalidRouteDefinition('there is no route');
         }

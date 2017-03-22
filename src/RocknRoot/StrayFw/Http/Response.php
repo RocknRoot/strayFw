@@ -19,11 +19,18 @@ class Response
     public $status;
 
     /**
+     * Response data.
+     *
+     * @var array
+     */
+    public $data;
+
+    /**
      * Render object.
      *
      * @var Render\RenderInterface
      */
-    protected $render;
+    protected $renderInst;
 
     /**
      * Construct response with default values.
@@ -31,7 +38,8 @@ class Response
     public function __construct()
     {
         $this->status = 200;
-        $this->render = null;
+        $this->data = [];
+        $this->renderInst = null;
     }
 
     /**
@@ -41,7 +49,7 @@ class Response
      */
     public function getRender()
     {
-        return $this->render;
+        return $this->renderInst;
     }
 
     /**
@@ -52,7 +60,7 @@ class Response
      */
     public function render(RenderInterface $render, $status = 200)
     {
-        $this->render = $render;
+        $this->renderInst = $render;
         $this->status = $status;
     }
 }

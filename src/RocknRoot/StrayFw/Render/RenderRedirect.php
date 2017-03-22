@@ -2,6 +2,8 @@
 
 namespace RocknRoot\StrayFw\Render;
 
+use RocknRoot\StrayFw\Exception\BadUse;
+
 /**
  * HTTP redirect render.
  *
@@ -9,26 +11,17 @@ namespace RocknRoot\StrayFw\Render;
  */
 class RenderRedirect implements RenderInterface
 {
-    use ArgsTrait;
-
-    /**
-     * Construct render with base arguments.
-     *
-     * @param array $args base arguments
-     */
-    public function __construct(array $args = array())
-    {
-        $this->args = $args;
-    }
-
     /**
      * Return the generated display.
      *
      * @return string content
      */
-    public function render()
+    public function render(array $args)
     {
-        header('Location: ' . $this->args['url']);
+        if (isset($args['url']) === false) {
+            throw new BadUse('RenderRedirect: expected "url" entry in args but it\'s unset');
+        }
+        header('Location: ' . $args['url']);
 
         return null;
     }

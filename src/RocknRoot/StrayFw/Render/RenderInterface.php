@@ -14,5 +14,5 @@ interface RenderInterface
      *
      * @return string content
      */
-    public function render();
+    public function render(array $data);
 }
