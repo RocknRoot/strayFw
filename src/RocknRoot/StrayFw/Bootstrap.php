@@ -63,7 +63,6 @@ abstract class Bootstrap
                 Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
             } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
                 if (STRAY_ENV === 'development') {
-                    Debug\Bar::init();
                     Debug\ErrorPage::init();
                 }
                 Http::init();
