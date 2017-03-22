@@ -4,7 +4,7 @@
 
 strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
 
-Not ready for production yet.
+beta - 0.4.4 - not ready for production yet
 
 Code is free, new-BSD license. So... fork us !
 
