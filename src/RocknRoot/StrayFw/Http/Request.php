@@ -68,7 +68,6 @@ class Request
      */
     public $data;
 
-
     /**
      * Parse raw request and choose a route.
      *

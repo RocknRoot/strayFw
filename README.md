@@ -4,27 +4,23 @@
 
 strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
 
-* Homepage : ???
-* Version : beta - 0.4.4-Marius
-
-This repository is the package one. If you want to start a new project, you need to download that one: https://github.com/RocknRoot/strayFw-Skeleton
-
-User guide is ??somewhere?? on the homepage. So... read it !
+Not ready for production yet.
 
 Code is free, new-BSD license. So... fork us !
 
 ## Requirements
 
-* PHP >= 5.4
+* PHP >= 5.5.9
 * If you're using the Locale namespace, PECL intl extension >= 1.0.0
 
-For installation help, ??check this page??.
+## Get started
+
+    get composer
+    $ php composer.phar create-project rocknroot/stray-fw-skeleton
 
 ## Need help ?
 
-Read the fraktastic manual !
-
-Or add an issue on github ! ;)
+You can add an issue on github ! ;)
 
 ## Contribute
 

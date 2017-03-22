@@ -195,6 +195,15 @@ class Schema extends ProviderSchema
             }
         }
 
+        if (isset($modelDefinition['uniques']) === true) {
+            foreach ($modelDefinition['uniques'] as $uniqueName => $uniqueDefinition) {
+                $statement = Mutation\AddUnique::statement($database, $modelName, $tableName, $modelDefinition, $uniqueName);
+                if ($statement->execute() == false) {
+                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                }
+            }
+        }
+
         echo $modelName . ' - Done' . PHP_EOL;
     }
 
