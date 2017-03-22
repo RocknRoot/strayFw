@@ -3,7 +3,8 @@
 namespace RocknRoot\StrayFw\Render;
 
 /**
- * JSON render class, useful for AJAX requests.
+ * JSON render class.
+ * In development environment, JSON is pretty printed.
  *
  * @author Nekith <nekith@errant-works.com>
  */

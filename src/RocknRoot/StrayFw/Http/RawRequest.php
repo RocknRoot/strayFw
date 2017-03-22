@@ -47,13 +47,6 @@ class RawRequest
     protected $method;
 
     /**
-     * True if request is made through AJAX.
-     *
-     * @var bool
-     */
-    protected $isAjax;
-
-    /**
      * GET variables.
      *
      * @var array
@@ -95,11 +88,6 @@ class RawRequest
             $this->query = '/';
         }
         $this->method = $_SERVER['REQUEST_METHOD'];
-        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) === false && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            $this->isAjax = true;
-        } else {
-            $this->isAjax = false;
-        }
         $this->getVars = $_GET;
         $this->postVars = $_POST;
     }
@@ -152,16 +140,6 @@ class RawRequest
     public function getMethod()
     {
         return $this->method;
-    }
-
-    /**
-     * True if request is made through AJAX.
-     *
-     * @return bool
-     */
-    public function isAjax()
-    {
-        return $this->isAjax;
     }
 
     /**

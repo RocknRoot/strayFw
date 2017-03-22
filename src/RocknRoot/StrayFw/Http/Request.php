@@ -95,38 +95,36 @@ class Request
                 throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
             }
             if (isset($route['method']) === false || strtolower($route['method']) === 'all' || strtolower($route['method']) == strtolower($this->rawRequest->getMethod())) {
-                if (isset($route['ajax']) === false || $route['ajax'] == $this->rawRequest->isAjax()) {
-                    $path = $route['path'];
-                    if (empty($route['uri']) === false) {
-                        $path = '/' . ltrim(rtrim($route['uri'], '/'), '/') . $path;
-                    }
-                    if (strlen($route['path']) > 1) {
-                        $path = rtrim($path, '/');
-                    }
-                    $matches = null;
-                    if ($route['type'] == 'before' || $route['type'] == 'after') {
-                        if (preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
-                            list($class, $action) = explode('.', $route['action']);
-                            if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                                $class = rtrim($route['namespace'], '\\') . '\\' . $class;
-                            }
-                            $a = [ 'class' => $class, 'action' => $action ];
-                            if ($route['type'] == 'before') {
-                                $this->before[] = $a;
-                            } else {
-                                $this->after[] = $a;
-                            }
+                $path = $route['path'];
+                if (empty($route['uri']) === false) {
+                    $path = '/' . ltrim(rtrim($route['uri'], '/'), '/') . $path;
+                }
+                if (strlen($route['path']) > 1) {
+                    $path = rtrim($path, '/');
+                }
+                $matches = null;
+                if ($route['type'] == 'before' || $route['type'] == 'after') {
+                    if (preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
+                        list($class, $action) = explode('.', $route['action']);
+                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
                         }
-                    } else {
-                        if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
-                            list($this->class, $this->action) = explode('.', $route['action']);
-                            if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                                $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
-                            }
-                            foreach ($matches as $k => $v) {
-                                if (is_numeric($k) === false && $v != null) {
-                                    $this->args[$k] = $v;
-                                }
+                        $a = [ 'class' => $class, 'action' => $action ];
+                        if ($route['type'] == 'before') {
+                            $this->before[] = $a;
+                        } else {
+                            $this->after[] = $a;
+                        }
+                    }
+                } else {
+                    if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                        list($this->class, $this->action) = explode('.', $route['action']);
+                        if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                        }
+                        foreach ($matches as $k => $v) {
+                            if (is_numeric($k) === false && $v != null) {
+                                $this->args[$k] = $v;
                             }
                         }
                     }
