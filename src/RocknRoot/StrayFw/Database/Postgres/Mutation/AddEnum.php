@@ -17,7 +17,7 @@ class AddEnum extends Mutation
      * @param  Database     $database database
      * @param  string       $type     type name
      * @param  array        $values   enum values
-     * @return PDOStatement $statement prepared query
+     * @return \PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $type, array $values)
     {

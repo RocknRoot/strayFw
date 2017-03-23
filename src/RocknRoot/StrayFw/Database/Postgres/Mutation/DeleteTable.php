@@ -16,7 +16,7 @@ class DeleteTable extends Mutation
      *
      * @param  Database     $database database
      * @param  string       $table    table name
-     * @return PDOStatement $statement prepared query
+     * @return \PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $table)
     {

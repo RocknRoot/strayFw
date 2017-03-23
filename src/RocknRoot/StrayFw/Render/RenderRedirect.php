@@ -19,7 +19,7 @@ class RenderRedirect implements RenderInterface
     public function render(array $args)
     {
         if (isset($args['url']) === false) {
-            throw new BadUse('RenderRedirect: expected "url" entry in args but it\'s unset');
+            throw new BadUse('RenderRedirect: expected "url" entry in args');
         }
         header('Location: ' . $args['url']);
 

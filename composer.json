@@ -22,5 +22,9 @@
         "psr-4": {
             "RocknRoot\\StrayFw\\": "src/RocknRoot/StrayFw/"
         }
+    },
+    "require-dev": {
+        "etsy/phan": "^0.9.1",
+        "filp/whoops": "^2.1"
     }
 }

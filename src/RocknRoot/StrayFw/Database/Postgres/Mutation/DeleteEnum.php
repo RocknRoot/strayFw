@@ -16,7 +16,7 @@ class DeleteEnum extends Mutation
      *
      * @param  Database     $database database
      * @param  string       $type     type name
-     * @return PDOStatement $statement prepared query
+     * @return \PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $type)
     {

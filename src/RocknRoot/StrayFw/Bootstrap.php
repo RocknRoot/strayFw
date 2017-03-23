@@ -53,7 +53,7 @@ abstract class Bootstrap
             self::$applications = array();
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
-            if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
+            if (defined('STRAY_IS_CLI') === true && constant('STRAY_IS_CLI') === true) {
                 Console::init();
                 Console::prefix('\\RocknRoot\\StrayFw\\Console');
                 Console::route('help', 'help', 'this screen', 'Controller.help');
@@ -61,8 +61,10 @@ abstract class Bootstrap
                 Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
                 Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.mappings');
                 Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
-            } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
-                if (STRAY_ENV === 'development') {
+                Console::prefix('\\RocknRoot\\StrayFw\\Http');
+                Console::route('http/routes', 'http/routes', 'list registered routes', 'Console.routes');
+            } elseif (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
+                if (constant('STRAY_ENV') === 'development') {
                     Debug\ErrorPage::init();
                 }
                 Http::init();
@@ -123,7 +125,7 @@ abstract class Bootstrap
     {
         $namespace = rtrim($namespace, '\\');
         if ($path == null) {
-            $path = STRAY_PATH_APPS . str_replace('_', DIRECTORY_SEPARATOR,
+            $path = constant('STRAY_PATH_APPS') . str_replace('_', DIRECTORY_SEPARATOR,
                 str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
         }
         self::$namespaces[$namespace] = $path;
@@ -135,6 +137,7 @@ abstract class Bootstrap
      *
      * @throws BadUse if bootstrap isn't initialized
      * @throws BadUse if no application is registered
+     * @throws BadUse if not CLI_IS_CLI nor STRAY_IS_HTTP
      * @static
      */
     public static function run()
@@ -149,13 +152,15 @@ abstract class Bootstrap
                 Logger::get()->error('namespace "' . $name . '" doesn\'t have an init.php');
             }
         }
-        if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
+        if (defined('STRAY_IS_CLI') === true && constant('STRAY_IS_CLI') === true) {
             Console::run();
-        } elseif (defined('STRAY_IS_HTTP') === true && STRAY_IS_HTTP === true) {
+        } elseif (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
             if (count(self::$applications) == 0) {
                 throw new BadUse('no application has been registered');
             }
             Http::run();
+        } else {
+            throw new BadUse('unknown mode, not CLI_IS_CLI nor STRAY_IS_HTTP');
         }
     }
 }

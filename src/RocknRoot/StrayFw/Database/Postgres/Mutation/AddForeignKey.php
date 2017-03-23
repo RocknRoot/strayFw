@@ -21,7 +21,7 @@ class AddForeignKey extends Mutation
      * @param  string       $tableName        table real name
      * @param  string       $foreignName      foreign key name
      * @param  string       $foreignTableName foreign table real name
-     * @return PDOStatement $statement prepared query
+     * @return \PDOStatement $statement prepared query
      */
     public static function statement(Database $database, array $definition, $modelName, $tableName, $foreignName, $foreignTableName)
     {

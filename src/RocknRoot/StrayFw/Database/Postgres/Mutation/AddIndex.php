@@ -20,7 +20,7 @@ class AddIndex extends Mutation
      * @param  string       $tableName       table real name
      * @param  array        $tableDefinition table definition
      * @param  string       $indexName       index name
-     * @return PDOStatement $statement prepared query
+     * @return \PDOStatement $statement prepared query
      */
     public static function statement(Database $database, $modelName, $tableName, array $tableDefinition, $indexName)
     {

@@ -11,7 +11,7 @@ define('STRAY_IS_HTTP', true);
 
 if (php_sapi_name() == 'cli-server') {
     define('STRAY_ENV', 'development');
-} else if (false === defined('STRAY_ENV')) {
+} else if (defined('STRAY_ENV') === false) {
     define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
 }
 

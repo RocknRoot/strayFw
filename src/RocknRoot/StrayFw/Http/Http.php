@@ -129,12 +129,13 @@ abstract class Http
                         }
                     }
                 }
-                if (!(self::$response->getRender() instanceof RenderInterface)) {
+                $render = self::$response->getRender();
+                if (!($render instanceof RenderInterface)) {
                     throw new NotARender('response->render is a non RenderInterface implementing object');
                 }
-                echo self::$response->getRender()->render(self::$response->data);
+                echo $render->render(self::$response->data);
                 ob_end_flush();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 ob_end_clean();
                 throw $e;
             }

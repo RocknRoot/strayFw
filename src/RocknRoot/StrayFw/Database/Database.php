@@ -94,7 +94,7 @@ class Database
             $info['user'] = $config['user'];
             $info['pass'] = $config['pass'];
             $this->servers['all'] = $info;
-        } elseif (isset($config['read']) === true && isset($config['write']) === true) {
+        } elseif (isset($config['read']) === true && is_array($config['read']) === true && isset($config['write']) === true && is_array($config['write']) === true) {
             $read = $config['read'];
             if (is_array(current($read)) === true) {
                 $read = $read[mt_rand(0, count($read) - 1)];

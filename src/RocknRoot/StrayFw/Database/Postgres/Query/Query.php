@@ -28,7 +28,7 @@ abstract class Query
     /**
      * PDO statement.
      *
-     * @var PDOStatement
+     * @var \PDOStatement
      */
     protected $statement;
 
@@ -80,7 +80,7 @@ abstract class Query
     /**
      * Get PDO statement.
      *
-     * @return PDOStatement statement
+     * @return \PDOStatement statement
      */
     public function getStatement()
     {

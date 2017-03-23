@@ -28,7 +28,7 @@ class Response
     /**
      * Render object.
      *
-     * @var Render\RenderInterface
+     * @var \RocknRoot\StrayFw\Render\RenderInterface
      */
     protected $renderInst;
 
@@ -43,9 +43,9 @@ class Response
     }
 
     /**
-     * Get current HTTP status code.
+     * Get set render object.
      *
-     * @return int
+     * @return \RocknRoot\StrayFw\Render\RenderInterface
      */
     public function getRender()
     {

@@ -11,7 +11,7 @@ Code is free, new-BSD license. So... fork us !
 ## Requirements
 
 * PHP >= 5.5.9
-* If you're using the Locale namespace, PECL intl extension >= 1.0.0
+* For the Locale namespace, PECL intl extension >= 1.0.0
 
 ## Get started
 
@@ -32,6 +32,10 @@ You can add an issue on github ! ;)
     * [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md 'PSR-2')
     * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3')
     * [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md 'PSR-4')
+
+### Static analysis
+
+    $ ./vendor/bin/phan
 
 ### Coding standards
 

@@ -32,7 +32,7 @@ class Config
      */
     public static function getSettings()
     {
-        return self::get(STRAY_PATH_ROOT . 'settings.yml');
+        return self::get(constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
 
     /**
