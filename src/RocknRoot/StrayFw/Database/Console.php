@@ -38,11 +38,22 @@ class Console
      */
     public function mappings(Request $request)
     {
+        $table = new \cli\Table();
+        $table->setHeaders([ 'Mapping', 'Database', 'Models path' ]);
+        $rows = [];
         $mappings = Mapping::getMappings();
-        echo 'mapping - database - models path' . PHP_EOL;
+        usort($mappings, function(array $a, array $b) {
+            return strcmp($a['config']['name'], $b['config']['name']);
+        });
         foreach ($mappings as $mapping) {
-            echo $mapping['config']['name'] . ' - ' . $mapping['config']['database'] . ' - ' . $mapping['config']['models']['path'] . PHP_EOL;
+            $rows[] = [
+                $mapping['config']['name'],
+                $mapping['config']['database'],
+                $mapping['config']['models']['path'],
+            ];
         }
+        $table->setRows($rows);
+        $table->display();
     }
 
     /**
