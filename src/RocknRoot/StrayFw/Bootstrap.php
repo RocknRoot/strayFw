@@ -53,21 +53,20 @@ abstract class Bootstrap
             self::$applications = array();
             spl_autoload_register(__CLASS__ . '::loadClass');
             self::$isInit = true;
-            if (defined('STRAY_IS_CLI') === true && constant('STRAY_IS_CLI') === true) {
-                Console::init();
-                Console::prefix('\\RocknRoot\\StrayFw\\Console');
-                Console::route('help', 'help', 'this screen', 'Controller.help');
-                Console::prefix('\\RocknRoot\\StrayFw\\Database');
-                Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
-                Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.mappings');
-                Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
-                Console::prefix('\\RocknRoot\\StrayFw\\Http');
-                Console::route('http/routes', 'http/routes', 'list registered routes', 'Console.routes');
-            } elseif (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
+            Console::init();
+            Console::prefix('\\RocknRoot\\StrayFw\\Console');
+            Console::route('help', 'help', 'this screen', 'Controller.help');
+            Console::prefix('\\RocknRoot\\StrayFw\\Database');
+            Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
+            Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.mappings');
+            Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
+            Console::prefix('\\RocknRoot\\StrayFw\\Http');
+            Console::route('http/routes', 'http/routes', 'list registered routes', 'Console.routes');
+            Http::init();
+            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
                 if (constant('STRAY_ENV') === 'development') {
                     Debug\ErrorPage::init();
                 }
-                Http::init();
             }
         }
     }

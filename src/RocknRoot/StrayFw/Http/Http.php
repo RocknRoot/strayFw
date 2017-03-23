@@ -88,11 +88,14 @@ abstract class Http
     public static function init()
     {
         if (self::$isInit === false) {
-            self::$rawRequest = new RawRequest();
+            self::$rawRequest = null;
             self::$routes = array();
             self::$isInit = true;
-            Session::init();
-            Locale::init(self::$rawRequest);
+            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
+                self::$rawRequest = new RawRequest();
+                Session::init();
+                Locale::init(self::$rawRequest);
+            }
         }
     }
 
