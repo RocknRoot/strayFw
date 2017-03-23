@@ -20,7 +20,7 @@ class Console
     public function routes(Request $request)
     {
         $table = new \cli\Table();
-        $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Namespace', 'Action' ]);
+        $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);
         $row = [];
         $routes = Http::getRoutes();
         usort($routes, function(array $a, array $b) {
@@ -35,8 +35,7 @@ class Console
                 $route['subdomain'],
                 $route['method'],
                 empty($route['uri']) === false ? '/' . ltrim(rtrim($route['uri'], '/'), '/') . $route['path'] : $route['path'],
-                $route['namespace'],
-                $route['action'],
+                $route['action'][0] == '\\' ? $route['action'] : rtrim($route['namespace'], '\\') . '\\' . $route['action'],
             ];
         }
         $table->setRows($rows);
