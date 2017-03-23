@@ -27,7 +27,10 @@ class Console
             if ($a['subdomain'] != $b['subdomain']) {
                 return strcmp($a['subdomain'], $b['subdomain']);
             }
-            return strcmp($a['path'], $b['path']);
+            if ($a['path'] != $a['path']) {
+                return strcmp($a['path'], $b['path']);
+            }
+            return strcmp($a['method'], $b['method']);
         });
         foreach ($routes as $route) {
             $rows[] = [
