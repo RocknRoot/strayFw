@@ -20,14 +20,21 @@ class Console
     public function routes(Request $request)
     {
         $table = new \cli\Table();
-        $table->setHeaders([ 'Type', 'Method', 'Path', 'Namespace', 'Action' ]);
+        $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Namespace', 'Action' ]);
         $row = [];
         $routes = Http::getRoutes();
+        usort($routes, function(array $a, array $b) {
+            if ($a['subdomain'] != $b['subdomain']) {
+                return strcmp($a['subdomain'], $b['subdomain']);
+            }
+            return strcmp($a['path'], $b['path']);
+        });
         foreach ($routes as $route) {
             $rows[] = [
                 $route['type'],
+                $route['subdomain'],
                 $route['method'],
-                $route['path'],
+                empty($route['uri']) === false ? '/' . ltrim(rtrim($route['uri'], '/'), '/') . $route['path'] : $route['path'],
                 $route['namespace'],
                 $route['action'],
             ];
