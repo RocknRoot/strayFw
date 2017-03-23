@@ -19,9 +19,20 @@ class Console
      */
     public function routes(Request $request)
     {
+        $table = new \cli\Table();
+        $table->setHeaders([ 'Type', 'Method', 'Path', 'Namespace', 'Action' ]);
+        $row = [];
         $routes = Http::getRoutes();
         foreach ($routes as $route) {
-            echo $route['type'] . ' ' . $route['method'] . ' ' . $route['path'] . ' => ' . $route['namespace'] . ' ' . $route['action'] . PHP_EOL;
+            $rows[] = [
+                $route['type'],
+                $route['method'],
+                $route['path'],
+                $route['namespace'],
+                $route['action'],
+            ];
         }
+        $table->setRows($rows);
+        $table->display();
     }
 }
