@@ -177,7 +177,7 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntity(array $conditions, $orderBy = null, $critical = false)
     {
-        $data = $this->fetchArray($conditions, $orderBy, $critical);
+        $data = static::fetchArray($conditions, $orderBy, $critical);
         if ($data === false) {
             return false;
         }
@@ -237,7 +237,7 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
     {
-        $res = $this->fetchArrays($conditions, $orderBy, $critical);
+        $res = static::fetchArrays($conditions, $orderBy, $critical);
         if ($res === false) {
             return false;
         }
