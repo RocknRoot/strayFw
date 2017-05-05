@@ -13,12 +13,14 @@ class RenderJson implements RenderInterface
     /**
      * Return the generated display.
      *
+     * @param  array  $args        view args
+     * @param  bool   $prettyPrint force pretty print parameter
      * @return string content
      */
-    public function render(array $args)
+    public function render(array $args, bool $prettyPrint = null)
     {
         header('Content-type: application/json');
-        if (STRAY_ENV === 'development') {
+        if ((STRAY_ENV === 'development' && $prettyPrint !== false) || $prettyPrint === true) {
             return json_encode($args, JSON_PRETTY_PRINT);
         }
 
