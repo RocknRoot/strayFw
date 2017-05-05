@@ -72,24 +72,28 @@ abstract class Console
         if (self::$isInit === true) {
             self::$request = new Request(self::$routes);
             self::$controllers = array();
-            $before = self::$request->getBefore();
-            foreach ($before as $b) {
-                $controller = Controllers::get($b['class']);
-                $action = $b['action'];
-                $controller->$action(self::$request);
-            }
-            if (self::$request->hasEnded() === false) {
-                $controller = Controllers::get(self::$request->getClass());
-                $action = self::$request->getAction();
-                $controller->$action(self::$request);
+            try {
+                $before = self::$request->getBefore();
+                foreach ($before as $b) {
+                    $controller = Controllers::get($b['class']);
+                    $action = $b['action'];
+                    $controller->$action(self::$request);
+                }
                 if (self::$request->hasEnded() === false) {
-                    $after = self::$request->getAfter();
-                    foreach ($after as $a) {
-                        $controller = Controllers::get($a['class']);
-                        $action = $a['action'];
-                        $controller->$action(self::$request);
+                    $controller = Controllers::get(self::$request->getClass());
+                    $action = self::$request->getAction();
+                    $controller->$action(self::$request);
+                    if (self::$request->hasEnded() === false) {
+                        $after = self::$request->getAfter();
+                        foreach ($after as $a) {
+                            $controller = Controllers::get($a['class']);
+                            $action = $a['action'];
+                            $controller->$action(self::$request);
+                        }
                     }
                 }
+            } catch (\Exception $e) {
+                echo 'Exception: ' . $e->getMessage() . PHP_EOL;
             }
         }
     }

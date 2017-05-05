@@ -2,7 +2,7 @@
     "name": "rocknroot/stray-fw",
     "type": "library",
     "description": "A PHP web framework for rock 'n' rollers.",
-    "keywords": [ "framework" ],
+    "keywords": [ "framework", "strayFw" ],
     "homepage": "http://github.com/RocknRoot/strayFw",
     "license": "BSD-3-Clause",
     "authors": [

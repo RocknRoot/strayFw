@@ -42,7 +42,7 @@ class Console
         $table->setHeaders([ 'Mapping', 'Database', 'Models path' ]);
         $rows = [];
         $mappings = Mapping::getMappings();
-        usort($mappings, function(array $a, array $b) {
+        usort($mappings, function (array $a, array $b) {
             return strcmp($a['config']['name'], $b['config']['name']);
         });
         foreach ($mappings as $mapping) {

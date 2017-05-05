@@ -171,10 +171,29 @@ abstract class Model extends ProviderModel
      * Fetch one entity satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
+     * @param  array $order      order clause
      * @param  bool  $critical   if true, will be executed on write server
      * @return Model model instance
      */
-    public static function fetchEntity(array $conditions, $critical = false)
+    public static function fetchEntity(array $conditions, $orderBy = null, $critical = false)
+    {
+        $data = $this->fetchArray($conditions, $orderBy, $critical);
+        if ($data === false) {
+            return false;
+        }
+
+        return new static($data);
+    }
+
+    /**
+     * Fetch one row satisfying the specified conditions.
+     *
+     * @param  array $conditions where conditions
+     * @param  array $order      order clause
+     * @param  bool  $critical   if true, will be executed on write server
+     * @return array row data
+     */
+    public static function fetchArray(array $conditions, $orderBy = null, $critical = false)
     {
         $selectQuery = new Select(static::DATABASE, $critical);
         $selectQuery->select(static::getAllFieldsRealNames());
@@ -188,38 +207,13 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        $selectQuery->limit(1);
-        if ($selectQuery->execute() === false) {
-            return false;
-        }
-        $data = $selectQuery->fetch();
-        if ($data === false) {
-            return false;
-        }
-
-        return new static($data);
-    }
-
-    /**
-     * Fetch one row satisfying the specified conditions.
-     *
-     * @param  array $conditions where conditions
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return array row data
-     */
-    public static function fetchArray(array $conditions, $critical = false)
-    {
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
-        $selectQuery->from(static::NAME);
-        if (count($conditions) > 0) {
-            $where = array();
-            foreach ($conditions as $key => $value) {
+        if (count($orderBy) > 0) {
+            $orders = array();
+            foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $orders[$realName] = strtoupper(ucfirst($value));
             }
-            $selectQuery->where($where);
+            $selectQuery->orderBy($orders);
         }
         $selectQuery->limit(1);
         if ($selectQuery->execute() === false) {
@@ -243,8 +237,30 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
     {
+        $res = $this->fetchArrays($conditions, $orderBy, $critical);
+        if ($res === false) {
+            return false;
+        }
+        $data = [];
+        foreach ($res as $r) {
+            $data[] = new static($r);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Fetch all rows satisfying the specified conditions.
+     *
+     * @param  array $conditions where conditions
+     * @param  array $order      order clause
+     * @param  bool  $critical   if true, will be executed on write server
+     * @return array rows data
+     */
+    public static function fetchArrays(array $conditions, $orderBy = null, $critical = false)
+    {
         $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(static::getAllFieldsRealNames());
+        $selectQuery->select(array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
         $selectQuery->from(static::NAME);
         if (count($conditions) > 0) {
             $where = array();
@@ -262,46 +278,6 @@ abstract class Model extends ProviderModel
                 $orders[$realName] = strtoupper(ucfirst($value));
             }
             $selectQuery->orderBy($orders);
-        }
-        if ($selectQuery->execute() === false) {
-            return false;
-        }
-        $res = $selectQuery->fetchAll();
-        $data = array();
-        if ($res === false) {
-            return false;
-        }
-        foreach ($res as $r) {
-            $data[] = new static($r);
-        }
-
-        return $data;
-    }
-
-    /**
-     * Fetch all rows satisfying the specified conditions.
-     *
-     * @param  array        $conditions where conditions
-     * @param  array|string $order      order clause
-     * @param  bool         $critical   if true, will be executed on write server
-     * @return array        rows data
-     */
-    public static function fetchArrays(array $conditions, $orderBy = null, $critical = false)
-    {
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
-        $selectQuery->from(static::NAME);
-        if (count($conditions) > 0) {
-            $where = array();
-            foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
-            }
-            $selectQuery->where($where);
-        }
-        if ($orderBy != null) {
-            $selectQuery->orderBy($orderBy);
         }
         if ($selectQuery->execute() === false) {
             return false;

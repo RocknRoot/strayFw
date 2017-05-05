@@ -3,7 +3,6 @@
 namespace RocknRoot\StrayFw\Http;
 
 use RocknRoot\StrayFw\Console\Request;
-use RocknRoot\StrayFw\Http\Http;
 
 /**
  * Console actions for Http namespace.
@@ -23,13 +22,14 @@ class Console
         $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);
         $row = [];
         $routes = Http::getRoutes();
-        usort($routes, function(array $a, array $b) {
+        usort($routes, function (array $a, array $b) {
             if ($a['subdomain'] != $b['subdomain']) {
                 return strcmp($a['subdomain'], $b['subdomain']);
             }
             if ($a['path'] != $a['path']) {
                 return strcmp($a['path'], $b['path']);
             }
+
             return strcmp($a['method'], $b['method']);
         });
         foreach ($routes as $route) {
