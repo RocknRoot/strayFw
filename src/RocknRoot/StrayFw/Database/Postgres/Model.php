@@ -177,7 +177,23 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntity(array $conditions, $orderBy = null, $critical = false)
     {
-        $data = static::fetchArray($conditions, $orderBy, $critical);
+        $selectQuery = new Select(static::DATABASE, $critical);
+        $selectQuery->select(static::getAllFieldsRealNames());
+        $selectQuery->from(static::NAME);
+        if (count($conditions) > 0) {
+            $where = array();
+            foreach ($conditions as $key => $value) {
+                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . ucfirst($key);
+                $selectQuery->bind('where' . ucfirst($key), $value);
+            }
+            $selectQuery->where($where);
+        }
+        $selectQuery->limit(1);
+        if ($selectQuery->execute() === false) {
+            return false;
+        }
+        $data = $selectQuery->fetch();
         if ($data === false) {
             return false;
         }
@@ -238,6 +254,30 @@ abstract class Model extends ProviderModel
     public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
     {
         $res = static::fetchArrays($conditions, $orderBy, $critical);
+        $selectQuery = new Select(static::DATABASE, $critical);
+        $selectQuery->select(static::getAllFieldsRealNames());
+        $selectQuery->from(static::NAME);
+        if (count($conditions) > 0) {
+            $where = array();
+            foreach ($conditions as $key => $value) {
+                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . ucfirst($key);
+                $selectQuery->bind('where' . ucfirst($key), $value);
+            }
+            $selectQuery->where($where);
+        }
+        if (count($orderBy) > 0) {
+            $orders = array();
+            foreach ($orderBy as $key => $value) {
+                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = strtoupper(ucfirst($value));
+            }
+            $selectQuery->orderBy($orders);
+        }
+        if ($selectQuery->execute() === false) {
+            return false;
+        }
+        $res = $selectQuery->fetchAll();
         if ($res === false) {
             return false;
         }
