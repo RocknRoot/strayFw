@@ -15,6 +15,5 @@ before_script:
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
   - sh -c "cp quality/settings.tests.yml settings.yml"
   - composer install
-  - ./vendor/bin/phan
 
 script: phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
