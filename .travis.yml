@@ -3,9 +3,18 @@ php:
   - 7.1
 
 before_script:
+  - git clone https://github.com/nikic/php-ast.git
+  - cd php-ast
+  - phpize
+  - ./configure
+  - make
+  - make install
+  - cd ..
+  - phpenv config-add travisphp.ini
   - psql -c "DROP DATABASE IF EXISTS strayFw_test;" -U postgres
   - psql -c "CREATE DATABASE strayFw_test;" -U postgres
   - sh -c "cp quality/settings.tests.yml settings.yml"
   - composer install
+  - ./vendor/bin/phan
 
 script: phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
