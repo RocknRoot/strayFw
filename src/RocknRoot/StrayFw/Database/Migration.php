@@ -75,7 +75,7 @@ class Migration
             $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
             list($up, $down) = call_user_func($cl, $mapping, $mappingName, $name);
             $this->write($mapping, $mappingName, $name, $up, $down);
-            echo PHP_EOL . 'Migration "' . $name . '" generated.' . PHP_EOL;
+            echo 'Migration "' . $name . '" generated.' . PHP_EOL;
             echo 'This is an automatic generation, please validate or rewrite parts of the migration.' . PHP_EOL;
             echo 'File is there:' . PHP_EOL;
             echo $path . PHP_EOL;

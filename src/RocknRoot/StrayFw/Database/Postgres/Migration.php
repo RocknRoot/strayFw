@@ -32,14 +32,14 @@ abstract class Migration extends ProviderMigration
         $schema = Config::get($mapping['config']['schema']);
 
         $newKeys = array_diff_key($schema, $oldSchema);
-        foreach ($newKeys as $key => $model) {
+        foreach ($newKeys as $key => $table) {
             $tableName = null;
-            if (isset($schema[$key]['name']) === true) {
-                $tableName = $schema[$key]['name'];
+            if (isset($table['name']) === true) {
+                $tableName = $table['name'];
             } else {
                 $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
             }
-            if (isset($schema[$key]['type']) === false || $schema[$key]['type'] == 'model') {
+            if (isset($table['type']) === false || $table['type'] == 'model') {
                 echo 'AddTable: ' . $tableName . PHP_EOL;
             } else {
                 echo 'AddEnum: ' . $tableName . PHP_EOL;
@@ -47,6 +47,19 @@ abstract class Migration extends ProviderMigration
         }
 
         $oldKeys = array_diff_key($oldSchema, $schema);
+        foreach ($oldKeys as $key => $model) {
+            $tableName = null;
+            if (isset($table['name']) === true) {
+                $tableName = $table['name'];
+            } else {
+                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
+            }
+            if (isset($table['type']) === false || $table['type'] == 'model') {
+                echo 'RemoveTable: ' . $tableName . PHP_EOL;
+            } else {
+                echo 'RemoveEnum: ' . $tableName . PHP_EOL;
+            }
+        }
 
         $keys = array_intersect_key($oldSchema, $schema);
 
