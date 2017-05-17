@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres;
 
+use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
 
 /**
@@ -17,6 +18,11 @@ abstract class Migration extends ProviderMigration
     {
         $up = '';
         $down = '';
+        $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
+        $schema = Config::get($mapping['config']['schema']);
+
+        foreach ($schema as $modelName => $modelDefinition) {
+        }
 
         return [ $up, $down ];
     }

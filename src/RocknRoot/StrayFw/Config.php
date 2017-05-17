@@ -2,8 +2,11 @@
 
 namespace RocknRoot\StrayFw;
 
+use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\FileNotParsable;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
+use RocknRoot\StrayFw\Exception\FileNotWritable;
+use Symfony\Component\Yaml\Exception\DumpException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -59,5 +62,26 @@ class Config
         }
 
         return self::$files[$fileName];
+    }
+
+    /**
+     * Write a file content. Save it internally.
+     *
+     * @static
+     * @throws FileNotWritable if file can't be written
+     * @param  string          $fileName file name
+     * @param  array           $content  file content
+     */
+    public static function set(string $fileName, array $content)
+    {
+        try {
+            $json = Yaml::dump($content, 2);
+            if (file_put_contents($fileName, $json) === false) {
+                throw new FileNotWritable('can\'t write to "' . $fileName . '"');
+            }
+        } catch (DumpException $e) {
+            throw new BadUse('Config::set() content parameter can\'t be dump to YAML');
+        }
+        self::$files[$fileName] = $content;
     }
 }

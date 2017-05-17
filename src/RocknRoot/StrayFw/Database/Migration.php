@@ -37,6 +37,16 @@ class Migration
                 if (copy($mapping['config']['schema'], $path) === false) {
                     throw new FileNotWritable('can\'t copy "' . $mapping['schema'] . '" to "' . $path . '"');
                 }
+                $migrations = [];
+                $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml';
+                if (file_exists($path) === true) {
+                    $migrations = Config::get($path);
+                }
+                $migrations[] = [
+                    'name' => $name,
+                    'timestamp' => time(),
+                ];
+                Config::set($path, $migrations);
                 echo 'Migration "' . $name . '" created.' . PHP_EOL;
             }
         }
@@ -63,7 +73,8 @@ class Migration
             }
             echo 'Are you sure you want to overwrite the existing migration file ? [y/n] : ';
             if (fgetc(STDIN) == 'y') {
-                list($up, $down) = call_user_func(rtrim($mapping['config']['migrations']['namespace'], '\\') . '\\' . $name . '\\' . $name . '::generate', $mapping, $name);
+                $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
+                list($up, $down) = call_user_func($cl, $mapping, $name);
                 $this->write($mapping, $mappingName, $name, $up, $down);
             }
         }
