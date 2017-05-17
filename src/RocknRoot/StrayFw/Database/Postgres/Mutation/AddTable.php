@@ -24,10 +24,9 @@ class AddTable extends Mutation
      * @param  string                  $mapping         mapping name
      * @param  string                  $tableName       table real name
      * @param  string                  $modelName       model name
-     * @param  array                   $tableDefinition table definition
      * @return \PDOStatement           $statement       prepared query
      */
-    public static function statement(Database $database, array $schema, $mapping, $tableName, $modelName, array $tableDefinition)
+    public static function statement(Database $database, array $schema, $mapping, $tableName, $modelName)
     {
         $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {

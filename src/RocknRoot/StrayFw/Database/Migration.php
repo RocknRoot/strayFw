@@ -82,16 +82,39 @@ class Migration
         }
     }
 
+    /**
+     * Run migration code for a mapping.
+     *
+     * @param Request $request current CLI request
+     */
     public function migrate(Request $req)
     {
         echo 'Not implemented yet.' . PHP_EOL;
     }
 
+    /**
+     * Rollback last migration for a mapping.
+     *
+     * @param Request $request current CLI request
+     */
     public function rollback(Request $req)
     {
         echo 'Not implemented yet.' . PHP_EOL;
     }
 
+    /**
+     * Write migration code to file.
+     *
+     * @param  array           $mapping     mapping definition
+     * @param  string          $mappingName mapping name
+     * @param  string          $name        migration name
+     * @param  array           $up          up code
+     * @param  array           $down        down code
+     * @param  array           $import      used classes in migration code
+     * @throws FileNotWritable if can't mkdir
+     * @throws FileNotWritable if can't open file with write permission
+     * @throws FileNotWritable if can't write to file
+     */
     private function write(array $mapping, string $mappingName, string $name, array $up = [], array $down = [], array $import = [])
     {
         $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -115,9 +138,8 @@ class Migration
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . $name . ";\n\nuse " . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration;' . PHP_EOL;
         $content .= 'use RocknRoot\StrayFw\Database\Database;' . PHP_EOL;
         $content .= 'use RocknRoot\StrayFw\Database\Mapping;' . PHP_EOL;
-        foreach ($import as $imp) {
-            $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\' . $imp . ";\n";
-        }
+        $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\{';
+        $content .= implode(', ', $import) . "};\n";
         $up = implode('', array_map(function (string $a) {
             return '        ' . $a;
         }, $up));
