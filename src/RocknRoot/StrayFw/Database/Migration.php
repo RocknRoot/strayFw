@@ -118,18 +118,12 @@ class Migration
         foreach ($import as $imp) {
             $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\' . $imp . ";\n";
         }
-        $up = implode('', array_map(function(string $a) {
+        $up = implode('', array_map(function (string $a) {
             return '        ' . $a;
         }, $up));
-        $down = implode('', array_map(function(string $a) {
+        $down = implode('', array_map(function (string $a) {
             return '        ' . $a;
         }, $down));
-        $up = '    $schema = Config::get($mapping[\'config\'][\'schema\']);' . PHP_EOL . $up;
-        $up = '    $database = Database::get($mapping[\'config\'][\'database\']);' . PHP_EOL . $up;
-        $up = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL . $up;
-        $down = '    $schema = Config::get(__DIR__ . \'/schema.yml\');' . PHP_EOL . $down;
-        $down = '    $database = Database::get($mapping[\'config\'][\'database\']);' . PHP_EOL . $down;
-        $down = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL . $down;
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";
         $content .= "    public function up()\n    {\n" . $up . "    }\n\n";

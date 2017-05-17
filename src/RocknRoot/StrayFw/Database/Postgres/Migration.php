@@ -42,8 +42,8 @@ abstract class Migration extends ProviderMigration
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up[] = '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
-                $down[] = '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
+                $up[] = '$this->execute(AddTable::statement($this->database, $this->schema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
+                $down[] = '$this->execute(RemoveTable::statement($this->database, \'' . $tableName . '\'));' . PHP_EOL;
                 echo 'AddTable: ' . $key . PHP_EOL;
             } else {
                 echo 'AddEnum: ' . $key . PHP_EOL;
@@ -61,8 +61,8 @@ abstract class Migration extends ProviderMigration
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up[] = '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
-                $down[] = '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
+                $up[] = '$this->execute(RemoveTable::statement($this->database, \'' . $tableName . '\'));' . PHP_EOL;
+                $down[] = '$this->execute(AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
                 echo 'RemoveEnum: ' . $key . PHP_EOL;
