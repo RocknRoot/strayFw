@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database;
 
+use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Console\Request;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
@@ -74,8 +75,12 @@ class Migration
             echo 'Are you sure you want to overwrite the existing migration file ? [y/n] : ';
             if (fgetc(STDIN) == 'y') {
                 $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
-                list($up, $down) = call_user_func($cl, $mapping, $name);
+                list($up, $down) = call_user_func($cl, $mapping, $mappingName, $name);
                 $this->write($mapping, $mappingName, $name, $up, $down);
+                echo PHP_EOL . 'Migration "' . $name . '" generated.' . PHP_EOL;
+                echo 'This is an automatic generation, please validate or rewrite parts of the migration.' . PHP_EOL;
+                echo 'File is there:' . PHP_EOL;
+                echo $path . PHP_EOL;
             }
         }
     }
