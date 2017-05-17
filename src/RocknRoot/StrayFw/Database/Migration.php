@@ -22,7 +22,7 @@ class Migration
             if ($this->write($mapping, $mappingName, $name, '', '') === true) {
                 $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 $path .= $name . DIRECTORY_SEPARATOR . 'schema.yml';
-                if (copy($mapping['schema'], $path) === false) {
+                if (copy($mapping['config']['schema'], $path) === false) {
                     throw new FileNotWritable('can\'t copy "' . $mapping['schema'] . '" to "' . $path . '"');
                 }
                 echo 'Migration "' . $name . '" created.' . PHP_EOL;
