@@ -32,7 +32,7 @@ abstract class Migration extends ProviderMigration
         $schema = Config::get($mapping['config']['schema']);
 
         $newKeys = array_diff_key($schema, $oldSchema);
-        foreach ($newKeys as $key) {
+        foreach ($newKeys as $keyi => $model) {
             $tableName = null;
             if (isset($schema[$key]['name']) === true) {
                 $tableName = $schema[$key]['name'];
