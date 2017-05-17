@@ -3,6 +3,8 @@
 namespace RocknRoot\StrayFw\Database;
 
 use RocknRoot\StrayFw\Console\Request;
+use RocknRoot\StrayFw\Exception\FileNotReadable;
+use RocknRoot\StrayFw\Exception\FileNotWritable;
 
 /**
  * Console actions for migration related operations.
@@ -11,6 +13,13 @@ use RocknRoot\StrayFw\Console\Request;
  */
 class Migration
 {
+    /**
+     * Create a new migration.
+     *
+     * @param Request $request current CLI request
+     * @throws FileNotReadable if can't find schema file
+     * @throws FileNotWritable if can't copy schema file
+     */
     public function create(Request $req)
     {
         if (count($req->getArgs()) != 2) {
@@ -22,6 +31,9 @@ class Migration
             if ($this->write($mapping, $mappingName, $name, '', '') === true) {
                 $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 $path .= $name . DIRECTORY_SEPARATOR . 'schema.yml';
+                if (file_exists($mapping['config']['schema']) === false) {
+                    throw new FileNotReadable('can\'t find "' . $mapping['schema'] . '"');
+                }
                 if (copy($mapping['config']['schema'], $path) === false) {
                     throw new FileNotWritable('can\'t copy "' . $mapping['schema'] . '" to "' . $path . '"');
                 }
@@ -30,6 +42,12 @@ class Migration
         }
     }
 
+    /**
+     * Generate code for migration.
+     *
+     * @param Request $request current CLI request
+     * @throws FileNotReadable if can't find migrate
+     */
     public function generate(Request $req)
     {
         if (count($req->getArgs()) != 2) {
@@ -38,6 +56,16 @@ class Migration
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
             $name = ucfirst($req->getArgs()[1]);
+            $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $path .= $name . DIRECTORY_SEPARATOR . $name . '.php';
+            if (file_exists($path) === false) {
+                throw new FileNotReadable('can\'t find migration at "' . $path . '"');
+            }
+            echo 'Are you sure you want to overwrite the existing migration file ? [y/n] : ';
+            if (fgetc(STDIN) == 'y') {
+                list($up, $down) = call_user_func(rtrim($mapping['config']['migrations']['namespace'], '\\') . '\\' . $name . '\\' . $name . '::generate', $mapping, $name);
+                $this->write($mapping, $mappingName, $name, $up, $down);
+            }
         }
     }
 
