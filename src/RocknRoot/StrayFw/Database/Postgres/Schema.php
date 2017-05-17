@@ -455,7 +455,7 @@ class Schema extends ProviderSchema
             if ($file === false) {
                 throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
             }
-            $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . ";\n\nuse " . rtrim($mapping['config']['models']['namespace'], '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
+            $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . ";\n\nuse " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base\\" . ucfirst($modelName) . " as BaseModel;\n\nclass " . ucfirst($modelName) . " extends BaseModel\n{\n}";
             if (fwrite($file, $content) === false) {
                 throw new FileNotWritable('can\'t write in "' . $path . '"');
             }
