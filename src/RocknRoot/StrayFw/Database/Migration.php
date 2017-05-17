@@ -29,7 +29,7 @@ class Migration
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
             $name = ucfirst($req->getArgs()[1]);
-            if ($this->write($mapping, $mappingName, $name, '', '', []) === true) {
+            if ($this->write($mapping, $mappingName, $name) === true) {
                 $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 $path .= $name . DIRECTORY_SEPARATOR . 'schema.yml';
                 if (file_exists($mapping['config']['schema']) === false) {
@@ -92,7 +92,7 @@ class Migration
         echo 'Not implemented yet.' . PHP_EOL;
     }
 
-    private function write(array $mapping, string $mappingName, string $name, string $up, string $down, array $import)
+    private function write(array $mapping, string $mappingName, string $name, array $up = [], array $down = [], array $import = [])
     {
         $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= $name . DIRECTORY_SEPARATOR;
@@ -118,9 +118,18 @@ class Migration
         foreach ($import as $imp) {
             $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\' . $imp . ";\n";
         }
-        $start = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL;
-        $start .= '    $database = Database::get($mapping[\'config\'][\'database\']);\n';
-        $start .= '    $schema = Config::get($mapping[\'config\'][\'schema\']);\n';
+        $up = implode('', array_map(function(string $a) {
+            return '        ' . $a;
+        }, $up);
+        $down = implode('', array_map(function(string $a) {
+            return '        ' . $a;
+        }, $down);
+        $up = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL . $up;
+        $up = '    $database = Database::get($mapping[\'config\'][\'database\']);\n' . $up;
+        $up = '    $schema = Config::get($mapping[\'config\'][\'schema\']);\n' . $up;
+        $down = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL . $down;
+        $down = '    $database = Database::get($mapping[\'config\'][\'database\']);\n' . $down;
+        $down = '    $schema = Config::get(__DIR__ . \'/schema.yml\');' . PHP_EOL . $down;
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";
         $content .= "    public function up()\n    {\n" . $up . "    }\n\n";

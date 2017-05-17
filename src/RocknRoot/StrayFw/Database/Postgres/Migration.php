@@ -26,8 +26,8 @@ abstract class Migration extends ProviderMigration
     public static function generate(array $mapping, string $mappingName, string $name)
     {
         $import = [];
-        $up = '';
-        $down = '';
+        $up = [];
+        $down = [];
         $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
         $schema = Config::get($mapping['config']['schema']);
 
@@ -42,8 +42,8 @@ abstract class Migration extends ProviderMigration
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up .= '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
-                $down .= '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
+                $up[] = '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
+                $down[] = '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
                 echo 'AddTable: ' . $key . PHP_EOL;
             } else {
                 echo 'AddEnum: ' . $key . PHP_EOL;
@@ -59,6 +59,10 @@ abstract class Migration extends ProviderMigration
                 $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
+                $import[] = 'AddTable';
+                $import[] = 'RemoveTable';
+                $up[] = '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
+                $down[] = '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
                 echo 'RemoveEnum: ' . $key . PHP_EOL;
