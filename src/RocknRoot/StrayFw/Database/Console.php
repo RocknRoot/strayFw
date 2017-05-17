@@ -20,7 +20,7 @@ class Console
     public function build(Request $request)
     {
         if (count($request->getArgs()) != 1) {
-            echo 'Wrong parameters.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
+            echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
         } else {
             $mapping = $request->getArgs()[0];
             echo 'Are you sure you want to delete all existing tables and data for mapping "' . $mapping . '" ? [y/n] : ';
@@ -64,7 +64,7 @@ class Console
     public function generate(Request $request)
     {
         if (count($request->getArgs()) != 1) {
-            echo 'Wrong parameters.' . PHP_EOL . 'Usage : db/model/generate mapping_name' . PHP_EOL;
+            echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/generate mapping_name' . PHP_EOL;
         } else {
             $mapping = $request->getArgs()[0];
             $schema = Schema::getSchema($mapping);

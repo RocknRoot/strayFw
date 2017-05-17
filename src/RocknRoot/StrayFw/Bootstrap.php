@@ -57,16 +57,18 @@ abstract class Bootstrap
             Console::prefix('\\RocknRoot\\StrayFw\\Console');
             Console::route('help', 'help', 'this screen', 'Controller.help');
             Console::prefix('\\RocknRoot\\StrayFw\\Database');
+            Console::route('db/list', 'db/list', 'list registered mappings', 'Console.mappings');
             Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
-            Console::route('db/mapping/list', 'db/mapping/list', 'list registered mappings', 'Console.mappings');
-            Console::route('db/mapping/generate', 'db/mapping/generate mapping_name', 'generate base models', 'Console.generate');
+            Console::route('db/generate', 'db/generate mapping_name', 'generate base models', 'Console.generate');
+            Console::route('db/migration/create', 'db/migration/create mapping_name migration_name', 'create a new migration', 'Migration.create');
+            Console::route('db/migration/generate', 'db/migration/generate mapping_name migration_name', 'generate migration code', 'Migration.generate');
+            Console::route('db/migration/migrate', 'db/migration/migrate mapping_name', 'migrate', 'Migration.migrate');
+            Console::route('db/migration/rollback', 'db/migration/rollback mapping_name', 'rollback last migration', 'Migration.rollback');
             Console::prefix('\\RocknRoot\\StrayFw\\Http');
             Console::route('http/routing/list', 'http/routing/list', 'list registered routes', 'Console.routes');
             Http::init();
-            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
-                if (constant('STRAY_ENV') === 'development') {
-                    Debug\ErrorPage::init();
-                }
+            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true && constant('STRAY_ENV') === 'development') {
+                Debug\ErrorPage::init();
             }
         }
     }
@@ -99,11 +101,9 @@ abstract class Bootstrap
                 }
             }
             if ($fileName === null) {
-                throw new UnknownNamespace('can\'t find namespace "'
-                    . substr($className, 0, $namespacePos) . '"');
+                throw new UnknownNamespace('can\'t find namespace "' . substr($className, 0, $namespacePos) . '"');
             }
-            $fileName = self::$namespaces[$namespace]
-                . str_replace('\\', DIRECTORY_SEPARATOR, implode(null, array_reverse($subNamespaces)));
+            $fileName = self::$namespaces[$namespace] . str_replace('\\', DIRECTORY_SEPARATOR, implode(null, array_reverse($subNamespaces)));
             $className = substr($className, $namespacePos + 1);
         }
         if ($fileName != null) {
