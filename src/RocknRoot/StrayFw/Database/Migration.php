@@ -120,10 +120,10 @@ class Migration
         }
         $up = implode('', array_map(function(string $a) {
             return '        ' . $a;
-        }, $up);
+        }, $up));
         $down = implode('', array_map(function(string $a) {
             return '        ' . $a;
-        }, $down);
+        }, $down));
         $up = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL . $up;
         $up = '    $database = Database::get($mapping[\'config\'][\'database\']);\n' . $up;
         $up = '    $schema = Config::get($mapping[\'config\'][\'schema\']);\n' . $up;
