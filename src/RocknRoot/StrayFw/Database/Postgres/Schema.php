@@ -181,7 +181,7 @@ class Schema extends ProviderSchema
         if (isset($modelDefinition['fields']) === false) {
             throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
         }
-        $statement = Mutation\AddTable::statement($database, $this->getDefinition(), $this->mapping, $tableName, $modelName, $modelDefinition);
+        $statement = Mutation\AddTable::statement($database, $this->getDefinition(), $this->mapping, $tableName, $modelName);
         if ($statement->execute() == false) {
             throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
         }

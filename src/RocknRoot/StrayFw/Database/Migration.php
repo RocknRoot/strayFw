@@ -29,7 +29,7 @@ class Migration
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
             $name = ucfirst($req->getArgs()[1]);
-            if ($this->write($mapping, $mappingName, $name, '', '') === true) {
+            if ($this->write($mapping, $mappingName, $name, '', '', []) === true) {
                 $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 $path .= $name . DIRECTORY_SEPARATOR . 'schema.yml';
                 if (file_exists($mapping['config']['schema']) === false) {
@@ -73,8 +73,8 @@ class Migration
                 throw new FileNotReadable('can\'t find migration at "' . $path . '"');
             }
             $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
-            list($up, $down) = call_user_func($cl, $mapping, $mappingName, $name);
-            $this->write($mapping, $mappingName, $name, $up, $down);
+            $res = call_user_func($cl, $mapping, $mappingName, $name);
+            $this->write($mapping, $mappingName, $name, $res['up'], $res['down'], $res['import']);
             echo 'Migration "' . $name . '" generated.' . PHP_EOL;
             echo 'This is an automatic generation, please validate or rewrite parts of the migration.' . PHP_EOL;
             echo 'File is there:' . PHP_EOL;
@@ -92,7 +92,7 @@ class Migration
         echo 'Not implemented yet.' . PHP_EOL;
     }
 
-    private function write(array $mapping, string $mappingName, string $name, string $up, string $down)
+    private function write(array $mapping, string $mappingName, string $name, string $up, string $down, array $import)
     {
         $path = rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= $name . DIRECTORY_SEPARATOR;
@@ -112,7 +112,15 @@ class Migration
         if ($file === false) {
             throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
         }
-        $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . $name . ";\n\nusing " . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration;' . PHP_EOL;
+        $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . $name . ";\n\nuse " . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration;' . PHP_EOL;
+        $content .= 'use RocknRoot\StrayFw\Database\Database;' . PHP_EOL;
+        $content .= 'use RocknRoot\StrayFw\Database\Mapping;' . PHP_EOL;
+        foreach ($import as $imp) {
+            $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\' . $imp . ";\n";
+        }
+        $start = '    $mapping = Mapping::get(\'' . $mappingName . '\');' . PHP_EOL;
+        $start .= '    $database = Database::get($mapping[\'config\'][\'database\']);\n';
+        $start .= '    $schema = Config::get($mapping[\'config\'][\'schema\']);\n';
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";
         $content .= "    public function up()\n    {\n" . $up . "    }\n\n";

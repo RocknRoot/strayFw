@@ -25,14 +25,15 @@ class AddTable extends Mutation
      * @param  string                  $tableName       table real name
      * @param  string                  $modelName       model name
      * @param  array                   $tableDefinition table definition
-     * @return \PDOStatement            $statement       prepared query
+     * @return \PDOStatement           $statement       prepared query
      */
     public static function statement(Database $database, array $schema, $mapping, $tableName, $modelName, array $tableDefinition)
     {
-        $sql = 'CREATE TABLE ' . $tableName . ' (';
+        $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {
             throw new InvalidSchemaDefinition('model "' . $modelName . '" has no field');
         }
+        $sql = 'CREATE TABLE ' . $tableName . ' (';
         $primary = array();
         foreach ($tableDefinition['fields'] as $fieldName => $fieldDefinition) {
             $fieldRealName = null;

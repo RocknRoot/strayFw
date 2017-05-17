@@ -4,7 +4,6 @@ namespace RocknRoot\StrayFw\Database\Postgres;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Helper;
-use RocknRoot\StrayFw\Database\Postgres\Mutation\{AddEnum, AddTable};
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
 
 /**
@@ -22,10 +21,11 @@ abstract class Migration extends ProviderMigration
      * @param array  $mapping     mapping definition
      * @param string $mappingName mapping name
      * @param string $name        migration name
-     * @return array up and down code
+     * @return array import, up and down code
      */
     public static function generate(array $mapping, string $mappingName, string $name)
     {
+        $import = [];
         $up = '';
         $down = '';
         $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
@@ -40,14 +40,18 @@ abstract class Migration extends ProviderMigration
                 $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
-                echo 'AddTable: ' . $tableName . PHP_EOL;
+                $import[] = 'AddTable';
+                $import[] = 'RemoveTable';
+                $up .= '$this->execute(AddTable::statement($database, $schema, $mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
+                $down .= '$this->execute(RemoveTable::statement($database, \'' . $tableName . '\'));' . PHP_EOL;
+                echo 'AddTable: ' . $key . PHP_EOL;
             } else {
-                echo 'AddEnum: ' . $tableName . PHP_EOL;
+                echo 'AddEnum: ' . $key . PHP_EOL;
             }
         }
 
         $oldKeys = array_diff_key($oldSchema, $schema);
-        foreach ($oldKeys as $key => $model) {
+        foreach ($oldKeys as $key => $table) {
             $tableName = null;
             if (isset($table['name']) === true) {
                 $tableName = $table['name'];
@@ -55,14 +59,20 @@ abstract class Migration extends ProviderMigration
                 $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
-                echo 'RemoveTable: ' . $tableName . PHP_EOL;
+                echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
-                echo 'RemoveEnum: ' . $tableName . PHP_EOL;
+                echo 'RemoveEnum: ' . $key . PHP_EOL;
             }
         }
 
         $keys = array_intersect_key($oldSchema, $schema);
+        foreach ($keys as $key => $table) {
+        }
 
-        return [ $up, $down ];
+        return [
+            'import' => array_unique($import),
+            'up' => $up,
+            'down' => $down,
+        ];
     }
 }
