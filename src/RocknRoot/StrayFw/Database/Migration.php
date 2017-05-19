@@ -149,10 +149,10 @@ class Migration
             $content .= implode(', ', $import) . "};\n";
         }
         $up = implode('', array_map(function (string $a) {
-            return '        assert ' . $a . '->execute();' . PHP_EOL;
+            return '        assert(' . $a . '->execute());' . PHP_EOL;
         }, $up));
         $down = implode('', array_map(function (string $a) {
-            return '        assert ' . $a . '->execute();' . PHP_EOL;
+            return '        assert(' . $a . '->execute());' . PHP_EOL;
         }, $down));
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";

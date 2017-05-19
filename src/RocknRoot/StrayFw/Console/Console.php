@@ -94,6 +94,7 @@ abstract class Console
                 }
             } catch (\Exception $e) {
                 echo 'Exception: ' . $e->getMessage() . PHP_EOL;
+                debug_print_backtrace();
             }
         }
     }
