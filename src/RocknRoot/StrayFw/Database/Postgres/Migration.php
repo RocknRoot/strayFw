@@ -45,7 +45,7 @@ abstract class Migration extends ProviderMigration
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up[] = 'AddTable::statement($this->database, $this->schema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
+                $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
                 $down[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
                 echo '  AddTable: ' . $key . PHP_EOL;
             } else {

@@ -34,14 +34,14 @@ abstract class Migration
      *
      * @var array
      */
-    protected $newSchema;
+    protected $nextSchema;
 
     /**
      * Old schema definition, current migration's one.
      *
      * @var array
      */
-    protected $schema;
+    protected $prevSchema;
 
     /**
      * Constructor.
@@ -54,7 +54,7 @@ abstract class Migration
         $this->mapping = Mapping::get(static::MAPPING);
         $this->database = Database::get($this->mapping['config']['database']);
         $this->nextSchema = $next;
-        $this->schema = Config::get($path . 'schema.yml');
+        $this->prevSchema = Config::get($path . 'schema.yml');
     }
 
     /**
