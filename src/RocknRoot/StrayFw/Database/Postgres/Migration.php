@@ -47,9 +47,9 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'RemoveTable';
                 $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
                 $down[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
-                echo '  AddTable: ' . $key . PHP_EOL;
+                echo 'AddTable: ' . $key . PHP_EOL;
             } else {
-                echo '  AddEnum: ' . $key . PHP_EOL;
+                echo 'AddEnum: ' . $key . PHP_EOL;
             }
         }
 
@@ -66,9 +66,9 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'RemoveTable';
                 $up[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
                 $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
-                echo '  RemoveTable: ' . $key . PHP_EOL;
+                echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
-                echo '  RemoveEnum: ' . $key . PHP_EOL;
+                echo 'RemoveEnum: ' . $key . PHP_EOL;
             }
         }
 
@@ -142,14 +142,12 @@ abstract class Migration extends ProviderMigration
         });
         $imax = count($migrations);
         for ($i = 0; $i < $imax; $i++) {
-            echo $migrations[$i]['name'] . PHP_EOL;
+            echo 'Run ' . $migrations[$i]['name'] . PHP_EOL;
             $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']) . '\\' . ucfirst($migrations[$i]['name']);
             if ($i < $imax - 1) {
                 $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
-                echo 'next' . PHP_EOL;
             } else {
                 $schema = Config::get($mapping['config']['schema']);
-                echo 'last' . PHP_EOL;
             }
             $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
             $n->up();
