@@ -87,9 +87,13 @@ abstract class Migration extends ProviderMigration
         foreach ($keys as $modelName => $model) {
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $newFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
-                var_dump($newFields);
+                foreach ($newFields as $fieldName => $fieldDefinition) {
+                    echo 'TODO AddField' . PHP_EOL;
+                }
                 $oldFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
-                var_dump($oldFields);
+                foreach ($oldFields as $fieldName => $fieldDefinition) {
+                    echo 'TODO DropField' . PHP_EOL;
+                }
                 $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($fields as $fieldName => $fieldDefinition) {
                     var_dump($fieldName);
