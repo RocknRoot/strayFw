@@ -143,7 +143,7 @@ abstract class Migration extends ProviderMigration
         $imax = count($migrations);
         for ($i = 0; $i < $imax; $i++) {
             echo $migrations[$i]['name'] . PHP_EOL;
-            $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']);
+            $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']) . '\\' . ucfirst($migrations[$i]['name']);
             if ($i < $imax - 1) {
                 $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
                 echo 'next' . PHP_EOL;
