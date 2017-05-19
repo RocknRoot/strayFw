@@ -135,7 +135,8 @@ abstract class Migration extends ProviderMigration
             echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
         }
         $last = $select->fetch();
-        $last['date'] = new \DateTime($last['date'])->getTimestamp();
+        $last['date'] = new \DateTime($last['date']);
+        $last['date'] = $last['date']->getTimestamp();
         $migrations = array_filter($migrations, function(array $m) use($last) {
             return (int)$m['timestamp'] > $last['date'];
         });
