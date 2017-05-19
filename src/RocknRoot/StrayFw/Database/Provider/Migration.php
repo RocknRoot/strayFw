@@ -66,4 +66,11 @@ abstract class Migration
      * Rollback migration.
      */
     abstract public function down();
+
+    /**
+     * Execute a mutation.
+     *
+     * @param mixed $mutation mutation
+     */
+    abstract public function execute($mutation);
 }

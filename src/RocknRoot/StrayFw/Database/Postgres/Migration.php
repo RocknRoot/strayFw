@@ -4,6 +4,7 @@ namespace RocknRoot\StrayFw\Database\Postgres;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
@@ -200,6 +201,18 @@ abstract class Migration extends ProviderMigration
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
             }
+        }
+    }
+
+    /**
+     * Execute a mutation.
+     *
+     * @param Mutation $mutation mutation
+     */
+    public function execute($mutation)
+    {
+        if ($mutation->execute() === false) {
+            throw new DatabaseError('Mutation error: ' . $mutation->getErrorMessage());
         }
     }
 }
