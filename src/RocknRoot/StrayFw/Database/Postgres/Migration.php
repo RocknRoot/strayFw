@@ -60,7 +60,7 @@ abstract class Migration extends ProviderMigration
                 $down[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
                 echo 'AddTable: ' . $key . PHP_EOL;
             } else {
-                echo 'AddEnum: ' . $key . PHP_EOL;
+                echo 'TODO AddEnum: ' . $key . PHP_EOL;
             }
         }
 
@@ -79,12 +79,24 @@ abstract class Migration extends ProviderMigration
                 $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
-                echo 'RemoveEnum: ' . $key . PHP_EOL;
+                echo 'TODO RemoveEnum: ' . $key . PHP_EOL;
             }
         }
 
         $keys = array_intersect_key($oldSchema, $schema);
-        foreach ($keys as $key => $table) {
+        foreach ($keys as $modelName => $model) {
+            if (isset($table['type']) === false || $table['type'] == 'model') {
+                $newFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
+                var_dump($newFields);
+                $oldFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
+                var_dump($oldFields);
+                $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);
+                foreach ($fields as $fieldName => $fieldDefinition) {
+                    var_dump($fieldName);
+                }
+            } else {
+                echo 'TODO Compare Enum values' . PHP_EOL;
+            }
         }
 
         return [
