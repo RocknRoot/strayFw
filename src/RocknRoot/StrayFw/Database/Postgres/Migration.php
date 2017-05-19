@@ -6,6 +6,8 @@ use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
+use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
+use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 
 /**
  * Representation parent class for PostgreSQL migrations.
@@ -95,7 +97,21 @@ abstract class Migration extends ProviderMigration
         $statement .= ')';
         $statement = $database->getMasterLink()->prepare($statement);
         if ($statement->execute() === false) {
-            echo 'Can\'t create _stray_migrations (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
+            echo 'Can\'t create _stray_migration (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
+        }
+        $select = new Select($mapping['config']['database'], true);
+        $select->select('COUNT(*) as count')
+            ->from('_stray_migration');
+        if ($select->execute() === false) {
+            echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+        }
+        if ($select->fetch()['count'] == 0) {
+            $insert = new Insert($mapping['config']['database']);
+            $insert->into('_stray_migration')
+                ->values([ ]);
+            if ($insert->execute() === false) {
+                echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+            }
         }
     }
 }
