@@ -4,13 +4,14 @@
 
 strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
 
-beta - 0.4.4 - not ready for production yet
+beta - not ready for production yet
 
 Code is free, new-BSD license. So... fork us !
 
 ## Requirements
 
 * PHP >= 7.0
+* PHP >= 7.1 for development (phan)
 * mbstring extension
 * For the Locale namespace, PECL intl extension >= 1.0.0
 
