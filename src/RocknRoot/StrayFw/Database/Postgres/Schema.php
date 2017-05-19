@@ -340,10 +340,10 @@ class Schema extends ProviderSchema
                 $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
             }
 
-            $properties .= '    protected $field' .  ucfirst($fieldName) . ";\n";
+            $properties .= '    protected $field' . ucfirst($fieldName) . ";\n";
             $consts .= '    const FIELD_' . strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
 
-            $constructor .= '        $this->field' .  ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
+            $constructor .= '        $this->field' . ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
             $constructorDefaults .= '        if (isset($fetch[\'' . $fieldRealName . '\']) === true) {' . "\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '($fetch[\'' . $fieldRealName . "']);\n        } else {\n            ";
             $constructorDefaults .= '$this->set' . ucfirst($fieldName) . '(';

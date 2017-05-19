@@ -51,7 +51,7 @@ abstract class Schema
             throw new InvalidDirectory('directory "' . $modelsDir . '" can\'t be identified');
         }
         if (is_dir($modelsDir . DIRECTORY_SEPARATOR . 'Base') === false) {
-            throw new InvalidDirectory('directory "' . $modelsDir  . DIRECTORY_SEPARATOR . 'Base" can\'t be identified');
+            throw new InvalidDirectory('directory "' . $modelsDir . DIRECTORY_SEPARATOR . 'Base" can\'t be identified');
         }
     }
 
