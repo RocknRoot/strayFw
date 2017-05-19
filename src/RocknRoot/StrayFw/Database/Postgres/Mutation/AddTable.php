@@ -41,7 +41,7 @@ class AddTable extends Mutation
             } else {
                 $fieldRealName = Helper::codifyName($modelName) . '_' . Helper::codifyName($fieldName);
             }
-            $sql .= Column::generateDefinition($schema, $mapping, $fieldName, $fieldRealName, $fieldDefinition);
+            $sql .= Column::generateDefinition($schema, $mapping, $fieldRealName, $fieldDefinition);
             if (isset($fieldDefinition['primary']) === true && $fieldDefinition['primary'] === true) {
                 $primary[] = $fieldRealName;
             }

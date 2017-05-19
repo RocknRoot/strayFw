@@ -55,9 +55,9 @@ abstract class Migration extends ProviderMigration
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
-                $import[] = 'RemoveTable';
+                $import[] = 'DeleteTable';
                 $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
-                $down[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
+                $down[] = 'DeleteTable::statement($this->database, \'' . $tableName . '\')';
                 echo 'AddTable: ' . $key . PHP_EOL;
             } else {
                 echo 'TODO AddEnum: ' . $key . PHP_EOL;
@@ -74,8 +74,8 @@ abstract class Migration extends ProviderMigration
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
-                $import[] = 'RemoveTable';
-                $up[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
+                $import[] = 'DeleteTable';
+                $up[] = 'DeleteTable::statement($this->database, \'' . $tableName . '\')';
                 $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
@@ -85,18 +85,33 @@ abstract class Migration extends ProviderMigration
 
         $keys = array_intersect_key($oldSchema, $schema);
         foreach ($keys as $modelName => $model) {
+            $tableName = null;
+            if (isset($table['name']) === true) {
+                $tableName = $table['name'];
+            } else {
+                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
+            }
             if (isset($table['type']) === false || $table['type'] == 'model') {
-                $newFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
+                $newFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
                 foreach ($newFields as $fieldName => $fieldDefinition) {
-                    echo 'TODO AddField' . PHP_EOL;
+                    $import[] = 'AddColumn';
+                    $import[] = 'DeleteColumn';
+                    $up[] = 'AddColumn::statement($this->database, $this->nextSchema, $this->mapping, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $down[] = 'DeleteColumn::statement($this->database, $this->oldSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    echo 'AddColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
-                $oldFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
+                $oldFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($oldFields as $fieldName => $fieldDefinition) {
                     echo 'TODO DropField' . PHP_EOL;
+                    $import[] = 'AddColumn';
+                    $import[] = 'DeleteColumn';
+                    $up[] = 'DeleteColumn::statement($this->database, $this->nextSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $down[] = 'AddColumn::statement($this->database, $this->oldSchema, $this->mapping, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    echo 'DeleteColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
                 $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($fields as $fieldName => $fieldDefinition) {
-                    var_dump($fieldName);
+                    echo 'TODO compare fields' . PHP_EOL;
                 }
             } else {
                 echo 'TODO Compare Enum values' . PHP_EOL;
