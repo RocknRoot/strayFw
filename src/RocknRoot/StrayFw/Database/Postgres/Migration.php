@@ -4,11 +4,11 @@ namespace RocknRoot\StrayFw\Database\Postgres;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Database;
-use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
+use RocknRoot\StrayFw\Exception\DatabaseError;
 
 /**
  * Representation parent class for PostgreSQL migrations.

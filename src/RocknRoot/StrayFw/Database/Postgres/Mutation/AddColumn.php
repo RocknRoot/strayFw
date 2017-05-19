@@ -5,8 +5,6 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Column;
-use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
-use RocknRoot\StrayFw\Logger;
 
 /**
  * Representation for column addition operations.
