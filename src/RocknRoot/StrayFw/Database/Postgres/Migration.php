@@ -47,9 +47,9 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'RemoveTable';
                 $up[] = '$this->execute(AddTable::statement($this->database, $this->schema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
                 $down[] = '$this->execute(RemoveTable::statement($this->database, \'' . $tableName . '\'));' . PHP_EOL;
-                echo 'AddTable: ' . $key . PHP_EOL;
+                echo '  AddTable: ' . $key . PHP_EOL;
             } else {
-                echo 'AddEnum: ' . $key . PHP_EOL;
+                echo '  AddEnum: ' . $key . PHP_EOL;
             }
         }
 
@@ -66,9 +66,9 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'RemoveTable';
                 $up[] = '$this->execute(RemoveTable::statement($this->database, \'' . $tableName . '\'));' . PHP_EOL;
                 $down[] = '$this->execute(AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\'));' . PHP_EOL;
-                echo 'RemoveTable: ' . $key . PHP_EOL;
+                echo '  RemoveTable: ' . $key . PHP_EOL;
             } else {
-                echo 'RemoveEnum: ' . $key . PHP_EOL;
+                echo '  RemoveEnum: ' . $key . PHP_EOL;
             }
         }
 
@@ -112,6 +112,34 @@ abstract class Migration extends ProviderMigration
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
             }
+        }
+    }
+
+    /**
+     * Run migration code for specified mapping.
+     *
+     * @param array $mapping mapping definition
+     */
+    public static function migrate(array $mapping)
+    {
+        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        usort($migrations, function(array $a, array $b) {
+            return $a['timestamp'] > $b['timestamp'];
+        });
+        $select = new Select($mapping['config']['database'], true);
+        $select->select('*')
+            ->from('_stray_migration')
+            ->orderBy('date DESC')
+            ->limit(1);
+        if ($select->execute() === false) {
+            echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+        }
+        $last = $select->fetch();
+        $migrations = array_filter($migrations, function(array $m) use($last) {
+            return $m['timestamp'] > $last['date'];
+        });
+        foreach ($migrations as $m) {
+            echo $m['timestamp'] . ' ' . $m['name'] . PHP_EOL;
         }
     }
 }

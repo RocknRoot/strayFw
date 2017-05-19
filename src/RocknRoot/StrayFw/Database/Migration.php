@@ -94,13 +94,9 @@ class Migration
         } else {
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
-            $all = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
-            usort($all, function(array $a, array $b) {
-                return $a['timestamp'] < $b['timestamp'];
-            });
-            foreach ($all as $m) {
-                echo $m['timestamp'] . ' ' . $m['name'] . PHP_EOL;
-            }
+            $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::migrate';
+            call_user_func($cl, $mapping);
+            echo 'Migrate - Done' . PHP_EOL;
         }
     }
 
