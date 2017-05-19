@@ -41,20 +41,20 @@ abstract class Migration
      *
      * @var array
      */
-    protected $oldSchema;
+    protected $schema;
 
     /**
      * Constructor.
      *
-     * @param array  $schema new schema definition
-     * @param string $path   migration path
+     * @param array  $next new schema definition
+     * @param string $path migration path
      */
-    public function __construct(array $schema, string $path)
+    public function __construct(array $next, string $path)
     {
         $this->mapping = Mapping::get(static::MAPPING);
         $this->database = Database::get($this->mapping['config']['database']);
-        $this->newSchema = $schema;
-        $this->oldSchema = Config::get($path . 'schema.yml');
+        $this->nextSchema = $next;
+        $this->schema = Config::get($path . 'schema.yml');
     }
 
     /**
