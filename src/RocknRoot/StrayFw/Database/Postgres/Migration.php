@@ -122,6 +122,7 @@ abstract class Migration extends ProviderMigration
      */
     public static function migrate(array $mapping)
     {
+        self::ensureTable($mapping);
         $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
@@ -151,6 +152,12 @@ abstract class Migration extends ProviderMigration
             }
             $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
             $n->up();
+            $insert = new Insert();
+            $insert->into('_stray_migration')
+                ->values([ 'migration' => $migrations[$i]['name'] ]);
+            if ($insert->execute() === false) {
+                echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+            }
         }
     }
 }
