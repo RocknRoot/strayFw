@@ -123,9 +123,6 @@ abstract class Migration extends ProviderMigration
     public static function migrate(array $mapping)
     {
         $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
-        usort($migrations, function(array $a, array $b) {
-            return $a['timestamp'] > $b['timestamp'];
-        });
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
             ->from('_stray_migration')
@@ -137,8 +134,11 @@ abstract class Migration extends ProviderMigration
         $last = $select->fetch();
         $last['date'] = new \DateTime($last['date']);
         $last['date'] = $last['date']->getTimestamp();
-        $migrations = array_filter($migrations, function(array $m) use($last) {
+        $migrations = array_values(array_filter($migrations, function(array $m) use($last) {
             return (int)$m['timestamp'] > $last['date'];
+        }));
+        usort($migrations, function(array $a, array $b) {
+            return $a['timestamp'] > $b['timestamp'];
         });
         $imax = count($migrations);
         for ($i = 0; $i < $imax; $i++) {
