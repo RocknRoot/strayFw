@@ -140,8 +140,18 @@ abstract class Migration extends ProviderMigration
         $migrations = array_filter($migrations, function(array $m) use($last) {
             return (int)$m['timestamp'] > $last['date'];
         });
-        foreach ($migrations as $m) {
-            echo $m['timestamp'] . ' ' . $m['name'] . PHP_EOL;
+        $imax = count($migrations);
+        for ($i = 0; $i < $imax; $i++) {
+            echo $migrations[$i]['name'] . PHP_EOL;
+            $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']);
+            if ($i < $imax - 1) {
+                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+                echo 'next' . PHP_EOL;
+            } else {
+                $schema = Config::get($mapping['config']['schema']);
+                echo 'last' . PHP_EOL;
+            }
+            $n = new $cl($schema);
         }
     }
 }
