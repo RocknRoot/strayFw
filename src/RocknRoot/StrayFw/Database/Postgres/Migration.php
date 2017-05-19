@@ -194,9 +194,9 @@ abstract class Migration extends ProviderMigration
             $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
             $n->up();
             $insert = new Insert($mapping['config']['database']);
-            $insert->into('_stray_migration')
-                ->bind('migration', $migrations[$i]['name'])
-                ->values([ 'migration' => ':migration' ]);
+            $insert->into('_stray_migration');
+            $insert->bind('migration', $migrations[$i]['name']);
+            $insert->values([ 'migration' => ':migration' ]);
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
             }
