@@ -149,8 +149,7 @@ abstract class Migration extends ProviderMigration
         }
         if ($select->fetch()['count'] == 0) {
             $insert = new Insert($mapping['config']['database']);
-            $insert->into('_stray_migration')
-                ->values([ ]);
+            $insert->into('_stray_migration');
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
             }
@@ -196,7 +195,8 @@ abstract class Migration extends ProviderMigration
             $n->up();
             $insert = new Insert($mapping['config']['database']);
             $insert->into('_stray_migration')
-                ->values([ 'migration' => $migrations[$i]['name'] ]);
+                ->bind('migration', $migrations[$i]['name'])
+                ->values([ 'migration' => ':migration' ]);
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
             }
