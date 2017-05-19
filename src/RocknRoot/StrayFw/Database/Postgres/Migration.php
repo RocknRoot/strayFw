@@ -93,7 +93,7 @@ abstract class Migration extends ProviderMigration
         $statement .= 'date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, ';
         $statement .= 'migration VARCHAR(255)';
         $statement .= ')';
-        $statement = $database->getMasterLink()->prepare($sql);
+        $statement = $database->getMasterLink()->prepare($statement);
         if ($statement->execute() === false) {
             echo 'Can\'t create _stray_migrations (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
         }
