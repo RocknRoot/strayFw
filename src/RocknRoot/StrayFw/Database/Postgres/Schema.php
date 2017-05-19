@@ -6,7 +6,6 @@ use RocknRoot\StrayFw\Database\Database as GlobalDatabase;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Mapping;
 use RocknRoot\StrayFw\Database\Provider\Schema as ProviderSchema;
-use RocknRoot\StrayFw\Database\Postgres\Migration;
 use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
