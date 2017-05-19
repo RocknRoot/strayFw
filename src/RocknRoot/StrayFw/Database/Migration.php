@@ -144,8 +144,6 @@ class Migration
             throw new FileNotWritable('can\'t open "' . $path . '" with write permission');
         }
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . $name . ";\n\nuse " . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration;' . PHP_EOL;
-        $content .= 'use RocknRoot\StrayFw\Database\Database;' . PHP_EOL;
-        $content .= 'use RocknRoot\StrayFw\Database\Mapping;' . PHP_EOL;
         if (count($import) >= 1) {
             $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\{';
             $content .= implode(', ', $import) . "};\n";
