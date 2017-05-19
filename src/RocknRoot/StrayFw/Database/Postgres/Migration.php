@@ -145,13 +145,13 @@ abstract class Migration extends ProviderMigration
             echo $migrations[$i]['name'] . PHP_EOL;
             $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']) . '\\' . ucfirst($migrations[$i]['name']);
             if ($i < $imax - 1) {
-                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
                 echo 'next' . PHP_EOL;
             } else {
                 $schema = Config::get($mapping['config']['schema']);
                 echo 'last' . PHP_EOL;
             }
-            $n = new $cl($schema);
+            $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
             $n->up();
         }
     }
