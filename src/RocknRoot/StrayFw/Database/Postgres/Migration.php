@@ -31,8 +31,19 @@ abstract class Migration extends ProviderMigration
         $import = [];
         $up = [];
         $down = [];
-        $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
-        $schema = Config::get($mapping['config']['schema']);
+        $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR.'schema.yml');
+        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'migrations.yml');
+        $imax = count($migrations);
+        for ($i = 0; $i < $imax; $i++) {
+            if ($migrations[$i]['name'] == $name) {
+                break;
+            }
+        }
+        if ($i < $imax - 1) {
+            $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.ucfirst($migrations[$i + 1]['name']).DIRECTORY_SEPARATOR.'schema.yml');
+        } else {
+            $schema = Config::get($mapping['config']['schema']);
+        }
 
         $newKeys = array_diff_key($schema, $oldSchema);
         foreach ($newKeys as $key => $table) {
@@ -40,16 +51,16 @@ abstract class Migration extends ProviderMigration
             if (isset($table['name']) === true) {
                 $tableName = $table['name'];
             } else {
-                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
+                $tableName = Helper::codifyName($mappingName).'_'.Helper::codifyName($key);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
-                $down[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
-                echo 'AddTable: ' . $key . PHP_EOL;
+                $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \''.$tableName.'\', \''.$key.'\')';
+                $down[] = 'RemoveTable::statement($this->database, \''.$tableName.'\')';
+                echo 'AddTable: '.$key.PHP_EOL;
             } else {
-                echo 'AddEnum: ' . $key . PHP_EOL;
+                echo 'AddEnum: '.$key.PHP_EOL;
             }
         }
 
@@ -59,16 +70,16 @@ abstract class Migration extends ProviderMigration
             if (isset($table['name']) === true) {
                 $tableName = $table['name'];
             } else {
-                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
+                $tableName = Helper::codifyName($mappingName).'_'.Helper::codifyName($key);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'RemoveTable';
-                $up[] = 'RemoveTable::statement($this->database, \'' . $tableName . '\')';
-                $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
-                echo 'RemoveTable: ' . $key . PHP_EOL;
+                $up[] = 'RemoveTable::statement($this->database, \''.$tableName.'\')';
+                $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \''.$tableName.'\', \''.$key.'\')';
+                echo 'RemoveTable: '.$key.PHP_EOL;
             } else {
-                echo 'RemoveEnum: ' . $key . PHP_EOL;
+                echo 'RemoveEnum: '.$key.PHP_EOL;
             }
         }
 
@@ -97,20 +108,20 @@ abstract class Migration extends ProviderMigration
         $statement .= ')';
         $statement = $database->getMasterLink()->prepare($statement);
         if ($statement->execute() === false) {
-            echo 'Can\'t create _stray_migration (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
+            echo 'Can\'t create _stray_migration ('.$statement->errorInfo()[2].')'.PHP_EOL;
         }
         $select = new Select($mapping['config']['database'], true);
         $select->select('COUNT(*) as count')
             ->from('_stray_migration');
         if ($select->execute() === false) {
-            echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+            echo 'Can\'t fetch from _stray_migration ('.$select->getErrorMessage().')'.PHP_EOL;
         }
         if ($select->fetch()['count'] == 0) {
             $insert = new Insert($mapping['config']['database']);
             $insert->into('_stray_migration')
                 ->values([ ]);
             if ($insert->execute() === false) {
-                echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+                echo 'Can\'t insert into _stray_migration ('.$insert->getErrorMessage().')'.PHP_EOL;
             }
         }
     }
@@ -123,40 +134,40 @@ abstract class Migration extends ProviderMigration
     public static function migrate(array $mapping)
     {
         self::ensureTable($mapping);
-        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'migrations.yml');
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
             ->from('_stray_migration')
             ->orderBy('date DESC')
             ->limit(1);
         if ($select->execute() === false) {
-            echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+            echo 'Can\'t fetch from _stray_migration ('.$select->getErrorMessage().')'.PHP_EOL;
         }
         $last = $select->fetch();
         $last['date'] = new \DateTime($last['date']);
         $last['date'] = $last['date']->getTimestamp();
-        $migrations = array_values(array_filter($migrations, function(array $m) use($last) {
-            return (int)$m['timestamp'] > $last['date'];
+        $migrations = array_values(array_filter($migrations, function (array $m) use ($last) {
+            return (int) $m['timestamp'] > $last['date'];
         }));
-        usort($migrations, function(array $a, array $b) {
+        usort($migrations, function (array $a, array $b) {
             return $a['timestamp'] > $b['timestamp'];
         });
         $imax = count($migrations);
         for ($i = 0; $i < $imax; $i++) {
-            echo 'Run ' . $migrations[$i]['name'] . PHP_EOL;
-            $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']) . '\\' . ucfirst($migrations[$i]['name']);
+            echo 'Run '.$migrations[$i]['name'].PHP_EOL;
+            $cl = '\\'.ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\').'\\'.ucfirst($migrations[$i]['name']).'\\'.ucfirst($migrations[$i]['name']);
             if ($i < $imax - 1) {
-                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.ucfirst($migrations[$i + 1]['name']).DIRECTORY_SEPARATOR.'schema.yml');
             } else {
                 $schema = Config::get($mapping['config']['schema']);
             }
-            $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
+            $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.ucfirst($migrations[$i]['name']).DIRECTORY_SEPARATOR);
             $n->up();
             $insert = new Insert();
             $insert->into('_stray_migration')
                 ->values([ 'migration' => $migrations[$i]['name'] ]);
             if ($insert->execute() === false) {
-                echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+                echo 'Can\'t insert into _stray_migration ('.$insert->getErrorMessage().')'.PHP_EOL;
             }
         }
     }

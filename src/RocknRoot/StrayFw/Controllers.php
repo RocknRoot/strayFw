@@ -4,7 +4,7 @@ namespace RocknRoot\StrayFw;
 
 /**
  * General class for user's controllers storage.
- * 
+ *
  * @author Nekith <nekith@errant-works.com>
  */
 class Controllers
@@ -19,7 +19,7 @@ class Controllers
 
     /**
      * Get a controller, creating one if it doesn't exist already.
-     * 
+     *
      * @static
      * @param string $class controller class with namespace
      * @return object controller

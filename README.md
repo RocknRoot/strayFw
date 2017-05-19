@@ -44,5 +44,5 @@ You can add an issue on github ! ;)
 
 ### Coding standards
 
-    $ curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-    $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw --level=psr2 --fixers=extra_empty_lines,remove_lines_between_uses,return,single_array_no_trailing_comma,spaces_before_semicolon,spaces_cast,unused_use,whitespacy_lines,concat_with_spaces,ordered_use
+    $ curl -L http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o php-cs-fixer.phar
+    $ php php-cs-fixer.phar fix src/RocknRoot/StrayFw --rules=@PSR2,no_trailing_comma_in_singleline_array,no_singleline_whitespace_before_semicolons,cast_spaces,no_unused_imports,no_whitespace_in_blank_line,ordered_imports
