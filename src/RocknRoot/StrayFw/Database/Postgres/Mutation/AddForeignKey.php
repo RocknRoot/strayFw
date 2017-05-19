@@ -49,7 +49,7 @@ class AddForeignKey extends Mutation
         if (isset($foreignDefinition['delete']) === true) {
             $sql .= ' ON DELETE ' . strtoupper($foreignDefinition['delete']);
         }
-        $statement = $database->getLink()->prepare($sql);
+        $statement = $database->getMasterLink()->prepare($sql);
 
         return $statement;
     }

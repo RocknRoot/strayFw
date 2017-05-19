@@ -20,7 +20,7 @@ class DeleteTable extends Mutation
      */
     public static function statement(Database $database, $table)
     {
-        $statement = $database->getLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
+        $statement = $database->getMasterLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
 
         return $statement;
     }

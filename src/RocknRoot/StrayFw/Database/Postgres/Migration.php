@@ -79,4 +79,22 @@ abstract class Migration extends ProviderMigration
             'down' => $down,
         ];
     }
+
+    /**
+     * Ensure the migrations table exist for specified mapping.
+     *
+     * @param array $mapping mapping definition
+     */
+    public static function ensureTable(array $mapping)
+    {
+        $database = GlobalDatabase::get($mapping['config']['database']);
+        $statement = 'CREATE TABLE IF NOT EXISTS _stray_migration (';
+        $statement .= 'date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, ';
+        $statement .= 'migration VARCHAR(255)'
+        $statement .= ')';
+        $statement = $database->getMasterLink()->prepare($sql);
+        if ($statement->execute() === false) {
+            echo 'Can\'t create _stray_migrations (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
+        }
+    }
 }

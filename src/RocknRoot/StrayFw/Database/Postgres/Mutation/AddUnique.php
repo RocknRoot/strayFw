@@ -33,7 +33,7 @@ class AddUnique extends Mutation
                 $fields[] = Helper::codifyName($modelName) . '_' . Helper::codifyName($field);
             }
         }
-        $statement = $database->getLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . implode(', ', $fields) . ')');
+        $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . implode(', ', $fields) . ')');
 
         return $statement;
     }

@@ -20,7 +20,7 @@ class DeleteEnum extends Mutation
      */
     public static function statement(Database $database, $type)
     {
-        $statement = $database->getLink()->prepare('DROP TYPE IF EXISTS ' . $type);
+        $statement = $database->getMasterLink()->prepare('DROP TYPE IF EXISTS ' . $type);
 
         return $statement;
     }

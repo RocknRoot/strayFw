@@ -6,6 +6,7 @@ use RocknRoot\StrayFw\Database\Database as GlobalDatabase;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Mapping;
 use RocknRoot\StrayFw\Database\Provider\Schema as ProviderSchema;
+use RocknRoot\StrayFw\Database\Postgres\Migration;
 use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
@@ -41,7 +42,7 @@ class Schema extends ProviderSchema
             } else {
                 $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
             }
-            $query = $database->getLink()->query('SELECT COUNT(*) as count FROM pg_class WHERE relname = \'' . $tableName . '\'');
+            $query = $database->getMasterLink()->query('SELECT COUNT(*) as count FROM pg_class WHERE relname = \'' . $tableName . '\'');
             $result = $query->fetch(\PDO::FETCH_ASSOC);
             if ($result['count'] != 0) {
                 foreach ($modelDefinition['links'] as $keyName => $keyDefinition) {
@@ -115,6 +116,7 @@ class Schema extends ProviderSchema
                 }
             }
         }
+        Migration::ensureTable($mapping);
     }
 
     /**

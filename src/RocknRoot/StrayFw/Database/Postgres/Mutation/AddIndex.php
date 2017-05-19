@@ -33,7 +33,7 @@ class AddIndex extends Mutation
                 $indexes[] = Helper::codifyName($modelName) . '_' . Helper::codifyName($field);
             }
         }
-        $statement = $database->getLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . implode(', ', $indexes) . ')');
+        $statement = $database->getMasterLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . implode(', ', $indexes) . ')');
 
         return $statement;
     }

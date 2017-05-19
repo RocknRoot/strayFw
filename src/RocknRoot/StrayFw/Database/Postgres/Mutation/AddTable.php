@@ -53,7 +53,7 @@ class AddTable extends Mutation
             Logger::get()->warning('table "' . $tableName . '" has no primary key');
         }
         $sql = substr($sql, 0, -2) . ')';
-        $statement = $database->getLink()->prepare($sql);
+        $statement = $database->getMasterLink()->prepare($sql);
 
         return $statement;
     }
