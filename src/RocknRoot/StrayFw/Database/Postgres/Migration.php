@@ -89,7 +89,7 @@ abstract class Migration extends ProviderMigration
             if (isset($table['name']) === true) {
                 $tableName = $table['name'];
             } else {
-                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($key);
+                $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($modelName);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $newFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
