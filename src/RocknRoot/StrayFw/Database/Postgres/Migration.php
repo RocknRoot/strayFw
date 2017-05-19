@@ -212,7 +212,7 @@ abstract class Migration extends ProviderMigration
     public function execute($mutation)
     {
         if ($mutation->execute() === false) {
-            throw new DatabaseError('Mutation error: ' . $mutation->getErrorMessage());
+            throw new DatabaseError('Mutation error: ' . $mutation->errorInfo()[2]);
         }
     }
 }
