@@ -89,7 +89,19 @@ class Migration
      */
     public function migrate(Request $req)
     {
-        echo 'Not implemented yet.' . PHP_EOL;
+        if (count($req->getArgs()) != 1) {
+            echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/migrate mapping_name' . PHP_EOL;
+        } else {
+            $mappingName = $req->getArgs()[0];
+            $mapping = Mapping::get($mappingName);
+            $all = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+            usort($all, function(array $a, array $b) {
+                return $a['timestamp'] < $b['timestamp'];
+            });
+            foreach ($all as $m) {
+                echo $m['timestamp'] . ' ' . $m['name'] . PHP_EOL;
+            }
+        }
     }
 
     /**
