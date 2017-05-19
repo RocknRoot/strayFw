@@ -4,6 +4,7 @@ namespace RocknRoot\StrayFw\Database\Provider;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Database\Mapping;
 
 /**
  * Representation parent class for migrations.
