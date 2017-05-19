@@ -72,6 +72,7 @@ class Migration
             if (file_exists($path) === false) {
                 throw new FileNotReadable('can\'t find migration at "' . $path . '"');
             }
+            use ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration';
             $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
             $res = call_user_func($cl, $mapping, $mappingName, $name);
             $this->write($mapping, $mappingName, $name, $res['up'], $res['down'], $res['import']);
@@ -94,6 +95,7 @@ class Migration
         } else {
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
+            use ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration';
             $cl = ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::migrate';
             call_user_func($cl, $mapping);
             echo 'Migrate - Done' . PHP_EOL;
