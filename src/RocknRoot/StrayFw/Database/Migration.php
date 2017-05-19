@@ -146,13 +146,15 @@ class Migration
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . $name . ";\n\nuse " . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration;' . PHP_EOL;
         $content .= 'use RocknRoot\StrayFw\Database\Database;' . PHP_EOL;
         $content .= 'use RocknRoot\StrayFw\Database\Mapping;' . PHP_EOL;
-        $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\{';
-        $content .= implode(', ', $import) . "};\n";
+        if (count($import) >= 1) {
+            $content .= 'use ' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Mutation\\{';
+            $content .= implode(', ', $import) . "};\n";
+        }
         $up = implode('', array_map(function (string $a) {
-            return '        ' . $a;
+            return '        assert ' . $a . '->execute();' . PHP_EOL;
         }, $up));
         $down = implode('', array_map(function (string $a) {
-            return '        ' . $a;
+            return '        assert ' . $a . '->execute();' . PHP_EOL;
         }, $down));
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";
