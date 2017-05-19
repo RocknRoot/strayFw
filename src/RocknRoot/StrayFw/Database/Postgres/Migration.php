@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Database\Postgres;
 
 use RocknRoot\StrayFw\Config;
+use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
 
@@ -87,7 +88,7 @@ abstract class Migration extends ProviderMigration
      */
     public static function ensureTable(array $mapping)
     {
-        $database = GlobalDatabase::get($mapping['config']['database']);
+        $database = Database::get($mapping['config']['database']);
         $statement = 'CREATE TABLE IF NOT EXISTS _stray_migration (';
         $statement .= 'date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, ';
         $statement .= 'migration VARCHAR(255)';
