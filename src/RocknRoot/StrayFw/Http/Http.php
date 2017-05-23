@@ -118,6 +118,9 @@ abstract class Http
                     $controller = Controllers::get($b['class']);
                     $action = $b['action'];
                     $controller->$action(self::$request, self::$response);
+                    if (self::$request->hasEnded() === true) {
+                        break;
+                    }
                 }
                 if (self::$request->hasEnded() === false) {
                     $controller = Controllers::get(self::$request->getClass());
