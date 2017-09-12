@@ -61,6 +61,14 @@ abstract class Model
     abstract public function delete();
 
     /**
+     * Flag for deletion. If true, model will be deleted on save.
+     */
+    public function getDeletionFlag()
+    {
+        return $this->deletionFlag;
+    }
+
+    /**
      * Set flag for deletion. If true, model will be deleted on save.
      *
      * @param bool $value new flag value
