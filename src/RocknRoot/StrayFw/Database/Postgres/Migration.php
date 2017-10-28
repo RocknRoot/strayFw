@@ -9,6 +9,7 @@ use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
 use RocknRoot\StrayFw\Exception\DatabaseError;
+use RocknRoot\StrayFw\Exception\Exception;
 
 /**
  * Representation parent class for PostgreSQL migrations.
@@ -130,6 +131,7 @@ abstract class Migration extends ProviderMigration
      * Ensure the migrations table exist for specified mapping.
      *
      * @param array $mapping mapping definition
+     * @return bool true if successful
      */
     public static function ensureTable(array $mapping)
     {
@@ -141,20 +143,24 @@ abstract class Migration extends ProviderMigration
         $statement = $database->getMasterLink()->prepare($statement);
         if ($statement->execute() === false) {
             echo 'Can\'t create _stray_migration (' . $statement->errorInfo()[2] . ')' . PHP_EOL;
+            return false;
         }
         $select = new Select($mapping['config']['database'], true);
         $select->select('COUNT(*) as count')
             ->from('_stray_migration');
         if ($select->execute() === false) {
             echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+            return false;
         }
         if ($select->fetch()['count'] == 0) {
             $insert = new Insert($mapping['config']['database']);
             $insert->into('_stray_migration');
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+                return false;
             }
         }
+        return true;
     }
 
     /**
@@ -164,7 +170,12 @@ abstract class Migration extends ProviderMigration
      */
     public static function migrate(array $mapping)
     {
-        self::ensureTable($mapping);
+        $database = Database::get($mapping['config']['database']);
+        $database->beginTransaction();
+        if (self::ensureTable($mapping) === false) {
+            $database->rollBack();
+            return;
+        }
         $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
@@ -173,6 +184,8 @@ abstract class Migration extends ProviderMigration
             ->limit(1);
         if ($select->execute() === false) {
             echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+            $database->rollBack();
+            return;
         }
         $last = $select->fetch();
         $last['date'] = new \DateTime($last['date']);
@@ -193,15 +206,23 @@ abstract class Migration extends ProviderMigration
                 $schema = Config::get($mapping['config']['schema']);
             }
             $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
-            $n->up();
+            try {
+                $n->up();
+            } catch (Exception $e) {
+                $database->rollBack();
+                throw $e;
+            }
             $insert = new Insert($mapping['config']['database']);
             $insert->into('_stray_migration');
             $insert->bind('migration', $migrations[$i]['name']);
             $insert->values([ 'migration' => ':migration' ]);
             if ($insert->execute() === false) {
                 echo 'Can\'t insert into _stray_migration (' . $insert->getErrorMessage() . ')' . PHP_EOL;
+                $database->rollBack();
+                return;
             }
         }
+        $database->commit();
     }
 
     /**
