@@ -93,6 +93,9 @@ abstract class Locale
                 throw new InvalidDirectory('directory "' . $dir . '" can\'t be identified');
             }
             $language = self::$currentLanguage;
+            if (($pos = strpos($language, '-')) !== false) {
+                $language = substr($language, 0, $pos);
+            }
             if (($pos = strpos($language, '_')) !== false) {
                 $language = substr($language, 0, $pos);
             }
