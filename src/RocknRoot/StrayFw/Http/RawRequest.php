@@ -2,8 +2,6 @@
 
 namespace RocknRoot\StrayFw\Http;
 
-use RocknRoot\StrayFw\Config;
-
 /**
  * Parsed data from HTTP request before logical routing.
  *
@@ -71,14 +69,11 @@ class RawRequest
             $this->scheme = 'http';
         }
         $this->host = $_SERVER['SERVER_NAME'];
-        $this->subDomain = substr($this->host, 0, stripos($this->host, '.'));
-        $settings = Config::getSettings();
-        if (empty($settings['domain_prefix']) === false) {
-            $pos = stripos($this->host, $settings['domain_prefix']);
-            if ($pos !== false) {
-                $this->subDomain = substr($this->host, 0, $pos - 1);
-            }
+        $this->subDomain = $this->host;
+        if (preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $this->subDomain, $matches)) {
+            $this->subDomain = $matches['domain'];
         }
+        $this->subDomain = rtrim(strstr($this->host, $this->subDomain, true), '.');
         $this->query = str_replace('/index.php', null, $_SERVER['REQUEST_URI']);
         if (($pos = stripos($this->query, '?')) !== false) {
             $this->query = substr($this->query, 0, stripos($this->query, '?'));

@@ -88,8 +88,10 @@ class Request
             throw new InvalidRouteDefinition('there is no route');
         }
         foreach ($routes as $route) {
-            if (isset($route['subdomain']) === true && ($this->rawRequest->getSubDomain() != null && $route['subdomain'] != $this->rawRequest->getSubDomain())) {
-                continue;
+            if (isset($route['subdomain']) === true) {
+                if (in_array($this->rawRequest->getSubDomain(), $route['subdomain']) === false) {
+                    continue;
+                }
             }
             if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
                 throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');

@@ -34,7 +34,7 @@ abstract class Http
     /**
      * Current subdomain prefix.
      *
-     * @var string
+     * @var array
      */
     protected static $subdomain;
 
@@ -153,13 +153,13 @@ abstract class Http
      *
      * @static
      * @param  string           $namespace namespace prefix
-     * @param  string           $subdomain subdomain prefix
+     * @param  string|array     $subdomain subdomain prefix
      * @param  string           $uri uri prefix
      */
     public static function prefix($namespace, $subdomain = null, $uri = null)
     {
         self::$namespace = $namespace;
-        self::$subdomain = $subdomain;
+        self::$subdomain = is_array($subdomain) ? $subdomain : [ $subdomain ];
         self::$uri = $uri;
     }
 
