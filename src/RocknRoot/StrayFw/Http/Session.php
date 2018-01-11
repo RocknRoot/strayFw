@@ -2,6 +2,8 @@
 
 namespace RocknRoot\StrayFw\Http;
 
+use RocknRoot\StrayFw\Config;
+
 /**
  * Wrapper class for session variables.
  *
@@ -28,6 +30,11 @@ abstract class Session
     {
         if (self::$isInit === false) {
             if (session_id() == null) {
+                $settings = Config::getSettings();
+                session_name(isset($settings['session_name']) === true ? $settings['session_name'] : 'stray_session');
+                if (isset($settings['session_cookie_domain']) === true) {
+                    session_set_cookie_params(0, '/', $settings['session_cookie_domain']);
+                }
                 session_start();
             }
             self::$isInit = true;
