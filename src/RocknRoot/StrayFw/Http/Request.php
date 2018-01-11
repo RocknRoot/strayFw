@@ -118,7 +118,7 @@ class Request
                             $this->after[] = $a;
                         }
                     }
-                } else {
+                } else if ($this->class == null) {
                     if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
                         list($this->class, $this->action) = explode('.', $route['action']);
                         if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
