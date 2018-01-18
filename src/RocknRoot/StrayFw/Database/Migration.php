@@ -107,7 +107,15 @@ class Migration
      */
     public function rollback(Request $req)
     {
-        echo 'Not implemented yet.' . PHP_EOL;
+        if (count($req->getArgs()) != 1) {
+            echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/rollback mapping_name' . PHP_EOL;
+        } else {
+            $mappingName = $req->getArgs()[0];
+            $mapping = Mapping::get($mappingName);
+            $cl = '\\' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::rollback';
+            call_user_func($cl, $mapping);
+            echo 'Rollback - Done' . PHP_EOL;
+        }
     }
 
     /**

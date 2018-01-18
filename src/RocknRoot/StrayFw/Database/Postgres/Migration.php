@@ -5,6 +5,7 @@ namespace RocknRoot\StrayFw\Database\Postgres;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
+use RocknRoot\StrayFw\Database\Postgres\Query\Delete;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
@@ -78,7 +79,7 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'AddTable';
                 $import[] = 'DeleteTable';
                 $up[] = 'DeleteTable::statement($this->database, \'' . $tableName . '\')';
-                $down[] = 'AddTable::statement($this->database, $this->oldSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
+                $down[] = 'AddTable::statement($this->database, $this->prevSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
                 echo 'TODO RemoveEnum: ' . $key . PHP_EOL;
@@ -99,16 +100,15 @@ abstract class Migration extends ProviderMigration
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
                     $up[] = 'AddColumn::statement($this->database, $this->nextSchema, self::MAPPING, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
-                    $down[] = 'DeleteColumn::statement($this->database, $this->oldSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $down[] = 'DeleteColumn::statement($this->database, $this->nextSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'AddColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
                 $oldFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($oldFields as $fieldName => $fieldDefinition) {
-                    echo 'TODO DropField' . PHP_EOL;
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
-                    $up[] = 'DeleteColumn::statement($this->database, $this->nextSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
-                    $down[] = 'AddColumn::statement($this->database, $this->oldSchema, self::MAPPING, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $up[] = 'DeleteColumn::statement($this->database, $this->prevSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $down[] = 'AddColumn::statement($this->database, $this->prevSchema, self::MAPPING, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'DeleteColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
                 $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);
@@ -221,6 +221,80 @@ abstract class Migration extends ProviderMigration
                 $database->rollBack();
                 return;
             }
+        }
+        $database->commit();
+    }
+
+    /**
+     * Run reversed migration code for specified mapping.
+     *
+     * @param array $mapping mapping definition
+     */
+    public static function rollback(array $mapping)
+    {
+        $database = Database::get($mapping['config']['database']);
+        $database->beginTransaction();
+        if (self::ensureTable($mapping) === false) {
+            $database->rollBack();
+            return;
+        }
+        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        $select = new Select($mapping['config']['database'], true);
+        $select->select('*')
+            ->where('migration IS NOT NULL')
+            ->from('_stray_migration')
+            ->orderBy('date DESC')
+            ->limit(1);
+        if ($select->execute() === false) {
+            echo 'Can\'t fetch from _stray_migration (' . $select->getErrorMessage() . ')' . PHP_EOL;
+            $database->rollBack();
+            return;
+        }
+        $last = $select->fetch();
+        if (!$last) {
+            echo 'There is no executed migration.' . PHP_EOL;
+            $database->rollBack();
+            return;
+        }
+        echo 'Last executed migration is: ' . $last['migration'] . '.' . PHP_EOL;
+        $last['date'] = new \DateTime($last['date']);
+        $last['date'] = $last['date']->getTimestamp();
+        $migration = null;
+        $i = 0;
+        $imax = count($migrations);
+        while ($i < $imax) {
+            if ($migrations[$i]['name'] == $last['migration']) {
+                $migration = $migrations[$i];
+                break;
+            }
+            $i++;
+        }
+        if ($migration == null) {
+            echo 'Can\'t find migration in migrations.yml.' . PHP_EOL;
+            return;
+        }
+        $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migration['name']) . '\\' . ucfirst($migration['name']);
+        if ($i < $imax - 1) {
+            $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+        } else {
+            $schema = Config::get($mapping['config']['schema']);
+            echo'last';
+        }
+        $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migration['name']) . DIRECTORY_SEPARATOR);
+        try {
+            $n->down();
+        } catch (Exception $e) {
+            $database->rollBack();
+            throw $e;
+        }
+        $delete = new Delete($mapping['config']['database']);
+        $delete->from('_stray_migration');
+        $delete->bind('migration', $migration['name']);
+        $delete->where([ 'migration' => ':migration' ]);
+        if ($delete->execute() === false) {
+            echo 'Can\'t delete from _stray_migration (' . $delete->getErrorMessage() . ')' . PHP_EOL;
+            $database->rollBack();
+            return;
         }
         $database->commit();
     }
