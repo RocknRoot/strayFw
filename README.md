@@ -32,11 +32,12 @@ You can add an issue on github ! ;)
 
 ### Technical considerations
 
-* The framework follows these standards :
-    * [PSR-1: Basic Coding Standard](https://www.php-fig.org/psr/psr-1/ 'PSR-1: Basic Coding Standard')
-    * [PSR-2: Coding Style Guide](https://www.php-fig.org/psr/psr-2/ 'PSR-2: Coding Style Guide')
-    * [PSR-3: Logger Interface](https://www.php-fig.org/psr/psr-3/ 'PSR-3: Logger Interface')
-    * [PSR-4: Autoloader](https://www.php-fig.org/psr/psr-4/ 'PSR-4: Autoloader')
+The framework follows these standards :
+
+* [PSR-1: Basic Coding Standard](https://www.php-fig.org/psr/psr-1/ 'PSR-1: Basic Coding Standard')
+* [PSR-2: Coding Style Guide](https://www.php-fig.org/psr/psr-2/ 'PSR-2: Coding Style Guide')
+* [PSR-3: Logger Interface](https://www.php-fig.org/psr/psr-3/ 'PSR-3: Logger Interface')
+* [PSR-4: Autoloader](https://www.php-fig.org/psr/psr-4/ 'PSR-4: Autoloader')
 
 ### Static analysis
 
