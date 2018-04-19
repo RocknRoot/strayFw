@@ -33,11 +33,10 @@ You can add an issue on github ! ;)
 ### Technical considerations
 
 * The framework follows these standards :
-    * [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md 'PSR-0')
-    * [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md 'PSR-1')
-    * [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md 'PSR-2')
-    * [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3')
-    * [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md 'PSR-4')
+    * [PSR-1](https://www.php-fig.org/psr/psr-1/ 'PSR-1: Basic Coding Standard')
+    * [PSR-2](https://www.php-fig.org/psr/psr-2/ 'PSR-2: Coding Style Guide')
+    * [PSR-3](https://www.php-fig.org/psr/psr-3/ 'PSR-3: Logger Interface')
+    * [PSR-4](https://www.php-fig.org/psr/psr-4/ 'PSR-4: Autoloader')
 
 ### Static analysis
 
