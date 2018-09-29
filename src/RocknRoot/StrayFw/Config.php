@@ -31,9 +31,9 @@ class Config
      * Get installation settings.
      *
      * @static
-     * @return string file content
+     * @return array file content
      */
-    public static function getSettings() : string
+    public static function getSettings() : array
     {
         return self::get(constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
