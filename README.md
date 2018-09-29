@@ -41,7 +41,7 @@ You can add an issue on github ! ;)
 
 ### Static analysis
 
-    $ vendor/bin/phpstan analyse src --level 1
+    $ vendor/bin/phpstan analyse src --level 2
 
 ### Coding standards
 

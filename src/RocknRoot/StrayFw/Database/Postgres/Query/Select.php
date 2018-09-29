@@ -274,9 +274,9 @@ class Select extends Query
      * @param  string $from table real name
      * @return Select this
      */
-    public function from($table)
+    public function from($from)
     {
-        $this->from = $table;
+        $this->from = $from;
 
         return $this;
     }

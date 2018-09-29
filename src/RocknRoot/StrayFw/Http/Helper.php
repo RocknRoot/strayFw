@@ -49,8 +49,6 @@ abstract class Helper
                 $nice .= $subDomain . '.';
             }
             $nice .= self::extractDomain($request->getRawRequest());
-        } else {
-            $file = Http::getRequest()->getFile();
         }
 
         return $nice . '/' . ltrim(preg_replace('/\/+/', '/', $url), '/');

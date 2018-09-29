@@ -33,7 +33,7 @@ class Database implements ProviderDatabase
     /**
      * Begin transaction if applicable.
      *
-     * @param mixed link info
+     * @param mixed $link link info
      * @return bool true if successful
      */
     public function beginTransaction($link)
@@ -44,7 +44,7 @@ class Database implements ProviderDatabase
     /**
      * Commit the current transaction if applicable.
      *
-     * @param mixed link info
+     * @param mixed $link link info
      * @return bool true if successful
      */
     public function commit($link)
@@ -55,7 +55,7 @@ class Database implements ProviderDatabase
     /**
      * Roll back the current transaction if applicable.
      *
-     * @param mixed link info
+     * @param mixed $link link info
      * @return bool true if successful
      */
     public function rollBack($link)
@@ -66,8 +66,8 @@ class Database implements ProviderDatabase
     /**
      * Create a new save point if applicable.
      *
-     * @param mixed link info
-     * @param string save point name
+     * @param mixed $link link info
+     * @param string $name save point name
      * @return bool true if successful
      */
     public function savePoint($link, $name)
@@ -78,8 +78,8 @@ class Database implements ProviderDatabase
     /**
      * Release a save point if applicable.
      *
-     * @param mixed link info
-     * @param string save point name
+     * @param mixed $link link info
+     * @param string $name save point name
      * @return bool true if successful
      */
     public function releaseSavePoint($link, $name)
@@ -90,8 +90,8 @@ class Database implements ProviderDatabase
     /**
      * Roll back a save point if applicable.
      *
-     * @param mixed link info
-     * @param string save point name
+     * @param mixed $link link info
+     * @param string $name save point name
      * @return bool true if successful
      */
     public function rollBackSavePoint($link, $name)

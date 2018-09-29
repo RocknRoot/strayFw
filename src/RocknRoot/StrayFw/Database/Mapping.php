@@ -26,7 +26,7 @@ class Mapping
      * Register a new mapping.
      *
      * @static
-     * @param  string           $config mapping configuration
+     * @param array $config mapping configuration
      */
     public static function registerMapping(array $config)
     {

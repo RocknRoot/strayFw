@@ -14,42 +14,42 @@ class Request
     /**
      * Route class name.
      *
-     * @param string
+     * @var string
      */
     protected $class;
 
     /**
      * Route action name.
      *
-     * @param string
+     * @var string
      */
     protected $action;
 
     /**
      * Command line arguments.
      *
-     * @param mixed[]
+     * @var mixed[]
      */
     protected $args;
 
     /**
      * Matching before hooks.
      *
-     * @param string[]
+     * @var string[]
      */
     protected $before;
 
     /**
      * Matching after hooks.
      *
-     * @param string[]
+     * @var string[]
      */
     protected $after;
 
     /**
      * True if route needs to stop early.
      *
-     * @param bool
+     * @var bool
      */
     protected $hasEnded;
 
@@ -139,7 +139,7 @@ class Request
     /**
      * Command line arguments.
      *
-     * @param mixed[]
+     * @return mixed[] line arguments
      */
     public function getArgs()
     {
@@ -147,9 +147,9 @@ class Request
     }
 
     /**
-     * Matching before hooks.
+     * Matched before hooks.
      *
-     * @param string[]
+     * @return string[] matched hooks
      */
     public function getBefore()
     {
@@ -159,7 +159,7 @@ class Request
     /**
      * Matching after hooks.
      *
-     * @param string[]
+     * @return string[] matched hooks
      */
     public function getAfter()
     {

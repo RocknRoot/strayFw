@@ -171,7 +171,7 @@ abstract class Model extends ProviderModel
      * Fetch one entity satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
-     * @param  array $order      order clause
+     * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
      * @return Model model instance
      */
@@ -214,7 +214,7 @@ abstract class Model extends ProviderModel
      * Fetch one row satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
-     * @param  array $order      order clause
+     * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
      * @return array row data
      */
@@ -257,7 +257,7 @@ abstract class Model extends ProviderModel
      * Fetch all entities satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
-     * @param  array $order      order clause
+     * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
      * @return array rows data
      */
@@ -304,7 +304,7 @@ abstract class Model extends ProviderModel
      * Fetch all rows satisfying the specified conditions.
      *
      * @param  array $conditions where conditions
-     * @param  array $order      order clause
+     * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
      * @return array rows data
      */

@@ -17,7 +17,7 @@ class Migration
     /**
      * Create a new migration.
      *
-     * @param Request $request current CLI request
+     * @param Request $req current CLI request
      * @throws FileNotReadable if can't find schema file
      * @throws FileNotWritable if can't copy schema file
      */
@@ -56,7 +56,7 @@ class Migration
     /**
      * Generate code for migration.
      *
-     * @param Request $request current CLI request
+     * @param Request $req current CLI request
      * @throws FileNotReadable if can't find migrate
      */
     public function generate(Request $req)
@@ -85,7 +85,7 @@ class Migration
     /**
      * Run migration code for a mapping.
      *
-     * @param Request $request current CLI request
+     * @param Request $req current CLI request
      */
     public function migrate(Request $req)
     {
@@ -103,7 +103,7 @@ class Migration
     /**
      * Rollback last migration for a mapping.
      *
-     * @param Request $request current CLI request
+     * @param Request $req current CLI request
      */
     public function rollback(Request $req)
     {
