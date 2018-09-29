@@ -53,36 +53,4 @@ abstract class Helper
 
         return $nice . '/' . ltrim(preg_replace('/\/+/', '/', $url), '/');
     }
-
-    /**
-     * Get nice URL for specified route.
-     *
-     * @static
-     * @throws RouteNotFound if needed route can't be found
-     * @param  Request       $request current request
-     * @param  string        $route   route name
-     * @param  array         $args    route arguments
-     * @return string        nice URL
-     */
-    public static function niceUrlForRoute(Request $request, $route, $args = array())
-    {
-        $file = null;
-        $url = null;
-        if (($pos = stripos($route, '.')) !== false) {
-        } else {
-            $file = $request->getDir() . $request->getFile();
-        }
-        $routes = Config::get($file);
-        if (isset($routes['routes'][$route]) === false) {
-            throw new RouteNotFound('no route "' . $route . '" in "' . $file . '"');
-        }
-        $url .= $routes['routes'][$route]['path'];
-        foreach ($args as $name => $value) {
-            $url = preg_replace('/\(\?<' . $name . '>(.*?)\)/', $value, $url);
-        }
-        $url = preg_replace('/\(\?<(\w)+>(.*?)\)[?*]/', null, $url);
-        $url = str_replace([ '(', ')', '?' ], null, $url);
-
-        return self::niceUrl(rtrim($url, '/'));
-    }
 }
