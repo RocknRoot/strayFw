@@ -2,8 +2,6 @@
 
 namespace RocknRoot\StrayFw\Database\Provider;
 
-use RocknRoot\StrayFw\Exception\BadUse;
-
 /**
  * Model representation parent class for all providers.
  * A model represents a table in SQL, a collection in MongoDB, ...
@@ -30,20 +28,11 @@ abstract class Model
 
     /**
      * Construct a new model.
-     *
-     * @throws BadUse if subclass doesnt define NAME class constant
-     * @throws BadUse if subclass doesnt define DATABASE class constant
      */
     public function __construct()
     {
         $this->new = true;
         $this->deletionFlag = false;
-        if (defined('static::NAME') === false) {
-            throw new BadUse('Model subclass doesn\'t define NAME class constant');
-        }
-        if (defined('static::DATABASE') === false) {
-            throw new BadUse('Model subclass doesn\'t define DATABASE class constant');
-        }
     }
 
     /**
