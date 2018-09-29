@@ -45,9 +45,9 @@ class Config
      * @throws FileNotReadable if file can't be opened
      * @throws FileNotParsable if file can't be parsed
      * @param  string          $fileName file name
-     * @return string          file content
+     * @return array           file content
      */
-    public static function get(string $fileName) : string
+    public static function get(string $fileName) : array
     {
         if (isset(self::$files[$fileName]) === false) {
             if (($content = file_get_contents($fileName)) === false) {
