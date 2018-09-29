@@ -275,8 +275,8 @@ class Schema extends ProviderSchema
         $path .= 'Base' . DIRECTORY_SEPARATOR . ucfirst($enumName) . '.php';
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
         $content .= "\nclass " . ucfirst($enumName) . " extends Enum\n{\n";
-        $content .= "    public function getDatabaseName()\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
-        $content .= "    public function getTableName()\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getDatabaseName()\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getTableName()\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
         $content .= $consts . "\n}";
         if (fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');
@@ -440,8 +440,8 @@ class Schema extends ProviderSchema
         }
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
         $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
-        $content .= "    public function getDatabaseName()\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
-        $content .= "    public function getTableName()\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getDatabaseName()\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getTableName()\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
         $content .= PHP_EOL . $consts . PHP_EOL . $properties . PHP_EOL;
         $content .= $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
         $content .= "    public function getPrimary()\n    {\n        return [ '" . implode('\', \'', $primary) . "' ];\n    }\n";
