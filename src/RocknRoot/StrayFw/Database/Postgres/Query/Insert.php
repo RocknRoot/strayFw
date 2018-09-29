@@ -61,7 +61,7 @@ class Insert extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (STRAY_ENV === 'development') {
+            if (constant('STRAY_ENV') === 'development') {
                 throw new AppException('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }

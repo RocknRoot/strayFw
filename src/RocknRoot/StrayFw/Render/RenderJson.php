@@ -20,7 +20,7 @@ class RenderJson implements RenderInterface
     public function render(array $args, bool $prettyPrint = null)
     {
         header('Content-type: application/json');
-        if ((STRAY_ENV === 'development' && $prettyPrint !== false) || $prettyPrint === true) {
+        if ((constant('STRAY_ENV') === 'development' && $prettyPrint !== false) || $prettyPrint === true) {
             return json_encode($args, JSON_PRETTY_PRINT);
         }
 

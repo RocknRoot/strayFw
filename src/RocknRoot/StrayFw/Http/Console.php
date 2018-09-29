@@ -20,7 +20,7 @@ class Console
     {
         $table = new \cli\Table();
         $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);
-        $row = [];
+        $rows = [];
         $routes = Http::getRoutes();
         usort($routes, function (array $a, array $b) {
             if ($a['subdomain'] != $b['subdomain']) {
