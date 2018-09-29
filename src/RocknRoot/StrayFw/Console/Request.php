@@ -121,7 +121,7 @@ class Request
      *
      * @return string
      */
-    public function getClass()
+    public function getClass() : string
     {
         return $this->class;
     }
@@ -131,7 +131,7 @@ class Request
      *
      * @return string
      */
-    public function getAction()
+    public function getAction() : string
     {
         return $this->action;
     }
@@ -141,7 +141,7 @@ class Request
      *
      * @return mixed[] line arguments
      */
-    public function getArgs()
+    public function getArgs() : array
     {
         return $this->args;
     }
@@ -151,7 +151,7 @@ class Request
      *
      * @return string[] matched hooks
      */
-    public function getBefore()
+    public function getBefore() : array
     {
         return $this->before;
     }
@@ -161,7 +161,7 @@ class Request
      *
      * @return string[] matched hooks
      */
-    public function getAfter()
+    public function getAfter() : array
     {
         return $this->after;
     }
@@ -171,7 +171,7 @@ class Request
      *
      * @return bool previous value
      */
-    public function end()
+    public function end() : bool
     {
         $v = $this->hasEnded;
         $this->hasEnded = true;
@@ -184,7 +184,7 @@ class Request
      *
      * @return bool
      */
-    public function hasEnded()
+    public function hasEnded() : bool
     {
         return $this->hasEnded;
     }

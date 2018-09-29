@@ -33,13 +33,13 @@ class Config
      * @static
      * @return string file content
      */
-    public static function getSettings()
+    public static function getSettings() : string
     {
         return self::get(constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
 
     /**
-     * Get a file content. Load it if it isn\'t already done.
+     * Get a file content. Load it if not already done.
      *
      * @static
      * @throws FileNotReadable if file can't be opened
@@ -47,7 +47,7 @@ class Config
      * @param  string          $fileName file name
      * @return string          file content
      */
-    public static function get($fileName)
+    public static function get(string $fileName) : string
     {
         if (isset(self::$files[$fileName]) === false) {
             if (($content = file_get_contents($fileName)) === false) {

@@ -82,7 +82,7 @@ abstract class Bootstrap
      * @throws UnknownNamespace if needed namespace can't be found
      * @param  string           $className needed class name
      */
-    public static function loadClass($className)
+    public static function loadClass(string $className)
     {
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
@@ -120,7 +120,7 @@ abstract class Bootstrap
      * @param string $namespace new namespace
      * @param string $path      custom files path if needed
      */
-    public static function registerApp($namespace, $path = null)
+    public static function registerApp(string $namespace, string $path = null)
     {
         $namespace = rtrim($namespace, '\\');
         if ($path == null) {

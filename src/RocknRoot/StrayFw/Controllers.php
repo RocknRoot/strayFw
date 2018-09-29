@@ -24,7 +24,7 @@ class Controllers
      * @param string $class controller class with namespace
      * @return object controller
      */
-    public static function get($class)
+    public static function get(string $class) : object
     {
         if (isset(self::$controllers[$class]) === false) {
             self::$controllers[$class] = new $class();

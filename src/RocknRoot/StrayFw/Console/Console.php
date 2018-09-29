@@ -105,7 +105,7 @@ abstract class Console
      * @static
      * @param  string           $namespace namespace prefix
      */
-    public static function prefix($namespace)
+    public static function prefix(string $namespace)
     {
         self::$namespace = $namespace;
     }
@@ -119,7 +119,7 @@ abstract class Console
      * @param  string           $help   route description, for help screen
      * @param  string           $action class and method to call
      */
-    public static function route($path, $usage, $help, $action)
+    public static function route(string $path, string $usage, string $help, string $action)
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -142,7 +142,7 @@ abstract class Console
      * @param  string           $help   route description, for help screen
      * @param  string           $action class and method to call
      */
-    public static function before($path, $usage, $help, $action)
+    public static function before(string $path, string $usage, string $help, string $action)
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -165,7 +165,7 @@ abstract class Console
      * @param  string           $help   route description, for help screen
      * @param  string           $action class and method to call
      */
-    public static function after($path, $usage, $help, $action)
+    public static function after(string $path, string $usage, string $help, string $action)
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -184,7 +184,7 @@ abstract class Console
      *
      * @return array[] all routes
      */
-    public static function getRoutes()
+    public static function getRoutes() : array
     {
         return self::$routes;
     }

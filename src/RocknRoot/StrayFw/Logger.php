@@ -28,7 +28,7 @@ class Logger extends AbstractLogger
      *
      * @return Logger
      */
-    public static function get()
+    public static function get() : Logger
     {
         if (self::$log == null) {
             self::$log = new Logger();
