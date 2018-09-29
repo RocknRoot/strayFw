@@ -2,9 +2,6 @@
 
 namespace RocknRoot\StrayFw\Http;
 
-use RocknRoot\StrayFw\Config;
-use RocknRoot\StrayFw\Exception\RouteNotFound;
-
 /**
  * Useful functions for the framework users.
  *
