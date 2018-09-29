@@ -124,8 +124,11 @@ abstract class Bootstrap
     {
         $namespace = rtrim($namespace, '\\');
         if ($path == null) {
-            $path = constant('STRAY_PATH_APPS') . str_replace('_', DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
+            $path = constant('STRAY_PATH_APPS') . str_replace(
+                '_',
+                DIRECTORY_SEPARATOR,
+                str_replace('\\', DIRECTORY_SEPARATOR, $namespace)
+            );
         }
         self::$namespaces[$namespace] = $path;
         self::$applications[] = $namespace;
