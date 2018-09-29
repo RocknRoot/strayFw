@@ -11,7 +11,7 @@ Code is free, new-BSD license. So... fork us !
 ## Requirements
 
 * PHP >= 7.0
-* PHP >= 7.1 for development (phan)
+* PHP >= 7.1 for development (phpstan)
 * mbstring extension
 * For the Locale namespace, PECL intl extension >= 1.0.0
 
@@ -41,7 +41,7 @@ You can add an issue on github ! ;)
 
 ### Static analysis
 
-    $ ./vendor/bin/phan
+    $ vendor/bin/phpstan analyse src --level 0
 
 ### Coding standards
 

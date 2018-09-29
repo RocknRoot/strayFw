@@ -51,11 +51,19 @@ abstract class Migration
      */
     public function __construct(array $next, string $path)
     {
-        $this->mapping = Mapping::get(static::MAPPING);
+        $this->mapping = Mapping::get($this->getMappingName());
         $this->database = Database::get($this->mapping['config']['database']);
         $this->nextSchema = $next;
         $this->prevSchema = Config::get($path . 'schema.yml');
     }
+
+    /**
+     * Get mapping's name.
+     *
+     * @ abstract
+     * @return string mapping's name
+     */
+    abstract public function getMappingName();
 
     /**
      * Perform migration.
@@ -66,11 +74,4 @@ abstract class Migration
      * Rollback migration.
      */
     abstract public function down();
-
-    /**
-     * Execute a mutation.
-     *
-     * @param mixed $mutation mutation
-     */
-    abstract public function execute($mutation);
 }

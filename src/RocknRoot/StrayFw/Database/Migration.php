@@ -163,7 +163,8 @@ class Migration
             return '        $this->execute(' . $a . ');' . PHP_EOL;
         }, $down));
         $content .= "\nclass " . $name . " extends Migration\n{\n";
-        $content .= '    const NAME = \'' . $name . "';\n    const MAPPING = '" . $mappingName . "';\n\n";
+        $content .= '    const NAME = \'' . $name . "';\n\n";
+        $content .= "    public function getMappingName()\n    {\n        return '" . $mappingName . "';\n    }\n\n";
         $content .= "    public function up()\n    {\n" . $up . "    }\n\n";
         $content .= "    public function down()\n    {\n" . $down . "    }\n";
         $content .= "}";

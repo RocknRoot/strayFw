@@ -9,6 +9,7 @@ use RocknRoot\StrayFw\Database\Postgres\Query\Delete;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 use RocknRoot\StrayFw\Database\Provider\Migration as ProviderMigration;
+use RocknRoot\StrayFw\Database\Provider\Mutation\Mutation;
 use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Exception\Exception;
 
@@ -297,17 +298,5 @@ abstract class Migration extends ProviderMigration
             return;
         }
         $database->commit();
-    }
-
-    /**
-     * Execute a mutation.
-     *
-     * @param Mutation $mutation mutation
-     */
-    public function execute($mutation)
-    {
-        if ($mutation->execute() === false) {
-            throw new DatabaseError('Mutation error: ' . $mutation->errorInfo()[2]);
-        }
     }
 }

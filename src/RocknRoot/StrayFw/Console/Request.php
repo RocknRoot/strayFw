@@ -71,7 +71,7 @@ class Request
             $cmd = ltrim(rtrim($cli[0], '/'), '/');
             foreach ($routes as $route) {
                 if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
-                    throw new InvalidRouteDefinition('route "' . $routeName . '" in "' . $file['file'] . '" has invalid definition');
+                    throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
                 }
                 if ($route['type'] == 'before' || $route['type'] == 'after') {
                     if (stripos($cmd, $route['path']) === 0) {

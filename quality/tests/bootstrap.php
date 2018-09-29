@@ -4,9 +4,7 @@ define('STRAY_PATH_ROOT', __DIR__ . '/../../');
 define('STRAY_PATH_APPS', __DIR__ . '/../../apps/');
 define('STRAY_PATH_VENDOR', __DIR__ . '/../../vendor/');
 
-if (false === defined('STRAY_ENV')) {
-    define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
-}
+define('STRAY_ENV', 'development');
 
 require STRAY_PATH_VENDOR . 'autoload.php';
 

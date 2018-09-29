@@ -52,7 +52,7 @@ class Select extends Query
     /**
      * Having clause.
      *
-     * @var string
+     * @var Condition
      */
     protected $having;
 
@@ -314,7 +314,7 @@ class Select extends Query
     /**
      * Set having clause.
      *
-     * @param  Condition|having $having having clause
+     * @param  Condition|string $having having clause
      * @return Select           this
      */
     public function having($having)

@@ -37,11 +37,11 @@ abstract class Model extends ProviderModel
             if ($this->deletionFlag === true) {
                 $status = $this->delete();
             } elseif (count($this->modified) > 0) {
-                $updateQuery = new Update(static::DATABASE);
-                $updateQuery->update(static::NAME);
+                $updateQuery = new Update($this->getDatabaseName());
+                $updateQuery->update($this->getTableName());
 
                 $where = array();
-                foreach (static::getPrimary() as $primary) {
+                foreach ($this->getPrimary() as $primary) {
                     $field = $this->{'field' . ucfirst($primary)};
                     $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
                     $where[$realName] = ':primary' . ucfirst($primary);
@@ -66,11 +66,11 @@ abstract class Model extends ProviderModel
             }
         } else {
             if ($this->deletionFlag === false) {
-                $insertQuery = new Insert(static::DATABASE);
-                $insertQuery->into(static::NAME);
+                $insertQuery = new Insert($this->getDatabaseName());
+                $insertQuery->into($this->getTableName());
 
                 $returning = array();
-                foreach (static::getPrimary() as $primary) {
+                foreach ($this->getPrimary() as $primary) {
                     $field = $this->{'field' . ucfirst($primary)};
                     $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
                     $returning[] = $realName;
@@ -78,7 +78,7 @@ abstract class Model extends ProviderModel
                 $insertQuery->returning($returning);
 
                 $values = array();
-                foreach (static::getAllFieldsAliases() as $name) {
+                foreach ($this->getAllFieldsAliases() as $name) {
                     $field = $this->{'field' . ucfirst($name)};
                     if (isset($field['value']) === true) {
                         $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($name)));
@@ -95,8 +95,8 @@ abstract class Model extends ProviderModel
                     $rows = $insertQuery->getStatement()->fetch(\PDO::FETCH_ASSOC);
                     $imax = count($rows);
                     for ($i = 0; $i < $imax; $i++) {
-                        $field = &$this->{'field' . ucfirst(static::getPrimary()[$i])};
-                        $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName(static::getPrimary()[$i])));
+                        $field = &$this->{'field' . ucfirst($this->getPrimary()[$i])};
+                        $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($this->getPrimary()[$i])));
                         $realName = substr($realName, stripos($realName, '.') + 1);
                         $field['value'] = $rows[$realName];
                     }
@@ -117,10 +117,10 @@ abstract class Model extends ProviderModel
     {
         $status = false;
         if ($this->new === false) {
-            $deleteQuery = new Delete(static::DATABASE);
-            $deleteQuery->from(static::NAME);
+            $deleteQuery = new Delete($this->getDatabaseName());
+            $deleteQuery->from($this->getTableName());
             $where = array();
-            foreach (static::getPrimary() as $primary) {
+            foreach ($this->getPrimary() as $primary) {
                 $field = $this->{'field' . ucfirst($primary)};
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
                 $where[$realName] = ':primary' . ucfirst($primary);
@@ -142,7 +142,7 @@ abstract class Model extends ProviderModel
     public function toArray()
     {
         $values = array();
-        foreach (static::getAllFieldsAliases() as $name) {
+        foreach ($this->getAllFieldsAliases() as $name) {
             $field = $this->{'field' . ucfirst($name)};
             $values[$name] = $field['value'];
         }
@@ -158,7 +158,7 @@ abstract class Model extends ProviderModel
     public function toRealNamesArray()
     {
         $values = array();
-        foreach (static::getAllFieldsAliases() as $name) {
+        foreach ($this->getAllFieldsAliases() as $name) {
             $field = $this->{'field' . ucfirst($name)};
             $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($name)));
             $values[$realName] = $field['value'];
@@ -177,9 +177,10 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntity(array $conditions, $orderBy = null, $critical = false)
     {
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(static::getAllFieldsRealNames());
-        $selectQuery->from(static::NAME);
+        $entity = new static();
+        $selectQuery = new Select($entity->getDatabaseName(), $critical);
+        $selectQuery->select($entity->getAllFieldsRealNames());
+        $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -219,9 +220,10 @@ abstract class Model extends ProviderModel
      */
     public static function fetchArray(array $conditions, $orderBy = null, $critical = false)
     {
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(static::getAllFieldsRealNames());
-        $selectQuery->from(static::NAME);
+        $entity = new static();
+        $selectQuery = new Select($entity->getDatabaseName(), $critical);
+        $selectQuery->select($entity->getAllFieldsRealNames());
+        $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -261,10 +263,11 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
     {
+        $entity = new static();
         $res = static::fetchArrays($conditions, $orderBy, $critical);
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(static::getAllFieldsRealNames());
-        $selectQuery->from(static::NAME);
+        $selectQuery = new Select($entity->getDatabaseName(), $critical);
+        $selectQuery->select($entity->getAllFieldsRealNames());
+        $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -307,9 +310,10 @@ abstract class Model extends ProviderModel
      */
     public static function fetchArrays(array $conditions, $orderBy = null, $critical = false)
     {
-        $selectQuery = new Select(static::DATABASE, $critical);
-        $selectQuery->select(array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
-        $selectQuery->from(static::NAME);
+        $entity = new static();
+        $selectQuery = new Select($entity->getDatabaseName(), $critical);
+        $selectQuery->select(array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
+        $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -347,9 +351,10 @@ abstract class Model extends ProviderModel
      */
     public static function countRows(array $conditions, $critical = false)
     {
-        $selectQuery = new Select(static::DATABASE, $critical);
+        $entity = new static();
+        $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select([ 'count' => 'COUNT(*)' ]);
-        $selectQuery->from(static::NAME);
+        $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -369,4 +374,44 @@ abstract class Model extends ProviderModel
 
         return $data['count'];
     }
+
+    /**
+     * Get database's name.
+     *
+     * @abstract
+     * @return string database's name
+     */
+    abstract public function getDatabaseName();
+
+    /**
+     * Get table's name.
+     *
+     * @abstract
+     * @return string table's name
+     */
+    abstract public function getTableName();
+
+    /**
+     * Get primary fields' names.
+     *
+     * @abstract
+     * @return array primary fields' names
+     */
+    abstract public function getPrimary();
+
+    /**
+     * Get all fields' names.
+     *
+     * @abstract
+     * @return array all fields' names
+     */
+    abstract public function getAllFieldsRealNames();
+
+    /**
+     * Get all fields' aliases.
+     *
+     * @abstract
+     * @return array all fields' aliases
+     */
+    abstract public function getAllFieldsAliases();
 }

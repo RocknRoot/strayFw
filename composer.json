@@ -25,7 +25,7 @@
         }
     },
     "require-dev": {
-        "etsy/phan": "^0.9.1",
-        "filp/whoops": "^2.1"
+        "filp/whoops": "^2.1",
+        "phpstan/phpstan": "^0.10.3"
     }
 }
