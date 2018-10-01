@@ -444,8 +444,8 @@ class Schema extends ProviderSchema
         }
         $content = "<?php\n\nnamespace " . ltrim(rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
         $content .= "\nclass " . ucfirst($modelName) . " extends Model\n{\n";
-        $content .= "    public function getDatabaseName()\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
-        $content .= "    public function getTableName()\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
+        $content .= "    public function getDatabaseName() : string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getTableName() : string\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
         $content .= PHP_EOL . $consts . PHP_EOL . $properties . PHP_EOL;
         $content .= $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
         $content .= "    public function getPrimary()\n    {\n        return [ '" . implode('\', \'', $primary) . "' ];\n    }\n";
