@@ -3,56 +3,15 @@
 namespace RocknRoot\StrayFw\Console;
 
 use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
+use RocknRoot\StrayFw\Request as BaseRequest;
 
 /**
  * Routed data from CLI.
  *
  * @author Nekith <nekith@errant-works.com>
  */
-class Request
+class Request extends BaseRequest
 {
-    /**
-     * Route class name.
-     *
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * Route action name.
-     *
-     * @var string
-     */
-    protected $action;
-
-    /**
-     * Command line arguments.
-     *
-     * @var mixed[]
-     */
-    protected $args;
-
-    /**
-     * Matching before hooks.
-     *
-     * @var string[]
-     */
-    protected $before;
-
-    /**
-     * Matching after hooks.
-     *
-     * @var string[]
-     */
-    protected $after;
-
-    /**
-     * True if route needs to stop early.
-     *
-     * @var bool
-     */
-    protected $hasEnded;
-
     /**
      * Parse executed command and choose a route.
      *
@@ -114,78 +73,5 @@ class Request
         $this->class = 'RocknRoot\\StrayFw\\Console\\Controller';
         $this->action = 'help';
         $this->args = array();
-    }
-
-    /**
-     * Get route class name.
-     *
-     * @return string
-     */
-    public function getClass() : string
-    {
-        return $this->class;
-    }
-
-    /**
-     * Get route action name.
-     *
-     * @return string
-     */
-    public function getAction() : string
-    {
-        return $this->action;
-    }
-
-    /**
-     * Command line arguments.
-     *
-     * @return mixed[] line arguments
-     */
-    public function getArgs() : array
-    {
-        return $this->args;
-    }
-
-    /**
-     * Matched before hooks.
-     *
-     * @return string[] matched hooks
-     */
-    public function getBefore() : array
-    {
-        return $this->before;
-    }
-
-    /**
-     * Matching after hooks.
-     *
-     * @return string[] matched hooks
-     */
-    public function getAfter() : array
-    {
-        return $this->after;
-    }
-
-    /**
-     * Set the request to end early.
-     *
-     * @return bool previous value
-     */
-    public function end() : bool
-    {
-        $v = $this->hasEnded;
-        $this->hasEnded = true;
-
-        return $v;
-    }
-
-    /**
-     * True if route needs to stop early.
-     *
-     * @return bool
-     */
-    public function hasEnded() : bool
-    {
-        return $this->hasEnded;
     }
 }
