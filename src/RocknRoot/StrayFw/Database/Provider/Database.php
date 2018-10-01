@@ -25,7 +25,7 @@ interface Database
      * @param mixed $link link info
      * @return bool true if successful
      */
-    public function beginTransaction($link);
+    public function beginTransaction($link) : bool;
 
     /**
      * Commit the current transaction if applicable.
@@ -33,7 +33,7 @@ interface Database
      * @param mixed $link link info
      * @return bool true if successful
      */
-    public function commit($link);
+    public function commit($link) : bool;
 
     /**
      * Roll back the current transaction if applicable.
@@ -41,7 +41,7 @@ interface Database
      * @param mixed $link link info
      * @return bool true if successful
      */
-    public function rollBack($link);
+    public function rollBack($link) : bool;
 
     /**
      * Create a new save point if applicable.
@@ -50,7 +50,7 @@ interface Database
      * @param string $name save point name
      * @return bool true if successful
      */
-    public function savePoint($link, $name);
+    public function savePoint($link, string $name) : bool;
 
     /**
      * Release a save point if applicable.
@@ -59,7 +59,7 @@ interface Database
      * @param string $name save point name
      * @return bool true if successful
      */
-    public function releaseSavePoint($link, $name);
+    public function releaseSavePoint($link, string $name) : bool;
 
     /**
      * Roll back a save point if applicable.
@@ -68,5 +68,5 @@ interface Database
      * @param string $name save point name
      * @return bool true if successful
      */
-    public function rollBackSavePoint($link, $name);
+    public function rollBackSavePoint($link, string $name) : bool;
 }

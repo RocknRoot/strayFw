@@ -68,7 +68,7 @@ class Database
      * @throws BadUse           if database parameters in settings miss provider
      * @param  string           $alias database alias
      */
-    protected function __construct($alias)
+    protected function __construct(string $alias)
     {
         $this->alias = $alias;
         $this->transactionLevel = 0;
@@ -172,7 +172,7 @@ class Database
      *
      * @return bool true if connected
      */
-    public function isConnected()
+    public function isConnected() : bool
     {
         if (isset($this->servers['all']) === true) {
             return isset($this->servers['all']['link']);
@@ -223,7 +223,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function beginTransaction()
+    public function beginTransaction() : bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -241,7 +241,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function commit()
+    public function commit() : bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -263,7 +263,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function rollBack()
+    public function rollBack() : bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -286,7 +286,7 @@ class Database
      * @static
      * @param string $alias database alias
      */
-    public static function registerDatabase($alias)
+    public static function registerDatabase(string $alias)
     {
         if (isset(self::$databases[$alias]) === false) {
             self::$databases[$alias] = new static($alias);
@@ -301,7 +301,7 @@ class Database
      * @param  string           $alias requested database alias
      * @return Database         instance
      */
-    public static function get($alias)
+    public static function get(string $alias)
     {
         if (isset(self::$databases[$alias]) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');

@@ -25,7 +25,7 @@ abstract class Helper
      * @param  string $name model name
      * @return string codified model name
      */
-    public static function codifyName($name)
+    public static function codifyName(string $name) : string
     {
         $matches = array();
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);

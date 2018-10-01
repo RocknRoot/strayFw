@@ -24,7 +24,7 @@ abstract class Column
      * @param  string                  $fieldName       field real name
      * @param  array                   $fieldDefinition field fieldDefinition
      */
-    public static function generateDefinition(array $schema, $mapping, $fieldName, array $fieldDefinition)
+    public static function generateDefinition(array $schema, string $mapping, string $fieldName, array $fieldDefinition)
     {
         $sql = $fieldName . ' ';
         switch ($fieldDefinition['type']) {

@@ -30,7 +30,7 @@ abstract class Model extends ProviderModel
      *
      * @return bool true if successfully saved
      */
-    public function save()
+    public function save() : bool
     {
         $status = false;
         if ($this->new === false) {
@@ -113,7 +113,7 @@ abstract class Model extends ProviderModel
      *
      * @return bool true if successfully deleted
      */
-    public function delete()
+    public function delete() : bool
     {
         $status = false;
         if ($this->new === false) {
@@ -139,7 +139,7 @@ abstract class Model extends ProviderModel
      *
      * @return array values
      */
-    public function toArray()
+    public function toArray() : array
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
@@ -155,7 +155,7 @@ abstract class Model extends ProviderModel
      *
      * @return array values
      */
-    public function toRealNamesArray()
+    public function toRealNamesArray() : array
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
@@ -175,7 +175,7 @@ abstract class Model extends ProviderModel
      * @param  bool  $critical   if true, will be executed on write server
      * @return Model model instance
      */
-    public static function fetchEntity(array $conditions, $orderBy = null, $critical = false)
+    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false) : Model
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -218,7 +218,7 @@ abstract class Model extends ProviderModel
      * @param  bool  $critical   if true, will be executed on write server
      * @return array row data
      */
-    public static function fetchArray(array $conditions, $orderBy = null, $critical = false)
+    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false) : array
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -261,7 +261,7 @@ abstract class Model extends ProviderModel
      * @param  bool  $critical   if true, will be executed on write server
      * @return array rows data
      */
-    public static function fetchEntities(array $conditions, $orderBy = null, $critical = false)
+    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false) : array
     {
         $entity = new static();
         $res = static::fetchArrays($conditions, $orderBy, $critical);
@@ -308,7 +308,7 @@ abstract class Model extends ProviderModel
      * @param  bool  $critical   if true, will be executed on write server
      * @return array rows data
      */
-    public static function fetchArrays(array $conditions, $orderBy = null, $critical = false)
+    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false) : array
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -349,7 +349,7 @@ abstract class Model extends ProviderModel
      * @param  bool  $critical   if true, will be executed on write server
      * @return int   number of rows
      */
-    public static function countRows(array $conditions, $critical = false)
+    public static function countRows(array $conditions, bool $critical = false) : int
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -381,7 +381,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string database's name
      */
-    abstract public function getDatabaseName();
+    abstract public function getDatabaseName() : string;
 
     /**
      * Get table's name.
@@ -389,7 +389,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string table's name
      */
-    abstract public function getTableName();
+    abstract public function getTableName() : string;
 
     /**
      * Get primary fields' names.
@@ -397,7 +397,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return array primary fields' names
      */
-    abstract public function getPrimary();
+    abstract public function getPrimary() : array;
 
     /**
      * Get all fields' names.
@@ -405,7 +405,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return array all fields' names
      */
-    abstract public function getAllFieldsRealNames();
+    abstract public function getAllFieldsRealNames() : array;
 
     /**
      * Get all fields' aliases.
@@ -413,5 +413,5 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return array all fields' aliases
      */
-    abstract public function getAllFieldsAliases();
+    abstract public function getAllFieldsAliases() : array;
 }

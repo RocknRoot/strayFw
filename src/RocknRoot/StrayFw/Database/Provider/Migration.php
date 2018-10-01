@@ -60,10 +60,10 @@ abstract class Migration
     /**
      * Get mapping's name.
      *
-     * @ abstract
+     * @abstract
      * @return string mapping's name
      */
-    abstract public function getMappingName();
+    abstract public function getMappingName() : string;
 
     /**
      * Perform migration.

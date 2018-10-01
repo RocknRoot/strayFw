@@ -46,7 +46,7 @@ class Mapping
      *
      * @return array[] mappings
      */
-    public static function getMappings()
+    public static function getMappings() : array
     {
         return self::$mappings;
     }
@@ -58,7 +58,7 @@ class Mapping
      * @param  string          $name mapping name
      * @return array           mapping data
      */
-    public static function get($name)
+    public static function get(string $name) : array
     {
         if (isset(self::$mappings[$name]) === false) {
             throw new MappingNotFound('there\'s no registered mapping with name "' . $name . '"');

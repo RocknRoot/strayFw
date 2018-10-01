@@ -121,10 +121,12 @@ class Schema extends ProviderSchema
     /**
      * Build an enum.
      *
+     * @param string $enumName enum alias
+     * @param array $enumDefinition enum definition from a schema file
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if an enum has no value
      */
-    private function buildEnum($enumName, array $enumDefinition)
+    private function buildEnum(string $enumName, array $enumDefinition)
     {
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
@@ -163,10 +165,12 @@ class Schema extends ProviderSchema
     /**
      * Build a model.
      *
+     * @param string $modelName model alias
+     * @param array $modelDefinition model definition from a schema file
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if a model has no field
      */
-    private function buildModel($modelName, array $modelDefinition)
+    private function buildModel(string $modelName, array $modelDefinition)
     {
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
@@ -239,7 +243,7 @@ class Schema extends ProviderSchema
      * @throws FileNotWritable         if a base file can't be opened with write permission
      * @throws FileNotWritable         if a user file can't be opened with write permission
      */
-    private function generateEnum($enumName, array $enumDefinition)
+    private function generateEnum(string $enumName, array $enumDefinition)
     {
         $definition = $this->getDefinition();
         $consts = null;
@@ -311,7 +315,7 @@ class Schema extends ProviderSchema
      * @throws FileNotWritable         if a base file can't be opened with write permission
      * @throws FileNotWritable         if a user file can't be opened with write permission
      */
-    private function generateModel($modelName, array $modelDefinition)
+    private function generateModel(string $modelName, array $modelDefinition)
     {
         $definition = $this->getDefinition();
         $primary = array();

@@ -34,7 +34,7 @@ abstract class Enum
      *
      * @throws BadUse if $v is not recognized as a possible value
      */
-    public function __construct($v)
+    public function __construct(string $v)
     {
         if (static::isValid($v) === false) {
             throw new BadUse('"' . $v . '" is not recognized as a possible value');
@@ -47,7 +47,7 @@ abstract class Enum
      *
      * @return string
      */
-    public function getValue()
+    public function getValue() : string
     {
         return $this->value;
     }
@@ -57,7 +57,7 @@ abstract class Enum
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->value;
     }
@@ -68,7 +68,7 @@ abstract class Enum
      * @param string $v new value
      * @return string
      */
-    public function setValue($v)
+    public function setValue(string $v) : string
     {
         if (static::isValid($v) === false) {
             throw new BadUse('"' . $v . '" is not recognized as a possible value');
@@ -79,9 +79,9 @@ abstract class Enum
     /**
      * Return keys and values as an associative array.
      *
-     * @return array keys => values
+     * @return array
      */
-    public static function toArray()
+    public static function toArray() : array
     {
         if (static::$array == null) {
             $ref = new \ReflectionClass(static::class);
@@ -103,7 +103,7 @@ abstract class Enum
      * @param string $value
      * @return bool true if value is recognized
      */
-    public static function isValid($value)
+    public static function isValid(string $value) : bool
     {
         return in_array($value, static::toArray());
     }

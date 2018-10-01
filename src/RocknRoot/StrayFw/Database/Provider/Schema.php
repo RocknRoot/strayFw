@@ -38,7 +38,7 @@ abstract class Schema
      * @throws FileNotReadable  if schema file is not readable
      * @param  string           $mapping mapping name
      */
-    public function __construct($mapping)
+    public function __construct(string $mapping)
     {
         $this->mapping = $mapping;
         $data = Mapping::get($mapping);
@@ -74,7 +74,7 @@ abstract class Schema
      *
      * @return array schema definition
      */
-    public function getDefinition()
+    public function getDefinition() : array
     {
         if ($this->definition == null) {
             $data = Mapping::get($this->mapping);
@@ -89,7 +89,7 @@ abstract class Schema
      *
      * @return string mapping name
      */
-    public function getMapping()
+    public function getMapping() : string
     {
         return $this->mapping;
     }
@@ -100,7 +100,7 @@ abstract class Schema
      * @param  string $mapping mapping name
      * @return Schema schema instance
      */
-    public static function getSchema($mapping)
+    public static function getSchema(string $mapping) : Schema
     {
         $data = Mapping::get($mapping);
         $class = rtrim(ucfirst($data['config']['provider']), '\\') . '\\Schema';
