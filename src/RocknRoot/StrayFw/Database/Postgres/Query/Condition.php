@@ -53,7 +53,7 @@ class Condition
      * Extract the corresponding SQL code, depth level by level.
      *
      * @param  array  $tree one tree level
-     * @return string generated SQL code for this level
+     * @return string|null generated SQL code for this level
      */
     protected function toSqlLevel(array $tree)
     {

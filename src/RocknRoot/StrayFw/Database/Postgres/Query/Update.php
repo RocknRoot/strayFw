@@ -24,7 +24,7 @@ class Update extends Query
     /**
      * Set clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $set;
 
@@ -38,7 +38,7 @@ class Update extends Query
     /**
      * Order by clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $orderBy;
 

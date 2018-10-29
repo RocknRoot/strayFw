@@ -24,7 +24,7 @@ class Select extends Query
     /**
      * Select clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $select;
 
@@ -59,7 +59,7 @@ class Select extends Query
     /**
      * Order by clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $orderBy;
 

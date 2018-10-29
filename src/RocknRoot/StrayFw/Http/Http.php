@@ -55,7 +55,7 @@ abstract class Http
     /**
      * Current raw request.
      *
-     * @var RawRequest
+     * @var RawRequest|null
      */
     protected static $rawRequest;
 
@@ -246,7 +246,7 @@ abstract class Http
      * Get current raw request.
      *
      * @static
-     * @return RawRequest
+     * @return RawRequest|null
      */
     public static function getRawRequest()
     {

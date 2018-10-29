@@ -28,7 +28,7 @@ class Response
     /**
      * Render object.
      *
-     * @var \RocknRoot\StrayFw\Render\RenderInterface
+     * @var \RocknRoot\StrayFw\Render\RenderInterface|null
      */
     protected $renderInst;
 
@@ -45,7 +45,7 @@ class Response
     /**
      * Get set render object.
      *
-     * @return \RocknRoot\StrayFw\Render\RenderInterface
+     * @return \RocknRoot\StrayFw\Render\RenderInterface|null
      */
     public function getRender()
     {

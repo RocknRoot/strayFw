@@ -173,9 +173,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return Model model instance
+     * @return Model|false model instance
      */
-    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false) : Model
+    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -216,9 +216,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array row data
+     * @return array|false row data
      */
-    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -259,9 +259,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array rows data
+     * @return array|false rows data
      */
-    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $res = static::fetchArrays($conditions, $orderBy, $critical);
@@ -306,9 +306,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array rows data
+     * @return array|false rows data
      */
-    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -347,9 +347,9 @@ abstract class Model extends ProviderModel
      *
      * @param  array $conditions where conditions
      * @param  bool  $critical   if true, will be executed on write server
-     * @return int   number of rows
+     * @return int|false   number of rows or false on error
      */
-    public static function countRows(array $conditions, bool $critical = false) : int
+    public static function countRows(array $conditions, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);

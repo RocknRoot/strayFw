@@ -23,6 +23,6 @@ class RenderRedirect implements RenderInterface
         }
         header('Location: ' . $args['url']);
 
-        return null;
+        return '';
     }
 }

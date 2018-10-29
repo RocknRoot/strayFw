@@ -31,7 +31,7 @@ class Delete extends Query
     /**
      * Order by clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $orderBy;
 

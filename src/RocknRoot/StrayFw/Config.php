@@ -23,7 +23,7 @@ class Config
      * Loaded files.
      *
      * @static
-     * @var string[]
+     * @var array<string, array>
      */
     protected static $files = array();
 

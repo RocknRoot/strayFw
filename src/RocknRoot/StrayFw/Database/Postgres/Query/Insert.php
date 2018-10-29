@@ -24,7 +24,7 @@ class Insert extends Query
     /**
      * Values clause.
      *
-     * @var string
+     * @var array<int, string|null>
      */
     protected $values;
 
