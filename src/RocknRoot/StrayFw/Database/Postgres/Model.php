@@ -246,7 +246,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetch();
-        if ($data === false) {
+        if (is_array($data) === false) {
             return false;
         }
 
@@ -289,7 +289,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $res = $selectQuery->fetchAll();
-        if ($res === false) {
+        if (is_array($res) === false) {
             return false;
         }
         $data = [];
@@ -312,7 +312,7 @@ abstract class Model extends ProviderModel
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select(array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
+        $selectQuery->select((array) array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
         $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
@@ -335,7 +335,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetchAll();
-        if ($data === false) {
+        if (is_array($data) === false) {
             return false;
         }
 
