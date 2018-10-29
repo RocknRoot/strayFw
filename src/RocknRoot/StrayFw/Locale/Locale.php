@@ -94,9 +94,11 @@ abstract class Locale
             }
             $language = self::$currentLanguage;
             if (($pos = strpos($language, '-')) !== false) {
+                $pos = (int) $pos; // re: https://github.com/phpstan/phpstan/issues/647
                 $language = substr($language, 0, $pos);
             }
             if (($pos = strpos($language, '_')) !== false) {
+                $pos = (int) $pos; // re: https://github.com/phpstan/phpstan/issues/647
                 $language = substr($language, 0, $pos);
             }
             if (is_readable($dir . DIRECTORY_SEPARATOR . $language . '.yml') === true) {
@@ -127,6 +129,9 @@ abstract class Locale
         $oldKey = $key;
         $section = self::$translations;
         while (isset($section[$key]) === false && ($pos = strpos($key, '.')) !== false) {
+            if ( ! is_int($pos)) { // re: https://github.com/phpstan/phpstan/issues/647
+                break;
+            }
             $subSection = substr($key, 0, $pos);
             if (isset($section[$subSection]) === false) {
                 break;

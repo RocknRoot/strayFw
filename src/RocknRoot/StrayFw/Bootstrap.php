@@ -89,11 +89,13 @@ abstract class Bootstrap
         }
         $fileName = null;
         if (($namespacePos = strripos($className, '\\')) !== false) {
+            $namespacePos = (int) $namespacePos; // re: https://github.com/phpstan/phpstan/issues/647
             $namespace = substr($className, 0, $namespacePos);
             $subNamespaces = array();
             while ($fileName === null && $namespace != null) {
                 if (isset(self::$namespaces[$namespace]) === false) {
                     $subNamespacePos = strripos($namespace, '\\');
+                    $subNamespacePos = (int) $subNamespacePos; // re: https://github.com/phpstan/phpstan/issues/647
                     $subNamespaces[] = substr($namespace, $subNamespacePos);
                     $namespace = substr($namespace, 0, $subNamespacePos);
                 } else {
