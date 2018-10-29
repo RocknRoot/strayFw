@@ -190,7 +190,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -233,7 +233,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -277,7 +277,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -323,7 +323,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));

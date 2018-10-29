@@ -132,7 +132,7 @@ class Update extends Query
     public function set($set)
     {
         if (is_array($set) === true) {
-            $this->set = null;
+            $this->set = '';
             foreach ($set as $name => $value) {
                 $pos = stripos($name, '.');
                 if ($pos !== false) {
@@ -172,7 +172,7 @@ class Update extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = null;
+            $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }

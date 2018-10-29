@@ -253,7 +253,7 @@ class Select extends Query
     public function select($select)
     {
         if (is_array($select) === true) {
-            $this->select = null;
+            $this->select = '';
             foreach ($select as $key => $elem) {
                 $this->select .= $elem;
                 if (is_numeric($key) === false) {
@@ -339,7 +339,7 @@ class Select extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = null;
+            $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }
