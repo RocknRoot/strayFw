@@ -74,14 +74,14 @@ class Select extends Query
     /**
      * Limit clause.
      *
-     * @var string
+     * @var int|null
      */
     protected $limit;
 
     /**
      * Offset clause.
      *
-     * @var string
+     * @var int|null
      */
     protected $offset;
 
@@ -371,10 +371,10 @@ class Select extends Query
     /**
      * Set limit clause.
      *
-     * @param  string $limit limit clause
+     * @param  int|null $limit limit clause
      * @return Select this
      */
-    public function limit($limit)
+    public function limit(int $limit = null)
     {
         $this->limit = $limit;
 
@@ -384,10 +384,10 @@ class Select extends Query
     /**
      * Set offset clause.
      *
-     * @param  string $offset offset clause
+     * @param  int|null $offset offset clause
      * @return Select this
      */
-    public function offset($offset)
+    public function offset(int $offset = null)
     {
         $this->offset = $offset;
 

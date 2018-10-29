@@ -103,7 +103,7 @@ abstract class Bootstrap
             if ($fileName === null) {
                 throw new UnknownNamespace('can\'t find namespace "' . substr($className, 0, $namespacePos) . '"');
             }
-            $fileName = self::$namespaces[$namespace] . str_replace('\\', DIRECTORY_SEPARATOR, implode(null, array_reverse($subNamespaces)));
+            $fileName = self::$namespaces[$namespace] . str_replace('\\', DIRECTORY_SEPARATOR, implode('', array_reverse($subNamespaces)));
             $className = substr($className, $namespacePos + 1);
         }
         if ($fileName != null) {
