@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres\Query;
 
+use InvalidArgumentException;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Exception\BadUse;
@@ -261,8 +262,13 @@ class Select extends Query
                 $this->select .= ', ';
             }
             $this->select = substr($this->select, 0, -2);
+        } elseif ( ! is_string($select)) {
+            throw new InvalidArgumentException(sprintf(
+                'Argument 1 passed to %s must be an array or string!',
+                __METHOD__
+            ));
         } else {
-            $this->select = (string) $select;
+            $this->select = $select;
         }
 
         return $this;

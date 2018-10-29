@@ -35,7 +35,7 @@ abstract class Query
     /**
      * PDO error info.
      *
-     * @var array
+     * @var array|null
      */
     protected $errorInfo;
 

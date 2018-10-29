@@ -21,7 +21,7 @@ abstract class Model extends ProviderModel
     /**
      * Aliases of modified columns values.
      *
-     * @var string[]
+     * @var array<string, scalar|null>
      */
     protected $modified;
 
