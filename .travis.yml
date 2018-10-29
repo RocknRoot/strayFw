@@ -19,4 +19,4 @@ before_script:
 
 script:
   - phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
-  - ./vendor/bin/phpstan analyse --level=3 ./src/
+  - ./vendor/bin/phpstan analyse --level=4 ./src/
