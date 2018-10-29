@@ -17,4 +17,6 @@ before_script:
   - sh -c "cp quality/settings.tests.yml settings.yml"
   - composer install
 
-script: phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
+script:
+  - phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
+  - ./vendor/bin/phpstan analyse --level=3 ./src/
