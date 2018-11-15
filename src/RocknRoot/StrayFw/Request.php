@@ -2,9 +2,6 @@
 
 namespace RocknRoot\StrayFw;
 
-use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
-use RocknRoot\StrayFw\Exception\RouteNotFound;
-
 /**
  * Base class for requests.
  *

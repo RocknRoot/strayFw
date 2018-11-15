@@ -129,7 +129,7 @@ abstract class Locale
         $oldKey = $key;
         $section = self::$translations;
         while (isset($section[$key]) === false && ($pos = strpos($key, '.')) !== false) {
-            if ( ! is_int($pos)) { // re: https://github.com/phpstan/phpstan/issues/647
+            if (! is_int($pos)) { // re: https://github.com/phpstan/phpstan/issues/647
                 break;
             }
             $subSection = substr($key, 0, $pos);

@@ -262,7 +262,7 @@ class Select extends Query
                 $this->select .= ', ';
             }
             $this->select = substr($this->select, 0, -2);
-        } elseif ( ! is_string($select)) {
+        } elseif (! is_string($select)) {
             throw new InvalidArgumentException(sprintf(
                 'Argument 1 passed to %s must be an array or string!',
                 __METHOD__
