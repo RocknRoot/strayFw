@@ -26,7 +26,7 @@ abstract class Schema
     /**
      * Schema definition.
      *
-     * @var array
+     * @var array<string, array>
      */
     protected $definition;
 
@@ -72,7 +72,7 @@ abstract class Schema
     /**
      * Get the schema definition, from schema configuration file.
      *
-     * @return array schema definition
+     * @return array<string, array> schema definition
      */
     public function getDefinition() : array
     {

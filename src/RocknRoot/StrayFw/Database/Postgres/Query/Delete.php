@@ -31,7 +31,7 @@ class Delete extends Query
     /**
      * Order by clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $orderBy;
 
@@ -137,7 +137,7 @@ class Delete extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = null;
+            $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }

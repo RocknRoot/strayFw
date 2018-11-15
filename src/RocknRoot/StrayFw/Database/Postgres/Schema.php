@@ -419,7 +419,7 @@ class Schema extends ProviderSchema
                     if (isset($modelDefinition['fields'][$from]) === false) {
                         throw new InvalidSchemaDefinition('building link : model "' . $modelName . '" has no field named "' . $from . '"');
                     }
-                    if (isset($linkedModel['fields']) === false || isset($linkedModel['fields'][$to]) === false) {
+                    if (isset($linkedModel['fields'], $linkedModel['fields'][$to]) === false) {
                         throw new InvalidSchemaDefinition('building link : model "' . $linkDefinition['model'] . '" has no field named "' . $to . '"');
                     }
                     $links[] = '\'' . $to . '\' => $this->get' . ucfirst($from) . '()';

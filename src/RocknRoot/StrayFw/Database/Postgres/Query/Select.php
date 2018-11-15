@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres\Query;
 
+use InvalidArgumentException;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Exception\BadUse;
@@ -24,7 +25,7 @@ class Select extends Query
     /**
      * Select clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $select;
 
@@ -59,7 +60,7 @@ class Select extends Query
     /**
      * Order by clause.
      *
-     * @var string
+     * @var string|null
      */
     protected $orderBy;
 
@@ -73,14 +74,14 @@ class Select extends Query
     /**
      * Limit clause.
      *
-     * @var string
+     * @var int|null
      */
     protected $limit;
 
     /**
      * Offset clause.
      *
-     * @var string
+     * @var int|null
      */
     protected $offset;
 
@@ -252,7 +253,7 @@ class Select extends Query
     public function select($select)
     {
         if (is_array($select) === true) {
-            $this->select = null;
+            $this->select = '';
             foreach ($select as $key => $elem) {
                 $this->select .= $elem;
                 if (is_numeric($key) === false) {
@@ -261,8 +262,13 @@ class Select extends Query
                 $this->select .= ', ';
             }
             $this->select = substr($this->select, 0, -2);
+        } elseif ( ! is_string($select)) {
+            throw new InvalidArgumentException(sprintf(
+                'Argument 1 passed to %s must be an array or string!',
+                __METHOD__
+            ));
         } else {
-            $this->select = (string) $select;
+            $this->select = $select;
         }
 
         return $this;
@@ -333,7 +339,7 @@ class Select extends Query
     public function orderBy($orderBy)
     {
         if (is_array($orderBy) === true) {
-            $this->orderBy = null;
+            $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }
@@ -365,10 +371,10 @@ class Select extends Query
     /**
      * Set limit clause.
      *
-     * @param  string $limit limit clause
+     * @param  int|null $limit limit clause
      * @return Select this
      */
-    public function limit($limit)
+    public function limit(int $limit = null)
     {
         $this->limit = $limit;
 
@@ -378,10 +384,10 @@ class Select extends Query
     /**
      * Set offset clause.
      *
-     * @param  string $offset offset clause
+     * @param  int|null $offset offset clause
      * @return Select this
      */
-    public function offset($offset)
+    public function offset(int $offset = null)
     {
         $this->offset = $offset;
 

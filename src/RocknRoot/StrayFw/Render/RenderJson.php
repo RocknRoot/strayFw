@@ -21,9 +21,9 @@ class RenderJson implements RenderInterface
     {
         header('Content-type: application/json');
         if ((constant('STRAY_ENV') === 'development' && $prettyPrint !== false) || $prettyPrint === true) {
-            return json_encode($args, JSON_PRETTY_PRINT);
+            return (string) json_encode($args, JSON_PRETTY_PRINT);
         }
 
-        return json_encode($args);
+        return (string) json_encode($args);
     }
 }

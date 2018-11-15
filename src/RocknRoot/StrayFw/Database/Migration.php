@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database;
 
+use RuntimeException;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Console\Request;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
@@ -73,6 +74,11 @@ class Migration
                 throw new FileNotReadable('can\'t find migration at "' . $path . '"');
             }
             $cl = '\\' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::generate';
+            if (is_callable($cl) === false) {
+                throw new RuntimeException(
+                    'Migration generate method is not callable on configured provider!'
+                );
+            }
             $res = call_user_func($cl, $mapping, $mappingName, $name);
             $this->write($mapping, $mappingName, $name, $res['up'], $res['down'], $res['import']);
             echo 'Migration "' . $name . '" generated.' . PHP_EOL;
@@ -95,6 +101,11 @@ class Migration
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
             $cl = '\\' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::migrate';
+            if (is_callable($cl) === false) {
+                throw new RuntimeException(
+                    'Migration migrate method is not callable on configured provider!'
+                );
+            }
             call_user_func($cl, $mapping);
             echo 'Migrate - Done' . PHP_EOL;
         }
@@ -113,6 +124,11 @@ class Migration
             $mappingName = $req->getArgs()[0];
             $mapping = Mapping::get($mappingName);
             $cl = '\\' . ltrim(rtrim($mapping['config']['provider'], '\\'), '\\') . '\\Migration::rollback';
+            if (is_callable($cl) === false) {
+                throw new RuntimeException(
+                    'Migration rollback method is not callable on configured provider!'
+                );
+            }
             call_user_func($cl, $mapping);
             echo 'Rollback - Done' . PHP_EOL;
         }

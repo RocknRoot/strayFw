@@ -65,7 +65,7 @@ abstract class Cookie
      */
     public static function delete($name)
     {
-        setcookie($name, null, time() - 1);
+        setcookie($name, '', time() - 1);
     }
 
     /**
@@ -77,7 +77,7 @@ abstract class Cookie
     {
         $keys = array_keys($_COOKIE);
         foreach ($keys as $key) {
-            setcookie($key, null, time() - 1);
+            setcookie($key, '', time() - 1);
         }
     }
 }

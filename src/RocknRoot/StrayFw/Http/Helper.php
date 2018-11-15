@@ -35,7 +35,7 @@ abstract class Helper
      * @param  string $url raw URL
      * @return string nice URL
      */
-    public static function niceUrl($url)
+    public static function niceUrl(string $url)
     {
         $nice = null;
         if (($pos = stripos($url, '.')) !== false) {
@@ -48,6 +48,6 @@ abstract class Helper
             $nice .= self::extractDomain($request->getRawRequest());
         }
 
-        return $nice . '/' . ltrim(preg_replace('/\/+/', '/', $url), '/');
+        return $nice . '/' . ltrim((string) preg_replace('/\/+/', '/', $url), '/');
     }
 }
