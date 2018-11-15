@@ -41,7 +41,7 @@ The framework follows these standards :
 
 ### Static analysis
 
-    $ vendor/bin/phpstan analyse src --level 2
+    $ vendor/bin/phpstan analyse src --level=max
 
 ### Coding standards
 
