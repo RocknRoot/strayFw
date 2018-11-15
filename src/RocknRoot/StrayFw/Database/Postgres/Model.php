@@ -312,11 +312,7 @@ abstract class Model extends ProviderModel
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $fields = array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames());
-        if (!is_array($fields)) {
-            $fields = array();
-        }
-        $selectQuery->select($fields);
+        $selectQuery->select((array) array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
         $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
