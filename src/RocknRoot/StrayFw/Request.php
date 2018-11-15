@@ -36,14 +36,14 @@ abstract class Request
     /**
      * Matching before hooks.
      *
-     * @var string[]
+     * @var string[][]
      */
     protected $before;
 
     /**
      * Matching after hooks.
      *
-     * @var string[]
+     * @var string[][]
      */
     protected $after;
 
@@ -87,7 +87,7 @@ abstract class Request
     /**
      * Matching before hooks.
      *
-     * @return string[] matched hooks
+     * @return string[][] matched hooks
      */
     public function getBefore()
     {
@@ -97,7 +97,7 @@ abstract class Request
     /**
      * Matching after hooks.
      *
-     * @return string[] matched hooks
+     * @return string[][] matched hooks
      */
     public function getAfter()
     {

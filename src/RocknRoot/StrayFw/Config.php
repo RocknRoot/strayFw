@@ -23,7 +23,7 @@ class Config
      * Loaded files.
      *
      * @static
-     * @var string[]
+     * @var array<string, array>
      */
     protected static $files = array();
 
@@ -53,6 +53,7 @@ class Config
             if (($content = file_get_contents($fileName)) === false) {
                 throw new FileNotReadable('file "' . $fileName . '" can\'t be read');
             }
+            $content = (string) $content; // re: https://github.com/phpstan/phpstan/issues/647
             try {
                 $content = Yaml::parse($content);
             } catch (ParseException $e) {

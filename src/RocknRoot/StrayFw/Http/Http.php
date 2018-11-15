@@ -6,6 +6,7 @@ use RocknRoot\StrayFw\Controllers;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;
+use RuntimeException;
 
 /**
  * Bootstrapping class for HTTP requests.
@@ -41,7 +42,7 @@ abstract class Http
     /**
      * Current URI prefix.
      *
-     * @var string
+     * @var string|null
      */
     protected static $uri;
 
@@ -55,7 +56,7 @@ abstract class Http
     /**
      * Current raw request.
      *
-     * @var RawRequest
+     * @var RawRequest|null
      */
     protected static $rawRequest;
 
@@ -108,6 +109,9 @@ abstract class Http
     public static function run()
     {
         if (self::$isInit === true) {
+            if ((self::$rawRequest instanceof RawRequest) === false) {
+                throw new RuntimeException('Raw request was not specified!');
+            }
             self::$request = new Request(self::$rawRequest, self::$routes);
             self::$controllers = array();
             self::$response = new Response();
@@ -156,7 +160,7 @@ abstract class Http
      * @param  string|array     $subdomain subdomain prefix
      * @param  string           $uri uri prefix
      */
-    public static function prefix($namespace, $subdomain = null, $uri = null)
+    public static function prefix(string $namespace, $subdomain = null, string $uri = null)
     {
         self::$namespace = $namespace;
         self::$subdomain = is_array($subdomain) ? $subdomain : [ $subdomain ];
@@ -246,7 +250,7 @@ abstract class Http
      * Get current raw request.
      *
      * @static
-     * @return RawRequest
+     * @return RawRequest|null
      */
     public static function getRawRequest()
     {

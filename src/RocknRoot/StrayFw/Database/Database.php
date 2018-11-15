@@ -18,7 +18,7 @@ class Database
      * Registered databases.
      *
      * @static
-     * @var array[]
+     * @var array<string, Database>
      */
     protected static $databases = array();
 

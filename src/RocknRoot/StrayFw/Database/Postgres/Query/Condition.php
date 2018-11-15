@@ -19,7 +19,7 @@ class Condition
     /**
      * Generated SQL code.
      *
-     * @var string
+     * @var string|null
      */
     protected $sql;
 
@@ -42,7 +42,7 @@ class Condition
      */
     public function toSql()
     {
-        if ($this->sql == null) {
+        if (is_string($this->sql) === false) {
             $this->sql = $this->toSqlLevel($this->tree);
         }
 
@@ -55,10 +55,10 @@ class Condition
      * @param  array  $tree one tree level
      * @return string generated SQL code for this level
      */
-    protected function toSqlLevel(array $tree)
+    protected function toSqlLevel(array $tree) : string
     {
         if (count($tree) == 0) {
-            return null;
+            return '';
         }
         $sql = '(';
         reset($tree);

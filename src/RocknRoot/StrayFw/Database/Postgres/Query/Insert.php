@@ -24,7 +24,7 @@ class Insert extends Query
     /**
      * Values clause.
      *
-     * @var string
+     * @var array<int, string|null>
      */
     protected $values;
 
@@ -126,7 +126,7 @@ class Insert extends Query
                     implode(', ', $values)
                 );
             } else {
-                $this->values = array(null, null);
+                $this->values = array('', '');
                 foreach ($values as $key => $value) {
                     if (stripos($key, '.') !== false) {
                         $key = substr($key, stripos($key, '.') + 1);

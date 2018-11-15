@@ -35,7 +35,7 @@ abstract class Query
     /**
      * PDO error info.
      *
-     * @var array
+     * @var array|null
      */
     protected $errorInfo;
 
@@ -90,7 +90,7 @@ abstract class Query
     /**
      * Get PDO error state.
      *
-     * @return string error state
+     * @return string|null error state
      */
     public function getErrorState()
     {
@@ -104,7 +104,7 @@ abstract class Query
     /**
      * Get PDO error message.
      *
-     * @return string error message
+     * @return string|null error message
      */
     public function getErrorMessage()
     {

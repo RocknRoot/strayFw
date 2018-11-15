@@ -21,7 +21,7 @@ abstract class Model extends ProviderModel
     /**
      * Aliases of modified columns values.
      *
-     * @var string[]
+     * @var array<string, scalar|null>
      */
     protected $modified;
 
@@ -173,9 +173,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return Model model instance
+     * @return Model|false model instance
      */
-    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false) : Model
+    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -190,7 +190,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -216,9 +216,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array row data
+     * @return array|false row data
      */
-    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
@@ -233,7 +233,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -246,7 +246,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetch();
-        if ($data === false) {
+        if (is_array($data) === false) {
             return false;
         }
 
@@ -259,9 +259,9 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array rows data
+     * @return array|false rows data
      */
-    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $res = static::fetchArrays($conditions, $orderBy, $critical);
@@ -277,7 +277,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -289,7 +289,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $res = $selectQuery->fetchAll();
-        if ($res === false) {
+        if (is_array($res) === false) {
             return false;
         }
         $data = [];
@@ -306,13 +306,13 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array rows data
+     * @return array|false rows data
      */
-    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false) : array
+    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select(array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
+        $selectQuery->select((array) array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
         $selectQuery->from($entity->getTableName());
         if (count($conditions) > 0) {
             $where = array();
@@ -323,7 +323,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (count($orderBy) > 0) {
+        if (is_array($orderBy) && count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
@@ -335,7 +335,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetchAll();
-        if ($data === false) {
+        if (is_array($data) === false) {
             return false;
         }
 
@@ -347,9 +347,9 @@ abstract class Model extends ProviderModel
      *
      * @param  array $conditions where conditions
      * @param  bool  $critical   if true, will be executed on write server
-     * @return int   number of rows
+     * @return int|false   number of rows or false on error
      */
-    public static function countRows(array $conditions, bool $critical = false) : int
+    public static function countRows(array $conditions, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);

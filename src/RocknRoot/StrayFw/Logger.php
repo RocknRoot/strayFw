@@ -47,6 +47,13 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
+        if ( ! is_string($message)) {
+            throw new LoggerInvalidArgumentException(sprintf(
+                'Argument 2 passed to %s must be a string!',
+                __METHOD__
+            ));
+        }
+
         static $levels = array(
             LogLevel::EMERGENCY,
             LogLevel::ALERT,
@@ -60,7 +67,7 @@ class Logger extends AbstractLogger
         if (in_array($level, $levels) === false) {
             throw new LoggerInvalidArgumentException('unknown level "' . $level . '"');
         }
-        $message = (string) $message;
+        $message = $message;
         foreach ($context as $key => $value) {
             $message = str_replace('{' . $key . '}', $value, $message);
         }
