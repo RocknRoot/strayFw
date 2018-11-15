@@ -59,7 +59,7 @@ abstract class ErrorPage
      * @param string $title data group title
      * @param array  $data  data that will be displayed
      */
-    public static function addData($title, array $data)
+    public static function addData(string $title, array $data)
     {
         if (self::$isInit === true) {
             self::$prettyPageHandler->AddDataTable($title, $data);
