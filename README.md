@@ -30,6 +30,10 @@ You can add an issue on github ! ;)
 
 ## Contribute
 
+### Contributors
+
+* @SignpostMarv : phpstan compliance.
+
 ### Technical considerations
 
 The framework follows these standards :
