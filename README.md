@@ -32,7 +32,7 @@ You can add an issue on github ! ;)
 
 ### Contributors
 
-* @SignpostMarv : phpstan compliance.
+* [SignpostMarv](https://github.com/SignpostMarv 'SignpostMarv') : phpstan compliance.
 
 ### Technical considerations
 
