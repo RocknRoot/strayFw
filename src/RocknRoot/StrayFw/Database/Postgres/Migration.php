@@ -58,7 +58,7 @@ abstract class Migration extends ProviderMigration
             if (isset($table['type']) === false || $table['type'] == 'model') {
                 $import[] = 'AddTable';
                 $import[] = 'DeleteTable';
-                $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
+                $up[] = 'AddTable::statement($this->database, $this->nextSchema, $this->getMappingName(), \'' . $tableName . '\', \'' . $key . '\')';
                 $down[] = 'DeleteTable::statement($this->database, \'' . $tableName . '\')';
                 echo 'AddTable: ' . $key . PHP_EOL;
             } else {
@@ -78,7 +78,7 @@ abstract class Migration extends ProviderMigration
                 $import[] = 'AddTable';
                 $import[] = 'DeleteTable';
                 $up[] = 'DeleteTable::statement($this->database, \'' . $tableName . '\')';
-                $down[] = 'AddTable::statement($this->database, $this->prevSchema, $this->mapping, \'' . $tableName . '\', \'' . $key . '\')';
+                $down[] = 'AddTable::statement($this->database, $this->prevSchema, $this->getMappingName(), \'' . $tableName . '\', \'' . $key . '\')';
                 echo 'RemoveTable: ' . $key . PHP_EOL;
             } else {
                 echo 'TODO RemoveEnum: ' . $key . PHP_EOL;
@@ -98,7 +98,7 @@ abstract class Migration extends ProviderMigration
                 foreach ($newFields as $fieldName => $fieldDefinition) {
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
-                    $up[] = 'AddColumn::statement($this->database, $this->nextSchema, self::MAPPING, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $up[] = 'AddColumn::statement($this->database, $this->nextSchema, $this->getMappingName(), \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     $down[] = 'DeleteColumn::statement($this->database, $this->nextSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'AddColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
@@ -107,7 +107,7 @@ abstract class Migration extends ProviderMigration
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
                     $up[] = 'DeleteColumn::statement($this->database, $this->prevSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
-                    $down[] = 'AddColumn::statement($this->database, $this->prevSchema, self::MAPPING, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
+                    $down[] = 'AddColumn::statement($this->database, $this->prevSchema, $this->getMappingName(), \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'DeleteColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
                 $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);

@@ -2,11 +2,11 @@
 
 namespace RocknRoot\StrayFw\Database;
 
+use RuntimeException;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Console\Request;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
-use RuntimeException;
 
 /**
  * Console actions for migration related operations.
@@ -173,14 +173,15 @@ class Migration
             $content .= implode(', ', $import) . "};\n";
         }
         $up = implode('', array_map(function (string $a) {
-            return '        $this->execute(' . $a . ');' . PHP_EOL;
+            return '        ' . $a . '->execute();' . PHP_EOL;
         }, $up));
         $down = implode('', array_map(function (string $a) {
-            return '        $this->execute(' . $a . ');' . PHP_EOL;
+            return '        ' . $a . '->execute();' . PHP_EOL;
         }, $down));
+        var_dump($up);
         $content .= "\nclass " . $name . " extends Migration\n{\n";
         $content .= '    const NAME = \'' . $name . "';\n\n";
-        $content .= "    public function getMappingName()\n    {\n        return '" . $mappingName . "';\n    }\n\n";
+        $content .= "    public function getMappingName() : string\n    {\n        return '" . $mappingName . "';\n    }\n\n";
         $content .= "    public function up()\n    {\n" . $up . "    }\n\n";
         $content .= "    public function down()\n    {\n" . $down . "    }\n";
         $content .= "}";
