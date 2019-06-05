@@ -10,8 +10,7 @@ Code is free, new-BSD license. So... fork us !
 
 ## Requirements
 
-* PHP >= 7.0
-* PHP >= 7.1 for development (phpstan)
+* PHP >= 7.1
 * mbstring extension
 * For the Locale namespace, PECL intl extension >= 1.0.0
 
