@@ -13,15 +13,12 @@ Code is free, new-BSD license. So... fork us !
 * PHP >= 7.1
 * mbstring extension
 * For the Locale namespace, PECL intl extension >= 1.0.0
+* For the [Twig](https://twig.symfony.com/ 'Twig') renderer, twig/twig >= 2.0
 
 ## Get started
 
     get composer
     $ php composer.phar create-project rocknroot/stray-fw-skeleton
-
-## Addons
-
-* [strayTwig](https://github.com/RocknRoot/strayTwig 'strayTwig'): [Twig](http://twig.sensiolabs.org/ 'Twig') rendering
 
 ## Need help ?
 
