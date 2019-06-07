@@ -187,6 +187,11 @@ abstract class Migration extends ProviderMigration
             return;
         }
         $last = $select->fetch();
+        if (is_bool($last)) {
+            echo 'Can\'t fetch from _stray_migration, select query result is null' . PHP_EOL;
+            $database->rollBack();
+            return;
+        }
         $last['date'] = new \DateTime($last['date']);
         $last['date'] = $last['date']->getTimestamp();
         $migrations = array_values(array_filter($migrations, function (array $m) use ($last) {
@@ -250,7 +255,7 @@ abstract class Migration extends ProviderMigration
             return;
         }
         $last = $select->fetch();
-        if (!$last) {
+        if (is_bool($last)) {
             echo 'There is no executed migration.' . PHP_EOL;
             $database->rollBack();
             return;

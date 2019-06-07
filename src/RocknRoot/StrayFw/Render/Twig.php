@@ -5,8 +5,8 @@ namespace RocknRoot\StrayFw\Render;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
-use Twig_Environment;
-use Twig_Extension;
+use Twig\Environment;
+use Twig\Extension;
 
 /**
  * Wrapper and configuration class for Twig.
@@ -21,7 +21,7 @@ abstract class Twig
      * Existing Twig environments.
      *
      * @static
-     * @var \Twig_Environment[]
+     * @var \Twig\Environment[]
      */
     protected static $environments = array();
 
@@ -29,7 +29,7 @@ abstract class Twig
      * Registered extensions.
      *
      * @static
-     * @var \Twig_Extension[]
+     * @var \Twig\Extension\ExtensionInterface[]
      */
     protected static $extensions = array();
 
@@ -37,7 +37,7 @@ abstract class Twig
      * Registered functions.
      *
      * @static
-     * @var string[]
+     * @var callable[]
      */
     protected static $functions = array();
 
@@ -49,9 +49,9 @@ abstract class Twig
      * @throws BadUse           if tmp path hasn't been defined
      * @throws BadUse           if tmp directory isn't writable
      * @param  string           $dir template directory
-     * @return Twig_Environment corresponding environment
+     * @return \Twig\Environment corresponding environment
      */
-    public static function getEnv(string $dir) : Twig_Environment
+    public static function getEnv(string $dir) : \Twig\Environment
     {
         if (isset(self::$environments[$dir]) === false) {
             $dir = rtrim($dir, '/') . '/';
@@ -71,27 +71,26 @@ abstract class Twig
                     throw new BadUse('tmp directory doesn\'t seem to be writable');
                 }
             }
-            $loader = new \Twig_Loader_Filesystem($dir);
-            $env = new \Twig_Environment($loader, array(
+            $loader = new \Twig\Loader\FilesystemLoader($dir);
+            $env = new \Twig\Environment($loader, array(
                 'cache' => $tmp . 'twig_compil',
                 'debug' => (constant('STRAY_ENV') === 'development')
             ));
             self::$environments[$dir] = $env;
             if (constant('STRAY_ENV') === 'development') {
-                self::$environments[$dir]->addExtension(new \Twig_Extension_Debug());
+                self::$environments[$dir]->addExtension(new \Twig\Extension\DebugExtension());
             }
-            self::$environments[$dir]->addFunction(new \Twig_Function('route', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::route'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('tr', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::tr'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('langFull', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::langFull'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('langPrimary', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::langPrimary'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('url', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::url'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('localizedDate', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::localizedDate'));
-            self::$environments[$dir]->addFunction(new \Twig_Function('session', '\\RocknRoot\\StrayFw\\Render\\TwigHelper::session'));
+            self::$environments[$dir]->addFunction(new \Twig_Function('tr', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'tr']));
+            self::$environments[$dir]->addFunction(new \Twig_Function('langFull', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langFull']));
+            self::$environments[$dir]->addFunction(new \Twig_Function('langPrimary', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langPrimary']));
+            self::$environments[$dir]->addFunction(new \Twig_Function('url', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'url']));
+            self::$environments[$dir]->addFunction(new \Twig_Function('localizedDate', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'localizedDate']));
+            self::$environments[$dir]->addFunction(new \Twig_Function('session', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'session']));
             foreach (self::$extensions as $ext) {
                 self::$environments[$dir]->addExtension($ext);
             }
-            foreach (self::$functions as $label => $name) {
-                self::$environments[$dir]->addFunction(new \Twig_Function($label, $name));
+            foreach (self::$functions as $label => $callable) {
+                self::$environments[$dir]->addFunction(new \Twig\TwigFunction($label, $callable));
             }
         }
 
@@ -102,9 +101,9 @@ abstract class Twig
      * Add an extension to Twig environments.
      *
      * @static
-     * @param Twig_Extension $extension instance
+     * @param \Twig\Extension\ExtensionInterface $extension instance
      */
-    public static function addExtension(\Twig_Extension $extension)
+    public static function addExtension(\Twig\Extension\ExtensionInterface $extension)
     {
         self::$extensions[] = $extension;
         foreach (self::$environments as $env) {
@@ -117,14 +116,14 @@ abstract class Twig
      *
      * @static
      * @param string $label       function name in Twig templates
-     * @param string $functionName function name
-     */
-    public static function addFunction(string $label, string $functionName)
+     * @param callable $function function
+    */
+    public static function addFunction(string $label, callable $function)
     {
         if (isset(self::$functions[$label]) === false) {
-            self::$functions[$label] = $functionName;
+            self::$functions[$label] = $function;
             foreach (self::$environments as $env) {
-                $env->addFunction(new \Twig_Function($label, $functionName));
+                $env->addFunction(new \Twig\TwigFunction($label, $function));
             }
         }
     }

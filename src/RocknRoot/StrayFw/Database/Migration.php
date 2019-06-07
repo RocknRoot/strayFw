@@ -2,11 +2,11 @@
 
 namespace RocknRoot\StrayFw\Database;
 
-use RuntimeException;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Console\Request;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
+use RuntimeException;
 
 /**
  * Console actions for migration related operations.

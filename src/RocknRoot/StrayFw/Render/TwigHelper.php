@@ -5,6 +5,7 @@ namespace RocknRoot\StrayFw\Render;
 use RocknRoot\StrayFw\Http\Helper as HttpHelper;
 use RocknRoot\StrayFw\Http\Session;
 use RocknRoot\StrayFw\Locale\Locale;
+use RocknRoot\StrayFw\Logger;
 
 /**
  * Proxy class for Twig additional functions.
@@ -84,6 +85,10 @@ abstract class TwigHelper
             $time = time();
         }
         $date = \IntlDateFormatter::create(Locale::getCurrentLanguage(), $dateFormat, $timeFormat);
+        if ($date === false) {
+            Logger::get()->warning('could not create IntlDateFormatter for dateFormat "' . $dateFormat . '" and timeFormat "' . $timeFormat . '"');
+            return '';
+        }
 
         return $date->format($time);
     }
