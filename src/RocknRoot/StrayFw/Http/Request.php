@@ -118,6 +118,7 @@ class Request extends BaseRequest
     /**
      * Retrieve an input var from, in this order of priority:
      *  * POST vars
+     *  * JSON body vars
      *  * route args
      *  * GET vars
      *  * $default
@@ -130,6 +131,9 @@ class Request extends BaseRequest
     {
         if (isset($this->rawRequest->getPostVars()[$name]) === true) {
             return $this->rawRequest->getPostVars()[$name];
+        }
+        if (isset($this->rawRequest->getJSONBodyVars()[$name]) === true) {
+            return $this->rawRequest->getJSONBodyVars()[$name];
         }
         if (isset($this->args[$name]) === true) {
             return $this->args[$name];

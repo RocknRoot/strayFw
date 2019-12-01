@@ -59,6 +59,13 @@ class RawRequest
     protected $postVars;
 
     /**
+     * Body JSON content.
+     *
+     * @var mixed
+     */
+    protected $jsonBodyVars;
+
+    /**
      * Fill properties with current HTTP request.
      */
     public function __construct()
@@ -87,6 +94,7 @@ class RawRequest
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->getVars = $_GET;
         $this->postVars = $_POST;
+        $this->jsonBodyVars = json_decode(file_get_contents('php://input'), true);
     }
 
     /**
@@ -157,5 +165,15 @@ class RawRequest
     public function getPostVars()
     {
         return $this->postVars;
+    }
+
+    /**
+     * Get JSON body variables.
+     *
+     * @return mixed
+     */
+    public function getJSONBodyVars()
+    {
+        return $this->jsonBodyVars;
     }
 }
