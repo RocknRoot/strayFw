@@ -94,7 +94,10 @@ class RawRequest
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->getVars = $_GET;
         $this->postVars = $_POST;
-        $this->jsonBodyVars = json_decode(file_get_contents('php://input'), true);
+        $body = file_get_contents('php://input');
+        if ($body) {
+            $this->jsonBodyVars = json_decode($body, true);
+        }
     }
 
     /**
