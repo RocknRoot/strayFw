@@ -2,6 +2,10 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
+
+services:
+  - postgresql
 
 before_script:
   - git clone https://github.com/nikic/php-ast.git
