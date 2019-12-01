@@ -22,5 +22,5 @@ before_script:
   - composer install
 
 script:
-  - phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
+  - ./vendor/bin/phpunit --configuration quality/phpunit_pgsql.xml --coverage-text
   - ./vendor/bin/phpstan analyse --level=max ./src/
