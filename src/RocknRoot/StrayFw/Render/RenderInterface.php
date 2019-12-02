@@ -12,7 +12,8 @@ interface RenderInterface
     /**
      * Return the generated display.
      *
+     * @param mixed[] $args render data
      * @return string content
      */
-    public function render(array $data) : string;
+    public function render(array $args) : string;
 }
