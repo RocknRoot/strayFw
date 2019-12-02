@@ -14,11 +14,11 @@ class DeleteTable extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param  Database     $database database
-     * @param  string       $table    table name
+     * @param  Database      $database database
+     * @param  string        $table    table name
      * @return \PDOStatement $statement prepared query
      */
-    public static function statement(Database $database, $table)
+    public static function statement(Database $database, string $table) : \PDOStatement
     {
         $statement = $database->getMasterLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
 

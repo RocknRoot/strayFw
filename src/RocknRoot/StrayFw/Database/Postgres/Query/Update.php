@@ -24,7 +24,7 @@ class Update extends Query
     /**
      * Set clause.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $set;
 
@@ -38,7 +38,7 @@ class Update extends Query
     /**
      * Order by clause.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $orderBy;
 
@@ -55,7 +55,7 @@ class Update extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute()
+    public function execute() : bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -89,7 +89,7 @@ class Update extends Query
      * @throws BadUse if update clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql()
+    public function toSql() : string
     {
         if (empty($this->update) === true) {
             throw new BadUse('update clause has not been defined (' . print_r($this, true) . ')');
@@ -116,7 +116,7 @@ class Update extends Query
      * @param  string $table table real name
      * @return Update this
      */
-    public function update($table)
+    public function update(string $table) : Update
     {
         $this->update = $table;
 
@@ -129,7 +129,7 @@ class Update extends Query
      * @param  array|string $set set clause
      * @return Update       this
      */
-    public function set($set)
+    public function set($set) : Update
     {
         if (is_array($set) === true) {
             $this->set = '';
@@ -153,10 +153,10 @@ class Update extends Query
     /**
      * Set where clause.
      *
-     * @param  Condition|array|string $where where clause
+     * @param  array|Condition|string $where where clause
      * @return Update                 this
      */
-    public function where($where)
+    public function where($where) : Update
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -169,7 +169,7 @@ class Update extends Query
      * @param  array|string $orderBy order by clause
      * @return Update       this
      */
-    public function orderBy($orderBy)
+    public function orderBy($orderBy) : Update
     {
         if (is_array($orderBy) === true) {
             $this->orderBy = '';
@@ -190,7 +190,7 @@ class Update extends Query
      * @param  string $limit limit clause
      * @return Update this
      */
-    public function limit($limit)
+    public function limit(string $limit) : Update
     {
         $this->limit = $limit;
 

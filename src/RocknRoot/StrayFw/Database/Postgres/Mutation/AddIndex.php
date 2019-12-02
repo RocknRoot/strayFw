@@ -15,14 +15,14 @@ class AddIndex extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param  Database     $database        database
-     * @param  string       $modelName       model name
-     * @param  string       $tableName       table real name
-     * @param  array        $tableDefinition table definition
-     * @param  string       $indexName       index name
+     * @param  Database      $database        database
+     * @param  string        $modelName       model name
+     * @param  string        $tableName       table real name
+     * @param  array         $tableDefinition table definition
+     * @param  string        $indexName       index name
      * @return \PDOStatement $statement prepared query
      */
-    public static function statement(Database $database, $modelName, $tableName, array $tableDefinition, $indexName)
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : \PDOStatement
     {
         $indexDefinition = $tableDefinition['indexes'][$indexName];
         $indexes = array();

@@ -63,10 +63,10 @@ class Database
     /**
      * Construct a new database representation.
      *
+     * @param  string           $alias database alias
      * @throws DatabaseNotFound if database parameters in settings can't be found
      * @throws BadUse           if database parameters in settings aren't well formatted
      * @throws BadUse           if database parameters in settings miss provider
-     * @param  string           $alias database alias
      */
     protected function __construct(string $alias)
     {
@@ -297,8 +297,8 @@ class Database
      * Get a database instance aliased as requested.
      *
      * @static
-     * @throws DatabaseNotFound if database isn't registered
      * @param  string           $alias requested database alias
+     * @throws DatabaseNotFound if database isn't registered
      * @return Database         instance
      */
     public static function get(string $alias) : Database

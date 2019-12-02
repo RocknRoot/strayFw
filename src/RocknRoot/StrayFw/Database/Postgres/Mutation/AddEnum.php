@@ -14,12 +14,12 @@ class AddEnum extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param  Database     $database database
-     * @param  string       $type     type name
-     * @param  array        $values   enum values
+     * @param  Database      $database database
+     * @param  string        $type     type name
+     * @param  array         $values   enum values
      * @return \PDOStatement $statement prepared query
      */
-    public static function statement(Database $database, $type, array $values)
+    public static function statement(Database $database, string $type, array $values) : \PDOStatement
     {
         $statement = $database->getMasterLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(\'' . implode('\', \'', $values) . '\')');
 

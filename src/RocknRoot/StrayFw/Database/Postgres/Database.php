@@ -33,8 +33,8 @@ class Database implements ProviderDatabase
     /**
      * Begin transaction if applicable.
      *
-     * @param mixed $link link info
-     * @return bool true if successful
+     * @param  mixed $link link info
+     * @return bool  true if successful
      */
     public function beginTransaction($link) : bool
     {
@@ -44,8 +44,8 @@ class Database implements ProviderDatabase
     /**
      * Commit the current transaction if applicable.
      *
-     * @param mixed $link link info
-     * @return bool true if successful
+     * @param  mixed $link link info
+     * @return bool  true if successful
      */
     public function commit($link) : bool
     {
@@ -55,8 +55,8 @@ class Database implements ProviderDatabase
     /**
      * Roll back the current transaction if applicable.
      *
-     * @param mixed $link link info
-     * @return bool true if successful
+     * @param  mixed $link link info
+     * @return bool  true if successful
      */
     public function rollBack($link) : bool
     {
@@ -66,9 +66,9 @@ class Database implements ProviderDatabase
     /**
      * Create a new save point if applicable.
      *
-     * @param mixed $link link info
-     * @param string $name save point name
-     * @return bool true if successful
+     * @param  mixed  $link link info
+     * @param  string $name save point name
+     * @return bool   true if successful
      */
     public function savePoint($link, string $name) : bool
     {
@@ -78,9 +78,9 @@ class Database implements ProviderDatabase
     /**
      * Release a save point if applicable.
      *
-     * @param mixed $link link info
-     * @param string $name save point name
-     * @return bool true if successful
+     * @param  mixed  $link link info
+     * @param  string $name save point name
+     * @return bool   true if successful
      */
     public function releaseSavePoint($link, string $name) : bool
     {
@@ -90,9 +90,9 @@ class Database implements ProviderDatabase
     /**
      * Roll back a save point if applicable.
      *
-     * @param mixed $link link info
-     * @param string $name save point name
-     * @return bool true if successful
+     * @param  mixed  $link link info
+     * @param  string $name save point name
+     * @return bool   true if successful
      */
     public function rollBackSavePoint($link, string $name) : bool
     {

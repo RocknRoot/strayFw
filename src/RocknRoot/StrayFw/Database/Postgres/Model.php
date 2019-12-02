@@ -21,7 +21,7 @@ abstract class Model extends ProviderModel
     /**
      * Aliases of modified columns values.
      *
-     * @var array<string, scalar|null>
+     * @var array<string, null|scalar>
      */
     protected $modified;
 
@@ -170,10 +170,10 @@ abstract class Model extends ProviderModel
     /**
      * Fetch one entity satisfying the specified conditions.
      *
-     * @param  array $conditions where conditions
-     * @param  array $orderBy    order clause
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return Model|null|false model instance, null if nothing found, false on error
+     * @param  array            $conditions where conditions
+     * @param  array            $orderBy    order clause
+     * @param  bool             $critical   if true, will be executed on write server
+     * @return null|false|Model model instance, null if nothing found, false on error
      */
     public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -213,10 +213,10 @@ abstract class Model extends ProviderModel
     /**
      * Fetch one row satisfying the specified conditions.
      *
-     * @param  array $conditions where conditions
-     * @param  array $orderBy    order clause
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return array|null|false row data, null if nothing found, false on error
+     * @param  array            $conditions where conditions
+     * @param  array            $orderBy    order clause
+     * @param  bool             $critical   if true, will be executed on write server
+     * @return null|array|false row data, null if nothing found, false on error
      */
     public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -256,10 +256,10 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all entities satisfying the specified conditions.
      *
-     * @param  array $conditions where conditions
-     * @param  array $orderBy    order clause
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return array|null|false rows data, null if nothing found, false on error
+     * @param  array            $conditions where conditions
+     * @param  array            $orderBy    order clause
+     * @param  bool             $critical   if true, will be executed on write server
+     * @return null|array|false rows data, null if nothing found, false on error
      */
     public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -303,10 +303,10 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all rows satisfying the specified conditions.
      *
-     * @param  array $conditions where conditions
-     * @param  array $orderBy    order clause
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return array|null|false rows data, null if nothing found, false on error
+     * @param  array            $conditions where conditions
+     * @param  array            $orderBy    order clause
+     * @param  bool             $critical   if true, will be executed on write server
+     * @return null|array|false rows data, null if nothing found, false on error
      */
     public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -345,9 +345,9 @@ abstract class Model extends ProviderModel
     /**
      * Count rows satisfying the specified conditions.
      *
-     * @param  array $conditions where conditions
-     * @param  bool  $critical   if true, will be executed on write server
-     * @return int|false   number of rows, false on error
+     * @param  array     $conditions where conditions
+     * @param  bool      $critical   if true, will be executed on write server
+     * @return false|int number of rows, false on error
      */
     public static function countRows(array $conditions, bool $critical = false)
     {

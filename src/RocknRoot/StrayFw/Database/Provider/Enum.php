@@ -65,7 +65,7 @@ abstract class Enum
     /**
      * Set current enum value.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return string
      */
     public function setValue(string $v) : string
@@ -100,8 +100,8 @@ abstract class Enum
     /**
      * Check if a value is a possible value for this enum.
      *
-     * @param string $value
-     * @return bool true if value is recognized
+     * @param  string $value
+     * @return bool   true if value is recognized
      */
     public static function isValid(string $value) : bool
     {

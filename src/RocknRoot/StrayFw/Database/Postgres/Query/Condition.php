@@ -19,12 +19,14 @@ class Condition
     /**
      * Generated SQL code.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $sql;
 
     /**
      * Construct a new condition expression.
+     *
+     * @param array|string $where where clause
      */
     public function __construct($where)
     {
@@ -40,7 +42,7 @@ class Condition
      *
      * @return string generated SQL code
      */
-    public function toSql()
+    public function toSql() : string
     {
         if (is_string($this->sql) === false) {
             $this->sql = $this->toSqlLevel($this->tree);

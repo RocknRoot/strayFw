@@ -24,7 +24,7 @@ class Insert extends Query
     /**
      * Values clause.
      *
-     * @var array<int, string|null>
+     * @var array<int, null|string>
      */
     protected $values;
 
@@ -41,7 +41,7 @@ class Insert extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute()
+    public function execute() : bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -75,7 +75,7 @@ class Insert extends Query
      * @throws BadUse if into clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql()
+    public function toSql() : string
     {
         if (empty($this->into) === true) {
             throw new BadUse('into clause has not been defined (' . print_r($this, true) . ')');
@@ -104,7 +104,7 @@ class Insert extends Query
      * @param  string $table table real name
      * @return Insert this
      */
-    public function into($table)
+    public function into(string $table) : Insert
     {
         $this->into = $table;
 
@@ -117,7 +117,7 @@ class Insert extends Query
      * @param  array|string $values values clause
      * @return Insert       this
      */
-    public function values($values)
+    public function values($values) : Insert
     {
         if (is_array($values) === true) {
             if (is_numeric(key($values)) === true) {
@@ -153,7 +153,7 @@ class Insert extends Query
      * @param  array|string $returning returning clause
      * @return Insert       this
      */
-    public function returning($returning)
+    public function returning($returning) : Insert
     {
         if (is_array($returning) === true) {
             $this->returning = implode(', ', $returning);

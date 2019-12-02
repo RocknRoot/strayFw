@@ -54,8 +54,8 @@ class Mapping
     /**
      * Get the mapping data.
      *
-     * @throws MappingNotFound if there's no registered mapping for specified database
      * @param  string          $name mapping name
+     * @throws MappingNotFound if there's no registered mapping for specified database
      * @return array           mapping data
      */
     public static function get(string $name) : array
@@ -70,13 +70,13 @@ class Mapping
     /**
      * Check the validation of mapping configuration.
      *
+     * @param  array  $config mapping configuration
      * @throws BadUse if there's no name in mapping configuration
      * @throws BadUse if there's no schema in mapping configuration
      * @throws BadUse if there's no provider in mapping configuration
      * @throws BadUse if there's no models in mapping configuration
      * @throws BadUse if there's no models.path in mapping configuration
      * @throws BadUse if there's no models.namespace in mapping configuration
-     * @param  array  $config mapping configuration
      */
     private static function validateConfig(array $config) : void
     {

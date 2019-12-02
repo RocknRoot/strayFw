@@ -121,8 +121,8 @@ class Schema extends ProviderSchema
     /**
      * Build an enum.
      *
-     * @param string $enumName enum alias
-     * @param array $enumDefinition enum definition from a schema file
+     * @param  string                  $enumName       enum alias
+     * @param  array                   $enumDefinition enum definition from a schema file
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if an enum has no value
      */
@@ -165,8 +165,8 @@ class Schema extends ProviderSchema
     /**
      * Build a model.
      *
-     * @param string $modelName model alias
-     * @param array $modelDefinition model definition from a schema file
+     * @param  string                  $modelName       model alias
+     * @param  array                   $modelDefinition model definition from a schema file
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if a model has no field
      */
@@ -237,8 +237,8 @@ class Schema extends ProviderSchema
     /**
      * Generate classes for a enum.
      *
-     * @param string $enumName enum alias
-     * @param array $enumDefinition enum definition from a schema file
+     * @param  string                  $enumName       enum alias
+     * @param  array                   $enumDefinition enum definition from a schema file
      * @throws InvalidSchemaDefinition if an enum has no values defined
      * @throws FileNotWritable         if a base file can't be opened with write permission
      * @throws FileNotWritable         if a user file can't be opened with write permission
@@ -306,8 +306,8 @@ class Schema extends ProviderSchema
     /**
      * Generate classes for a model.
      *
-     * @param string $modelName model alias
-     * @param array $modelDefinition model definition from a schema file
+     * @param  string                  $modelName       model alias
+     * @param  array                   $modelDefinition model definition from a schema file
      * @throws InvalidSchemaDefinition if a model has no field
      * @throws InvalidSchemaDefinition if a model is linked to an unknown enum
      * @throws InvalidSchemaDefinition if a model is linked to an unknown model

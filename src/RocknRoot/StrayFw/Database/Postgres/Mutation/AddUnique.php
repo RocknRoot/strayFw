@@ -15,14 +15,14 @@ class AddUnique extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param  Database     $database         database
-     * @param  string       $modelName        model name
-     * @param  string       $tableName        table real name
-     * @param  array        $tableDefinition  table definition
-     * @param  string       $uniqueName       unique constraint name
+     * @param  Database      $database        database
+     * @param  string        $modelName       model name
+     * @param  string        $tableName       table real name
+     * @param  array         $tableDefinition table definition
+     * @param  string        $uniqueName      unique constraint name
      * @return \PDOStatement $statement prepared query
      */
-    public static function statement(Database $database, $modelName, $tableName, array $tableDefinition, $uniqueName)
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : \PDOStatement
     {
         $uniqueDefinition = $tableDefinition['uniques'][$uniqueName];
         $fields = array();

@@ -33,10 +33,10 @@ abstract class Schema
     /**
      * Construct a new schema representation class.
      *
+     * @param  string           $mapping mapping name
      * @throws InvalidDirectory if directory $modelsDir can't be indentified
      * @throws InvalidDirectory if directory Base in $modelsDir can't be indentified
      * @throws FileNotReadable  if schema file is not readable
-     * @param  string           $mapping mapping name
      */
     public function __construct(string $mapping)
     {

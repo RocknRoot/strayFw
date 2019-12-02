@@ -18,7 +18,7 @@ class Migration
     /**
      * Create a new migration.
      *
-     * @param Request $req current CLI request
+     * @param  Request         $req current CLI request
      * @throws FileNotReadable if can't find schema file
      * @throws FileNotWritable if can't copy schema file
      */
@@ -57,7 +57,7 @@ class Migration
     /**
      * Generate code for migration.
      *
-     * @param Request $req current CLI request
+     * @param  Request         $req current CLI request
      * @throws FileNotReadable if can't find migrate
      */
     public function generate(Request $req) : void
@@ -143,10 +143,10 @@ class Migration
      * @param  array           $up          up code
      * @param  array           $down        down code
      * @param  array           $import      used classes in migration code
-     * @return bool true if successful
      * @throws FileNotWritable if can't mkdir
      * @throws FileNotWritable if can't open file with write permission
      * @throws FileNotWritable if can't write to file
+     * @return bool            true if successful
      */
     private function write(array $mapping, string $mappingName, string $name, array $up = [], array $down = [], array $import = []) : bool
     {

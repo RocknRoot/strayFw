@@ -35,7 +35,7 @@ abstract class Query
     /**
      * PDO error info.
      *
-     * @var array|null
+     * @var null|array
      */
     protected $errorInfo;
 
@@ -44,7 +44,7 @@ abstract class Query
      *
      * @param string $database database name
      */
-    public function __construct($database)
+    public function __construct(string $database)
     {
         $this->database = $database;
         $this->parameters = array();
@@ -56,7 +56,7 @@ abstract class Query
      * @abstract
      * @return bool true if the query is successfully executed
      */
-    abstract public function execute();
+    abstract public function execute() : bool;
 
     /**
      * Extract the corresponding SQL code.
@@ -64,7 +64,7 @@ abstract class Query
      * @abstract
      * @return string generated SQL code
      */
-    abstract public function toSql();
+    abstract public function toSql() : string;
 
     /**
      * Bind a parameter.
@@ -72,7 +72,7 @@ abstract class Query
      * @param string $name  parameter name
      * @param string $value parameter value
      */
-    public function bind($name, $value)
+    public function bind(string $name, string $value)
     {
         $this->parameters[$name] = $value;
     }
@@ -82,7 +82,7 @@ abstract class Query
      *
      * @return \PDOStatement statement
      */
-    public function getStatement()
+    public function getStatement() : \PDOStatement
     {
         return $this->statement;
     }
@@ -90,9 +90,9 @@ abstract class Query
     /**
      * Get PDO error state.
      *
-     * @return string|null error state
+     * @return null|string error state
      */
-    public function getErrorState()
+    public function getErrorState() : ?string
     {
         if (is_array($this->errorInfo) === false) {
             return null;
@@ -104,9 +104,9 @@ abstract class Query
     /**
      * Get PDO error message.
      *
-     * @return string|null error message
+     * @return null|string error message
      */
-    public function getErrorMessage()
+    public function getErrorMessage() : ?string
     {
         if (is_array($this->errorInfo) === false) {
             return null;

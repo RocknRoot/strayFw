@@ -31,7 +31,7 @@ class Delete extends Query
     /**
      * Order by clause.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $orderBy;
 
@@ -48,7 +48,7 @@ class Delete extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute()
+    public function execute() : bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -82,7 +82,7 @@ class Delete extends Query
      * @throws BadUse if from clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql()
+    public function toSql() : string
     {
         if (empty($this->from) === true) {
             throw new BadUse('from clause has not been defined (' . print_r($this, true) . ')');
@@ -108,7 +108,7 @@ class Delete extends Query
      * @param  string $table table real name
      * @return Delete this
      */
-    public function from($table)
+    public function from(string $table) : Delete
     {
         $this->from = $table;
 
@@ -118,10 +118,10 @@ class Delete extends Query
     /**
      * Set where clause.
      *
-     * @param  Condition|array|string $where where clause
+     * @param  array|Condition|string $where where clause
      * @return Delete                 this
      */
-    public function where($where)
+    public function where($where) : Delete
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -134,7 +134,7 @@ class Delete extends Query
      * @param  array|string $orderBy order by clause
      * @return Delete       this
      */
-    public function orderBy($orderBy)
+    public function orderBy($orderBy) : Delete
     {
         if (is_array($orderBy) === true) {
             $this->orderBy = '';
@@ -155,7 +155,7 @@ class Delete extends Query
      * @param  string $limit limit clause
      * @return Delete this
      */
-    public function limit($limit)
+    public function limit($limit) : Delete
     {
         $this->limit = $limit;
 

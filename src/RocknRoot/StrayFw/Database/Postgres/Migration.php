@@ -23,10 +23,10 @@ abstract class Migration extends ProviderMigration
     /**
      * Generate code for migration.
      *
-     * @param array  $mapping     mapping definition
-     * @param string $mappingName mapping name
-     * @param string $name        migration name
-     * @return array import, up and down code
+     * @param  array  $mapping     mapping definition
+     * @param  string $mappingName mapping name
+     * @param  string $name        migration name
+     * @return array  import, up and down code
      */
     public static function generate(array $mapping, string $mappingName, string $name) : array
     {
@@ -129,8 +129,8 @@ abstract class Migration extends ProviderMigration
     /**
      * Ensure the migrations table exist for specified mapping.
      *
-     * @param array $mapping mapping definition
-     * @return bool true if successful
+     * @param  array $mapping mapping definition
+     * @return bool  true if successful
      */
     public static function ensureTable(array $mapping) : bool
     {
