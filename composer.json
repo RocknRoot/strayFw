@@ -14,11 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "psr/log": "~1.0",
         "symfony/yaml": "^4.3",
-        "wp-cli/php-cli-tools": "^0.11.2",
-        "phpunit/phpunit": "^8.4"
+        "wp-cli/php-cli-tools": "^0.11.2"
     },
     "suggest": {
         "twig/twig": "For the Twig renderer"
@@ -31,6 +30,7 @@
     "require-dev": {
         "filp/whoops": "^2.1",
         "phpstan/phpstan": "^0.11.8",
+        "phpunit/phpunit": "^8.4",
         "twig/twig": "^2.11"
     }
 }
