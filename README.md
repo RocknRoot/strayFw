@@ -18,7 +18,7 @@ Code is free, new-BSD license. So... fork us !
 ## Get started
 
 * [get composer](https://getcomposer.org/download/ 'Composer')
-* $ `php composer.phar create-project rocknroot/stray-fw-skeleton`
+* `$ php composer.phar create-project rocknroot/stray-fw-skeleton`
 
 ## Need help ?
 
