@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RocknRoot/strayFw.png?branch=master)](https://travis-ci.org/RocknRoot/strayFw)
 
-strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro-frameworks.
+strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro frameworks.
 
 beta - not ready for production yet
 
@@ -10,15 +10,15 @@ Code is free, new-BSD license. So... fork us !
 
 ## Requirements
 
-* PHP >= 7.1
+* PHP >= 7.2
 * mbstring extension
 * For the Locale namespace, PECL intl extension >= 1.0.0
 * For the [Twig](https://twig.symfony.com/ 'Twig') renderer, twig/twig >= 2.0
 
 ## Get started
 
-    get composer
-    $ php composer.phar create-project rocknroot/stray-fw-skeleton
+* [get composer](https://getcomposer.org/download/ 'Composer')
+* $ `php composer.phar create-project rocknroot/stray-fw-skeleton`
 
 ## Need help ?
 
