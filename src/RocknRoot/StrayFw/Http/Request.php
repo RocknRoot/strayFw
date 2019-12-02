@@ -30,11 +30,11 @@ class Request extends BaseRequest
     /**
      * Parse raw request and choose a route.
      *
+     * @param  RawRequest             $rawRequest base raw request
+     * @param  array[]                $routes     registered routes
      * @throws InvalidRouteDefinition if there is no route
      * @throws InvalidRouteDefinition if a route has an invalid definition
-     * @throws RouteNotFound if no route matches the request
-     * @param  RawRequest    $rawRequest base raw request
-     * @param  array[]       $routes registered routes
+     * @throws RouteNotFound          if no route matches the request
      */
     public function __construct(RawRequest $rawRequest, array $routes)
     {
@@ -123,9 +123,9 @@ class Request extends BaseRequest
      *  * GET vars
      *  * $default
      *
-     * @param string $name input searched
-     * @param mixed $default returned value if nothing is found
-     * @return mixed found value or default
+     * @param  string $name    input searched
+     * @param  mixed  $default returned value if nothing is found
+     * @return mixed  found value or default
      */
     public function input(string $name, $default = null)
     {

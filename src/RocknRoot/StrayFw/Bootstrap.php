@@ -78,9 +78,9 @@ abstract class Bootstrap
      * Try to require a file according to the needed class.
      *
      * @static
+     * @param  string           $className needed class name
      * @throws BadUse           if bootstrap isn't initialized
      * @throws UnknownNamespace if needed namespace can't be found
-     * @param  string           $className needed class name
      */
     public static function loadClass(string $className)
     {

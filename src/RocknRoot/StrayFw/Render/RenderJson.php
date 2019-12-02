@@ -13,9 +13,9 @@ class RenderJson implements RenderInterface
     /**
      * Return the generated display.
      *
-     * @param  mixed[]  $args        render data
-     * @param  bool   $prettyPrint force pretty print parameter
-     * @return string content
+     * @param  mixed[] $args        render data
+     * @param  bool    $prettyPrint force pretty print parameter
+     * @return string  content
      */
     public function render(array $args, bool $prettyPrint = null) : string
     {

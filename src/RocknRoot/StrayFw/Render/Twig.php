@@ -45,10 +45,10 @@ abstract class Twig
      * Get environment for specified templates directory.
      *
      * @static
-     * @throws InvalidDirectory if directory can't be identified
-     * @throws BadUse           if tmp path hasn't been defined
-     * @throws BadUse           if tmp directory isn't writable
-     * @param  string           $dir template directory
+     * @param  string            $dir template directory
+     * @throws InvalidDirectory  if directory can't be identified
+     * @throws BadUse            if tmp path hasn't been defined
+     * @throws BadUse            if tmp directory isn't writable
      * @return \Twig\Environment corresponding environment
      */
     public static function getEnv(string $dir) : \Twig\Environment
@@ -115,9 +115,9 @@ abstract class Twig
      * Add a function to Twig environments.
      *
      * @static
-     * @param string $label       function name in Twig templates
+     * @param string   $label    function name in Twig templates
      * @param callable $function function
-    */
+     */
     public static function addFunction(string $label, callable $function) : void
     {
         if (isset(self::$functions[$label]) === false) {

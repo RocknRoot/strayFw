@@ -74,7 +74,7 @@ abstract class Session
      *
      * @static
      * @param string $name  key
-     * @param mixed $value new value
+     * @param mixed  $value new value
      */
     public static function set(string $name, $value)
     {

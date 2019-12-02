@@ -61,7 +61,7 @@ class RawRequest
     /**
      * Body JSON content.
      *
-     * @var mixed|null
+     * @var null|mixed
      */
     protected $jsonBodyVars;
 
@@ -173,7 +173,7 @@ class RawRequest
     /**
      * Get JSON body variables.
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function getJSONBodyVars()
     {

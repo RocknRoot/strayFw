@@ -49,8 +49,8 @@ abstract class Locale
      * Initialize properties, detect current language and load translations.
      *
      * @static
-     * @throws BadUse     if locale.default isn\'t defined in settings
      * @param  RawRequest $request base raw request if applied
+     * @throws BadUse     if locale.default isn\'t defined in settings
      */
     public static function init(RawRequest $request = null) : void
     {
@@ -80,10 +80,10 @@ abstract class Locale
      * Load translations from directory according to current language.
      *
      * @static
-     * @throws InvalidDirectory if directory can't be identified
      * @param  string           $baseDir    application directory path
      * @param  string           $localesDir translations directory path
      * @param  string           $prefix     prefix for all translations from this directory
+     * @throws InvalidDirectory if directory can't be identified
      */
     public static function registerTranslations(string $baseDir, string $localesDir, string $prefix = null) : void
     {

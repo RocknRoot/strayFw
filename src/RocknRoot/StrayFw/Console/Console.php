@@ -103,7 +103,7 @@ abstract class Console
      * Set namespace prefix for incoming routes.
      *
      * @static
-     * @param  string           $namespace namespace prefix
+     * @param string $namespace namespace prefix
      */
     public static function prefix(string $namespace) : void
     {
@@ -114,10 +114,10 @@ abstract class Console
      * Add route to be considered.
      *
      * @static
-     * @param  string           $path   route path
-     * @param  string           $usage  how to use it, for help screen
-     * @param  string           $help   route description, for help screen
-     * @param  string           $action class and method to call
+     * @param string $path   route path
+     * @param string $usage  how to use it, for help screen
+     * @param string $help   route description, for help screen
+     * @param string $action class and method to call
      */
     public static function route(string $path, string $usage, string $help, string $action) : void
     {
@@ -137,10 +137,10 @@ abstract class Console
      * Add before hook to be considered.
      *
      * @static
-     * @param  string           $path   route path
-     * @param  string           $usage  how to use it, for help screen
-     * @param  string           $help   route description, for help screen
-     * @param  string           $action class and method to call
+     * @param string $path   route path
+     * @param string $usage  how to use it, for help screen
+     * @param string $help   route description, for help screen
+     * @param string $action class and method to call
      */
     public static function before(string $path, string $usage, string $help, string $action) : void
     {
@@ -160,10 +160,10 @@ abstract class Console
      * Add after hook to be considered.
      *
      * @static
-     * @param  string           $path   route path
-     * @param  string           $usage  how to use it, for help screen
-     * @param  string           $help   route description, for help screen
-     * @param  string           $action class and method to call
+     * @param string $path   route path
+     * @param string $usage  how to use it, for help screen
+     * @param string $help   route description, for help screen
+     * @param string $action class and method to call
      */
     public static function after(string $path, string $usage, string $help, string $action) : void
     {

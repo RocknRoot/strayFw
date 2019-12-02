@@ -15,8 +15,8 @@ class Request extends BaseRequest
     /**
      * Parse executed command and choose a route.
      *
-     * @throws InvalidRouteDefinition if a route has an invalid definition
      * @param  array[]                $routes registered routes
+     * @throws InvalidRouteDefinition if a route has an invalid definition
      */
     public function __construct(array $routes)
     {

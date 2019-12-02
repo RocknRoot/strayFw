@@ -40,10 +40,10 @@ class Logger extends AbstractLogger
     /**
      * Logs with an arbitrary level.
      *
-     * @throws LoggerInvalidArgumentException if level is unknown
      * @param  mixed                          $level
      * @param  string                         $message
      * @param  array                          $context
+     * @throws LoggerInvalidArgumentException if level is unknown
      */
     public function log($level, $message, array $context = array())
     {

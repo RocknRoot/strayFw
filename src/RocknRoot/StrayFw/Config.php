@@ -42,9 +42,9 @@ class Config
      * Get a file content. Load it if not already done.
      *
      * @static
+     * @param  string          $fileName file name
      * @throws FileNotReadable if file can't be opened
      * @throws FileNotParsable if file can't be parsed
-     * @param  string          $fileName file name
      * @return array           file content
      */
     public static function get(string $fileName) : array
@@ -69,9 +69,9 @@ class Config
      * Write a file content. Save it internally.
      *
      * @static
-     * @throws FileNotWritable if file can't be written
      * @param  string          $fileName file name
      * @param  array           $content  file content
+     * @throws FileNotWritable if file can't be written
      */
     public static function set(string $fileName, array $content)
     {

@@ -42,7 +42,7 @@ abstract class Http
     /**
      * Current URI prefix.
      *
-     * @var string|null
+     * @var null|string
      */
     protected static $uri;
 
@@ -56,7 +56,7 @@ abstract class Http
     /**
      * Current raw request.
      *
-     * @var RawRequest|null
+     * @var null|RawRequest
      */
     protected static $rawRequest;
 
@@ -156,9 +156,9 @@ abstract class Http
      * Set namespace, subdomain and url prefixes for incoming routes.
      *
      * @static
-     * @param  string           $namespace namespace prefix
-     * @param  string|array     $subdomain subdomain prefix
-     * @param  string           $uri uri prefix
+     * @param string       $namespace namespace prefix
+     * @param array|string $subdomain subdomain prefix
+     * @param string       $uri       uri prefix
      */
     public static function prefix(string $namespace, $subdomain = null, string $uri = null) : void
     {
@@ -171,9 +171,9 @@ abstract class Http
      * Add route to be considered.
      *
      * @static
-     * @param  string           $method route HTTP method
-     * @param  string           $path   route path
-     * @param  string           $action class and method to call
+     * @param string $method route HTTP method
+     * @param string $path   route path
+     * @param string $action class and method to call
      */
     public static function route(string $method, string $path, string $action) : void
     {
@@ -194,9 +194,9 @@ abstract class Http
      * Add before hook to be considered.
      *
      * @static
-     * @param  string           $method route HTTP method
-     * @param  string           $path   route path
-     * @param  string           $action class and method to call
+     * @param string $method route HTTP method
+     * @param string $path   route path
+     * @param string $action class and method to call
      */
     public static function before(string $method, string $path, string $action) : void
     {
@@ -217,9 +217,9 @@ abstract class Http
      * Add before hook to be considered.
      *
      * @static
-     * @param  string           $method route HTTP method
-     * @param  string           $path   route path
-     * @param  string           $action class and method to call
+     * @param string $method route HTTP method
+     * @param string $path   route path
+     * @param string $action class and method to call
      */
     public static function after(string $method, string $path, string $action) : void
     {
@@ -250,7 +250,7 @@ abstract class Http
      * Get current raw request.
      *
      * @static
-     * @return RawRequest|null
+     * @return null|RawRequest
      */
     public static function getRawRequest() : ?RawRequest
     {

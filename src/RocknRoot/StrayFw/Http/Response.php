@@ -28,7 +28,7 @@ class Response
     /**
      * Render object.
      *
-     * @var \RocknRoot\StrayFw\Render\RenderInterface|null
+     * @var null|\RocknRoot\StrayFw\Render\RenderInterface
      */
     protected $renderInst;
 
@@ -45,7 +45,7 @@ class Response
     /**
      * Get set render object.
      *
-     * @return \RocknRoot\StrayFw\Render\RenderInterface|null
+     * @return null|\RocknRoot\StrayFw\Render\RenderInterface
      */
     public function getRender() : ?\RocknRoot\StrayFw\Render\RenderInterface
     {
@@ -56,7 +56,7 @@ class Response
      * Set render and status.
      *
      * @param RenderInterface $render render object
-     * @param int $status status code
+     * @param int             $status status code
      */
     public function render(RenderInterface $render, int $status = 200)
     {

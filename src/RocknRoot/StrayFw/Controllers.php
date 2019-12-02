@@ -21,7 +21,7 @@ class Controllers
      * Get a controller, creating one if it doesn't exist already.
      *
      * @static
-     * @param string $class controller class with namespace
+     * @param  string $class controller class with namespace
      * @return object controller
      */
     public static function get(string $class)
