@@ -60,14 +60,14 @@ abstract class Schema
      *
      * @abstract
      */
-    abstract public function build();
+    abstract public function build() : void;
 
     /**
      * Generate base models.
      *
      * @abstract
      */
-    abstract public function generateModels();
+    abstract public function generateModels() : void;
 
     /**
      * Get the schema definition, from schema configuration file.

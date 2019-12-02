@@ -52,7 +52,7 @@ abstract class Locale
      * @throws BadUse     if locale.default isn\'t defined in settings
      * @param  RawRequest $request base raw request if applied
      */
-    public static function init(RawRequest $request = null)
+    public static function init(RawRequest $request = null) : void
     {
         if (self::$isInit === false) {
             self::$translations = array();
@@ -85,7 +85,7 @@ abstract class Locale
      * @param  string           $localesDir translations directory path
      * @param  string           $prefix     prefix for all translations from this directory
      */
-    public static function registerTranslations($baseDir, $localesDir, $prefix = null)
+    public static function registerTranslations(string $baseDir, string $localesDir, string $prefix = null) : void
     {
         if (self::$isInit === true) {
             $dir = $baseDir . DIRECTORY_SEPARATOR . $localesDir;
@@ -121,7 +121,7 @@ abstract class Locale
      * @static
      * @throws BadUse if locale isn't initialized
      */
-    public static function translate($key, array $args = array())
+    public static function translate(string $key, array $args = array()) : string
     {
         if (self::$isInit === false) {
             throw new BadUse('locale doesn\'t seem to have been initialized');
@@ -129,9 +129,6 @@ abstract class Locale
         $oldKey = $key;
         $section = self::$translations;
         while (isset($section[$key]) === false && ($pos = strpos($key, '.')) !== false) {
-            if (! is_int($pos)) { // re: https://github.com/phpstan/phpstan/issues/647
-                break;
-            }
             $subSection = substr($key, 0, $pos);
             if (isset($section[$subSection]) === false) {
                 break;
@@ -154,7 +151,7 @@ abstract class Locale
      * @static
      * @param string $language
      */
-    public static function setCurrentLanguage($language)
+    public static function setCurrentLanguage(string $language)
     {
         self::$currentLanguage = $language;
         Session::set('_stray_language', self::$currentLanguage);
@@ -167,7 +164,7 @@ abstract class Locale
      * @static
      * @return string
      */
-    public static function getCurrentLanguage()
+    public static function getCurrentLanguage() : string
     {
         return self::$currentLanguage;
     }

@@ -18,7 +18,7 @@ abstract class Cookie
      * @param  string $name key
      * @return mixed
      */
-    public static function get($name)
+    public static function get(string $name)
     {
         if (isset($_COOKIE[$name]) === false) {
             return null;
@@ -34,7 +34,7 @@ abstract class Cookie
      * @param  string $name key
      * @return bool
      */
-    public static function has($name)
+    public static function has(string $name) : bool
     {
         return isset($_COOKIE[$name]);
     }
@@ -48,7 +48,7 @@ abstract class Cookie
      * @param int    $expire expiration timestamp
      * @param string $path   cookie path
      */
-    public static function set($name, $value, $expire = 0, $path = null)
+    public static function set(string $name, $value, int $expire = 0, ?string $path = null) : void
     {
         if ($path === null) {
             setcookie($name, $value, $expire);
@@ -63,7 +63,7 @@ abstract class Cookie
      * @static
      * @param string $name key
      */
-    public static function delete($name)
+    public static function delete(string $name) : void
     {
         setcookie($name, '', time() - 1);
     }
@@ -73,7 +73,7 @@ abstract class Cookie
      *
      * @static
      */
-    public static function clear()
+    public static function clear() : void
     {
         $keys = array_keys($_COOKIE);
         foreach ($keys as $key) {

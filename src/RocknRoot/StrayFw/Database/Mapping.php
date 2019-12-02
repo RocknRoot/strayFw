@@ -28,7 +28,7 @@ class Mapping
      * @static
      * @param array $config mapping configuration
      */
-    public static function registerMapping(array $config)
+    public static function registerMapping(array $config) : void
     {
         self::validateConfig($config);
         if (isset(self::$mappings[$config['name']]) === false) {
@@ -78,7 +78,7 @@ class Mapping
      * @throws BadUse if there's no models.namespace in mapping configuration
      * @param  array  $config mapping configuration
      */
-    private static function validateConfig(array $config)
+    private static function validateConfig(array $config) : void
     {
         if (isset($config['name']) === false) {
             throw new BadUse('there\'s no name in mapping configuration');

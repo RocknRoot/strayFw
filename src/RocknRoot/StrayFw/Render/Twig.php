@@ -103,7 +103,7 @@ abstract class Twig
      * @static
      * @param \Twig\Extension\ExtensionInterface $extension instance
      */
-    public static function addExtension(\Twig\Extension\ExtensionInterface $extension)
+    public static function addExtension(\Twig\Extension\ExtensionInterface $extension) : void
     {
         self::$extensions[] = $extension;
         foreach (self::$environments as $env) {
@@ -118,7 +118,7 @@ abstract class Twig
      * @param string $label       function name in Twig templates
      * @param callable $function function
     */
-    public static function addFunction(string $label, callable $function)
+    public static function addFunction(string $label, callable $function) : void
     {
         if (isset(self::$functions[$label]) === false) {
             self::$functions[$label] = $function;

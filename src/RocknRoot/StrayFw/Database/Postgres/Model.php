@@ -173,7 +173,7 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return Model|false model instance
+     * @return Model|null|false model instance, null if nothing found, false on error
      */
     public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -216,7 +216,7 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array|false row data
+     * @return array|null|false row data, null if nothing found, false on error
      */
     public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -247,7 +247,7 @@ abstract class Model extends ProviderModel
         }
         $data = $selectQuery->fetch();
         if (is_array($data) === false) {
-            return false;
+            return null;
         }
 
         return $data;
@@ -259,7 +259,7 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array|false rows data
+     * @return array|null|false rows data, null if nothing found, false on error
      */
     public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -290,7 +290,7 @@ abstract class Model extends ProviderModel
         }
         $res = $selectQuery->fetchAll();
         if (is_array($res) === false) {
-            return false;
+            return null;
         }
         $data = [];
         foreach ($res as $r) {
@@ -306,7 +306,7 @@ abstract class Model extends ProviderModel
      * @param  array $conditions where conditions
      * @param  array $orderBy    order clause
      * @param  bool  $critical   if true, will be executed on write server
-     * @return array|false rows data
+     * @return array|null|false rows data, null if nothing found, false on error
      */
     public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false)
     {
@@ -336,7 +336,7 @@ abstract class Model extends ProviderModel
         }
         $data = $selectQuery->fetchAll();
         if (is_array($data) === false) {
-            return false;
+            return null;
         }
 
         return $data;
@@ -347,7 +347,7 @@ abstract class Model extends ProviderModel
      *
      * @param  array $conditions where conditions
      * @param  bool  $critical   if true, will be executed on write server
-     * @return int|false   number of rows or false on error
+     * @return int|false   number of rows, false on error
      */
     public static function countRows(array $conditions, bool $critical = false)
     {

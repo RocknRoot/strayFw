@@ -16,7 +16,7 @@ class RenderRedirect implements RenderInterface
      *
      * @return string content
      */
-    public function render(array $args)
+    public function render(array $args) : string
     {
         if (isset($args['url']) === false) {
             throw new BadUse('RenderRedirect: expected "url" entry in args');

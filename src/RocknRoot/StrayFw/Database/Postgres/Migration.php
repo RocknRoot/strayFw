@@ -167,7 +167,7 @@ abstract class Migration extends ProviderMigration
      *
      * @param array $mapping mapping definition
      */
-    public static function migrate(array $mapping)
+    public static function migrate(array $mapping) : void
     {
         $database = Database::get($mapping['config']['database']);
         $database->beginTransaction();
@@ -234,7 +234,7 @@ abstract class Migration extends ProviderMigration
      *
      * @param array $mapping mapping definition
      */
-    public static function rollback(array $mapping)
+    public static function rollback(array $mapping) : void
     {
         $database = Database::get($mapping['config']['database']);
         $database->beginTransaction();

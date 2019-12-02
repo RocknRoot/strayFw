@@ -17,7 +17,7 @@ class RenderJson implements RenderInterface
      * @param  bool   $prettyPrint force pretty print parameter
      * @return string content
      */
-    public function render(array $args, bool $prettyPrint = null)
+    public function render(array $args, bool $prettyPrint = null) : string
     {
         header('Content-type: application/json');
         if ((constant('STRAY_ENV') === 'development' && $prettyPrint !== false) || $prettyPrint === true) {

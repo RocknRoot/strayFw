@@ -110,7 +110,7 @@ class Request extends BaseRequest
      *
      * @return RawRequest
      */
-    public function getRawRequest()
+    public function getRawRequest() : RawRequest
     {
         return $this->rawRequest;
     }
@@ -127,7 +127,7 @@ class Request extends BaseRequest
      * @param mixed $default returned value if nothing is found
      * @return mixed found value or default
      */
-    public function input($name, $default = null)
+    public function input(string $name, $default = null)
     {
         if (isset($this->rawRequest->getPostVars()[$name]) === true) {
             return $this->rawRequest->getPostVars()[$name];

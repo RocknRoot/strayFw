@@ -26,7 +26,7 @@ abstract class Session
      *
      * @static
      */
-    public static function init()
+    public static function init() : void
     {
         if (self::$isInit === false) {
             if (session_id() == null) {
@@ -48,7 +48,7 @@ abstract class Session
      * @param  string $name key
      * @return mixed
      */
-    public static function get($name)
+    public static function get(string $name)
     {
         if (isset($_SESSION[$name]) === false) {
             return null;
@@ -64,7 +64,7 @@ abstract class Session
      * @param  string $name key
      * @return bool
      */
-    public static function has($name)
+    public static function has(string $name)
     {
         return isset($_SESSION[$name]);
     }
@@ -74,9 +74,9 @@ abstract class Session
      *
      * @static
      * @param string $name  key
-     * @param string $value new value
+     * @param mixed $value new value
      */
-    public static function set($name, $value)
+    public static function set(string $name, $value)
     {
         $_SESSION[$name] = $value;
     }
@@ -87,7 +87,7 @@ abstract class Session
      * @static
      * @param string $name key
      */
-    public static function delete($name)
+    public static function delete(string $name)
     {
         unset($_SESSION[$name]);
     }

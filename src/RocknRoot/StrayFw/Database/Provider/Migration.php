@@ -68,10 +68,10 @@ abstract class Migration
     /**
      * Perform migration.
      */
-    abstract public function up();
+    abstract public function up() : void;
 
     /**
      * Rollback migration.
      */
-    abstract public function down();
+    abstract public function down() : void;
 }

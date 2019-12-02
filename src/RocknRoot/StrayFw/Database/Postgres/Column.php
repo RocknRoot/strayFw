@@ -19,12 +19,13 @@ abstract class Column
      *
      * @throws InvalidSchemaDefinition if default value aren't well typed
      * @throws InvalidSchemaDefinition if a field has an unknown type
+     * @return string generated SQL
      * @param  array                   $schema          schema definition
      * @param  string                  $mapping         mapping name
      * @param  string                  $fieldName       field real name
      * @param  array                   $fieldDefinition field fieldDefinition
      */
-    public static function generateDefinition(array $schema, string $mapping, string $fieldName, array $fieldDefinition)
+    public static function generateDefinition(array $schema, string $mapping, string $fieldName, array $fieldDefinition) : string
     {
         $sql = $fieldName . ' ';
         switch ($fieldDefinition['type']) {

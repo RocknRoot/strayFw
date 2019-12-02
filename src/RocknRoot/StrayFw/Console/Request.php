@@ -68,7 +68,7 @@ class Request extends BaseRequest
     /**
      * Fill internal variables with help/default CLI route.
      */
-    private function fillWithDefaultRoute()
+    private function fillWithDefaultRoute() : void
     {
         $this->class = 'RocknRoot\\StrayFw\\Console\\Controller';
         $this->action = 'help';

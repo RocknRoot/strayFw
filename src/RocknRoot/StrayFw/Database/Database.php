@@ -135,7 +135,7 @@ class Database
      *
      * @throws ExternalLink if database connection can't be established
      */
-    public function connect()
+    public function connect() : void
     {
         if ($this->isConnected() === false) {
             try {
@@ -157,7 +157,7 @@ class Database
     /**
      * Disconnect link to database.
      */
-    public function disconnect()
+    public function disconnect() : void
     {
         if (isset($this->servers['all']) === true) {
             unset($this->servers['all']['link']);
@@ -286,7 +286,7 @@ class Database
      * @static
      * @param string $alias database alias
      */
-    public static function registerDatabase(string $alias)
+    public static function registerDatabase(string $alias) : void
     {
         if (isset(self::$databases[$alias]) === false) {
             self::$databases[$alias] = new static($alias);
@@ -301,7 +301,7 @@ class Database
      * @param  string           $alias requested database alias
      * @return Database         instance
      */
-    public static function get(string $alias)
+    public static function get(string $alias) : Database
     {
         if (isset(self::$databases[$alias]) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');

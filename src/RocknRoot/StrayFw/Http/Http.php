@@ -86,7 +86,7 @@ abstract class Http
      *
      * @static
      */
-    public static function init()
+    public static function init() : void
     {
         if (self::$isInit === false) {
             self::$rawRequest = null;
@@ -106,7 +106,7 @@ abstract class Http
      * @static
      * @throws NotARender if response->render is a non RenderInterface implementing object
      */
-    public static function run()
+    public static function run() : void
     {
         if (self::$isInit === true) {
             if ((self::$rawRequest instanceof RawRequest) === false) {
@@ -160,7 +160,7 @@ abstract class Http
      * @param  string|array     $subdomain subdomain prefix
      * @param  string           $uri uri prefix
      */
-    public static function prefix(string $namespace, $subdomain = null, string $uri = null)
+    public static function prefix(string $namespace, $subdomain = null, string $uri = null) : void
     {
         self::$namespace = $namespace;
         self::$subdomain = is_array($subdomain) ? $subdomain : [ $subdomain ];
@@ -175,7 +175,7 @@ abstract class Http
      * @param  string           $path   route path
      * @param  string           $action class and method to call
      */
-    public static function route($method, $path, $action)
+    public static function route(string $method, string $path, string $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -198,7 +198,7 @@ abstract class Http
      * @param  string           $path   route path
      * @param  string           $action class and method to call
      */
-    public static function before($method, $path, $action)
+    public static function before(string $method, string $path, string $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -221,7 +221,7 @@ abstract class Http
      * @param  string           $path   route path
      * @param  string           $action class and method to call
      */
-    public static function after($method, $path, $action)
+    public static function after(string $method, string $path, string $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -241,7 +241,7 @@ abstract class Http
      *
      * @return array[] all routes
      */
-    public static function getRoutes()
+    public static function getRoutes() : array
     {
         return self::$routes;
     }
@@ -252,7 +252,7 @@ abstract class Http
      * @static
      * @return RawRequest|null
      */
-    public static function getRawRequest()
+    public static function getRawRequest() : ?RawRequest
     {
         return self::$rawRequest;
     }
@@ -263,7 +263,7 @@ abstract class Http
      * @static
      * @return Request
      */
-    public static function getRequest()
+    public static function getRequest() : Request
     {
         return self::$request;
     }

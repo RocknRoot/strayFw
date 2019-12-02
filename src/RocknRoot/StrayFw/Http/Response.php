@@ -47,7 +47,7 @@ class Response
      *
      * @return \RocknRoot\StrayFw\Render\RenderInterface|null
      */
-    public function getRender()
+    public function getRender() : ?\RocknRoot\StrayFw\Render\RenderInterface
     {
         return $this->renderInst;
     }
@@ -58,7 +58,7 @@ class Response
      * @param RenderInterface $render render object
      * @param int $status status code
      */
-    public function render(RenderInterface $render, $status = 200)
+    public function render(RenderInterface $render, int $status = 200)
     {
         $this->renderInst = $render;
         $this->status = $status;

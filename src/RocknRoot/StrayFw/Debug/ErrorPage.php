@@ -39,7 +39,7 @@ abstract class ErrorPage
      *
      * @static
      */
-    public static function init()
+    public static function init() : void
     {
         if (self::$isInit === false) {
             self::$prettyPageHandler = new PrettyPageHandler();
@@ -59,7 +59,7 @@ abstract class ErrorPage
      * @param string $title data group title
      * @param array  $data  data that will be displayed
      */
-    public static function addData(string $title, array $data)
+    public static function addData(string $title, array $data) : void
     {
         if (self::$isInit === true) {
             self::$prettyPageHandler->AddDataTable($title, $data);

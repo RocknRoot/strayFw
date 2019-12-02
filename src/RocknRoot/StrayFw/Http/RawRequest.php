@@ -61,7 +61,7 @@ class RawRequest
     /**
      * Body JSON content.
      *
-     * @var mixed
+     * @var mixed|null
      */
     protected $jsonBodyVars;
 
@@ -105,7 +105,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getScheme()
+    public function getScheme() : string
     {
         return $this->scheme;
     }
@@ -115,7 +115,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getHost()
+    public function getHost() : string
     {
         return $this->host;
     }
@@ -125,7 +125,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getSubDomain()
+    public function getSubDomain() : string
     {
         return $this->subDomain;
     }
@@ -135,7 +135,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getQuery()
+    public function getQuery() : string
     {
         return $this->query;
     }
@@ -145,7 +145,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getMethod()
+    public function getMethod() : string
     {
         return $this->method;
     }
@@ -155,7 +155,7 @@ class RawRequest
      *
      * @return array
      */
-    public function getGetVars()
+    public function getGetVars() : array
     {
         return $this->getVars;
     }
@@ -165,7 +165,7 @@ class RawRequest
      *
      * @return array
      */
-    public function getPostVars()
+    public function getPostVars() : array
     {
         return $this->postVars;
     }
@@ -173,7 +173,7 @@ class RawRequest
     /**
      * Get JSON body variables.
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function getJSONBodyVars()
     {

@@ -17,7 +17,7 @@ interface Database
      * @param  array  $info database info
      * @return string DSN string
      */
-    public function getDsn(array $info);
+    public function getDsn(array $info) : string;
 
     /**
      * Begin transaction if applicable.

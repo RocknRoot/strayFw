@@ -17,7 +17,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function build(Request $request)
+    public function build(Request $request) : void
     {
         if (count($request->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
@@ -36,7 +36,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function mappings(Request $request)
+    public function mappings(Request $request) : void
     {
         $table = new \cli\Table();
         $table->setHeaders([ 'Mapping', 'Database', 'Models path' ]);
@@ -61,7 +61,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function generate(Request $request)
+    public function generate(Request $request) : void
     {
         if (count($request->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/generate mapping_name' . PHP_EOL;
