@@ -19,6 +19,12 @@
         "symfony/yaml": "^4.3",
         "wp-cli/php-cli-tools": "^0.11.2"
     },
+    "require-dev": {
+        "filp/whoops": "^2.1",
+        "phpstan/phpstan": "^0.11.8",
+        "phpunit/phpunit": "^8.4",
+        "twig/twig": "^2.11"
+    },
     "suggest": {
         "twig/twig": "For the Twig renderer"
     },
@@ -27,10 +33,7 @@
             "RocknRoot\\StrayFw\\": "src/RocknRoot/StrayFw/"
         }
     },
-    "require-dev": {
-        "filp/whoops": "^2.1",
-        "phpstan/phpstan": "^0.11.8",
-        "phpunit/phpunit": "^8.4",
-        "twig/twig": "^2.11"
+    "archive": {
+        "exclude": [ "/docs" ]
     }
 }
