@@ -59,7 +59,7 @@ class Config
             } catch (ParseException $e) {
                 throw new FileNotParsable('file "' . $fileName . '" can\'t be parsed');
             }
-            self::$files[$fileName] = $content;
+            self::$files[$fileName] = $content ?? [];
         }
 
         return self::$files[$fileName];
