@@ -281,6 +281,16 @@ class Database
     }
 
     /**
+     * Get database alias.
+     *
+     * @return string alias
+     */
+    public function getAlias() : string
+    {
+        return $this->alias;
+    }
+
+    /**
      * Register a new database.
      *
      * @static
