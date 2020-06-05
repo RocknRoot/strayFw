@@ -5,6 +5,7 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Column;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
 use RocknRoot\StrayFw\Logger;
 
@@ -24,9 +25,9 @@ class AddTable extends Mutation
      * @param  string                  $tableName table real name
      * @param  string                  $modelName model name
      * @throws InvalidSchemaDefinition if a model has no field
-     * @return \PDOStatement           $statement       prepared query
+     * @return MutationQuery           $statement prepared query
      */
-    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName) : \PDOStatement
+    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
     {
         $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {
@@ -55,6 +56,6 @@ class AddTable extends Mutation
         $sql = substr($sql, 0, -2) . ')';
         $statement = $database->getMasterLink()->prepare($sql);
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

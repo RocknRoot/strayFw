@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for table deletion operations.
@@ -16,12 +17,12 @@ class DeleteTable extends Mutation
      *
      * @param  Database      $database database
      * @param  string        $table    table name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $table) : \PDOStatement
+    public static function statement(Database $database, string $table) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

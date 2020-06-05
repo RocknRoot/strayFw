@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for enum type addition operations.
@@ -17,12 +18,12 @@ class AddEnum extends Mutation
      * @param  Database      $database database
      * @param  string        $type     type name
      * @param  array         $values   enum values
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $type, array $values) : \PDOStatement
+    public static function statement(Database $database, string $type, array $values) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(\'' . implode('\', \'', $values) . '\')');
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

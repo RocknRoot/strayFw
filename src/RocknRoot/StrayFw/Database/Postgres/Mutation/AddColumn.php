@@ -5,6 +5,7 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Column;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for column addition operations.
@@ -22,9 +23,9 @@ class AddColumn extends Mutation
      * @param  string        $modelName model name
      * @param  string        $tableName table name
      * @param  string        $fieldName field name
-     * @return \PDOStatement $statement       prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, array $schema, string $mapping, string $modelName, string $tableName, string $fieldName) : \PDOStatement
+    public static function statement(Database $database, array $schema, string $mapping, string $modelName, string $tableName, string $fieldName) : MutationQuery
     {
         $fieldDefinition = $schema[$modelName]['fields'][$fieldName];
         $fieldRealName = null;
@@ -36,6 +37,7 @@ class AddColumn extends Mutation
         $sql = 'ALTER TABLE ' . $tableName . ' ADD COLUMN ';
         $sql .= Column::generateDefinition($schema, $mapping, $fieldRealName, $fieldDefinition);
         $statement = $database->getMasterLink()->prepare($sql);
-        return $statement;
+
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

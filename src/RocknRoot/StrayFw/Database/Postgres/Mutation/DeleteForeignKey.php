@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for foreign key deletion operations.
@@ -17,12 +18,12 @@ class DeleteForeignKey extends Mutation
      * @param  Database      $database database
      * @param  string        $table    table name
      * @param  string        $key      foreign key name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $table, string $key) : \PDOStatement
+    public static function statement(Database $database, string $table, string $key) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $table . ' DROP CONSTRAINT IF EXISTS fk_' . $key);
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

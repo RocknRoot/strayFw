@@ -47,7 +47,7 @@ class Schema extends ProviderSchema
                 foreach ($modelDefinition['links'] as $keyName => $keyDefinition) {
                     $statement = Mutation\DeleteForeignKey::statement($database, $tableName, $keyName);
                     if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                        throw new DatabaseError('db/build : SQL query failed');
                     }
                 }
             }
@@ -63,7 +63,7 @@ class Schema extends ProviderSchema
                 }
                 $statement = Mutation\DeleteTable::statement($database, $tableName);
                 if ($statement->execute() == false) {
-                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                    throw new DatabaseError('db/build : SQL query failed');
                 }
             }
         }
@@ -77,7 +77,7 @@ class Schema extends ProviderSchema
                 }
                 $statement = Mutation\DeleteEnum::statement($database, $modelRealName);
                 if ($statement->execute() == false) {
-                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                    throw new DatabaseError('db/build : SQL query failed');
                 }
             }
         }
@@ -110,7 +110,7 @@ class Schema extends ProviderSchema
                     }
                     $statement = Mutation\AddForeignKey::statement($database, $definition, $modelName, $tableName, $foreignName, $foreignTableName);
                     if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                        throw new DatabaseError('db/build : SQL query failed');
                     }
                 }
             }
@@ -156,7 +156,7 @@ class Schema extends ProviderSchema
 
         $statement = Mutation\AddEnum::statement($database, $enumRealName, $values);
         if ($statement->execute() == false) {
-            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+            throw new DatabaseError('db/build : SQL query failed');
         }
 
         echo $enumName . ' - Done' . PHP_EOL;
@@ -188,14 +188,14 @@ class Schema extends ProviderSchema
         }
         $statement = Mutation\AddTable::statement($database, $this->getDefinition(), $this->mapping, $tableName, $modelName);
         if ($statement->execute() == false) {
-            throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+            throw new DatabaseError('db/build : SQL query failed');
         }
 
         if (isset($modelDefinition['indexes']) === true) {
             foreach ($modelDefinition['indexes'] as $indexName => $indexDefinition) {
                 $statement = Mutation\AddIndex::statement($database, $modelName, $tableName, $modelDefinition, $indexName);
                 if ($statement->execute() == false) {
-                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                    throw new DatabaseError('db/build : SQL query failed');
                 }
             }
         }
@@ -204,7 +204,7 @@ class Schema extends ProviderSchema
             foreach ($modelDefinition['uniques'] as $uniqueName => $uniqueDefinition) {
                 $statement = Mutation\AddUnique::statement($database, $modelName, $tableName, $modelDefinition, $uniqueName);
                 if ($statement->execute() == false) {
-                    throw new DatabaseError('db/build : ' . print_r($statement->errorInfo(), true));
+                    throw new DatabaseError('db/build : SQL query failed');
                 }
             }
         }

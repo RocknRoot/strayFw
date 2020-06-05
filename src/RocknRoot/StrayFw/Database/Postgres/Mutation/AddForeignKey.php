@@ -4,6 +4,7 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for foreign key addition operations.
@@ -21,9 +22,9 @@ class AddForeignKey extends Mutation
      * @param  string        $tableName        table real name
      * @param  string        $foreignName      foreign key name
      * @param  string        $foreignTableName foreign table real name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName) : \PDOStatement
+    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName) : MutationQuery
     {
         $tableDefinition = $definition[$modelName];
         $foreignDefinition = $tableDefinition['links'][$foreignName];
@@ -51,6 +52,6 @@ class AddForeignKey extends Mutation
         }
         $statement = $database->getMasterLink()->prepare($sql);
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

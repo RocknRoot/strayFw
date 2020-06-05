@@ -4,6 +4,7 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for unique constraint addition operations.
@@ -20,9 +21,9 @@ class AddUnique extends Mutation
      * @param  string        $tableName       table real name
      * @param  array         $tableDefinition table definition
      * @param  string        $uniqueName      unique constraint name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : \PDOStatement
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : MutationQuery
     {
         $uniqueDefinition = $tableDefinition['uniques'][$uniqueName];
         $fields = array();
@@ -35,6 +36,6 @@ class AddUnique extends Mutation
         }
         $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . implode(', ', $fields) . ')');
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

@@ -4,6 +4,7 @@ namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
 use RocknRoot\StrayFw\Database\Helper;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for index addition operations.
@@ -20,9 +21,9 @@ class AddIndex extends Mutation
      * @param  string        $tableName       table real name
      * @param  array         $tableDefinition table definition
      * @param  string        $indexName       index name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : \PDOStatement
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : MutationQuery
     {
         $indexDefinition = $tableDefinition['indexes'][$indexName];
         $indexes = array();
@@ -35,6 +36,6 @@ class AddIndex extends Mutation
         }
         $statement = $database->getMasterLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . implode(', ', $indexes) . ')');
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }

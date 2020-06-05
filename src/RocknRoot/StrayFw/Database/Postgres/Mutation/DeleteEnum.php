@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Database\Postgres\Mutation;
 
 use RocknRoot\StrayFw\Database\Database;
+use RocknRoot\StrayFw\Database\Postgres\Query\Mutation as MutationQuery;
 
 /**
  * Representation for enum type deletion operations.
@@ -16,12 +17,12 @@ class DeleteEnum extends Mutation
      *
      * @param  Database      $database database
      * @param  string        $type     type name
-     * @return \PDOStatement $statement prepared query
+     * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $type) : \PDOStatement
+    public static function statement(Database $database, string $type) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('DROP TYPE IF EXISTS ' . $type);
 
-        return $statement;
+        return new MutationQuery($database->getAlias(), $statement);
     }
 }
