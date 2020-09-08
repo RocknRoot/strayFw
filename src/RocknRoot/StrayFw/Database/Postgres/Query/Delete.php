@@ -16,31 +16,23 @@ class Delete extends Query
 {
     /**
      * From clause.
-     *
-     * @var string
      */
-    protected $from;
+    protected ?string $from = null;
 
     /**
      * Where clause.
-     *
-     * @var Condition
      */
-    protected $where;
+    protected ?\RocknRoot\StrayFw\Database\Postgres\Query\Condition $where = null;
 
     /**
      * Order by clause.
-     *
-     * @var null|string
      */
-    protected $orderBy;
+    protected ?string $orderBy = null;
 
     /**
      * Limit clause.
-     *
-     * @var string
      */
-    protected $limit;
+    protected ?string $limit = null;
 
     /**
      * Execute the constructed query.
@@ -55,11 +47,11 @@ class Delete extends Query
         }
         foreach ($this->parameters as $name => $value) {
             $type = \PDO::PARAM_STR;
-            if (is_int($value) === true) {
+            if (\is_int($value) === true) {
                 $type = \PDO::PARAM_INT;
-            } elseif (is_bool($value) === true) {
+            } elseif (\is_bool($value) === true) {
                 $type = \PDO::PARAM_BOOL;
-            } elseif (is_null($value) === true) {
+            } elseif (\is_null($value) === true) {
                 $type = \PDO::PARAM_NULL;
             }
             $this->statement->bindValue($name, $value, $type);
@@ -68,7 +60,7 @@ class Delete extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('delete query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 throw new AppException('delete query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
@@ -85,7 +77,7 @@ class Delete extends Query
     public function toSql() : string
     {
         if (empty($this->from) === true) {
-            throw new BadUse('from clause has not been defined (' . print_r($this, true) . ')');
+            throw new BadUse('from clause has not been defined (' . \print_r($this, true) . ')');
         }
         $sql = 'DELETE FROM ' . $this->from . ' ';
 
@@ -108,7 +100,7 @@ class Delete extends Query
      * @param  string $table table real name
      * @return Delete this
      */
-    public function from(string $table) : Delete
+    public function from(string $table) : self
     {
         $this->from = $table;
 
@@ -118,10 +110,10 @@ class Delete extends Query
     /**
      * Set where clause.
      *
-     * @param  array|Condition|string $where where clause
-     * @return Delete                 this
+     * @param  mixed[]|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
+     * @return Delete                                                              this
      */
-    public function where($where) : Delete
+    public function where(array $where) : self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -134,14 +126,14 @@ class Delete extends Query
      * @param  array|string $orderBy order by clause
      * @return Delete       this
      */
-    public function orderBy($orderBy) : Delete
+    public function orderBy($orderBy) : self
     {
-        if (is_array($orderBy) === true) {
+        if (\is_array($orderBy) === true) {
             $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }
-            $this->orderBy = substr($this->orderBy, 0, -2);
+            $this->orderBy = \substr($this->orderBy, 0, -2);
         } else {
             $this->orderBy = $orderBy;
         }
@@ -155,7 +147,7 @@ class Delete extends Query
      * @param  string $limit limit clause
      * @return Delete this
      */
-    public function limit($limit) : Delete
+    public function limit(string $limit) : self
     {
         $this->limit = $limit;
 

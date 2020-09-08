@@ -15,8 +15,8 @@ abstract class Cookie
      * Get a cookie value by its key.
      *
      * @static
-     * @param  string $name key
-     * @return mixed
+     * @param  string     $name key
+     * @return null|mixed
      */
     public static function get(string $name)
     {
@@ -48,12 +48,12 @@ abstract class Cookie
      * @param int    $expire expiration timestamp
      * @param string $path   cookie path
      */
-    public static function set(string $name, $value, int $expire = 0, ?string $path = null) : void
+    public static function set(string $name, string $value, int $expire = 0, ?string $path = null) : void
     {
         if ($path === null) {
-            setcookie($name, $value, $expire);
+            \setcookie($name, $value, $expire);
         } else {
-            setcookie($name, $value, $expire, $path);
+            \setcookie($name, $value, $expire, $path);
         }
     }
 
@@ -65,7 +65,7 @@ abstract class Cookie
      */
     public static function delete(string $name) : void
     {
-        setcookie($name, '', time() - 1);
+        \setcookie($name, '', \time() - 1);
     }
 
     /**
@@ -75,9 +75,9 @@ abstract class Cookie
      */
     public static function clear() : void
     {
-        $keys = array_keys($_COOKIE);
+        $keys = \array_keys($_COOKIE);
         foreach ($keys as $key) {
-            setcookie($key, '', time() - 1);
+            \setcookie($key, '', \time() - 1);
         }
     }
 }

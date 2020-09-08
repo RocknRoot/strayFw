@@ -18,17 +18,15 @@ abstract class Schema
 {
     /**
      * Mapping name.
-     *
-     * @var string
      */
-    protected $mapping;
+    protected string $mapping;
 
     /**
      * Schema definition.
      *
-     * @var array<string, array>
+     * @var array[]
      */
-    protected $definition;
+    protected ?array $definition = null;
 
     /**
      * Construct a new schema representation class.
@@ -44,13 +42,13 @@ abstract class Schema
         $data = Mapping::get($mapping);
         $file = $data['config']['schema'];
         $modelsDir = $data['config']['models']['path'];
-        if (is_readable($file) === false) {
+        if (\is_readable($file) === false) {
             throw new FileNotReadable('file "' . $file . '" isn\'t readable');
         }
-        if (is_dir($modelsDir) === false) {
+        if (\is_dir($modelsDir) === false) {
             throw new InvalidDirectory('directory "' . $modelsDir . '" can\'t be identified');
         }
-        if (is_dir($modelsDir . DIRECTORY_SEPARATOR . 'Base') === false) {
+        if (\is_dir($modelsDir . DIRECTORY_SEPARATOR . 'Base') === false) {
             throw new InvalidDirectory('directory "' . $modelsDir . DIRECTORY_SEPARATOR . 'Base" can\'t be identified');
         }
     }
@@ -103,7 +101,7 @@ abstract class Schema
     public static function getSchema(string $mapping) : Schema
     {
         $data = Mapping::get($mapping);
-        $class = rtrim(ucfirst($data['config']['provider']), '\\') . '\\Schema';
+        $class = \rtrim(\ucfirst($data['config']['provider']), '\\') . '\\Schema';
 
         return new $class($mapping);
     }

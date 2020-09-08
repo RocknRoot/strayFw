@@ -20,45 +20,37 @@ class Database
      * @static
      * @var array<string, Database>
      */
-    protected static $databases = array();
+    protected static array $databases = array();
 
     /**
      * Database alias.
-     *
-     * @var string
      */
-    protected $alias;
+    protected string $alias;
 
     /**
      * Provider's classes namespace.
-     *
-     * @var string
      */
-    protected $providerNamespace;
+    protected string $providerNamespace;
 
     /**
      * Provider's instance.
-     *
-     * @var Provider\Database
      */
-    protected $providerDatabase;
+    protected \RocknRoot\StrayFw\Database\Provider\Database $providerDatabase;
 
     /**
      * Servers info.
      *
-     * @var array
+     * @var array<mixed, array<string, mixed>>
      */
-    protected $servers;
+    protected array $servers;
 
     /**
      * Transaction level.
      * If 0, there's no happening transaction.
      * If 1, it's a classic transaction.
      * If >= 2, there's at least one save point.
-     *
-     * @var int
      */
-    protected $transactionLevel;
+    protected int $transactionLevel;
 
     /**
      * Construct a new database representation.
@@ -94,10 +86,10 @@ class Database
             $info['user'] = $config['user'];
             $info['pass'] = $config['pass'];
             $this->servers['all'] = $info;
-        } elseif (isset($config['read']) === true && is_array($config['read']) === true && isset($config['write']) === true && is_array($config['write']) === true) {
+        } elseif (isset($config['read']) === true && \is_array($config['read']) === true && isset($config['write']) === true && \is_array($config['write']) === true) {
             $read = $config['read'];
-            if (is_array(current($read)) === true) {
-                $read = $read[mt_rand(0, count($read) - 1)];
+            if (\is_array(\current($read)) === true) {
+                $read = $read[\mt_rand(0, \count($read) - 1)];
             }
             $info = array();
             $info['host'] = $read['host'];
@@ -107,8 +99,8 @@ class Database
             $info['pass'] = $read['pass'];
             $this->servers['read'] = $info;
             $write = $config['write'];
-            if (is_array(current($write)) === true) {
-                $write = $write[mt_rand(0, count($write) - 1)];
+            if (\is_array(\current($write)) === true) {
+                $write = $write[\mt_rand(0, \count($write) - 1)];
             }
             $info = array();
             $info['host'] = $write['host'];

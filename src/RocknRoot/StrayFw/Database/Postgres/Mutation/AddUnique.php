@@ -23,7 +23,7 @@ class AddUnique extends Mutation
      * @param  string        $uniqueName      unique constraint name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : MutationQuery
+    public static function statement(GlobalDatabase $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : MutationQuery
     {
         $uniqueDefinition = $tableDefinition['uniques'][$uniqueName];
         $fields = array();
@@ -34,7 +34,7 @@ class AddUnique extends Mutation
                 $fields[] = Helper::codifyName($modelName) . '_' . Helper::codifyName($field);
             }
         }
-        $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . implode(', ', $fields) . ')');
+        $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . \implode(', ', $fields) . ')');
 
         return new MutationQuery($database->getAlias(), $statement);
     }

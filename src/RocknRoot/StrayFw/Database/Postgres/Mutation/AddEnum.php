@@ -20,9 +20,9 @@ class AddEnum extends Mutation
      * @param  array         $values   enum values
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $type, array $values) : MutationQuery
+    public static function statement(GlobalDatabase $database, string $type, array $values) : MutationQuery
     {
-        $statement = $database->getMasterLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(\'' . implode('\', \'', $values) . '\')');
+        $statement = $database->getMasterLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(\'' . \implode('\', \'', $values) . '\')');
 
         return new MutationQuery($database->getAlias(), $statement);
     }

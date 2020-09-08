@@ -17,7 +17,7 @@ abstract class Column
     /**
      * Generate a column SQL fieldDefinition.
      *
-     * @param  array                   $schema          schema definition
+     * @param  mixed[]                 $schema          schema definition
      * @param  string                  $mapping         mapping name
      * @param  string                  $fieldName       field real name
      * @param  array                   $fieldDefinition field fieldDefinition
@@ -32,7 +32,7 @@ abstract class Column
         case 'bool':
             $sql .= 'BOOL';
             if (isset($fieldDefinition['default']) === true) {
-                if (is_bool($fieldDefinition['default']) === false) {
+                if (\is_bool($fieldDefinition['default']) === false) {
                     throw new InvalidSchemaDefinition('default value for "' . $fieldName . '" isn\'t a boolean');
                 }
                 $sql .= ' DEFAULT ' . ($fieldDefinition['default'] === true ? 'TRUE' : 'FALSE');

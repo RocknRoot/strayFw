@@ -19,9 +19,8 @@ class Logger extends AbstractLogger
      * General logger instance.
      *
      * @static
-     * @var Logger
      */
-    private static $log = null;
+    private static ?\RocknRoot\StrayFw\Logger $log = null;
 
     /**
      * Get general logger instance.
@@ -42,13 +41,13 @@ class Logger extends AbstractLogger
      *
      * @param  mixed                          $level
      * @param  string                         $message
-     * @param  array                          $context
+     * @param  array<string, string>          $context
      * @throws LoggerInvalidArgumentException if level is unknown
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
-        if (! is_string($message)) {
-            throw new LoggerInvalidArgumentException(sprintf(
+        if (! \is_string($message)) {
+            throw new LoggerInvalidArgumentException(\sprintf(
                 'Argument 2 passed to %s must be a string!',
                 __METHOD__
             ));
@@ -64,15 +63,15 @@ class Logger extends AbstractLogger
             LogLevel::INFO,
             LogLevel::DEBUG
         );
-        if (in_array($level, $levels) === false) {
+        if (\in_array($level, $levels) === false) {
             throw new LoggerInvalidArgumentException('unknown level "' . $level . '"');
         }
         $message = $message;
         foreach ($context as $key => $value) {
-            $message = str_replace('{' . $key . '}', $value, $message);
+            $message = \str_replace('{' . $key . '}', $value, $message);
         }
-        error_log('[' . $level . '] ' . $message);
-        if (defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
+        \error_log('[' . $level . '] ' . $message);
+        if (\defined('STRAY_IS_CLI') === true && STRAY_IS_CLI === true) {
             echo '[' . $level . '] ' . $message . PHP_EOL;
         }
     }

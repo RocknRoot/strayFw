@@ -11,62 +11,52 @@ abstract class Request
 {
     /**
      * Route class name.
-     *
-     * @var string
      */
-    protected $class;
+    protected string $class;
 
     /**
      * Route action name.
-     *
-     * @var string
      */
-    protected $action;
+    protected string $action;
 
     /**
      * Route parsed arguments.
      *
      * @var mixed[]
      */
-    protected $args;
+    protected array $args;
 
     /**
      * Matching before hooks.
      *
      * @var string[][]
      */
-    protected $before;
+    protected array $before;
 
     /**
      * Matching after hooks.
      *
      * @var string[][]
      */
-    protected $after;
+    protected array $after;
 
     /**
      * True if route needs to stop early.
-     *
-     * @var bool
      */
-    protected $hasEnded;
+    protected bool $hasEnded;
 
     /**
      * Get route class name.
-     *
-     * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }
 
     /**
      * Get route action name.
-     *
-     * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -76,7 +66,7 @@ abstract class Request
      *
      * @return mixed[] parsed arguments
      */
-    public function getArgs()
+    public function getArgs(): array
     {
         return $this->args;
     }
@@ -86,7 +76,7 @@ abstract class Request
      *
      * @return string[][] matched hooks
      */
-    public function getBefore()
+    public function getBefore(): array
     {
         return $this->before;
     }
@@ -96,7 +86,7 @@ abstract class Request
      *
      * @return string[][] matched hooks
      */
-    public function getAfter()
+    public function getAfter(): array
     {
         return $this->after;
     }
@@ -106,7 +96,7 @@ abstract class Request
      *
      * @return bool previous value
      */
-    public function end()
+    public function end(): bool
     {
         $v = $this->hasEnded;
         $this->hasEnded = true;
@@ -116,10 +106,8 @@ abstract class Request
 
     /**
      * True if route needs to stop early.
-     *
-     * @return bool
      */
-    public function hasEnded()
+    public function hasEnded(): bool
     {
         return $this->hasEnded;
     }

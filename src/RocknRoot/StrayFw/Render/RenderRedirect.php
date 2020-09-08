@@ -22,7 +22,7 @@ class RenderRedirect implements RenderInterface
         if (isset($args['url']) === false) {
             throw new BadUse('RenderRedirect: expected "url" entry in args');
         }
-        header('Location: ' . $args['url']);
+        \header('Location: ' . $args['url']);
 
         return '';
     }

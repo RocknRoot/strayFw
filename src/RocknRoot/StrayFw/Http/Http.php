@@ -3,10 +3,10 @@
 namespace RocknRoot\StrayFw\Http;
 
 use RocknRoot\StrayFw\Controllers;
+use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;
-use RuntimeException;
 
 /**
  * Bootstrapping class for HTTP requests.
@@ -21,65 +21,54 @@ abstract class Http
      * True if class has already been initialized.
      *
      * @static
-     * @var bool
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
      * Current namespace prefix.
-     *
-     * @var string
      */
-    protected static $namespace;
+    protected static ?string $namespace = null;
 
     /**
      * Current subdomain prefix.
      *
-     * @var array
+     * @var string[]
      */
-    protected static $subdomain;
+    protected static ?array $subdomain = null;
 
     /**
      * Current URI prefix.
-     *
-     * @var null|string
      */
-    protected static $uri;
+    protected static ?string $uri = null;
 
     /**
      * Registed routes.
      *
      * @var array[]
      */
-    protected static $routes;
+    protected static array $routes = [];
 
     /**
      * Current raw request.
-     *
-     * @var null|RawRequest
      */
-    protected static $rawRequest;
+    protected static ?\RocknRoot\StrayFw\Http\RawRequest $rawRequest = null;
 
     /**
      * Current request.
-     *
-     * @var Request
      */
-    protected static $request;
+    protected static ?\RocknRoot\StrayFw\Http\Request $request = null;
 
     /**
      * Current render.
-     *
-     * @var Response
      */
-    protected static $response;
+    protected static ?\RocknRoot\StrayFw\Http\Response $response = null;
 
     /**
      * Current controllers.
      *
      * @var object[]
      */
-    protected static $controllers;
+    protected static ?array $controllers = null;
 
     /**
      * Initialize inner states according to current HTTP request.
@@ -89,10 +78,8 @@ abstract class Http
     public static function init() : void
     {
         if (self::$isInit === false) {
-            self::$rawRequest = null;
-            self::$routes = array();
             self::$isInit = true;
-            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
+            if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true) {
                 self::$rawRequest = new RawRequest();
                 Session::init();
                 Locale::init(self::$rawRequest);
@@ -104,19 +91,20 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
+     * @throws AppException if raw request is not defined
      * @throws NotARender if response->render is a non RenderInterface implementing object
      */
     public static function run() : void
     {
         if (self::$isInit === true) {
             if ((self::$rawRequest instanceof RawRequest) === false) {
-                throw new RuntimeException('Raw request was not specified!');
+                throw new AppException('Http\Helper: raw request is not defined');
             }
             self::$request = new Request(self::$rawRequest, self::$routes);
             self::$controllers = array();
             self::$response = new Response();
             try {
-                ob_start();
+                \ob_start();
                 $before = self::$request->getBefore();
                 foreach ($before as $b) {
                     $controller = Controllers::get($b['class']);
@@ -144,9 +132,9 @@ abstract class Http
                     throw new NotARender('response->render is a non RenderInterface implementing object');
                 }
                 echo $render->render(self::$response->data);
-                ob_end_flush();
+                \ob_end_flush();
             } catch (\Exception $e) {
-                ob_end_clean();
+                \ob_end_clean();
                 throw $e;
             }
         }
@@ -157,13 +145,13 @@ abstract class Http
      *
      * @static
      * @param string       $namespace namespace prefix
-     * @param array|string $subdomain subdomain prefix
+     * @param string[]|string|null $subdomain subdomain prefix
      * @param string       $uri       uri prefix
      */
     public static function prefix(string $namespace, $subdomain = null, string $uri = null) : void
     {
         self::$namespace = $namespace;
-        self::$subdomain = is_array($subdomain) ? $subdomain : [ $subdomain ];
+        self::$subdomain = \is_string($subdomain) ? [ $subdomain ] : $subdomain;
         self::$uri = $uri;
     }
 
@@ -261,9 +249,8 @@ abstract class Http
      * Get current request.
      *
      * @static
-     * @return Request
      */
-    public static function getRequest() : Request
+    public static function getRequest() : ?\RocknRoot\StrayFw\Http\Request
     {
         return self::$request;
     }

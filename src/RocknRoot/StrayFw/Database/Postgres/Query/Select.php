@@ -17,101 +17,73 @@ class Select extends Query
 {
     /**
      * If true, will be executed on write server.
-     *
-     * @var bool
      */
-    protected $isCritical;
+    protected bool $isCritical;
 
     /**
      * Select clause.
-     *
-     * @var null|string
      */
-    protected $select;
+    protected ?string $select = null;
 
     /**
      * From clause.
-     *
-     * @var string
      */
-    protected $from;
+    protected ?string $from = null;
 
     /**
      * Where clause.
-     *
-     * @var Condition
      */
-    protected $where;
+    protected ?\RocknRoot\StrayFw\Database\Postgres\Query\Condition $where = null;
 
     /**
      * Group by clause.
-     *
-     * @var string
      */
-    protected $groupBy;
+    protected ?string $groupBy = null;
 
     /**
      * Having clause.
-     *
-     * @var Condition
      */
-    protected $having;
+    protected ?\RocknRoot\StrayFw\Database\Postgres\Query\Condition $having = null;
 
     /**
      * Order by clause.
-     *
-     * @var null|string
      */
-    protected $orderBy;
+    protected ?string $orderBy = null;
 
     /**
      * Distinct clause.
-     *
-     * @var string
      */
-    protected $distinct;
+    protected ?string $distinct = null;
 
     /**
      * Limit clause.
-     *
-     * @var null|int
      */
-    protected $limit;
+    protected ?int $limit = null;
 
     /**
      * Offset clause.
-     *
-     * @var null|int
      */
-    protected $offset;
+    protected ?int $offset = null;
 
     /**
      * Inner join table clause.
-     *
-     * @var array[]
      */
-    protected $innerJoins;
+    protected array $innerJoins;
 
     /**
      * Left outer join table clause.
-     *
-     * @var array[]
      */
-    protected $leftOuterJoins;
+    protected array $leftOuterJoins;
 
     /**
      * Right outer join table clause.
-     *
-     * @var array[]
      */
-    protected $rightOuterJoins;
+    protected array $rightOuterJoins;
 
     /**
      * Full outer join table clause.
-     *
-     * @var array[]
      */
-    protected $fullOuterJoins;
+    protected array $fullOuterJoins;
 
     /**
      * Construct a new empty select query.
@@ -119,7 +91,7 @@ class Select extends Query
      * @param string $database database name
      * @param bool   $critical if true, will be executed on write server
      */
-    public function __construct($database, $critical = false)
+    public function __construct(string $database, bool $critical = false)
     {
         parent::__construct($database);
         $this->isCritical = $critical;
@@ -142,11 +114,11 @@ class Select extends Query
         }
         foreach ($this->parameters as $name => $value) {
             $type = \PDO::PARAM_STR;
-            if (is_int($value) === true) {
+            if (\is_int($value) === true) {
                 $type = \PDO::PARAM_INT;
-            } elseif (is_bool($value) === true) {
+            } elseif (\is_bool($value) === true) {
                 $type = \PDO::PARAM_BOOL;
-            } elseif (is_null($value) === true) {
+            } elseif (\is_null($value) === true) {
                 $type = \PDO::PARAM_NULL;
             }
             $this->statement->bindValue($name, $value, $type);
@@ -155,7 +127,7 @@ class Select extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('select query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 throw new AppException('select query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
@@ -166,7 +138,7 @@ class Select extends Query
     /**
      * Get the next result row.
      *
-     * @return array|bool result data or false if something went wrong
+     * @return bool|mixed result data or false if something went wrong
      */
     public function fetch()
     {
@@ -205,7 +177,7 @@ class Select extends Query
         }
         $sql .= ($this->select != null ? $this->select : '*') . ' ';
         if (empty($this->from) === true) {
-            throw new BadUse('from clause has not been defined (' . print_r($this, true) . ')');
+            throw new BadUse('from clause has not been defined (' . \print_r($this, true) . ')');
         }
         $sql .= 'FROM ' . $this->from . ' ';
 
@@ -250,20 +222,20 @@ class Select extends Query
      * @param  array|string $select select clause
      * @return Select       this
      */
-    public function select($select) : Select
+    public function select($select) : self
     {
-        if (is_array($select) === true) {
+        if (\is_array($select) === true) {
             $this->select = '';
             foreach ($select as $key => $elem) {
                 $this->select .= $elem;
-                if (is_numeric($key) === false) {
+                if (\is_numeric($key) === false) {
                     $this->select .= ' AS ' . $key;
                 }
                 $this->select .= ', ';
             }
-            $this->select = substr($this->select, 0, -2);
-        } elseif (! is_string($select)) {
-            throw new InvalidArgumentException(sprintf(
+            $this->select = \substr($this->select, 0, -2);
+        } elseif (! \is_string($select)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Argument 1 passed to %s must be an array or string!',
                 __METHOD__
             ));
@@ -280,7 +252,7 @@ class Select extends Query
      * @param  string $from table real name
      * @return Select this
      */
-    public function from(string $from) : Select
+    public function from(string $from) : self
     {
         $this->from = $from;
 
@@ -293,7 +265,7 @@ class Select extends Query
      * @param  Condition|mixed $where where clause
      * @return Select          this
      */
-    public function where($where) : Select
+    public function where($where) : self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -306,10 +278,10 @@ class Select extends Query
      * @param  array|string $groupBy group by clause
      * @return Select       this
      */
-    public function groupBy($groupBy) : Select
+    public function groupBy($groupBy) : self
     {
-        if (is_array($groupBy) === true) {
-            $this->groupBy = implode(', ', $groupBy);
+        if (\is_array($groupBy) === true) {
+            $this->groupBy = \implode(', ', $groupBy);
         } else {
             $this->groupBy = $groupBy;
         }
@@ -323,7 +295,7 @@ class Select extends Query
      * @param  Condition|string $having having clause
      * @return Select           this
      */
-    public function having($having) : Select
+    public function having($having) : self
     {
         $this->having = ($having instanceof Condition ? $having : new Condition($having));
 
@@ -336,14 +308,14 @@ class Select extends Query
      * @param  array|string $orderBy order by clause
      * @return Select       this
      */
-    public function orderBy($orderBy) : Select
+    public function orderBy($orderBy) : self
     {
-        if (is_array($orderBy) === true) {
+        if (\is_array($orderBy) === true) {
             $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }
-            $this->orderBy = substr($this->orderBy, 0, -2);
+            $this->orderBy = \substr($this->orderBy, 0, -2);
         } else {
             $this->orderBy = $orderBy;
         }
@@ -357,10 +329,10 @@ class Select extends Query
      * @param  array|string $distinct distinct on clause
      * @return Select       this
      */
-    public function distinct($distinct) : Select
+    public function distinct($distinct) : self
     {
-        if (is_array($distinct) === true) {
-            $this->distinct = implode(', ', $distinct);
+        if (\is_array($distinct) === true) {
+            $this->distinct = \implode(', ', $distinct);
         } else {
             $this->distinct = $distinct;
         }
@@ -374,7 +346,7 @@ class Select extends Query
      * @param  null|int $limit limit clause
      * @return Select   this
      */
-    public function limit(int $limit = null) : Select
+    public function limit(int $limit = null) : self
     {
         $this->limit = $limit;
 
@@ -387,7 +359,7 @@ class Select extends Query
      * @param  null|int $offset offset clause
      * @return Select   this
      */
-    public function offset(int $offset = null) : Select
+    public function offset(int $offset = null) : self
     {
         $this->offset = $offset;
 
@@ -401,7 +373,7 @@ class Select extends Query
      * @param  array|Condition|string $on    join condition
      * @return Select                 this
      */
-    public function addInnerJoin(string $table, $on) : Select
+    public function addInnerJoin(string $table, $on) : self
     {
         $this->innerJoins[] = array(
             'table' => $table,
@@ -418,7 +390,7 @@ class Select extends Query
      * @param  array|Condition|string $on    join condition
      * @return Select                 $this
      */
-    public function addLeftOuterJoin(string $table, $on) : Select
+    public function addLeftOuterJoin(string $table, $on) : self
     {
         $this->leftOuterJoins[] = array(
             'table' => $table,
@@ -435,7 +407,7 @@ class Select extends Query
      * @param  array|Condition|string $on    join condition
      * @return Select                 $this
      */
-    public function addRightOuterJoin(string $table, $on) : Select
+    public function addRightOuterJoin(string $table, $on) : self
     {
         $this->rightOuterJoins[] = array(
             'table' => $table,
@@ -452,7 +424,7 @@ class Select extends Query
      * @param  array|Condition|string $on    join condition
      * @return Select                 $this
      */
-    public function addFullOuterJoin(string $table, $on) : Select
+    public function addFullOuterJoin(string $table, $on) : self
     {
         $this->fullOuterJoins[] = array(
             'table' => $table,

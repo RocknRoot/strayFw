@@ -20,17 +20,15 @@ abstract class ErrorPage
      * True if class has already been initialized.
      *
      * @static
-     * @var bool
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
      * Whoops error page handler.
      *
      * @static
-     * @var \Whoops\Handler\PrettyPageHandler
      */
-    protected static $prettyPageHandler;
+    protected static ?\Whoops\Handler\PrettyPageHandler $prettyPageHandler = null;
 
     /**
      * Init Whoops handlers.
@@ -57,11 +55,11 @@ abstract class ErrorPage
      *
      * @static
      * @param string $title data group title
-     * @param array  $data  data that will be displayed
+     * @param mixed[]  $data  data that will be displayed
      */
     public static function addData(string $title, array $data) : void
     {
-        if (self::$isInit === true) {
+        if (self::$isInit === true && self::$prettyPageHandler) {
             self::$prettyPageHandler->AddDataTable($title, $data);
         }
     }

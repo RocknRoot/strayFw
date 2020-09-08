@@ -12,16 +12,14 @@ class Condition
     /**
      * Logic condition tree.
      *
-     * @var mixed
+     * @var mixed[]
      */
-    protected $tree;
+    protected array $tree;
 
     /**
      * Generated SQL code.
-     *
-     * @var null|string
      */
-    protected $sql;
+    protected string $sql;
 
     /**
      * Construct a new condition expression.
@@ -30,7 +28,7 @@ class Condition
      */
     public function __construct($where)
     {
-        if (is_array($where) === true) {
+        if (\is_array($where) === true) {
             $this->tree = $where;
         } else {
             $this->sql = $where;
@@ -44,7 +42,7 @@ class Condition
      */
     public function toSql() : string
     {
-        if (is_string($this->sql) === false) {
+        if (\is_string($this->sql) === false) {
             $this->sql = $this->toSqlLevel($this->tree);
         }
 
@@ -54,46 +52,46 @@ class Condition
     /**
      * Extract the corresponding SQL code, depth level by level.
      *
-     * @param  array  $tree one tree level
-     * @return string generated SQL code for this level
+     * @param  mixed[] $tree one tree level
+     * @return string  generated SQL code for this level
      */
     protected function toSqlLevel(array $tree) : string
     {
-        if (count($tree) == 0) {
+        if (\count($tree) == 0) {
             return '';
         }
         $sql = '(';
-        reset($tree);
-        if (is_numeric(key($tree)) === true) {
+        \reset($tree);
+        if (\is_numeric(\key($tree)) === true) {
             foreach ($tree as $elem) {
                 $sql .= $elem . ' AND ';
             }
-            $sql = substr($sql, 0, -5);
-        } elseif (key($tree) === 'OR') {
+            $sql = \substr($sql, 0, -5);
+        } elseif (\key($tree) === 'OR') {
             foreach ($tree as $value) {
-                if (is_array($value) === true) {
+                if (\is_array($value) === true) {
                     $sql .= $this->toSqlLevel($value);
                 } else {
                     $sql .= $value;
                 }
                 $sql .= ' OR ';
             }
-            $sql = substr($sql, 0, -4);
-        } elseif (key($tree) === 'AND') {
+            $sql = \substr($sql, 0, -4);
+        } elseif (\key($tree) === 'AND') {
             foreach ($tree as $value) {
-                if (is_array($value) === true) {
+                if (\is_array($value) === true) {
                     $sql .= $this->toSqlLevel($value);
                 } else {
                     $sql .= $value;
                 }
                 $sql .= ' AND ';
             }
-            $sql = substr($sql, 0, -5);
+            $sql = \substr($sql, 0, -5);
         } else {
             foreach ($tree as $key => $value) {
                 $sql .= $key . ' = ' . $value . ' AND ';
             }
-            $sql = substr($sql, 0, -5);
+            $sql = \substr($sql, 0, -5);
         }
         $sql .= ')';
 

@@ -25,7 +25,7 @@ class Config
      * @static
      * @var array<string, array>
      */
-    protected static $files = array();
+    protected static array $files = array();
 
     /**
      * Get installation settings.
@@ -35,7 +35,7 @@ class Config
      */
     public static function getSettings() : array
     {
-        return self::get(constant('STRAY_PATH_ROOT') . 'settings.yml');
+        return self::get(\constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
 
     /**
@@ -50,7 +50,7 @@ class Config
     public static function get(string $fileName) : array
     {
         if (isset(self::$files[$fileName]) === false) {
-            if (($content = file_get_contents($fileName)) === false) {
+            if (($content = \file_get_contents($fileName)) === false) {
                 throw new FileNotReadable('file "' . $fileName . '" can\'t be read');
             }
             $content = (string) $content; // re: https://github.com/phpstan/phpstan/issues/647
@@ -73,11 +73,11 @@ class Config
      * @param  array           $content  file content
      * @throws FileNotWritable if file can't be written
      */
-    public static function set(string $fileName, array $content)
+    public static function set(string $fileName, array $content): void
     {
         try {
             $json = Yaml::dump($content, 2);
-            if (file_put_contents($fileName, $json) === false) {
+            if (\file_put_contents($fileName, $json) === false) {
                 throw new FileNotWritable('can\'t write to "' . $fileName . '"');
             }
         } catch (DumpException $e) {

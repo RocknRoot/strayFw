@@ -13,24 +13,20 @@ class Response
 {
     /**
      * HTTP status.
-     *
-     * @var int
      */
-    public $status;
+    public int $status;
 
     /**
      * Response data.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $data;
+    public array $data;
 
     /**
      * Render object.
-     *
-     * @var null|\RocknRoot\StrayFw\Render\RenderInterface
      */
-    protected $renderInst;
+    protected ?\RocknRoot\StrayFw\Render\RenderInterface $renderInst = null;
 
     /**
      * Construct response with default values.
@@ -58,7 +54,7 @@ class Response
      * @param RenderInterface $render render object
      * @param int             $status status code
      */
-    public function render(RenderInterface $render, int $status = 200)
+    public function render(RenderInterface $render, int $status = 200): void
     {
         $this->renderInst = $render;
         $this->status = $status;

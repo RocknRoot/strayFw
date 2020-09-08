@@ -23,7 +23,7 @@ class AddIndex extends Mutation
      * @param  string        $indexName       index name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : MutationQuery
+    public static function statement(GlobalDatabase $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : MutationQuery
     {
         $indexDefinition = $tableDefinition['indexes'][$indexName];
         $indexes = array();
@@ -34,7 +34,7 @@ class AddIndex extends Mutation
                 $indexes[] = Helper::codifyName($modelName) . '_' . Helper::codifyName($field);
             }
         }
-        $statement = $database->getMasterLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . implode(', ', $indexes) . ')');
+        $statement = $database->getMasterLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . \implode(', ', $indexes) . ')');
 
         return new MutationQuery($database->getAlias(), $statement);
     }

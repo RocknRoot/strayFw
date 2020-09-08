@@ -20,13 +20,13 @@ class Mapping
      * @static
      * @var array[]
      */
-    protected static $mappings = array();
+    protected static array $mappings = array();
 
     /**
      * Register a new mapping.
      *
      * @static
-     * @param array $config mapping configuration
+     * @param mixed[] $config mapping configuration
      */
     public static function registerMapping(array $config) : void
     {
@@ -70,13 +70,13 @@ class Mapping
     /**
      * Check the validation of mapping configuration.
      *
-     * @param  array  $config mapping configuration
-     * @throws BadUse if there's no name in mapping configuration
-     * @throws BadUse if there's no schema in mapping configuration
-     * @throws BadUse if there's no provider in mapping configuration
-     * @throws BadUse if there's no models in mapping configuration
-     * @throws BadUse if there's no models.path in mapping configuration
-     * @throws BadUse if there's no models.namespace in mapping configuration
+     * @param  mixed[] $config mapping configuration
+     * @throws BadUse  if there's no name in mapping configuration
+     * @throws BadUse  if there's no schema in mapping configuration
+     * @throws BadUse  if there's no provider in mapping configuration
+     * @throws BadUse  if there's no models in mapping configuration
+     * @throws BadUse  if there's no models.path in mapping configuration
+     * @throws BadUse  if there's no models.namespace in mapping configuration
      */
     private static function validateConfig(array $config) : void
     {

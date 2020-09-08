@@ -23,7 +23,7 @@ abstract class Twig
      * @static
      * @var \Twig\Environment[]
      */
-    protected static $environments = array();
+    protected static array $environments = array();
 
     /**
      * Registered extensions.
@@ -31,7 +31,7 @@ abstract class Twig
      * @static
      * @var \Twig\Extension\ExtensionInterface[]
      */
-    protected static $extensions = array();
+    protected static array $extensions = array();
 
     /**
      * Registered functions.
@@ -39,7 +39,7 @@ abstract class Twig
      * @static
      * @var callable[]
      */
-    protected static $functions = array();
+    protected static array $functions = array();
 
     /**
      * Get environment for specified templates directory.
@@ -54,30 +54,30 @@ abstract class Twig
     public static function getEnv(string $dir) : \Twig\Environment
     {
         if (isset(self::$environments[$dir]) === false) {
-            $dir = rtrim($dir, '/') . '/';
-            if (is_dir($dir) === false) {
+            $dir = \rtrim($dir, '/') . '/';
+            if (\is_dir($dir) === false) {
                 throw new InvalidDirectory('invalid templates directory "' . $dir . '"');
             }
             $settings = Config::getSettings();
             if (empty($settings['tmp']) === true) {
                 throw new BadUse('tmp directory hasn\'t been defined in installation settings');
             }
-            $tmp = rtrim($settings['tmp'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $tmp = \rtrim($settings['tmp'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
             if ($tmp[0] != DIRECTORY_SEPARATOR) {
-                $tmp = constant('STRAY_PATH_ROOT') . $tmp;
+                $tmp = \constant('STRAY_PATH_ROOT') . $tmp;
             }
-            if (is_dir($tmp . 'twig_compil/') == false) {
-                if (mkdir($tmp . 'twig_compil') === false) {
+            if (\is_dir($tmp . 'twig_compil/') == false) {
+                if (\mkdir($tmp . 'twig_compil') === false) {
                     throw new BadUse('tmp directory doesn\'t seem to be writable');
                 }
             }
             $loader = new \Twig\Loader\FilesystemLoader($dir);
             $env = new \Twig\Environment($loader, array(
                 'cache' => $tmp . 'twig_compil',
-                'debug' => (constant('STRAY_ENV') === 'development')
+                'debug' => (\constant('STRAY_ENV') === 'development')
             ));
             self::$environments[$dir] = $env;
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 self::$environments[$dir]->addExtension(new \Twig\Extension\DebugExtension());
             }
             self::$environments[$dir]->addFunction(new \Twig_Function('tr', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'tr']));

@@ -13,31 +13,23 @@ abstract class Query
 {
     /**
      * Associated database name.
-     *
-     * @var string
      */
-    protected $database;
+    protected string $database;
 
     /**
      * Query parameters.
-     *
-     * @var mixed[]
      */
-    protected $parameters;
+    protected array $parameters;
 
     /**
      * PDO statement.
-     *
-     * @var \PDOStatement
      */
-    protected $statement;
+    protected \PDOStatement $statement;
 
     /**
      * PDO error info.
-     *
-     * @var null|array
      */
-    protected $errorInfo;
+    protected ?array $errorInfo = null;
 
     /**
      * Construct a new empty query.
@@ -94,7 +86,7 @@ abstract class Query
      */
     public function getErrorState() : ?string
     {
-        if (is_array($this->errorInfo) === false) {
+        if (\is_array($this->errorInfo) === false) {
             return null;
         }
 
@@ -108,7 +100,7 @@ abstract class Query
      */
     public function getErrorMessage() : ?string
     {
-        if (is_array($this->errorInfo) === false) {
+        if (\is_array($this->errorInfo) === false) {
             return null;
         }
 

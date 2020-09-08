@@ -16,16 +16,14 @@ abstract class Enum
     /**
      * Keys and values as an associative array.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected static $array;
+    protected static ?array $array = null;
 
     /**
      * Enum value.
-     *
-     * @var string
      */
-    protected $value;
+    protected string $value;
 
     /**
      * Creates a new enum with specified value.
@@ -66,9 +64,8 @@ abstract class Enum
      * Set current enum value.
      *
      * @param  string $v new value
-     * @return string
      */
-    public function setValue(string $v) : string
+    public function setValue(string $v) : void
     {
         if (static::isValid($v) === false) {
             throw new BadUse('"' . $v . '" is not recognized as a possible value');
@@ -79,7 +76,7 @@ abstract class Enum
     /**
      * Return keys and values as an associative array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public static function toArray() : array
     {
@@ -88,7 +85,7 @@ abstract class Enum
             $consts = $ref->getConstants();
             static::$array = array();
             foreach ($consts as $key => $value) {
-                if (stripos($key, 'VALUE_') === 0) {
+                if (\stripos($key, 'VALUE_') === 0) {
                     static::$array[$key] = $value;
                 }
             }
@@ -105,6 +102,6 @@ abstract class Enum
      */
     public static function isValid(string $value) : bool
     {
-        return in_array($value, static::toArray());
+        return \in_array($value, static::toArray());
     }
 }

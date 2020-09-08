@@ -27,7 +27,7 @@ class AddTable extends Mutation
      * @throws InvalidSchemaDefinition if a model has no field
      * @return MutationQuery           $statement prepared query
      */
-    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
+    public static function statement(GlobalDatabase $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
     {
         $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {
@@ -48,12 +48,12 @@ class AddTable extends Mutation
             }
             $sql .= ', ';
         }
-        if (count($primary) > 0) {
-            $sql .= 'CONSTRAINT pk_' . $tableName . ' PRIMARY KEY (' . implode(', ', $primary) . '), ';
+        if (\count($primary) > 0) {
+            $sql .= 'CONSTRAINT pk_' . $tableName . ' PRIMARY KEY (' . \implode(', ', $primary) . '), ';
         } else {
             Logger::get()->warning('table "' . $tableName . '" has no primary key');
         }
-        $sql = substr($sql, 0, -2) . ')';
+        $sql = \substr($sql, 0, -2) . ')';
         $statement = $database->getMasterLink()->prepare($sql);
 
         return new MutationQuery($database->getAlias(), $statement);

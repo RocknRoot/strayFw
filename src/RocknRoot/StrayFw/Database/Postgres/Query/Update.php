@@ -16,38 +16,30 @@ class Update extends Query
 {
     /**
      * Update clause.
-     *
-     * @var string
      */
-    protected $update;
+    protected ?string $update = null;
 
     /**
      * Set clause.
      *
-     * @var null|string
+     * @var null|mixed|string
      */
     protected $set;
 
     /**
      * Where clause.
-     *
-     * @var Condition
      */
-    protected $where;
+    protected ?\RocknRoot\StrayFw\Database\Postgres\Query\Condition $where = null;
 
     /**
      * Order by clause.
-     *
-     * @var null|string
      */
-    protected $orderBy;
+    protected ?string $orderBy = null;
 
     /**
      * Limit clause.
-     *
-     * @var string
      */
-    protected $limit;
+    protected ?string $limit = null;
 
     /**
      * Execute the constructed query.
@@ -62,11 +54,11 @@ class Update extends Query
         }
         foreach ($this->parameters as $name => $value) {
             $type = \PDO::PARAM_STR;
-            if (is_int($value) === true) {
+            if (\is_int($value) === true) {
                 $type = \PDO::PARAM_INT;
-            } elseif (is_bool($value) === true) {
+            } elseif (\is_bool($value) === true) {
                 $type = \PDO::PARAM_BOOL;
-            } elseif (is_null($value) === true) {
+            } elseif (\is_null($value) === true) {
                 $type = \PDO::PARAM_NULL;
             }
             $this->statement->bindValue($name, $value, $type);
@@ -75,7 +67,7 @@ class Update extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('update query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 throw new AppException('update query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
@@ -92,7 +84,7 @@ class Update extends Query
     public function toSql() : string
     {
         if (empty($this->update) === true) {
-            throw new BadUse('update clause has not been defined (' . print_r($this, true) . ')');
+            throw new BadUse('update clause has not been defined (' . \print_r($this, true) . ')');
         }
         $sql = 'UPDATE ' . $this->update . ' ';
         $sql .= 'SET ' . $this->set . ' ';
@@ -116,7 +108,7 @@ class Update extends Query
      * @param  string $table table real name
      * @return Update this
      */
-    public function update(string $table) : Update
+    public function update(string $table) : self
     {
         $this->update = $table;
 
@@ -126,23 +118,23 @@ class Update extends Query
     /**
      * Set set clause.
      *
-     * @param  array|string $set set clause
-     * @return Update       this
+     * @param  mixed[]|string $set set clause
+     * @return Update         this
      */
-    public function set($set) : Update
+    public function set(array $set) : self
     {
-        if (is_array($set) === true) {
+        if (\is_array($set) === true) {
             $this->set = '';
             foreach ($set as $name => $value) {
-                $pos = stripos($name, '.');
+                $pos = \stripos($name, '.');
                 if ($pos !== false) {
-                    $this->set .= substr($name, $pos + 1);
+                    $this->set .= \substr($name, $pos + 1);
                 } else {
                     $this->set .= $name;
                 }
                 $this->set .= ' = ' . $value . ', ';
             }
-            $this->set = substr($this->set, 0, -2);
+            $this->set = \substr($this->set, 0, -2);
         } else {
             $this->set = $set;
         }
@@ -153,10 +145,10 @@ class Update extends Query
     /**
      * Set where clause.
      *
-     * @param  array|Condition|string $where where clause
-     * @return Update                 this
+     * @param  mixed[]|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
+     * @return Update                                                              this
      */
-    public function where($where) : Update
+    public function where(array $where) : self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -169,14 +161,14 @@ class Update extends Query
      * @param  array|string $orderBy order by clause
      * @return Update       this
      */
-    public function orderBy($orderBy) : Update
+    public function orderBy($orderBy) : self
     {
-        if (is_array($orderBy) === true) {
+        if (\is_array($orderBy) === true) {
             $this->orderBy = '';
             foreach ($orderBy as $key => $elem) {
                 $this->orderBy .= $key . ' ' . $elem . ', ';
             }
-            $this->orderBy = substr($this->orderBy, 0, -2);
+            $this->orderBy = \substr($this->orderBy, 0, -2);
         } else {
             $this->orderBy = $orderBy;
         }
@@ -190,7 +182,7 @@ class Update extends Query
      * @param  string $limit limit clause
      * @return Update this
      */
-    public function limit(string $limit) : Update
+    public function limit(string $limit) : self
     {
         $this->limit = $limit;
 

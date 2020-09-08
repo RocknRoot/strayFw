@@ -22,23 +22,23 @@ class Console
         $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);
         $rows = [];
         $routes = Http::getRoutes();
-        usort($routes, function (array $a, array $b) {
+        \usort($routes, function (array $a, array $b): int {
             if ($a['subdomain'] != $b['subdomain']) {
-                return strcmp($a['subdomain'], $b['subdomain']);
+                return \strcmp($a['subdomain'], $b['subdomain']);
             }
             if ($a['path'] != $a['path']) {
-                return strcmp($a['path'], $b['path']);
+                return \strcmp($a['path'], $b['path']);
             }
 
-            return strcmp($a['method'], $b['method']);
+            return \strcmp($a['method'], $b['method']);
         });
         foreach ($routes as $route) {
             $rows[] = [
                 $route['type'],
                 $route['subdomain'],
                 $route['method'],
-                empty($route['uri']) === false ? '/' . ltrim(rtrim($route['uri'], '/'), '/') . $route['path'] : $route['path'],
-                $route['action'][0] == '\\' ? $route['action'] : rtrim($route['namespace'], '\\') . '\\' . $route['action'],
+                empty($route['uri']) === false ? '/' . \ltrim(\rtrim($route['uri'], '/'), '/') . $route['path'] : $route['path'],
+                $route['action'][0] == '\\' ? $route['action'] : \rtrim($route['namespace'], '\\') . '\\' . $route['action'],
             ];
         }
         $table->setRows($rows);

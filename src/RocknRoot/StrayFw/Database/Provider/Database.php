@@ -14,8 +14,8 @@ interface Database
     /**
      * Get DSN string for PDO according to specified info.
      *
-     * @param  array  $info database info
-     * @return string DSN string
+     * @param  mixed[] $info database info
+     * @return string  DSN string
      */
     public function getDsn(array $info) : string;
 

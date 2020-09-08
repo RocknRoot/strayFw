@@ -21,25 +21,22 @@ abstract class Bootstrap
      * True if class has already been initialized.
      *
      * @static
-     * @var bool
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
      * Namespace-path hash.
      *
      * @static
-     * @var string[]
      */
-    protected static $namespaces;
+    protected static ?array $namespaces = null;
 
     /**
      * Registered applications.
      *
      * @static
-     * @var string[]
      */
-    protected static $applications;
+    protected static ?array $applications = null;
 
     /**
      * Initialize properties and register autoloader static method.
@@ -51,7 +48,7 @@ abstract class Bootstrap
         if (self::$isInit === false) {
             self::$namespaces = array();
             self::$applications = array();
-            spl_autoload_register(__CLASS__ . '::loadClass');
+            \spl_autoload_register(self::class . '::loadClass');
             self::$isInit = true;
             Console::init();
             Console::prefix('\\RocknRoot\\StrayFw\\Console');
@@ -67,7 +64,7 @@ abstract class Bootstrap
             Console::prefix('\\RocknRoot\\StrayFw\\Http');
             Console::route('http/routing/list', 'http/routing/list', 'list registered routes', 'Console.routes');
             Http::init();
-            if (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true && constant('STRAY_ENV') === 'development') {
+            if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true && \constant('STRAY_ENV') === 'development') {
                 Debug\ErrorPage::init();
             }
         }
@@ -88,28 +85,28 @@ abstract class Bootstrap
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
         }
         $fileName = null;
-        if (($namespacePos = strripos($className, '\\')) !== false) {
+        if (($namespacePos = \strripos($className, '\\')) !== false) {
             $namespacePos = (int) $namespacePos; // re: https://github.com/phpstan/phpstan/issues/647
-            $namespace = substr($className, 0, $namespacePos);
+            $namespace = \substr($className, 0, $namespacePos);
             $subNamespaces = array();
             while ($fileName === null && $namespace != null) {
                 if (isset(self::$namespaces[$namespace]) === false) {
-                    $subNamespacePos = strripos($namespace, '\\');
+                    $subNamespacePos = \strripos($namespace, '\\');
                     $subNamespacePos = (int) $subNamespacePos; // re: https://github.com/phpstan/phpstan/issues/647
-                    $subNamespaces[] = substr($namespace, $subNamespacePos);
-                    $namespace = substr($namespace, 0, $subNamespacePos);
+                    $subNamespaces[] = \substr($namespace, $subNamespacePos);
+                    $namespace = \substr($namespace, 0, $subNamespacePos);
                 } else {
                     $fileName = self::$namespaces[$namespace];
                 }
             }
             if ($fileName === null) {
-                throw new UnknownNamespace('can\'t find namespace "' . substr($className, 0, $namespacePos) . '"');
+                throw new UnknownNamespace('can\'t find namespace "' . \substr($className, 0, $namespacePos) . '"');
             }
-            $fileName = self::$namespaces[$namespace] . str_replace('\\', DIRECTORY_SEPARATOR, implode('', array_reverse($subNamespaces)));
-            $className = substr($className, $namespacePos + 1);
+            $fileName = self::$namespaces[$namespace] . \str_replace('\\', DIRECTORY_SEPARATOR, \implode('', \array_reverse($subNamespaces)));
+            $className = \substr($className, $namespacePos + 1);
         }
         if ($fileName != null) {
-            $fileName .= DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+            $fileName .= DIRECTORY_SEPARATOR . \str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
             require $fileName;
         }
     }
@@ -124,12 +121,12 @@ abstract class Bootstrap
      */
     public static function registerApp(string $namespace, string $path = null)
     {
-        $namespace = rtrim($namespace, '\\');
+        $namespace = \rtrim($namespace, '\\');
         if ($path == null) {
-            $path = constant('STRAY_PATH_APPS') . str_replace(
+            $path = \constant('STRAY_PATH_APPS') . \str_replace(
                 '_',
                 DIRECTORY_SEPARATOR,
-                str_replace('\\', DIRECTORY_SEPARATOR, $namespace)
+                \str_replace('\\', DIRECTORY_SEPARATOR, $namespace)
             );
         }
         self::$namespaces[$namespace] = $path;
@@ -150,16 +147,16 @@ abstract class Bootstrap
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
         }
         foreach (self::$namespaces as $name => $path) {
-            if (is_readable($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
+            if (\is_readable($path . DIRECTORY_SEPARATOR . 'init.php') === true) {
                 require $path . DIRECTORY_SEPARATOR . 'init.php';
-            } elseif (stripos($path, 'vendor') === false || stripos($path, 'vendor') == strlen($path) - strlen('vendor')) {
+            } elseif (\stripos($path, 'vendor') === false || \stripos($path, 'vendor') == \strlen($path) - \strlen('vendor')) {
                 Logger::get()->error('namespace "' . $name . '" doesn\'t have an init.php');
             }
         }
-        if (defined('STRAY_IS_CLI') === true && constant('STRAY_IS_CLI') === true) {
+        if (\defined('STRAY_IS_CLI') === true && \constant('STRAY_IS_CLI') === true) {
             Console::run();
-        } elseif (defined('STRAY_IS_HTTP') === true && constant('STRAY_IS_HTTP') === true) {
-            if (count(self::$applications) == 0) {
+        } elseif (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true) {
+            if (\count(self::$applications) == 0) {
                 throw new BadUse('no application has been registered');
             }
             Http::run();

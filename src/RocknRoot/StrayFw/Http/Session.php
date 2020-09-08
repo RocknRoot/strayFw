@@ -17,9 +17,8 @@ abstract class Session
      * True if class has already been initialized.
      *
      * @static
-     * @var bool
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
      * Initialize session.
@@ -29,13 +28,13 @@ abstract class Session
     public static function init() : void
     {
         if (self::$isInit === false) {
-            if (session_id() == null) {
+            if (\session_id() == null) {
                 $settings = Config::getSettings();
-                session_name(isset($settings['session_name']) === true ? $settings['session_name'] : 'stray_session');
+                \session_name(isset($settings['session_name']) === true ? $settings['session_name'] : 'stray_session');
                 if (isset($settings['session_cookie_domain']) === true) {
-                    session_set_cookie_params(0, '/', $settings['session_cookie_domain']);
+                    \session_set_cookie_params(0, '/', $settings['session_cookie_domain']);
                 }
-                session_start();
+                \session_start();
             }
             self::$isInit = true;
         }
@@ -45,8 +44,8 @@ abstract class Session
      * Get a session variable value by its key.
      *
      * @static
-     * @param  string $name key
-     * @return mixed
+     * @param  string     $name key
+     * @return null|mixed
      */
     public static function get(string $name)
     {
@@ -61,10 +60,9 @@ abstract class Session
      * Check if a session variable is set.
      *
      * @static
-     * @param  string $name key
-     * @return bool
+     * @param string $name key
      */
-    public static function has(string $name)
+    public static function has(string $name): bool
     {
         return isset($_SESSION[$name]);
     }
@@ -76,7 +74,7 @@ abstract class Session
      * @param string $name  key
      * @param mixed  $value new value
      */
-    public static function set(string $name, $value)
+    public static function set(string $name, $value) : void
     {
         $_SESSION[$name] = $value;
     }
@@ -87,7 +85,7 @@ abstract class Session
      * @static
      * @param string $name key
      */
-    public static function delete(string $name)
+    public static function delete(string $name) : void
     {
         unset($_SESSION[$name]);
     }
@@ -97,9 +95,9 @@ abstract class Session
      *
      * @static
      */
-    public static function clear()
+    public static function clear() : void
     {
-        session_unset();
-        session_destroy();
+        \session_unset();
+        \session_destroy();
     }
 }

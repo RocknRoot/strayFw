@@ -15,7 +15,7 @@ class Controllers
      * @static
      * @var object[]
      */
-    protected static $controllers = array();
+    protected static array $controllers = array();
 
     /**
      * Get a controller, creating one if it doesn't exist already.
@@ -24,7 +24,7 @@ class Controllers
      * @param  string $class controller class with namespace
      * @return object controller
      */
-    public static function get(string $class)
+    public static function get(string $class): object
     {
         if (isset(self::$controllers[$class]) === false) {
             self::$controllers[$class] = new $class();

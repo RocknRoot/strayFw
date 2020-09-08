@@ -16,22 +16,18 @@ class Insert extends Query
 {
     /**
      * Into clause.
-     *
-     * @var string
      */
-    protected $into;
+    protected ?string $into = null;
 
     /**
      * Values clause.
-     *
-     * @var array<int, null|string>
      */
-    protected $values;
+    protected ?array $values = null;
 
     /**
      * Returning clause.
      *
-     * @var string
+     * @var null|mixed|string
      */
     protected $returning;
 
@@ -48,11 +44,11 @@ class Insert extends Query
         }
         foreach ($this->parameters as $name => $value) {
             $type = \PDO::PARAM_STR;
-            if (is_int($value) === true) {
+            if (\is_int($value) === true) {
                 $type = \PDO::PARAM_INT;
-            } elseif (is_bool($value) === true) {
+            } elseif (\is_bool($value) === true) {
                 $type = \PDO::PARAM_BOOL;
-            } elseif (is_null($value) === true) {
+            } elseif (\is_null($value) === true) {
                 $type = \PDO::PARAM_NULL;
             }
             $this->statement->bindValue($name, $value, $type);
@@ -61,7 +57,7 @@ class Insert extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 throw new AppException('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
@@ -78,7 +74,7 @@ class Insert extends Query
     public function toSql() : string
     {
         if (empty($this->into) === true) {
-            throw new BadUse('into clause has not been defined (' . print_r($this, true) . ')');
+            throw new BadUse('into clause has not been defined (' . \print_r($this, true) . ')');
         }
         $sql = 'INSERT INTO ' . $this->into . ' ';
 
@@ -104,7 +100,7 @@ class Insert extends Query
      * @param  string $table table real name
      * @return Insert this
      */
-    public function into(string $table) : Insert
+    public function into(string $table) : self
     {
         $this->into = $table;
 
@@ -114,28 +110,28 @@ class Insert extends Query
     /**
      * Set values clause.
      *
-     * @param  array|string $values values clause
-     * @return Insert       this
+     * @param  mixed[]|string $values values clause
+     * @return Insert         this
      */
-    public function values($values) : Insert
+    public function values(array $values) : self
     {
-        if (is_array($values) === true) {
-            if (is_numeric(key($values)) === true) {
+        if (\is_array($values) === true) {
+            if (\is_numeric(\key($values)) === true) {
                 $this->values = array(
                     null,
-                    implode(', ', $values)
+                    \implode(', ', $values)
                 );
             } else {
                 $this->values = array('', '');
                 foreach ($values as $key => $value) {
-                    if (stripos($key, '.') !== false) {
-                        $key = substr($key, stripos($key, '.') + 1);
+                    if (\stripos($key, '.') !== false) {
+                        $key = \substr($key, \stripos($key, '.') + 1);
                     }
                     $this->values[0] .= $key . ', ';
                     $this->values[1] .= $value . ', ';
                 }
-                $this->values[0] = substr($this->values[0], 0, -2);
-                $this->values[1] = substr($this->values[1], 0, -2);
+                $this->values[0] = \substr($this->values[0], 0, -2);
+                $this->values[1] = \substr($this->values[1], 0, -2);
             }
         } else {
             $this->values = array(
@@ -150,13 +146,13 @@ class Insert extends Query
     /**
      * Set returning clause.
      *
-     * @param  array|string $returning returning clause
-     * @return Insert       this
+     * @param  mixed[]|string $returning returning clause
+     * @return Insert         this
      */
-    public function returning($returning) : Insert
+    public function returning(array $returning) : self
     {
-        if (is_array($returning) === true) {
-            $this->returning = implode(', ', $returning);
+        if (\is_array($returning) === true) {
+            $this->returning = \implode(', ', $returning);
         } else {
             $this->returning = $returning;
         }

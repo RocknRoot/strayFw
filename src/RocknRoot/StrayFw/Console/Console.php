@@ -17,37 +17,28 @@ abstract class Console
      * True if class has already been initialized.
      *
      * @static
-     * @var bool
      */
-    private static $isInit = false;
+    private static bool $isInit = false;
 
     /**
      * Current namespace prefix.
-     *
-     * @var string
      */
-    protected static $namespace;
+    protected static ?string $namespace = null;
 
     /**
      * Registed routes.
-     *
-     * @var array[]
      */
-    protected static $routes;
+    protected static ?array $routes = null;
 
     /**
      * Current request.
-     *
-     * @var Request
      */
-    protected static $request;
+    protected static ?\RocknRoot\StrayFw\Console\Request $request = null;
 
     /**
      * Current controllers.
-     *
-     * @var object[]
      */
-    protected static $controllers;
+    protected static ?array $controllers = null;
 
     /**
      * Initialize inner states according.
@@ -184,7 +175,7 @@ abstract class Console
      *
      * @return array[] all routes
      */
-    public static function getRoutes() : array
+    public static function getRoutes() : ?array
     {
         return self::$routes;
     }

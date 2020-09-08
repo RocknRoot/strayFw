@@ -19,7 +19,7 @@ class DeleteEnum extends Mutation
      * @param  string        $type     type name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $type) : MutationQuery
+    public static function statement(GlobalDatabase $database, string $type) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('DROP TYPE IF EXISTS ' . $type);
 

@@ -18,36 +18,34 @@ abstract class Migration
     /**
      * Mapping definition.
      *
-     * @var array
+     * @var mixed[]
      */
-    protected $mapping;
+    protected array $mapping;
 
     /**
      * Database.
-     *
-     * @var Database
      */
-    protected $database;
+    protected \RocknRoot\StrayFw\Database\Database $database;
 
     /**
      * New schema definition, current one or next migration's one.
      *
-     * @var array
+     * @var mixed[]
      */
-    protected $nextSchema;
+    protected array $nextSchema;
 
     /**
      * Old schema definition, current migration's one.
      *
-     * @var array
+     * @var mixed[]
      */
-    protected $prevSchema;
+    protected array $prevSchema;
 
     /**
      * Constructor.
      *
-     * @param array  $next new schema definition
-     * @param string $path migration path
+     * @param mixed[] $next new schema definition
+     * @param string  $path migration path
      */
     public function __construct(array $next, string $path)
     {

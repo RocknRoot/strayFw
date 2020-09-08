@@ -20,10 +20,8 @@ abstract class Model extends ProviderModel
 {
     /**
      * Aliases of modified columns values.
-     *
-     * @var array<string, null|scalar>
      */
-    protected $modified;
+    protected ?array $modified = null;
 
     /**
      * Save the model. Delete if deletionFlag is true.
@@ -36,26 +34,26 @@ abstract class Model extends ProviderModel
         if ($this->new === false) {
             if ($this->deletionFlag === true) {
                 $status = $this->delete();
-            } elseif (count($this->modified) > 0) {
+            } elseif (\count($this->modified) > 0) {
                 $updateQuery = new Update($this->getDatabaseName());
                 $updateQuery->update($this->getTableName());
 
                 $where = array();
                 foreach ($this->getPrimary() as $primary) {
-                    $field = $this->{'field' . ucfirst($primary)};
-                    $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
-                    $where[$realName] = ':primary' . ucfirst($primary);
-                    $updateQuery->bind('primary' . ucfirst($primary), $field['value']);
+                    $field = $this->{'field' . \ucfirst($primary)};
+                    $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($primary)));
+                    $where[$realName] = ':primary' . \ucfirst($primary);
+                    $updateQuery->bind('primary' . \ucfirst($primary), $field['value']);
                 }
                 $updateQuery->where($where);
 
                 $set = array();
                 foreach ($this->modified as $key => $value) {
                     if ($value === true) {
-                        $field = $this->{'field' . ucfirst($key)};
-                        $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                        $set[$realName] = ':field' . ucfirst($key);
-                        $updateQuery->bind(':field' . ucfirst($key), $field['value']);
+                        $field = $this->{'field' . \ucfirst($key)};
+                        $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                        $set[$realName] = ':field' . \ucfirst($key);
+                        $updateQuery->bind(':field' . \ucfirst($key), $field['value']);
                     }
                 }
                 $updateQuery->set($set);
@@ -71,19 +69,19 @@ abstract class Model extends ProviderModel
 
                 $returning = array();
                 foreach ($this->getPrimary() as $primary) {
-                    $field = $this->{'field' . ucfirst($primary)};
-                    $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
+                    $field = $this->{'field' . \ucfirst($primary)};
+                    $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($primary)));
                     $returning[] = $realName;
                 }
                 $insertQuery->returning($returning);
 
                 $values = array();
                 foreach ($this->getAllFieldsAliases() as $name) {
-                    $field = $this->{'field' . ucfirst($name)};
+                    $field = $this->{'field' . \ucfirst($name)};
                     if (isset($field['value']) === true) {
-                        $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($name)));
-                        $values[$realName] = ':field' . ucfirst($name);
-                        $insertQuery->bind('field' . ucfirst($name), $field['value']);
+                        $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
+                        $values[$realName] = ':field' . \ucfirst($name);
+                        $insertQuery->bind('field' . \ucfirst($name), $field['value']);
                     }
                 }
                 $insertQuery->values($values);
@@ -93,11 +91,11 @@ abstract class Model extends ProviderModel
                 if ($status === true) {
                     $this->modified = array();
                     $rows = $insertQuery->getStatement()->fetch(\PDO::FETCH_ASSOC);
-                    $imax = count($rows);
+                    $imax = \count($rows);
                     for ($i = 0; $i < $imax; $i++) {
-                        $field = &$this->{'field' . ucfirst($this->getPrimary()[$i])};
-                        $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($this->getPrimary()[$i])));
-                        $realName = substr($realName, stripos($realName, '.') + 1);
+                        $field = &$this->{'field' . \ucfirst($this->getPrimary()[$i])};
+                        $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($this->getPrimary()[$i])));
+                        $realName = \substr($realName, \stripos($realName, '.') + 1);
                         $field['value'] = $rows[$realName];
                     }
                     $this->new = false;
@@ -121,10 +119,10 @@ abstract class Model extends ProviderModel
             $deleteQuery->from($this->getTableName());
             $where = array();
             foreach ($this->getPrimary() as $primary) {
-                $field = $this->{'field' . ucfirst($primary)};
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($primary)));
-                $where[$realName] = ':primary' . ucfirst($primary);
-                $deleteQuery->bind('primary' . ucfirst($primary), $field['value']);
+                $field = $this->{'field' . \ucfirst($primary)};
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($primary)));
+                $where[$realName] = ':primary' . \ucfirst($primary);
+                $deleteQuery->bind('primary' . \ucfirst($primary), $field['value']);
             }
             $deleteQuery->where($where);
 
@@ -143,7 +141,7 @@ abstract class Model extends ProviderModel
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
-            $field = $this->{'field' . ucfirst($name)};
+            $field = $this->{'field' . \ucfirst($name)};
             $values[$name] = $field['value'];
         }
 
@@ -159,8 +157,8 @@ abstract class Model extends ProviderModel
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
-            $field = $this->{'field' . ucfirst($name)};
-            $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($name)));
+            $field = $this->{'field' . \ucfirst($name)};
+            $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
             $values[$realName] = $field['value'];
         }
 
@@ -170,7 +168,7 @@ abstract class Model extends ProviderModel
     /**
      * Fetch one entity satisfying the specified conditions.
      *
-     * @param  array            $conditions where conditions
+     * @param  mixed[]          $conditions where conditions
      * @param  array            $orderBy    order clause
      * @param  bool             $critical   if true, will be executed on write server
      * @return null|false|Model model instance, null if nothing found, false on error
@@ -181,20 +179,20 @@ abstract class Model extends ProviderModel
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
         $selectQuery->from($entity->getTableName());
-        if (count($conditions) > 0) {
+        if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . \ucfirst($key);
+                $selectQuery->bind('where' . \ucfirst($key), $value);
             }
             $selectQuery->where($where);
         }
-        if (is_array($orderBy) && count($orderBy) > 0) {
+        if (\is_array($orderBy) && \count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $orders[$realName] = strtoupper(ucfirst($value));
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = \strtoupper(\ucfirst($value));
             }
             $selectQuery->orderBy($orders);
         }
@@ -213,7 +211,7 @@ abstract class Model extends ProviderModel
     /**
      * Fetch one row satisfying the specified conditions.
      *
-     * @param  array            $conditions where conditions
+     * @param  mixed[]          $conditions where conditions
      * @param  array            $orderBy    order clause
      * @param  bool             $critical   if true, will be executed on write server
      * @return null|array|false row data, null if nothing found, false on error
@@ -224,20 +222,20 @@ abstract class Model extends ProviderModel
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
         $selectQuery->from($entity->getTableName());
-        if (count($conditions) > 0) {
+        if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . \ucfirst($key);
+                $selectQuery->bind('where' . \ucfirst($key), $value);
             }
             $selectQuery->where($where);
         }
-        if (is_array($orderBy) && count($orderBy) > 0) {
+        if (\is_array($orderBy) && \count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $orders[$realName] = strtoupper(ucfirst($value));
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = \strtoupper(\ucfirst($value));
             }
             $selectQuery->orderBy($orders);
         }
@@ -246,7 +244,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetch();
-        if (is_array($data) === false) {
+        if (\is_array($data) === false) {
             return null;
         }
 
@@ -256,7 +254,7 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all entities satisfying the specified conditions.
      *
-     * @param  array            $conditions where conditions
+     * @param  mixed[]          $conditions where conditions
      * @param  array            $orderBy    order clause
      * @param  bool             $critical   if true, will be executed on write server
      * @return null|array|false rows data, null if nothing found, false on error
@@ -268,20 +266,20 @@ abstract class Model extends ProviderModel
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
         $selectQuery->from($entity->getTableName());
-        if (count($conditions) > 0) {
+        if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . \ucfirst($key);
+                $selectQuery->bind('where' . \ucfirst($key), $value);
             }
             $selectQuery->where($where);
         }
-        if (is_array($orderBy) && count($orderBy) > 0) {
+        if (\is_array($orderBy) && \count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $orders[$realName] = strtoupper(ucfirst($value));
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = \strtoupper(\ucfirst($value));
             }
             $selectQuery->orderBy($orders);
         }
@@ -289,7 +287,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $res = $selectQuery->fetchAll();
-        if (is_array($res) === false) {
+        if (\is_array($res) === false) {
             return null;
         }
         $data = [];
@@ -303,31 +301,31 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all rows satisfying the specified conditions.
      *
-     * @param  array            $conditions where conditions
+     * @param  mixed[]          $conditions where conditions
      * @param  array            $orderBy    order clause
      * @param  bool             $critical   if true, will be executed on write server
      * @return null|array|false rows data, null if nothing found, false on error
      */
-    public static function fetchArrays(array $conditions, array $orderBy = null, bool $critical = false)
+    public static function fetchArrays(array $conditions, ?array $orderBy = null, bool $critical = false)
     {
         $entity = new static();
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select((array) array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
+        $selectQuery->select((array) \array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
         $selectQuery->from($entity->getTableName());
-        if (count($conditions) > 0) {
+        if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . \ucfirst($key);
+                $selectQuery->bind('where' . \ucfirst($key), $value);
             }
             $selectQuery->where($where);
         }
-        if (is_array($orderBy) && count($orderBy) > 0) {
+        if (\is_array($orderBy) && \count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $orders[$realName] = strtoupper(ucfirst($value));
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $orders[$realName] = \strtoupper(\ucfirst($value));
             }
             $selectQuery->orderBy($orders);
         }
@@ -335,7 +333,7 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetchAll();
-        if (is_array($data) === false) {
+        if (\is_array($data) === false) {
             return null;
         }
 
@@ -345,9 +343,9 @@ abstract class Model extends ProviderModel
     /**
      * Count rows satisfying the specified conditions.
      *
-     * @param  array     $conditions where conditions
-     * @param  bool      $critical   if true, will be executed on write server
-     * @return false|int number of rows, false on error
+     * @param  mixed[]    $conditions where conditions
+     * @param  bool       $critical   if true, will be executed on write server
+     * @return bool|mixed number of rows, false on error
      */
     public static function countRows(array $conditions, bool $critical = false)
     {
@@ -355,12 +353,12 @@ abstract class Model extends ProviderModel
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select([ 'count' => 'COUNT(*)' ]);
         $selectQuery->from($entity->getTableName());
-        if (count($conditions) > 0) {
+        if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
-                $realName = constant(get_called_class() . '::FIELD_' . strtoupper(Helper::codifyName($key)));
-                $where[$realName] = ':where' . ucfirst($key);
-                $selectQuery->bind('where' . ucfirst($key), $value);
+                $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                $where[$realName] = ':where' . \ucfirst($key);
+                $selectQuery->bind('where' . \ucfirst($key), $value);
             }
             $selectQuery->where($where);
         }

@@ -20,11 +20,11 @@ abstract class TwigHelper
      * Get a translation from loaded files.
      *
      * @static
-     * @param  string $key  translation key
-     * @param  array  $args translation arguments values
-     * @return string translated content
+     * @param  string   $key  translation key
+     * @param  string[] $args translation arguments values
+     * @return string   translated content
      */
-    public static function tr(string $key, array $args = array()) : string
+    public static function tr(string $key, array $args = []) : string
     {
         return Locale::translate($key, $args);
     }
@@ -33,9 +33,9 @@ abstract class TwigHelper
      * Get full tag for current language.
      *
      * @static
-     * @return string tag
+     * @return ?string tag
      */
-    public static function langFull() : string
+    public static function langFull() : ?string
     {
         return Locale::getCurrentLanguage();
     }
@@ -46,14 +46,17 @@ abstract class TwigHelper
      * @static
      * @return string primary tag
      */
-    public static function langPrimary() : string
+    public static function langPrimary() : ?string
     {
         $lang = Locale::getCurrentLanguage();
-        if (($pos = strpos($lang, '-')) !== false) {
-            $lang = substr($lang, 0, $pos);
+        if (!$lang) {
+            return null;
         }
-        if (($pos = strpos($lang, '_')) !== false) {
-            $lang = substr($lang, 0, $pos);
+        if (($pos = \strpos($lang, '-')) !== false) {
+            $lang = \substr($lang, 0, $pos);
+        }
+        if (($pos = \strpos($lang, '_')) !== false) {
+            $lang = \substr($lang, 0, $pos);
         }
         return $lang;
     }
@@ -82,7 +85,7 @@ abstract class TwigHelper
     public static function localizedDate($time, int $dateFormat, int $timeFormat) : string
     {
         if ($time === 'now') {
-            $time = time();
+            $time = \time();
         }
         $date = \IntlDateFormatter::create(Locale::getCurrentLanguage(), $dateFormat, $timeFormat);
         if ($date === false) {

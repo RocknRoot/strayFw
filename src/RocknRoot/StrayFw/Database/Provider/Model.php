@@ -14,17 +14,13 @@ abstract class Model
 {
     /**
      * False if instance has been created from existing data.
-     *
-     * @var bool
      */
-    protected $new;
+    protected bool $new;
 
     /**
      * Flag for deletion. If true, model will be deleted on save.
-     *
-     * @var bool
      */
-    protected $deletionFlag;
+    protected bool $deletionFlag;
 
     /**
      * Construct a new model.
@@ -64,7 +60,7 @@ abstract class Model
      *
      * @param bool $value new flag value
      */
-    public function setDeletionFlag(bool $value) : bool
+    public function setDeletionFlag(bool $value) : void
     {
         $this->deletionFlag = $value;
     }

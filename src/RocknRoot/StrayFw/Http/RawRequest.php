@@ -11,52 +11,42 @@ class RawRequest
 {
     /**
      * Request HTTP scheme.
-     *
-     * @var string
      */
-    protected $scheme;
+    protected string $scheme;
 
     /**
      * Requested host name.
-     *
-     * @var string
      */
-    protected $host;
+    protected string $host;
 
     /**
      * Requested sub domain.
-     *
-     * @var string
      */
-    protected $subDomain;
+    protected string $subDomain;
 
     /**
      * Requested URI.
-     *
-     * @var string
      */
-    protected $query;
+    protected string $query;
 
     /**
      * Request HTTP method.
-     *
-     * @var string
      */
-    protected $method;
+    protected string $method;
 
     /**
      * GET variables.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $getVars;
+    protected array $getVars;
 
     /**
      * POST variables.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $postVars;
+    protected array $postVars;
 
     /**
      * Body JSON content.
@@ -77,26 +67,26 @@ class RawRequest
         }
         $this->host = $_SERVER['SERVER_NAME'];
         $this->subDomain = $this->host;
-        if (preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $this->subDomain, $matches)) {
+        if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $this->subDomain, $matches)) {
             $this->subDomain = $matches['domain'];
         }
-        $this->subDomain = rtrim((string) strstr($this->host, $this->subDomain, true), '.');
-        $query = str_replace('/index.php', '', (string) $_SERVER['REQUEST_URI']);
-        if (($pos = stripos($query, '?')) !== false) {
+        $this->subDomain = \rtrim((string) \strstr($this->host, $this->subDomain, true), '.');
+        $query = \str_replace('/index.php', '', (string) $_SERVER['REQUEST_URI']);
+        if (($pos = \stripos($query, '?')) !== false) {
             $pos = (int) $pos; // re: https://github.com/phpstan/phpstan/issues/647
-            $query = substr($query, 0, $pos);
+            $query = \substr($query, 0, $pos);
         }
-        $query = rtrim($query, '/');
-        if (strlen($query) == 0) {
+        $query = \rtrim($query, '/');
+        if (\strlen($query) == 0) {
             $query = '/';
         }
         $this->query = $query;
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->getVars = $_GET;
         $this->postVars = $_POST;
-        $body = file_get_contents('php://input');
+        $body = \file_get_contents('php://input');
         if ($body) {
-            $this->jsonBodyVars = json_decode($body, true);
+            $this->jsonBodyVars = \json_decode($body, true);
         }
     }
 
@@ -153,7 +143,7 @@ class RawRequest
     /**
      * Get GET variables.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getGetVars() : array
     {
@@ -163,7 +153,7 @@ class RawRequest
     /**
      * Get POST variables.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getPostVars() : array
     {

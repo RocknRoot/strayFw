@@ -19,12 +19,12 @@ class Console
      */
     public function build(Request $request) : void
     {
-        if (count($request->getArgs()) != 1) {
+        if (\count($request->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
         } else {
             $mapping = $request->getArgs()[0];
             echo 'Are you sure you want to delete all existing tables and data for mapping "' . $mapping . '" ? [y/n] : ';
-            if (fgetc(STDIN) == 'y') {
+            if (\fgetc(STDIN) == 'y') {
                 $schema = Schema::getSchema($mapping);
                 $schema->build();
             }
@@ -42,9 +42,7 @@ class Console
         $table->setHeaders([ 'Mapping', 'Database', 'Models path' ]);
         $rows = [];
         $mappings = Mapping::getMappings();
-        usort($mappings, function (array $a, array $b) {
-            return strcmp($a['config']['name'], $b['config']['name']);
-        });
+        \usort($mappings, fn (array $a, array $b): int => \strcmp($a['config']['name'], $b['config']['name']));
         foreach ($mappings as $mapping) {
             $rows[] = [
                 $mapping['config']['name'],
@@ -63,7 +61,7 @@ class Console
      */
     public function generate(Request $request) : void
     {
-        if (count($request->getArgs()) != 1) {
+        if (\count($request->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/generate mapping_name' . PHP_EOL;
         } else {
             $mapping = $request->getArgs()[0];

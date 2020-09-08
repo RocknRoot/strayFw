@@ -24,7 +24,7 @@ class AddForeignKey extends Mutation
      * @param  string        $foreignTableName foreign table real name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName) : MutationQuery
+    public static function statement(GlobalDatabase $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName) : MutationQuery
     {
         $tableDefinition = $definition[$modelName];
         $foreignDefinition = $tableDefinition['links'][$foreignName];
@@ -43,12 +43,12 @@ class AddForeignKey extends Mutation
                 $to[] = Helper::codifyName($foreignDefinition['model']) . '_' . Helper::codifyName($linked);
             }
         }
-        $sql = 'ALTER TABLE ' . $tableName . ' ADD CONSTRAINT fk_' . $foreignName . ' FOREIGN KEY (' . implode(', ', $from) . ') REFERENCES ' . $foreignTableName . '(' . implode(', ', $to) . ')';
+        $sql = 'ALTER TABLE ' . $tableName . ' ADD CONSTRAINT fk_' . $foreignName . ' FOREIGN KEY (' . \implode(', ', $from) . ') REFERENCES ' . $foreignTableName . '(' . \implode(', ', $to) . ')';
         if (isset($foreignDefinition['update']) === true) {
-            $sql .= ' ON UPDATE ' . strtoupper($foreignDefinition['update']);
+            $sql .= ' ON UPDATE ' . \strtoupper($foreignDefinition['update']);
         }
         if (isset($foreignDefinition['delete']) === true) {
-            $sql .= ' ON DELETE ' . strtoupper($foreignDefinition['delete']);
+            $sql .= ' ON DELETE ' . \strtoupper($foreignDefinition['delete']);
         }
         $statement = $database->getMasterLink()->prepare($sql);
 

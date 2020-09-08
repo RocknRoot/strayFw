@@ -2,6 +2,8 @@
 
 namespace RocknRoot\StrayFw\Http;
 
+use RocknRoot\StrayFw\Exception\AppException;
+
 /**
  * Useful functions for the framework users.
  *
@@ -21,7 +23,7 @@ abstract class Helper
     public static function extractDomain(RawRequest $rawRequest) : string
     {
         $domain = null;
-        if (preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $rawRequest->getHost(), $matches)) {
+        if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $rawRequest->getHost(), $matches)) {
             $domain = $matches['domain'];
         }
 
@@ -34,13 +36,18 @@ abstract class Helper
      * @static
      * @param  string $url raw URL
      * @return string nice URL
+     * @throws AppException if request is not defined
+     * @throws AppException if raw request is not defined
      */
     public static function niceUrl(string $url) : string
     {
         $nice = null;
-        if (($pos = stripos($url, '.')) !== false) {
-            list($subDomain, $url) = explode('.', $url);
+        if (($pos = \stripos($url, '.')) !== false) {
+            list($subDomain, $url) = \explode('.', $url);
             $request = Http::getRequest();
+            if (!$request) {
+                throw new AppException('Http\Helper: request is not defined');
+            }
             $nice = $request->getRawRequest()->getScheme() . '://';
             if ($subDomain != null) {
                 $nice .= $subDomain . '.';
@@ -48,6 +55,6 @@ abstract class Helper
             $nice .= self::extractDomain($request->getRawRequest());
         }
 
-        return $nice . '/' . ltrim((string) preg_replace('/\/+/', '/', $url), '/');
+        return $nice . '/' . \ltrim((string) \preg_replace('/\/+/', '/', $url), '/');
     }
 }

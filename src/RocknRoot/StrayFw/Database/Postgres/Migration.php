@@ -23,31 +23,31 @@ abstract class Migration extends ProviderMigration
     /**
      * Generate code for migration.
      *
-     * @param  array  $mapping     mapping definition
-     * @param  string $mappingName mapping name
-     * @param  string $name        migration name
-     * @return array  import, up and down code
+     * @param  mixed[] $mapping     mapping definition
+     * @param  string  $mappingName mapping name
+     * @param  string  $name        migration name
+     * @return array   import, up and down code
      */
     public static function generate(array $mapping, string $mappingName, string $name) : array
     {
         $import = [];
         $up = [];
         $down = [];
-        $oldSchema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
-        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
-        $imax = count($migrations);
+        $oldSchema = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'schema.yml');
+        $migrations = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        $imax = \count($migrations);
         for ($i = 0; $i < $imax; $i++) {
             if ($migrations[$i]['name'] == $name) {
                 break;
             }
         }
         if ($i < $imax - 1) {
-            $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+            $schema = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
         } else {
             $schema = Config::get($mapping['config']['schema']);
         }
 
-        $newKeys = array_diff_key($schema, $oldSchema);
+        $newKeys = \array_diff_key($schema, $oldSchema);
         foreach ($newKeys as $key => $table) {
             $tableName = null;
             if (isset($table['name']) === true) {
@@ -66,7 +66,7 @@ abstract class Migration extends ProviderMigration
             }
         }
 
-        $oldKeys = array_diff_key($oldSchema, $schema);
+        $oldKeys = \array_diff_key($oldSchema, $schema);
         foreach ($oldKeys as $key => $table) {
             $tableName = null;
             if (isset($table['name']) === true) {
@@ -85,7 +85,7 @@ abstract class Migration extends ProviderMigration
             }
         }
 
-        $keys = array_intersect_key($oldSchema, $schema);
+        $keys = \array_intersect_key($oldSchema, $schema);
         foreach ($keys as $modelName => $model) {
             $tableName = null;
             if (isset($table['name']) === true) {
@@ -94,7 +94,7 @@ abstract class Migration extends ProviderMigration
                 $tableName = Helper::codifyName($mappingName) . '_' . Helper::codifyName($modelName);
             }
             if (isset($table['type']) === false || $table['type'] == 'model') {
-                $newFields = array_diff_key($schema[$modelName]['fields'], $model['fields']);
+                $newFields = \array_diff_key($schema[$modelName]['fields'], $model['fields']);
                 foreach ($newFields as $fieldName => $fieldDefinition) {
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
@@ -102,7 +102,7 @@ abstract class Migration extends ProviderMigration
                     $down[] = 'DeleteColumn::statement($this->database, $this->nextSchema, \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'AddColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
-                $oldFields = array_diff_key($model['fields'], $schema[$modelName]['fields']);
+                $oldFields = \array_diff_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($oldFields as $fieldName => $fieldDefinition) {
                     $import[] = 'AddColumn';
                     $import[] = 'DeleteColumn';
@@ -110,7 +110,7 @@ abstract class Migration extends ProviderMigration
                     $down[] = 'AddColumn::statement($this->database, $this->prevSchema, $this->getMappingName(), \'' . $modelName . '\', \'' . $tableName . '\', \'' . $fieldName . '\')';
                     echo 'DeleteColumn: ' . $modelName . '.' . $fieldName . PHP_EOL;
                 }
-                $fields = array_intersect_key($model['fields'], $schema[$modelName]['fields']);
+                $fields = \array_intersect_key($model['fields'], $schema[$modelName]['fields']);
                 foreach ($fields as $fieldName => $fieldDefinition) {
                     echo 'TODO compare fields' . PHP_EOL;
                 }
@@ -120,7 +120,7 @@ abstract class Migration extends ProviderMigration
         }
 
         return [
-            'import' => array_unique($import),
+            'import' => \array_unique($import),
             'up' => $up,
             'down' => $down,
         ];
@@ -129,8 +129,8 @@ abstract class Migration extends ProviderMigration
     /**
      * Ensure the migrations table exist for specified mapping.
      *
-     * @param  array $mapping mapping definition
-     * @return bool  true if successful
+     * @param  mixed[] $mapping mapping definition
+     * @return bool    true if successful
      */
     public static function ensureTable(array $mapping) : bool
     {
@@ -165,7 +165,7 @@ abstract class Migration extends ProviderMigration
     /**
      * Run migration code for specified mapping.
      *
-     * @param array $mapping mapping definition
+     * @param mixed[] $mapping mapping definition
      */
     public static function migrate(array $mapping) : void
     {
@@ -175,7 +175,7 @@ abstract class Migration extends ProviderMigration
             $database->rollBack();
             return;
         }
-        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        $migrations = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
             ->from('_stray_migration')
@@ -187,29 +187,25 @@ abstract class Migration extends ProviderMigration
             return;
         }
         $last = $select->fetch();
-        if (is_bool($last)) {
+        if (\is_bool($last)) {
             echo 'Can\'t fetch from _stray_migration, select query result is null' . PHP_EOL;
             $database->rollBack();
             return;
         }
         $last['date'] = new \DateTime($last['date']);
         $last['date'] = $last['date']->getTimestamp();
-        $migrations = array_values(array_filter($migrations, function (array $m) use ($last) {
-            return (int) $m['timestamp'] > $last['date'];
-        }));
-        usort($migrations, function (array $a, array $b) {
-            return $a['timestamp'] > $b['timestamp'];
-        });
-        $imax = count($migrations);
+        $migrations = \array_values(\array_filter($migrations, fn (array $m): bool => (int) $m['timestamp'] > $last['date']));
+        \usort($migrations, fn (array $a, array $b): bool => $a['timestamp'] > $b['timestamp']);
+        $imax = \count($migrations);
         for ($i = 0; $i < $imax; $i++) {
             echo 'Run ' . $migrations[$i]['name'] . PHP_EOL;
-            $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migrations[$i]['name']) . '\\' . ucfirst($migrations[$i]['name']);
+            $cl = '\\' . \ltrim(\rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . \ucfirst($migrations[$i]['name']) . '\\' . \ucfirst($migrations[$i]['name']);
             if ($i < $imax - 1) {
-                $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+                $schema = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
             } else {
                 $schema = Config::get($mapping['config']['schema']);
             }
-            $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
+            $n = new $cl($schema, \rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
             try {
                 $n->up();
             } catch (Exception $e) {
@@ -232,7 +228,7 @@ abstract class Migration extends ProviderMigration
     /**
      * Run reversed migration code for specified mapping.
      *
-     * @param array $mapping mapping definition
+     * @param mixed[] $mapping mapping definition
      */
     public static function rollback(array $mapping) : void
     {
@@ -242,7 +238,7 @@ abstract class Migration extends ProviderMigration
             $database->rollBack();
             return;
         }
-        $migrations = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
+        $migrations = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'migrations.yml');
         $select = new Select($mapping['config']['database'], true);
         $select->select('*')
             ->where('migration IS NOT NULL')
@@ -255,7 +251,7 @@ abstract class Migration extends ProviderMigration
             return;
         }
         $last = $select->fetch();
-        if (is_bool($last)) {
+        if (\is_bool($last)) {
             echo 'There is no executed migration.' . PHP_EOL;
             $database->rollBack();
             return;
@@ -265,7 +261,7 @@ abstract class Migration extends ProviderMigration
         $last['date'] = $last['date']->getTimestamp();
         $migration = null;
         $i = 0;
-        $imax = count($migrations);
+        $imax = \count($migrations);
         while ($i < $imax) {
             if ($migrations[$i]['name'] == $last['migration']) {
                 $migration = $migrations[$i];
@@ -277,14 +273,14 @@ abstract class Migration extends ProviderMigration
             echo 'Can\'t find migration in migrations.yml.' . PHP_EOL;
             return;
         }
-        $cl = '\\' . ltrim(rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . ucfirst($migration['name']) . '\\' . ucfirst($migration['name']);
+        $cl = '\\' . \ltrim(\rtrim($mapping['config']['migrations']['namespace'], '\\'), '\\') . '\\' . \ucfirst($migration['name']) . '\\' . \ucfirst($migration['name']);
         if ($i < $imax - 1) {
-            $schema = Config::get(rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
+            $schema = Config::get(\rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migrations[$i + 1]['name']) . DIRECTORY_SEPARATOR . 'schema.yml');
         } else {
             $schema = Config::get($mapping['config']['schema']);
             echo'last';
         }
-        $n = new $cl($schema, rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ucfirst($migration['name']) . DIRECTORY_SEPARATOR);
+        $n = new $cl($schema, \rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migration['name']) . DIRECTORY_SEPARATOR);
         try {
             $n->down();
         } catch (Exception $e) {

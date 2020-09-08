@@ -18,7 +18,7 @@ class Mutation extends Query
      * @param string        $database  database name
      * @param \PDOStatement $statement PDO statement
      */
-    public function __construct($database, \PDOStatement $statement)
+    public function __construct(string $database, \PDOStatement $statement)
     {
         parent::__construct($database);
         $this->statement = $statement;
@@ -36,7 +36,7 @@ class Mutation extends Query
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
             Logger::get()->error('mutation query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
-            if (constant('STRAY_ENV') === 'development') {
+            if (\constant('STRAY_ENV') === 'development') {
                 throw new AppException('mutation query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }

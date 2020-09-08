@@ -15,17 +15,15 @@ class Request extends BaseRequest
 {
     /**
      * Raw request.
-     *
-     * @var RawRequest
      */
-    protected $rawRequest;
+    protected \RocknRoot\StrayFw\Http\RawRequest $rawRequest;
 
     /**
      * Request data.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $data;
+    public array $data;
 
     /**
      * Parse raw request and choose a route.
@@ -43,32 +41,32 @@ class Request extends BaseRequest
         $this->after = array();
         $this->hasEnded = false;
         $this->data = [];
-        if (count($routes) == 0) {
+        if (\count($routes) == 0) {
             throw new InvalidRouteDefinition('there is no route');
         }
         foreach ($routes as $route) {
             if (isset($route['subdomain']) === true) {
-                if (in_array($this->rawRequest->getSubDomain(), $route['subdomain']) === false) {
+                if (\in_array($this->rawRequest->getSubDomain(), $route['subdomain']) === false) {
                     continue;
                 }
             }
-            if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
+            if (isset($route['path']) === false || isset($route['action']) === false || \strpos($route['action'], '.') === false) {
                 throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
             }
-            if (isset($route['method']) === false || strtolower($route['method']) === 'all' || strtolower($route['method']) == strtolower($this->rawRequest->getMethod())) {
+            if (isset($route['method']) === false || \strtolower($route['method']) === 'all' || \strtolower($route['method']) == \strtolower($this->rawRequest->getMethod())) {
                 $path = $route['path'];
                 if (empty($route['uri']) === false) {
-                    $path = '/' . ltrim(rtrim($route['uri'], '/'), '/') . $path;
+                    $path = '/' . \ltrim(\rtrim($route['uri'], '/'), '/') . $path;
                 }
-                if (strlen($route['path']) > 1) {
-                    $path = rtrim($path, '/');
+                if (\strlen($route['path']) > 1) {
+                    $path = \rtrim($path, '/');
                 }
                 $matches = null;
                 if ($route['type'] == 'before' || $route['type'] == 'after') {
-                    if (preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
-                        list($class, $action) = explode('.', $route['action']);
-                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                    if (\preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
+                        list($class, $action) = \explode('.', $route['action']);
+                        if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
                         }
                         $a = [ 'class' => $class, 'action' => $action ];
                         if ($route['type'] == 'before') {
@@ -78,13 +76,13 @@ class Request extends BaseRequest
                         }
                     }
                 } elseif ($this->class == null) {
-                    if (preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
-                        list($this->class, $this->action) = explode('.', $route['action']);
-                        if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                    if (\preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                        list($this->class, $this->action) = \explode('.', $route['action']);
+                        if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
                         }
                         foreach ($matches as $k => $v) {
-                            if (is_numeric($k) === false && $v != null) {
+                            if (\is_numeric($k) === false && $v != null) {
                                 $this->args[$k] = $v;
                             }
                         }
@@ -93,7 +91,7 @@ class Request extends BaseRequest
             }
         }
         if ($this->class == null) {
-            throw new RouteNotFound('no route matches this : ' . print_r($this->rawRequest, true));
+            throw new RouteNotFound('no route matches this : ' . \print_r($this->rawRequest, true));
         }
     }
 

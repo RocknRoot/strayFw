@@ -13,24 +13,18 @@ class RenderTwig implements RenderInterface
 {
     /**
      * Associated request.
-     *
-     * @var Request
      */
-    protected $request;
+    protected \RocknRoot\StrayFw\Http\Request $request;
 
     /**
      * Templates files directory.
-     *
-     * @var string
      */
-    protected $templatesDir;
+    protected string $templatesDir;
 
     /**
      * Template file name.
-     *
-     * @var string
      */
-    protected $fileName;
+    protected string $fileName;
 
     /**
      * Construct render with base arguments.
@@ -42,7 +36,7 @@ class RenderTwig implements RenderInterface
     public function __construct(Request $request, string $templatesDir, string $fileName)
     {
         $this->request = $request;
-        $this->templatesDir = DIRECTORY_SEPARATOR . ltrim(rtrim($templatesDir, DIRECTORY_SEPARATOR), DIRECTORY_SEPARATOR);
+        $this->templatesDir = DIRECTORY_SEPARATOR . \ltrim(\rtrim($templatesDir, DIRECTORY_SEPARATOR), DIRECTORY_SEPARATOR);
         $this->fileName = $fileName;
     }
 

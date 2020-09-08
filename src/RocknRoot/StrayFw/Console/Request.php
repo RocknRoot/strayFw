@@ -25,18 +25,18 @@ class Request extends BaseRequest
         $this->hasEnded = false;
         global $argv;
         $cli = $argv;
-        array_shift($cli);
-        if (count($cli) > 0) {
-            $cmd = ltrim(rtrim($cli[0], '/'), '/');
+        \array_shift($cli);
+        if (\count($cli) > 0) {
+            $cmd = \ltrim(\rtrim($cli[0], '/'), '/');
             foreach ($routes as $route) {
-                if (isset($route['path']) === false || isset($route['action']) === false || strpos($route['action'], '.') === false) {
+                if (isset($route['path']) === false || isset($route['action']) === false || \strpos($route['action'], '.') === false) {
                     throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
                 }
                 if ($route['type'] == 'before' || $route['type'] == 'after') {
-                    if (stripos($cmd, $route['path']) === 0) {
-                        list($class, $action) = explode('.', $route['action']);
-                        if (stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = rtrim($route['namespace'], '\\') . '\\' . $class;
+                    if (\stripos($cmd, $route['path']) === 0) {
+                        list($class, $action) = \explode('.', $route['action']);
+                        if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
                         }
                         $a = [ 'class' => $class, 'action' => $action ];
                         if ($route['type'] == 'before') {
@@ -47,13 +47,13 @@ class Request extends BaseRequest
                     }
                 } elseif ($this->class == null) {
                     if ($cmd == $route['path']) {
-                        list($this->class, $this->action) = explode('.', $route['action']);
-                        if (stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                        list($this->class, $this->action) = \explode('.', $route['action']);
+                        if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                            $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
                         }
-                        array_shift($cli);
+                        \array_shift($cli);
                         $this->args = $cli;
-                        if (is_array($this->args) === false) {
+                        if (\is_array($this->args) === false) {
                             $this->args = array();
                         }
                     }

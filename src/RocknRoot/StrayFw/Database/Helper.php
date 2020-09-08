@@ -28,12 +28,12 @@ abstract class Helper
     public static function codifyName(string $name) : string
     {
         $matches = array();
-        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);
+        \preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);
         $ret = $matches[0];
         foreach ($ret as &$match) {
-            $match = (strtoupper($match) == $match ? strtolower($match) : lcfirst($match));
+            $match = (\strtoupper($match) == $match ? \strtolower($match) : \lcfirst($match));
         }
 
-        return implode('_', $ret);
+        return \implode('_', $ret);
     }
 }
