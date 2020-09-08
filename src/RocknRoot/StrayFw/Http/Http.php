@@ -157,18 +157,18 @@ abstract class Http
      * Add route to be considered.
      *
      * @static
-     * @param string $method route HTTP method
-     * @param string $path   route path
-     * @param string $action class and method to call
+     * @param string          $method route HTTP method
+     * @param string          $path   route path
+     * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function route(string $method, string $path, string $action) : void
+    public static function route(string $method, string $path, $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
                 'type' => 'route',
                 'method' => $method,
                 'path' => $path,
-                'action' => $action,
+                'action' => \is_array($action) ? $action : [ $action ],
                 'namespace' => self::$namespace,
                 'subdomain' => self::$subdomain,
                 'uri' => self::$uri
@@ -180,18 +180,18 @@ abstract class Http
      * Add before hook to be considered.
      *
      * @static
-     * @param string $method route HTTP method
-     * @param string $path   route path
-     * @param string $action class and method to call
+     * @param string          $method route HTTP method
+     * @param string          $path   route path
+     * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function before(string $method, string $path, string $action) : void
+    public static function before(string $method, string $path, $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
                 'type' => 'before',
                 'method' => $method,
                 'path' => $path,
-                'action' => $action,
+                'action' => \is_array($action) ? $action : [ $action ],
                 'namespace' => self::$namespace,
                 'subdomain' => self::$subdomain,
                 'uri' => self::$uri
@@ -203,18 +203,18 @@ abstract class Http
      * Add before hook to be considered.
      *
      * @static
-     * @param string $method route HTTP method
-     * @param string $path   route path
-     * @param string $action class and method to call
+     * @param string          $method route HTTP method
+     * @param string          $path   route path
+     * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function after(string $method, string $path, string $action) : void
+    public static function after(string $method, string $path, $action) : void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
                 'type' => 'after',
                 'method' => $method,
                 'path' => $path,
-                'action' => $action,
+                'action' => \is_array($action) ? $action : [ $action ],
                 'namespace' => self::$namespace,
                 'subdomain' => self::$subdomain,
                 'uri' => self::$uri

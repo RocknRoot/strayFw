@@ -50,9 +50,15 @@ class Request extends BaseRequest
                     continue;
                 }
             }
-            if (isset($route['path']) === false || isset($route['action']) === false || \strpos($route['action'], '.') === false) {
+            if (isset($route['path']) === false || isset($route['action']) === false) {
                 throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
             }
+            foreach ($route['action'] as $r) {
+                if (\stripos($r, '.') === false) {
+                    throw new InvalidRouteDefinition('route "' . $route['path'] . '" has invalid definition');
+                }
+            }
+
             if (isset($route['method']) === false || \strtolower($route['method']) === 'all' || \strtolower($route['method']) == \strtolower($this->rawRequest->getMethod())) {
                 $path = $route['path'];
                 if (empty($route['uri']) === false) {
@@ -64,26 +70,30 @@ class Request extends BaseRequest
                 $matches = null;
                 if ($route['type'] == 'before' || $route['type'] == 'after') {
                     if (\preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
-                        list($class, $action) = \explode('.', $route['action']);
-                        if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
-                        }
-                        $a = [ 'class' => $class, 'action' => $action ];
-                        if ($route['type'] == 'before') {
-                            $this->before[] = $a;
-                        } else {
-                            $this->after[] = $a;
+                        foreach ($route['action'] as $r) {
+                            list($class, $action) = \explode('.', $r);
+                            if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
+                            }
+                            $a = [ 'class' => $class, 'action' => $action ];
+                            if ($route['type'] == 'before') {
+                                $this->before[] = $a;
+                            } else {
+                                $this->after[] = $a;
+                            }
                         }
                     }
                 } elseif ($this->class == null) {
                     if (\preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
-                        list($this->class, $this->action) = \explode('.', $route['action']);
-                        if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
-                        }
-                        foreach ($matches as $k => $v) {
-                            if (\is_numeric($k) === false && $v != null) {
-                                $this->args[$k] = $v;
+                        foreach ($route['action'] as $r) {
+                            list($this->class, $this->action) = \explode('.', $r);
+                            if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                            }
+                            foreach ($matches as $k => $v) {
+                                if (\is_numeric($k) === false && $v != null) {
+                                    $this->args[$k] = $v;
+                                }
                             }
                         }
                     }
