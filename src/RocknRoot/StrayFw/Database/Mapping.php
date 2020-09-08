@@ -2,7 +2,6 @@
 
 namespace RocknRoot\StrayFw\Database;
 
-use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\MappingNotFound;
 use RocknRoot\StrayFw\Logger;
@@ -56,7 +55,7 @@ class Mapping
      *
      * @param  string          $name mapping name
      * @throws MappingNotFound if there's no registered mapping for specified database
-     * @return array           mapping data
+     * @return array<string,   mixed>           mapping data
      */
     public static function get(string $name) : array
     {

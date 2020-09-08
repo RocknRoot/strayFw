@@ -20,8 +20,10 @@ abstract class Model extends ProviderModel
 {
     /**
      * Aliases of modified columns values.
+     *
+     * @var array<string, mixed>
      */
-    protected ?array $modified = null;
+    protected array $modified = array();
 
     /**
      * Save the model. Delete if deletionFlag is true.
@@ -41,7 +43,7 @@ abstract class Model extends ProviderModel
                 $where = array();
                 foreach ($this->getPrimary() as $primary) {
                     $field = $this->{'field' . \ucfirst($primary)};
-                    $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($primary)));
+                    $realName = (string) \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($primary)));
                     $where[$realName] = ':primary' . \ucfirst($primary);
                     $updateQuery->bind('primary' . \ucfirst($primary), $field['value']);
                 }
@@ -51,7 +53,7 @@ abstract class Model extends ProviderModel
                 foreach ($this->modified as $key => $value) {
                     if ($value === true) {
                         $field = $this->{'field' . \ucfirst($key)};
-                        $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
+                        $realName = (string) \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
                         $set[$realName] = ':field' . \ucfirst($key);
                         $updateQuery->bind(':field' . \ucfirst($key), $field['value']);
                     }
@@ -135,7 +137,7 @@ abstract class Model extends ProviderModel
     /**
      * Get field values as associative array (alias => value).
      *
-     * @return array values
+     * @return array<string, mixed> values
      */
     public function toArray() : array
     {
@@ -151,14 +153,14 @@ abstract class Model extends ProviderModel
     /**
      * Get field values as associative array (real names => value).
      *
-     * @return array values
+     * @return array<string, mixed> values
      */
     public function toRealNamesArray() : array
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
             $field = $this->{'field' . \ucfirst($name)};
-            $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
+            $realName = (string) \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
             $values[$realName] = $field['value'];
         }
 
@@ -169,13 +171,13 @@ abstract class Model extends ProviderModel
      * Fetch one entity satisfying the specified conditions.
      *
      * @param  mixed[]          $conditions where conditions
-     * @param  array            $orderBy    order clause
+     * @param  string[]         $orderBy    order clause
      * @param  bool             $critical   if true, will be executed on write server
      * @return null|false|Model model instance, null if nothing found, false on error
      */
-    public static function fetchEntity(array $conditions, array $orderBy = null, bool $critical = false)
+    public static function fetchEntity(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static();
+        $entity = new static(); // @phpstan-ignore-line
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
         $selectQuery->from($entity->getTableName());
@@ -188,7 +190,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (\is_array($orderBy) && \count($orderBy) > 0) {
+        if (\count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
@@ -202,23 +204,23 @@ abstract class Model extends ProviderModel
         }
         $data = $selectQuery->fetch();
         if ($data === false) {
-            return false;
+            return null;
         }
 
-        return new static($data);
+        return new static($data); // @phpstan-ignore-line
     }
 
     /**
      * Fetch one row satisfying the specified conditions.
      *
-     * @param  mixed[]          $conditions where conditions
-     * @param  array            $orderBy    order clause
-     * @param  bool             $critical   if true, will be executed on write server
-     * @return null|array|false row data, null if nothing found, false on error
+     * @param  mixed[]           $conditions where conditions
+     * @param  string[]          $orderBy    order clause
+     * @param  bool              $critical   if true, will be executed on write server
+     * @return null|bool|mixed[] row data, null if nothing found, false on error
      */
-    public static function fetchArray(array $conditions, array $orderBy = null, bool $critical = false)
+    public static function fetchArray(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static();
+        $entity = new static(); // @phpstan-ignore-line
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
         $selectQuery->from($entity->getTableName());
@@ -231,7 +233,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (\is_array($orderBy) && \count($orderBy) > 0) {
+        if (\count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
@@ -254,14 +256,14 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all entities satisfying the specified conditions.
      *
-     * @param  mixed[]          $conditions where conditions
-     * @param  array            $orderBy    order clause
-     * @param  bool             $critical   if true, will be executed on write server
-     * @return null|array|false rows data, null if nothing found, false on error
+     * @param  mixed[]       $conditions where conditions
+     * @param  string[]      $orderBy    order clause
+     * @param  bool          $critical   if true, will be executed on write server
+     * @return false|Model[] rows data, false on error
      */
-    public static function fetchEntities(array $conditions, array $orderBy = null, bool $critical = false)
+    public static function fetchEntities(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static();
+        $entity = new static(); // @phpstan-ignore-line
         $res = static::fetchArrays($conditions, $orderBy, $critical);
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select($entity->getAllFieldsRealNames());
@@ -275,7 +277,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (\is_array($orderBy) && \count($orderBy) > 0) {
+        if (\count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
@@ -287,12 +289,9 @@ abstract class Model extends ProviderModel
             return false;
         }
         $res = $selectQuery->fetchAll();
-        if (\is_array($res) === false) {
-            return null;
-        }
         $data = [];
         foreach ($res as $r) {
-            $data[] = new static($r);
+            $data[] = new static($r); // @phpstan-ignore-line
         }
 
         return $data;
@@ -301,14 +300,14 @@ abstract class Model extends ProviderModel
     /**
      * Fetch all rows satisfying the specified conditions.
      *
-     * @param  mixed[]          $conditions where conditions
-     * @param  array            $orderBy    order clause
-     * @param  bool             $critical   if true, will be executed on write server
-     * @return null|array|false rows data, null if nothing found, false on error
+     * @param  mixed[]      $conditions where conditions
+     * @param  string[]     $orderBy    order clause
+     * @param  bool         $critical   if true, will be executed on write server
+     * @return bool|mixed[] rows data, false on error
      */
-    public static function fetchArrays(array $conditions, ?array $orderBy = null, bool $critical = false)
+    public static function fetchArrays(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static();
+        $entity = new static(); // @phpstan-ignore-line
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select((array) \array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
         $selectQuery->from($entity->getTableName());
@@ -321,7 +320,7 @@ abstract class Model extends ProviderModel
             }
             $selectQuery->where($where);
         }
-        if (\is_array($orderBy) && \count($orderBy) > 0) {
+        if (\count($orderBy) > 0) {
             $orders = array();
             foreach ($orderBy as $key => $value) {
                 $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($key)));
@@ -333,9 +332,6 @@ abstract class Model extends ProviderModel
             return false;
         }
         $data = $selectQuery->fetchAll();
-        if (\is_array($data) === false) {
-            return null;
-        }
 
         return $data;
     }
@@ -349,7 +345,7 @@ abstract class Model extends ProviderModel
      */
     public static function countRows(array $conditions, bool $critical = false)
     {
-        $entity = new static();
+        $entity = new static(); // @phpstan-ignore-line
         $selectQuery = new Select($entity->getDatabaseName(), $critical);
         $selectQuery->select([ 'count' => 'COUNT(*)' ]);
         $selectQuery->from($entity->getTableName());
@@ -393,7 +389,7 @@ abstract class Model extends ProviderModel
      * Get primary fields' names.
      *
      * @abstract
-     * @return array primary fields' names
+     * @return string[] primary fields' names
      */
     abstract public function getPrimary() : array;
 
@@ -401,7 +397,7 @@ abstract class Model extends ProviderModel
      * Get all fields' names.
      *
      * @abstract
-     * @return array all fields' names
+     * @return string[] all fields' names
      */
     abstract public function getAllFieldsRealNames() : array;
 
@@ -409,7 +405,7 @@ abstract class Model extends ProviderModel
      * Get all fields' aliases.
      *
      * @abstract
-     * @return array all fields' aliases
+     * @return string[] all fields' aliases
      */
     abstract public function getAllFieldsAliases() : array;
 }

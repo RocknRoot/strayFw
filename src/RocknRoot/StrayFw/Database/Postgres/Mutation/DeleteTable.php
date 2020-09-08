@@ -19,7 +19,7 @@ class DeleteTable extends Mutation
      * @param  string        $table    table name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(GlobalDatabase $database, string $table) : MutationQuery
+    public static function statement(Database $database, string $table) : MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
 

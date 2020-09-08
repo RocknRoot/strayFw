@@ -17,12 +17,12 @@ class DeleteColumn extends Mutation
     /**
      * Prepare and return according PDO statement.
      *
-     * @param  Database      $database  database
-     * @param  array         $schema    schema definition
-     * @param  string        $modelName model name
-     * @param  string        $tableName table name
-     * @param  string        $fieldName field name
-     * @return MutationQuery $statement prepared query
+     * @param  Database             $database  database
+     * @param  array<string, mixed> $schema    schema definition
+     * @param  string               $modelName model name
+     * @param  string               $tableName table name
+     * @param  string               $fieldName field name
+     * @return MutationQuery        $statement prepared query
      */
     public static function statement(Database $database, array $schema, string $modelName, string $tableName, string $fieldName) : MutationQuery
     {

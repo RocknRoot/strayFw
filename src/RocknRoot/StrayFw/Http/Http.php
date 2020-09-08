@@ -92,7 +92,7 @@ abstract class Http
      *
      * @static
      * @throws AppException if raw request is not defined
-     * @throws NotARender if response->render is a non RenderInterface implementing object
+     * @throws NotARender   if response->render is a non RenderInterface implementing object
      */
     public static function run() : void
     {
@@ -144,9 +144,9 @@ abstract class Http
      * Set namespace, subdomain and url prefixes for incoming routes.
      *
      * @static
-     * @param string       $namespace namespace prefix
-     * @param string[]|string|null $subdomain subdomain prefix
-     * @param string       $uri       uri prefix
+     * @param string               $namespace namespace prefix
+     * @param null|string|string[] $subdomain subdomain prefix
+     * @param string               $uri       uri prefix
      */
     public static function prefix(string $namespace, $subdomain = null, string $uri = null) : void
     {

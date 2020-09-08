@@ -21,10 +21,8 @@ class Update extends Query
 
     /**
      * Set clause.
-     *
-     * @var null|mixed|string
      */
-    protected $set;
+    protected ?string $set = null;
 
     /**
      * Where clause.
@@ -118,10 +116,10 @@ class Update extends Query
     /**
      * Set set clause.
      *
-     * @param  mixed[]|string $set set clause
-     * @return Update         this
+     * @param  array<string, mixed>|string $set set clause
+     * @return Update                      this
      */
-    public function set(array $set) : self
+    public function set($set) : self
     {
         if (\is_array($set) === true) {
             $this->set = '';
@@ -145,10 +143,10 @@ class Update extends Query
     /**
      * Set where clause.
      *
-     * @param  mixed[]|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
-     * @return Update                                                              this
+     * @param  array<string, mixed>|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
+     * @return Update                                                                           this
      */
-    public function where(array $where) : self
+    public function where($where) : self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -158,8 +156,8 @@ class Update extends Query
     /**
      * Set order by clause.
      *
-     * @param  array|string $orderBy order by clause
-     * @return Update       this
+     * @param  string|string[] $orderBy order by clause
+     * @return Update          this
      */
     public function orderBy($orderBy) : self
     {

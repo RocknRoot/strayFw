@@ -27,8 +27,10 @@ abstract class Console
 
     /**
      * Registed routes.
+     *
+     * @var array[]
      */
-    protected static ?array $routes = null;
+    protected static array $routes = [];
 
     /**
      * Current request.
@@ -37,8 +39,10 @@ abstract class Console
 
     /**
      * Current controllers.
+     *
+     * @var object[]
      */
-    protected static ?array $controllers = null;
+    protected static array $controllers = [];
 
     /**
      * Initialize inner states according.
@@ -48,7 +52,6 @@ abstract class Console
     public static function init() : void
     {
         if (self::$isInit === false) {
-            self::$routes = array();
             self::$isInit = true;
         }
     }
@@ -175,7 +178,7 @@ abstract class Console
      *
      * @return array[] all routes
      */
-    public static function getRoutes() : ?array
+    public static function getRoutes() : array
     {
         return self::$routes;
     }

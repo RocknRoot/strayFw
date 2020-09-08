@@ -18,6 +18,8 @@ abstract class Query
 
     /**
      * Query parameters.
+     *
+     * @var array<string, mixed>
      */
     protected array $parameters;
 
@@ -28,6 +30,8 @@ abstract class Query
 
     /**
      * PDO error info.
+     *
+     * @var string[]
      */
     protected ?array $errorInfo = null;
 
@@ -62,9 +66,9 @@ abstract class Query
      * Bind a parameter.
      *
      * @param string $name  parameter name
-     * @param string $value parameter value
+     * @param mixed  $value parameter value
      */
-    public function bind(string $name, string $value)
+    public function bind(string $name, $value) : void
     {
         $this->parameters[$name] = $value;
     }

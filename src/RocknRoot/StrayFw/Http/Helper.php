@@ -34,10 +34,10 @@ abstract class Helper
      * Get nice URL.
      *
      * @static
-     * @param  string $url raw URL
-     * @return string nice URL
+     * @param  string       $url raw URL
      * @throws AppException if request is not defined
      * @throws AppException if raw request is not defined
+     * @return string       nice URL
      */
     public static function niceUrl(string $url) : string
     {

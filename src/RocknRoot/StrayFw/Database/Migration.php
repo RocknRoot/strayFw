@@ -140,9 +140,9 @@ class Migration
      * @param  mixed[]         $mapping     mapping definition
      * @param  string          $mappingName mapping name
      * @param  string          $name        migration name
-     * @param  array           $up          up code
-     * @param  array           $down        down code
-     * @param  array           $import      used classes in migration code
+     * @param  string[]        $up          up code
+     * @param  string[]        $down        down code
+     * @param  string[]        $import      used classes in migration code
      * @throws FileNotWritable if can't mkdir
      * @throws FileNotWritable if can't open file with write permission
      * @throws FileNotWritable if can't write to file

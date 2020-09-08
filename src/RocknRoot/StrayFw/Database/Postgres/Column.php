@@ -20,7 +20,7 @@ abstract class Column
      * @param  mixed[]                 $schema          schema definition
      * @param  string                  $mapping         mapping name
      * @param  string                  $fieldName       field real name
-     * @param  array                   $fieldDefinition field fieldDefinition
+     * @param  array<string, mixed>    $fieldDefinition field fieldDefinition
      * @throws InvalidSchemaDefinition if default value aren't well typed
      * @throws InvalidSchemaDefinition if a field has an unknown type
      * @return string                  generated SQL
@@ -145,7 +145,7 @@ abstract class Column
                     break;
                 }
             }
-            throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type');
+            throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type'); // @phpstan-ignore-next-line
             break;
         }
         if (isset($fieldDefinition['notnull']) === false || $fieldDefinition['notnull'] === true) {

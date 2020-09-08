@@ -19,12 +19,12 @@ class Condition
     /**
      * Generated SQL code.
      */
-    protected string $sql;
+    protected ?string $sql;
 
     /**
      * Construct a new condition expression.
      *
-     * @param array|string $where where clause
+     * @param mixed[]|string $where where clause
      */
     public function __construct($where)
     {

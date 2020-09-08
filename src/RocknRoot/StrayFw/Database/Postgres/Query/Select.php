@@ -67,23 +67,31 @@ class Select extends Query
 
     /**
      * Inner join table clause.
+     *
+     * @var array[]
      */
-    protected array $innerJoins;
+    protected array $innerJoins = array();
 
     /**
      * Left outer join table clause.
+     *
+     * @var array[]
      */
-    protected array $leftOuterJoins;
+    protected array $leftOuterJoins = array();
 
     /**
      * Right outer join table clause.
+     *
+     * @var array[]
      */
-    protected array $rightOuterJoins;
+    protected array $rightOuterJoins = array();
 
     /**
      * Full outer join table clause.
+     *
+     * @var array[]
      */
-    protected array $fullOuterJoins;
+    protected array $fullOuterJoins = array();
 
     /**
      * Construct a new empty select query.
@@ -95,10 +103,6 @@ class Select extends Query
     {
         parent::__construct($database);
         $this->isCritical = $critical;
-        $this->innerJoins = array();
-        $this->leftOuterJoins = array();
-        $this->rightOuterJoins = array();
-        $this->fullOuterJoins = array();
     }
 
     /**
@@ -138,12 +142,16 @@ class Select extends Query
     /**
      * Get the next result row.
      *
-     * @return bool|mixed result data or false if something went wrong
+     * @throws BadUse if statement is null or after SQL error
+     * @return mixed  result data or false if something went wrong
      */
     public function fetch()
     {
-        if ($this->statement == null || $this->getErrorState() != '00000') {
-            return false;
+        if ($this->statement == null) {
+            throw new BadUse('Database\Postgres/Query/Select.fetchAll: statement is null');
+        }
+        if ($this->getErrorState() != '00000') {
+            throw new BadUse('Database\Postgres/Query/Select.fetchAll: cannot fetch results after a SQL error');
         }
 
         return $this->statement->fetch(\PDO::FETCH_ASSOC);
@@ -152,15 +160,23 @@ class Select extends Query
     /**
      * Get all result rows.
      *
-     * @return array|bool results data or false if something went wrong
+     * @throws BadUse  if statement is null or after SQL error
+     * @return mixed[] results data
      */
-    public function fetchAll()
+    public function fetchAll() : array
     {
-        if ($this->statement == null || $this->getErrorState() != '00000') {
-            return false;
+        if ($this->statement == null) {
+            throw new BadUse('Database\Postgres/Query/Select.fetchAll: statement is null');
+        }
+        if ($this->getErrorState() != '00000') {
+            throw new BadUse('Database\Postgres/Query/Select.fetchAll: cannot fetch results after a SQL error');
         }
 
-        return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
+        $res = $this->statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$res) {
+            return [];
+        }
+        return $res;
     }
 
     /**
@@ -219,8 +235,8 @@ class Select extends Query
     /**
      * Set select clause.
      *
-     * @param  array|string $select select clause
-     * @return Select       this
+     * @param  array<string, string>|string $select select clause
+     * @return Select                       this
      */
     public function select($select) : self
     {
@@ -275,8 +291,8 @@ class Select extends Query
     /**
      * Set group by clause.
      *
-     * @param  array|string $groupBy group by clause
-     * @return Select       this
+     * @param  string|string[] $groupBy group by clause
+     * @return Select          this
      */
     public function groupBy($groupBy) : self
     {
@@ -305,8 +321,8 @@ class Select extends Query
     /**
      * Set order by clause.
      *
-     * @param  array|string $orderBy order by clause
-     * @return Select       this
+     * @param  string|string[] $orderBy order by clause
+     * @return Select          this
      */
     public function orderBy($orderBy) : self
     {
@@ -326,8 +342,8 @@ class Select extends Query
     /**
      * Set distinct on clause.
      *
-     * @param  array|string $distinct distinct on clause
-     * @return Select       this
+     * @param  string|string[] $distinct distinct on clause
+     * @return Select          this
      */
     public function distinct($distinct) : self
     {
@@ -369,9 +385,9 @@ class Select extends Query
     /**
      * Add an inner join.
      *
-     * @param  string                 $table foreign table real name
-     * @param  array|Condition|string $on    join condition
-     * @return Select                 this
+     * @param  string                   $table foreign table real name
+     * @param  Condition|mixed[]|string $on    join condition
+     * @return Select                   this
      */
     public function addInnerJoin(string $table, $on) : self
     {
@@ -386,9 +402,9 @@ class Select extends Query
     /**
      * Add a left outer join.
      *
-     * @param  string                 $table foreign table real name
-     * @param  array|Condition|string $on    join condition
-     * @return Select                 $this
+     * @param  string                   $table foreign table real name
+     * @param  Condition|mixed[]|string $on    join condition
+     * @return Select                   $this
      */
     public function addLeftOuterJoin(string $table, $on) : self
     {
@@ -403,9 +419,9 @@ class Select extends Query
     /**
      * Add a right outer join.
      *
-     * @param  string                 $table foreign table real name
-     * @param  array|Condition|string $on    join condition
-     * @return Select                 $this
+     * @param  string                   $table foreign table real name
+     * @param  Condition|mixed[]|string $on    join condition
+     * @return Select                   $this
      */
     public function addRightOuterJoin(string $table, $on) : self
     {
@@ -420,9 +436,9 @@ class Select extends Query
     /**
      * Add a full outer join.
      *
-     * @param  string                 $table foreign table real name
-     * @param  array|Condition|string $on    join condition
-     * @return Select                 $this
+     * @param  string                   $table foreign table real name
+     * @param  Condition|mixed[]|string $on    join condition
+     * @return Select                   $this
      */
     public function addFullOuterJoin(string $table, $on) : self
     {

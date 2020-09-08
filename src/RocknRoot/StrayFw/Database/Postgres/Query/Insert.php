@@ -21,15 +21,15 @@ class Insert extends Query
 
     /**
      * Values clause.
+     *
+     * @var mixed[]
      */
     protected ?array $values = null;
 
     /**
      * Returning clause.
-     *
-     * @var null|mixed|string
      */
-    protected $returning;
+    protected ?string $returning = null;
 
     /**
      * Execute the constructed query.
@@ -69,12 +69,16 @@ class Insert extends Query
      * Extract the corresponding SQL code.
      *
      * @throws BadUse if into clause has not been defined
+     * @throws BadUse if values have not been set
      * @return string generated SQL code
      */
     public function toSql() : string
     {
         if (empty($this->into) === true) {
             throw new BadUse('into clause has not been defined (' . \print_r($this, true) . ')');
+        }
+        if (!$this->values || \count($this->values) < 2) {
+            throw new BadUse('values have not been set');
         }
         $sql = 'INSERT INTO ' . $this->into . ' ';
 
@@ -113,7 +117,7 @@ class Insert extends Query
      * @param  mixed[]|string $values values clause
      * @return Insert         this
      */
-    public function values(array $values) : self
+    public function values($values) : self
     {
         if (\is_array($values) === true) {
             if (\is_numeric(\key($values)) === true) {
@@ -149,7 +153,7 @@ class Insert extends Query
      * @param  mixed[]|string $returning returning clause
      * @return Insert         this
      */
-    public function returning(array $returning) : self
+    public function returning($returning) : self
     {
         if (\is_array($returning) === true) {
             $this->returning = \implode(', ', $returning);

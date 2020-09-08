@@ -11,7 +11,6 @@ define('STRAY_ENV', 'production');
 require STRAY_PATH_VENDOR . 'autoload.php';
 
 use RocknRoot\StrayFw\Bootstrap;
-use RocknRoot\StrayFw\Console\Console;
 
 Bootstrap::init();
 

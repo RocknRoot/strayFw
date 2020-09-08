@@ -54,8 +54,8 @@ abstract class ErrorPage
      * Add additionnal info in case of error page is displayed.
      *
      * @static
-     * @param string $title data group title
-     * @param mixed[]  $data  data that will be displayed
+     * @param string  $title data group title
+     * @param mixed[] $data  data that will be displayed
      */
     public static function addData(string $title, array $data) : void
     {

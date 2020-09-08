@@ -23,10 +23,10 @@ abstract class Migration extends ProviderMigration
     /**
      * Generate code for migration.
      *
-     * @param  mixed[] $mapping     mapping definition
-     * @param  string  $mappingName mapping name
-     * @param  string  $name        migration name
-     * @return array   import, up and down code
+     * @param  mixed[]       $mapping     mapping definition
+     * @param  string        $mappingName mapping name
+     * @param  string        $name        migration name
+     * @return array<string, array>   import, up and down code
      */
     public static function generate(array $mapping, string $mappingName, string $name) : array
     {
@@ -195,7 +195,7 @@ abstract class Migration extends ProviderMigration
         $last['date'] = new \DateTime($last['date']);
         $last['date'] = $last['date']->getTimestamp();
         $migrations = \array_values(\array_filter($migrations, fn (array $m): bool => (int) $m['timestamp'] > $last['date']));
-        \usort($migrations, fn (array $a, array $b): bool => $a['timestamp'] > $b['timestamp']);
+        \usort($migrations, fn (array $a, array $b): int => $a['timestamp'] - $b['timestamp']);
         $imax = \count($migrations);
         for ($i = 0; $i < $imax; $i++) {
             echo 'Run ' . $migrations[$i]['name'] . PHP_EOL;

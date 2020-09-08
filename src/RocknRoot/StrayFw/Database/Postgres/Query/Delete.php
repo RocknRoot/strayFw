@@ -113,7 +113,7 @@ class Delete extends Query
      * @param  mixed[]|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
      * @return Delete                                                              this
      */
-    public function where(array $where) : self
+    public function where($where) : self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -123,8 +123,8 @@ class Delete extends Query
     /**
      * Set order by clause.
      *
-     * @param  array|string $orderBy order by clause
-     * @return Delete       this
+     * @param  array<string, string>|string $orderBy order by clause
+     * @return Delete                       this
      */
     public function orderBy($orderBy) : self
     {

@@ -20,14 +20,14 @@ class AddTable extends Mutation
      * Prepare and return according PDO statement.
      *
      * @param  Database                $database  database
-     * @param  array                   $schema    schema definition
+     * @param  array<string, mixed>    $schema    schema definition
      * @param  string                  $mapping   mapping name
      * @param  string                  $tableName table real name
      * @param  string                  $modelName model name
      * @throws InvalidSchemaDefinition if a model has no field
      * @return MutationQuery           $statement prepared query
      */
-    public static function statement(GlobalDatabase $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
+    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
     {
         $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {

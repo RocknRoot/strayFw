@@ -1,15 +1,15 @@
 <?php
 
-define('STRAY_PATH_ROOT', __DIR__ . '/../');
-define('STRAY_PATH_APPS', __DIR__ . '/../apps/');
-define('STRAY_PATH_VENDOR', __DIR__ . '/../vendor/');
+\define('STRAY_PATH_ROOT', __DIR__ . '/../');
+\define('STRAY_PATH_APPS', __DIR__ . '/../apps/');
+\define('STRAY_PATH_VENDOR', __DIR__ . '/../vendor/');
 
-define('STRAY_IS_HTTP', true);
+\define('STRAY_IS_HTTP', true);
 
-if (php_sapi_name() == 'cli-server') {
-    define('STRAY_ENV', 'development');
-} else if (defined('STRAY_ENV') === false) {
-    define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
+if (\php_sapi_name() == 'cli-server') {
+    \define('STRAY_ENV', 'development');
+} elseif (\defined('STRAY_ENV') === false) {
+    \define('STRAY_ENV', (getenv('STRAY_ENV') === 'development' ? 'development' : 'production'));
 }
 
 require STRAY_PATH_VENDOR . 'autoload.php';

@@ -28,44 +28,49 @@ abstract class Bootstrap
      * Namespace-path hash.
      *
      * @static
+     * @var array<string, string>
      */
-    protected static ?array $namespaces = null;
+    protected static array $namespaces = [];
 
     /**
      * Registered applications.
      *
      * @static
+     * @var string[]
      */
-    protected static ?array $applications = null;
+    protected static array $applications = [];
 
     /**
      * Initialize properties and register autoloader static method.
      *
      * @static
      */
-    public static function init()
+    public static function init() : void
     {
         if (self::$isInit === false) {
-            self::$namespaces = array();
-            self::$applications = array();
-            \spl_autoload_register(self::class . '::loadClass');
+            \spl_autoload_register(function (string $name) : void {
+                self::loadClass($name);
+            });
             self::$isInit = true;
-            Console::init();
-            Console::prefix('\\RocknRoot\\StrayFw\\Console');
-            Console::route('help', 'help', 'this screen', 'Controller.help');
-            Console::prefix('\\RocknRoot\\StrayFw\\Database');
-            Console::route('db/list', 'db/list', 'list registered mappings', 'Console.mappings');
-            Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
-            Console::route('db/generate', 'db/generate mapping_name', 'generate base models', 'Console.generate');
-            Console::route('db/migration/create', 'db/migration/create mapping_name migration_name', 'create a new migration', 'Migration.create');
-            Console::route('db/migration/generate', 'db/migration/generate mapping_name migration_name', 'generate migration code', 'Migration.generate');
-            Console::route('db/migration/migrate', 'db/migration/migrate mapping_name', 'migrate', 'Migration.migrate');
-            Console::route('db/migration/rollback', 'db/migration/rollback mapping_name', 'rollback last migration', 'Migration.rollback');
-            Console::prefix('\\RocknRoot\\StrayFw\\Http');
-            Console::route('http/routing/list', 'http/routing/list', 'list registered routes', 'Console.routes');
-            Http::init();
-            if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true && \constant('STRAY_ENV') === 'development') {
-                Debug\ErrorPage::init();
+            if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true) {
+                Http::init();
+                if (\constant('STRAY_ENV') === 'development') {
+                    Debug\ErrorPage::init();
+                }
+            } else {
+                Console::init();
+                Console::prefix('\\RocknRoot\\StrayFw\\Console');
+                Console::route('help', 'help', 'this screen', 'Controller.help');
+                Console::prefix('\\RocknRoot\\StrayFw\\Database');
+                Console::route('db/list', 'db/list', 'list registered mappings', 'Console.mappings');
+                Console::route('db/build', 'db/build mapping_name', 'build data structures', 'Console.build');
+                Console::route('db/generate', 'db/generate mapping_name', 'generate base models', 'Console.generate');
+                Console::route('db/migration/create', 'db/migration/create mapping_name migration_name', 'create a new migration', 'Migration.create');
+                Console::route('db/migration/generate', 'db/migration/generate mapping_name migration_name', 'generate migration code', 'Migration.generate');
+                Console::route('db/migration/migrate', 'db/migration/migrate mapping_name', 'migrate', 'Migration.migrate');
+                Console::route('db/migration/rollback', 'db/migration/rollback mapping_name', 'rollback last migration', 'Migration.rollback');
+                Console::prefix('\\RocknRoot\\StrayFw\\Http');
+                Console::route('http/routing/list', 'http/routing/list', 'list registered routes', 'Console.routes');
             }
         }
     }
@@ -79,7 +84,7 @@ abstract class Bootstrap
      * @throws BadUse           if bootstrap isn't initialized
      * @throws UnknownNamespace if needed namespace can't be found
      */
-    public static function loadClass(string $className)
+    public static function loadClass(string $className) : void
     {
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
@@ -119,7 +124,7 @@ abstract class Bootstrap
      * @param string $namespace new namespace
      * @param string $path      custom files path if needed
      */
-    public static function registerApp(string $namespace, string $path = null)
+    public static function registerApp(string $namespace, string $path = null) : void
     {
         $namespace = \rtrim($namespace, '\\');
         if ($path == null) {
@@ -141,7 +146,7 @@ abstract class Bootstrap
      * @throws BadUse if not CLI_IS_CLI nor STRAY_IS_HTTP
      * @static
      */
-    public static function run()
+    public static function run() : void
     {
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');

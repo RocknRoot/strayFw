@@ -63,7 +63,7 @@ abstract class Enum
     /**
      * Set current enum value.
      *
-     * @param  string $v new value
+     * @param string $v new value
      */
     public function setValue(string $v) : void
     {

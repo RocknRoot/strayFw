@@ -31,9 +31,9 @@ class Config
      * Get installation settings.
      *
      * @static
-     * @return array file content
+     * @return mixed file content
      */
-    public static function getSettings() : array
+    public static function getSettings() : mixed
     {
         return self::get(\constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
@@ -45,15 +45,14 @@ class Config
      * @param  string          $fileName file name
      * @throws FileNotReadable if file can't be opened
      * @throws FileNotParsable if file can't be parsed
-     * @return array           file content
+     * @return mixed           file content
      */
-    public static function get(string $fileName) : array
+    public static function get(string $fileName) : mixed
     {
         if (isset(self::$files[$fileName]) === false) {
             if (($content = \file_get_contents($fileName)) === false) {
                 throw new FileNotReadable('file "' . $fileName . '" can\'t be read');
             }
-            $content = (string) $content; // re: https://github.com/phpstan/phpstan/issues/647
             try {
                 $content = Yaml::parse($content);
             } catch (ParseException $e) {
@@ -70,10 +69,10 @@ class Config
      *
      * @static
      * @param  string          $fileName file name
-     * @param  array           $content  file content
+     * @param  mixed           $content  file content
      * @throws FileNotWritable if file can't be written
      */
-    public static function set(string $fileName, array $content): void
+    public static function set(string $fileName, $content): void
     {
         try {
             $json = Yaml::dump($content, 2);

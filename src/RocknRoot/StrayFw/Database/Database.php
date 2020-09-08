@@ -291,7 +291,7 @@ class Database
     public static function registerDatabase(string $alias) : void
     {
         if (isset(self::$databases[$alias]) === false) {
-            self::$databases[$alias] = new static($alias);
+            self::$databases[$alias] = new static($alias); // @phpstan-ignore-line
         }
     }
 
