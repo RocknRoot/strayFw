@@ -33,7 +33,7 @@ class Config
      * @static
      * @return mixed file content
      */
-    public static function getSettings() : mixed
+    public static function getSettings() // @phpstan-ignore-line
     {
         return self::get(\constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
@@ -47,7 +47,7 @@ class Config
      * @throws FileNotParsable if file can't be parsed
      * @return mixed           file content
      */
-    public static function get(string $fileName) : mixed
+    public static function get(string $fileName) // @phpstan-ignore-line
     {
         if (isset(self::$files[$fileName]) === false) {
             if (($content = \file_get_contents($fileName)) === false) {

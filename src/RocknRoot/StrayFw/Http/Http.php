@@ -79,11 +79,9 @@ abstract class Http
     {
         if (self::$isInit === false) {
             self::$isInit = true;
-            if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true) {
-                self::$rawRequest = new RawRequest();
-                Session::init();
-                Locale::init(self::$rawRequest);
-            }
+            self::$rawRequest = new RawRequest();
+            Session::init();
+            Locale::init(self::$rawRequest);
         }
     }
 
