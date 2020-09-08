@@ -21,12 +21,12 @@ abstract class Query
      *
      * @var array<string, mixed>
      */
-    protected array $parameters;
+    protected array $parameters = [];
 
     /**
      * PDO statement.
      */
-    protected \PDOStatement $statement;
+    protected ?\PDOStatement $statement = null;
 
     /**
      * PDO error info.
@@ -43,7 +43,6 @@ abstract class Query
     public function __construct(string $database)
     {
         $this->database = $database;
-        $this->parameters = array();
     }
 
     /**

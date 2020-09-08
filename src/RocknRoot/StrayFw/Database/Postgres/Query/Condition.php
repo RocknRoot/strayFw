@@ -14,12 +14,12 @@ class Condition
      *
      * @var mixed[]
      */
-    protected array $tree;
+    protected array $tree = [];
 
     /**
      * Generated SQL code.
      */
-    protected ?string $sql;
+    protected ?string $sql = null;
 
     /**
      * Construct a new condition expression.
