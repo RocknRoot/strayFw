@@ -52,7 +52,7 @@ class Mutation extends Query
      * Extract the corresponding SQL code.
      *
      * @throws AppException if statement is unset
-     * @return string generated SQL code
+     * @return string       generated SQL code
      */
     public function toSql() : string
     {

@@ -2,13 +2,13 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres;
 
-use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Query\Delete;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
 use RocknRoot\StrayFw\Database\Postgres\Query\Select;
 use RocknRoot\StrayFw\Database\Postgres\Query\Update;
 use RocknRoot\StrayFw\Database\Provider\Model as ProviderModel;
+use RocknRoot\StrayFw\Exception\AppException;
 
 /**
  * Model representation class for PostgreSQL tables.

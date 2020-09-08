@@ -35,8 +35,8 @@ class Request extends BaseRequest
     /**
      * Construct request.
      *
-     * @param  RawRequest             $rawRequest base raw request
-     * @param  array[]                $routes     registered routes
+     * @param RawRequest $rawRequest base raw request
+     * @param array[]    $routes     registered routes
      */
     public function __construct(RawRequest $rawRequest, array $routes)
     {
@@ -95,7 +95,7 @@ class Request extends BaseRequest
                             }
                         }
                     }
-                } elseif (count($this->actions) == 0) {
+                } elseif (\count($this->actions) == 0) {
                     if (\preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
                         foreach ($route['action'] as $r) {
                             list($class, $action) = \explode('.', $r);
@@ -114,7 +114,7 @@ class Request extends BaseRequest
                 }
             }
         }
-        if (count($this->actions) == 0) {
+        if (\count($this->actions) == 0) {
             throw new RouteNotFound('no route matches this : ' . \print_r($this->rawRequest, true));
         }
     }

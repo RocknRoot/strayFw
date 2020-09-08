@@ -47,7 +47,7 @@ class Request extends BaseRequest
                             }
                         }
                     }
-                } elseif (count($this->actions) == 0) {
+                } elseif (\count($this->actions) == 0) {
                     if ($cmd == $route['path']) {
                         foreach ($route['action'] as $r) {
                             list($class, $action) = \explode('.', $r);
@@ -65,7 +65,7 @@ class Request extends BaseRequest
                 }
             }
         }
-        if (count($this->actions) == 0) {
+        if (\count($this->actions) == 0) {
             $this->fillWithDefaultRoute();
         }
     }

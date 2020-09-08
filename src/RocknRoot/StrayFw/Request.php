@@ -11,7 +11,7 @@ abstract class Request
 {
     /**
      * Route actions classes and names.
-     * 
+     *
      * @var string[][]
      */
     protected array $actions = [];
