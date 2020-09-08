@@ -34,33 +34,38 @@ class Request extends BaseRequest
                 }
                 if ($route['type'] == 'before' || $route['type'] == 'after') {
                     if (\stripos($cmd, $route['path']) === 0) {
-                        list($class, $action) = \explode('.', $route['action']);
-                        if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
-                        }
-                        $a = [ 'class' => $class, 'action' => $action ];
-                        if ($route['type'] == 'before') {
-                            $this->before[] = $a;
-                        } else {
-                            $this->after[] = $a;
+                        foreach ($route['action'] as $r) {
+                            list($class, $action) = \explode('.', $r);
+                            if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
+                            }
+                            $a = [ 'class' => $class, 'action' => $action ];
+                            if ($route['type'] == 'before') {
+                                $this->before[] = $a;
+                            } else {
+                                $this->after[] = $a;
+                            }
                         }
                     }
-                } elseif ($this->class == null) {
+                } elseif (count($this->actions) == 0) {
                     if ($cmd == $route['path']) {
-                        list($this->class, $this->action) = \explode('.', $route['action']);
-                        if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                            $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
-                        }
-                        \array_shift($cli);
-                        $this->args = $cli;
-                        if (\is_array($this->args) === false) {
-                            $this->args = array();
+                        foreach ($route['action'] as $r) {
+                            list($class, $action) = \explode('.', $r);
+                            if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
+                            }
+                            $a = [ 'class' => $class, 'action' => $action ];
+                            $this->actions[] = $a;
+                            \array_shift($cli);
+                            if (\is_array($cli) === true) {
+                                $this->args = $cli;
+                            }
                         }
                     }
                 }
             }
         }
-        if ($this->class == null) {
+        if (count($this->actions) == 0) {
             $this->fillWithDefaultRoute();
         }
     }
@@ -70,8 +75,10 @@ class Request extends BaseRequest
      */
     private function fillWithDefaultRoute() : void
     {
-        $this->class = 'RocknRoot\\StrayFw\\Console\\Controller';
-        $this->action = 'help';
+        $this->actions[] = [
+            'class' => 'RocknRoot\\StrayFw\\Console\\Controller',
+            'action' => 'help',
+        ];
         $this->args = array();
     }
 }

@@ -93,11 +93,6 @@ class Request extends BaseRequest
                             } else {
                                 $this->after[] = $a;
                             }
-                            foreach ($matches as $k => $v) {
-                                if (\is_numeric($k) === false && $v != null) {
-                                    $this->args[$k] = $v;
-                                }
-                            }
                         }
                     }
                 } elseif (count($this->actions) == 0) {

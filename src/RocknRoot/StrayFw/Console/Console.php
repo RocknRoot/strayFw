@@ -74,15 +74,18 @@ abstract class Console
                     $controller->$action(self::$request);
                 }
                 if (self::$request->hasEnded() === false) {
-                    $controller = Controllers::get(self::$request->getClass());
-                    $action = self::$request->getAction();
-                    $controller->$action(self::$request);
-                    if (self::$request->hasEnded() === false) {
-                        $after = self::$request->getAfter();
-                        foreach ($after as $a) {
-                            $controller = Controllers::get($a['class']);
-                            $action = $a['action'];
-                            $controller->$action(self::$request);
+                    $actions = self::$request->getActions();
+                    foreach ($actions as $a) {
+                        $controller = Controllers::get($a['class']);
+                        $action = $a['action'];
+                        $controller->$action(self::$request);
+                        if (self::$request->hasEnded() === false) {
+                            $after = self::$request->getAfter();
+                            foreach ($after as $a) {
+                                $controller = Controllers::get($a['class']);
+                                $action = $a['action'];
+                                $controller->$action(self::$request);
+                            }
                         }
                     }
                 }
