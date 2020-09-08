@@ -3,3 +3,9 @@ composer.phar
 php-cs-fixer.phar
 .php_cs.cache
 composer.lock
+
+docs/_site
+docs/.bundle
+docs/.jekyll-cache
+docs/vendor
+docs/Gemfile.lock
