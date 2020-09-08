@@ -10,14 +10,11 @@ namespace RocknRoot\StrayFw;
 abstract class Request
 {
     /**
-     * Route class name.
+     * Route actions classes and names.
+     * 
+     * @var string[][]
      */
-    protected ?string $class = null;
-
-    /**
-     * Route action name.
-     */
-    protected ?string $action = null;
+    protected array $actions = [];
 
     /**
      * Route parsed arguments.
@@ -46,19 +43,13 @@ abstract class Request
     protected bool $hasEnded = false;
 
     /**
-     * Get route class name.
+     * Get route actions.
+     *
+     * @return string[][] matched routes
      */
-    public function getClass(): ?string
+    public function getActions(): array
     {
-        return $this->class;
-    }
-
-    /**
-     * Get route action name.
-     */
-    public function getAction(): ?string
-    {
-        return $this->action;
+        return $this->actions;
     }
 
     /**

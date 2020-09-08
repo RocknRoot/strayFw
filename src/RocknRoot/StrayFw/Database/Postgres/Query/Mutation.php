@@ -27,11 +27,15 @@ class Mutation extends Query
     /**
      * Execute the query.
      *
+     * @throws AppException if statement is unset
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
     public function execute() : bool
     {
+        if (!$this->statement) {
+            throw new AppException('Database/Postgres/Query/Mutation.execute: statement is unset');
+        }
         $result = $this->statement->execute();
         $this->errorInfo = $this->statement->errorInfo();
         if ($this->getErrorState() != '00000') {
@@ -47,10 +51,14 @@ class Mutation extends Query
     /**
      * Extract the corresponding SQL code.
      *
+     * @throws AppException if statement is unset
      * @return string generated SQL code
      */
     public function toSql() : string
     {
+        if (!$this->statement) {
+            throw new AppException('Database/Postgres/Query/Mutation.execute: statement is unset');
+        }
         return $this->statement->queryString;
     }
 }

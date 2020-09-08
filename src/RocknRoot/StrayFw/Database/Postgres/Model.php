@@ -2,6 +2,7 @@
 
 namespace RocknRoot\StrayFw\Database\Postgres;
 
+use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Postgres\Query\Delete;
 use RocknRoot\StrayFw\Database\Postgres\Query\Insert;
@@ -92,7 +93,11 @@ abstract class Model extends ProviderModel
 
                 if ($status === true) {
                     $this->modified = array();
-                    $rows = $insertQuery->getStatement()->fetch(\PDO::FETCH_ASSOC);
+                    $statement = $insertQuery->getStatement();
+                    if (!$statement) {
+                        throw new AppException('Database/Postgres/Model.save: insert query statement is null');
+                    }
+                    $rows = $statement->fetch(\PDO::FETCH_ASSOC);
                     $imax = \count($rows);
                     for ($i = 0; $i < $imax; $i++) {
                         $field = &$this->{'field' . \ucfirst($this->getPrimary()[$i])};

@@ -75,9 +75,9 @@ abstract class Query
     /**
      * Get PDO statement.
      *
-     * @return \PDOStatement statement
+     * @return ?\PDOStatement statement
      */
-    public function getStatement() : \PDOStatement
+    public function getStatement() : ?\PDOStatement
     {
         return $this->statement;
     }

@@ -54,7 +54,7 @@ class Request extends BaseRequest
      * @throws InvalidRouteDefinition if a route has an invalid definition
      * @throws RouteNotFound          if no route matches the request
      */
-    public function route()
+    public function route() : void
     {
         foreach ($this->routes as $route) {
             if (isset($route['subdomain']) === true) {
@@ -93,15 +93,22 @@ class Request extends BaseRequest
                             } else {
                                 $this->after[] = $a;
                             }
+                            foreach ($matches as $k => $v) {
+                                if (\is_numeric($k) === false && $v != null) {
+                                    $this->args[$k] = $v;
+                                }
+                            }
                         }
                     }
-                } elseif ($this->class == null) {
+                } elseif (count($this->actions) == 0) {
                     if (\preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
                         foreach ($route['action'] as $r) {
-                            list($this->class, $this->action) = \explode('.', $r);
-                            if (\stripos($this->class, '\\') !== 0 && isset($route['namespace']) === true) {
-                                $this->class = \rtrim($route['namespace'], '\\') . '\\' . $this->class;
+                            list($class, $action) = \explode('.', $r);
+                            if (\stripos($class, '\\') !== 0 && isset($route['namespace']) === true) {
+                                $class = \rtrim($route['namespace'], '\\') . '\\' . $class;
                             }
+                            $a = [ 'class' => $class, 'action' => $action ];
+                            $this->actions[] = $a;
                             foreach ($matches as $k => $v) {
                                 if (\is_numeric($k) === false && $v != null) {
                                     $this->args[$k] = $v;
@@ -112,7 +119,7 @@ class Request extends BaseRequest
                 }
             }
         }
-        if ($this->class == null) {
+        if (count($this->actions) == 0) {
             throw new RouteNotFound('no route matches this : ' . \print_r($this->rawRequest, true));
         }
     }
