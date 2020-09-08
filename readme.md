@@ -24,7 +24,7 @@ Code is free, new-BSD license. So... fork us!
 * PHP >= 7.4
 * mbstring extension
 * For the Locale namespace, intl extension >= 1.0.0
-* For the [Twig](https://twig.symfony.com/ 'Twig') renderer, twig/twig >= 2.0
+* For the [Twig](https://twig.symfony.com/ 'Twig') renderer, twig/twig >= 3.0
 
 ## Get started
 

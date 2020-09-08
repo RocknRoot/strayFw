@@ -49,11 +49,10 @@ class RenderTwig implements RenderInterface
     public function render(array $args) : string
     {
         $env = Twig::getEnv($this->templatesDir);
-        $template = $env->loadTemplate($this->fileName);
         if (isset($args['request']) === false) {
             $args['request'] = $this->request;
         }
 
-        return $template->render($args);
+        return $env->render($this->fileName, $args);
     }
 }
