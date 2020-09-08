@@ -52,6 +52,10 @@ The framework follows these standards:
 * [PSR-3: Logger Interface](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md 'PSR-3: Logger Interface')
 * [PSR-4: Autoloader](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md 'PSR-4: Autoloader')
 
+### Rector
+
+    $ php vendor/bin/rector -c quality/rector.php process src
+
 ### Static analysis
 
     $ php vendor/bin/phpstan analyse src --level=max
