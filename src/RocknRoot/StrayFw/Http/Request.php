@@ -19,32 +19,44 @@ class Request extends BaseRequest
     protected \RocknRoot\StrayFw\Http\RawRequest $rawRequest;
 
     /**
+     * Apps routes.
+     *
+     * @var array[]
+     */
+    protected array $routes;
+
+    /**
      * Request data.
      *
      * @var array<string, mixed>
      */
-    public array $data;
+    public array $data = [];
 
     /**
-     * Parse raw request and choose a route.
+     * Construct request.
      *
      * @param  RawRequest             $rawRequest base raw request
      * @param  array[]                $routes     registered routes
-     * @throws InvalidRouteDefinition if there is no route
-     * @throws InvalidRouteDefinition if a route has an invalid definition
-     * @throws RouteNotFound          if no route matches the request
      */
     public function __construct(RawRequest $rawRequest, array $routes)
     {
         $this->rawRequest = $rawRequest;
-        $this->before = array();
-        $this->after = array();
-        $this->hasEnded = false;
-        $this->data = [];
+        $this->routes = $routes;
         if (\count($routes) == 0) {
             throw new InvalidRouteDefinition('there is no route');
         }
-        foreach ($routes as $route) {
+    }
+
+    /**
+     * Parse raw request and choose a route.
+     *
+     * @throws InvalidRouteDefinition if there is no route
+     * @throws InvalidRouteDefinition if a route has an invalid definition
+     * @throws RouteNotFound          if no route matches the request
+     */
+    public function route()
+    {
+        foreach ($this->routes as $route) {
             if (isset($route['subdomain']) === true) {
                 if (\in_array($this->rawRequest->getSubDomain(), $route['subdomain']) === false) {
                     continue;

@@ -12,43 +12,43 @@ abstract class Request
     /**
      * Route class name.
      */
-    protected string $class;
+    protected ?string $class = null;
 
     /**
      * Route action name.
      */
-    protected string $action;
+    protected ?string $action = null;
 
     /**
      * Route parsed arguments.
      *
      * @var mixed[]
      */
-    protected array $args;
+    protected array $args = [];
 
     /**
      * Matching before hooks.
      *
      * @var string[][]
      */
-    protected array $before;
+    protected array $before = [];
 
     /**
      * Matching after hooks.
      *
      * @var string[][]
      */
-    protected array $after;
+    protected array $after = [];
 
     /**
      * True if route needs to stop early.
      */
-    protected bool $hasEnded;
+    protected bool $hasEnded = false;
 
     /**
      * Get route class name.
      */
-    public function getClass(): string
+    public function getClass(): ?string
     {
         return $this->class;
     }
@@ -56,7 +56,7 @@ abstract class Request
     /**
      * Get route action name.
      */
-    public function getAction(): string
+    public function getAction(): ?string
     {
         return $this->action;
     }

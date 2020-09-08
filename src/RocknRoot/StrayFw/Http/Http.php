@@ -102,6 +102,7 @@ abstract class Http
             self::$controllers = array();
             self::$response = new Response();
             try {
+                self::$request->route();
                 \ob_start();
                 $before = self::$request->getBefore();
                 foreach ($before as $b) {
