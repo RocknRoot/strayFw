@@ -5,8 +5,6 @@ namespace RocknRoot\StrayFw\Render;
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
-use Twig\Environment;
-use Twig\Extension;
 
 /**
  * Wrapper and configuration class for Twig.
@@ -80,12 +78,12 @@ abstract class Twig
             if (\constant('STRAY_ENV') === 'development') {
                 self::$environments[$dir]->addExtension(new \Twig\Extension\DebugExtension());
             }
-            self::$environments[$dir]->addFunction(new \Twig_Function('tr', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'tr']));
-            self::$environments[$dir]->addFunction(new \Twig_Function('langFull', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langFull']));
-            self::$environments[$dir]->addFunction(new \Twig_Function('langPrimary', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langPrimary']));
-            self::$environments[$dir]->addFunction(new \Twig_Function('url', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'url']));
-            self::$environments[$dir]->addFunction(new \Twig_Function('localizedDate', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'localizedDate']));
-            self::$environments[$dir]->addFunction(new \Twig_Function('session', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'session']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('tr', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'tr']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('langFull', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langFull']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('langPrimary', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'langPrimary']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('url', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'url']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('localizedDate', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'localizedDate']));
+            self::$environments[$dir]->addFunction(new \Twig\TwigFunction('session', ['\\RocknRoot\\StrayFw\\Render\\TwigHelper', 'session']));
             foreach (self::$extensions as $ext) {
                 self::$environments[$dir]->addExtension($ext);
             }
