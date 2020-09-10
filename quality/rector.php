@@ -19,6 +19,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SETS, [
         SetList::PERFORMANCE,
         SetList::TYPE_DECLARATION,
-        SetList::PHP_74,
     ]);
+    $services = $containerConfigurator->services();
+    $services->set(Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
+    $services->set(Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector::class);
+    $services->set(Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector::class);
+    $services->set(Rector\Php74\Rector\Class_\ClassConstantToSelfClassRector::class);
+    $services->set(Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class);
+    $services->set(Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector::class);
+    $services->set(Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector::class);
+    $services->set(Rector\Php74\Rector\Assign\NullCoalescingOperatorRector::class);
+    $services->set(Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector::class);
+    $services->set(Rector\Php74\Rector\Property\TypedPropertyRector::class);
 };
