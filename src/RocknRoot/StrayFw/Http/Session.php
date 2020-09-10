@@ -29,11 +29,24 @@ abstract class Session
     {
         if (self::$isInit === false) {
             if (\session_id() == null) {
+                global $_SERVER;
                 $settings = Config::getSettings();
-                \session_name(isset($settings['session_name']) === true ? $settings['session_name'] : 'stray_session');
-                if (isset($settings['session_cookie_domain']) === true) {
-                    \session_set_cookie_params(0, '/', $settings['session_cookie_domain']);
+                $name = 'stray_session';
+                $lifetime = 7200;
+                $cookie_domain = $_SERVER['HTTP_HOST'];
+                if (isset($settings['session']) === true) {
+                    if (isset($settings['session']['name']) === true) {
+                        $name = $settings['session']['name'];
+                    }
+                    if (isset($settings['session']['cookie_domain']) === true) {
+                        $cookie_domain = $settings['session']['cookie_domain'];
+                    }
+                    if (isset($settings['session']['lifetime']) === true) {
+                        $lifetime = $settings['session']['lifetime'];
+                    }
                 }
+                \session_name($name);
+                \session_set_cookie_params($lifetime, '/', $cookie_domain);
                 \session_start();
             }
             self::$isInit = true;
