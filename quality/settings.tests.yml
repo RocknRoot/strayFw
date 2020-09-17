@@ -1,6 +1,9 @@
 tmp: tmp
 domain_prefix:
 
+locale:
+  default: en-GB
+
 databases:
     global:
         host: localhost

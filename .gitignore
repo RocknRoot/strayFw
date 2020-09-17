@@ -1,8 +1,10 @@
 /vendor
 composer.phar
-php-cs-fixer.phar
-.php_cs.cache
 composer.lock
+
+php-cs-fixer.phar
+
+*.cache
 
 docs/_site
 docs/.bundle

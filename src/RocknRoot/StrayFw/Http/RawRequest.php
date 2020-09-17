@@ -65,15 +65,14 @@ class RawRequest
         } else {
             $this->scheme = 'http';
         }
-        $this->host = $_SERVER['SERVER_NAME'];
+        $this->host = $_SERVER['SERVER_NAME'] ?? 'localhost';
         $this->subDomain = $this->host;
         if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $this->subDomain, $matches)) {
             $this->subDomain = $matches['domain'];
         }
         $this->subDomain = \rtrim((string) \strstr($this->host, $this->subDomain, true), '.');
-        $query = \str_replace('/index.php', '', (string) $_SERVER['REQUEST_URI']);
+        $query = \str_replace('/index.php', '', $_SERVER['REQUEST_URI'] ?? '');
         if (($pos = \stripos($query, '?')) !== false) {
-            $pos = (int) $pos; // re: https://github.com/phpstan/phpstan/issues/647
             $query = \substr($query, 0, $pos);
         }
         $query = \rtrim($query, '/');
@@ -81,7 +80,7 @@ class RawRequest
             $query = '/';
         }
         $this->query = $query;
-        $this->method = $_SERVER['REQUEST_METHOD'];
+        $this->method = $_SERVER['REQUEST_METHOD'] ?? 'get';
         $this->getVars = $_GET;
         $this->postVars = $_POST;
         $body = \file_get_contents('php://input');
