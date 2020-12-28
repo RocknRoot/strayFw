@@ -61,5 +61,5 @@ Static analysis :
 
 Coding standards :
 
-    $ curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o php-cs-fixer
+    $ curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o php-cs-fixer.phar
     $ php php-cs-fixer.phar fix

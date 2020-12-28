@@ -23,7 +23,7 @@ class AddUnique extends Mutation
      * @param  string               $uniqueName      unique constraint name
      * @return MutationQuery        $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName) : MutationQuery
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $uniqueName): MutationQuery
     {
         $uniqueDefinition = $tableDefinition['uniques'][$uniqueName];
         $fields = array();

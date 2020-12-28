@@ -27,7 +27,7 @@ class Mapping
      * @static
      * @param mixed[] $config mapping configuration
      */
-    public static function registerMapping(array $config) : void
+    public static function registerMapping(array $config): void
     {
         self::validateConfig($config);
         if (isset(self::$mappings[$config['name']]) === false) {
@@ -45,7 +45,7 @@ class Mapping
      *
      * @return array[] mappings
      */
-    public static function getMappings() : array
+    public static function getMappings(): array
     {
         return self::$mappings;
     }
@@ -57,7 +57,7 @@ class Mapping
      * @throws MappingNotFound if there's no registered mapping for specified database
      * @return array<string,   mixed>           mapping data
      */
-    public static function get(string $name) : array
+    public static function get(string $name): array
     {
         if (isset(self::$mappings[$name]) === false) {
             throw new MappingNotFound('there\'s no registered mapping with name "' . $name . '"');
@@ -77,7 +77,7 @@ class Mapping
      * @throws BadUse  if there's no models.path in mapping configuration
      * @throws BadUse  if there's no models.namespace in mapping configuration
      */
-    private static function validateConfig(array $config) : void
+    private static function validateConfig(array $config): void
     {
         if (isset($config['name']) === false) {
             throw new BadUse('there\'s no name in mapping configuration');

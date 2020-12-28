@@ -24,7 +24,7 @@ class AddForeignKey extends Mutation
      * @param  string               $foreignTableName foreign table real name
      * @return MutationQuery        $statement prepared query
      */
-    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName) : MutationQuery
+    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName): MutationQuery
     {
         $tableDefinition = $definition[$modelName];
         $foreignDefinition = $tableDefinition['links'][$foreignName];

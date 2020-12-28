@@ -54,7 +54,7 @@ class Request extends BaseRequest
      * @throws InvalidRouteDefinition if a route has an invalid definition
      * @throws RouteNotFound          if no route matches the request
      */
-    public function route() : void
+    public function route(): void
     {
         foreach ($this->routes as $route) {
             if (isset($route['subdomain']) === true) {
@@ -132,7 +132,7 @@ class Request extends BaseRequest
      *
      * @return RawRequest
      */
-    public function getRawRequest() : RawRequest
+    public function getRawRequest(): RawRequest
     {
         return $this->rawRequest;
     }

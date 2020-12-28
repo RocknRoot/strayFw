@@ -22,7 +22,7 @@ class Migration
      * @throws FileNotReadable if can't find schema file
      * @throws FileNotWritable if can't copy schema file
      */
-    public function create(Request $req) : void
+    public function create(Request $req): void
     {
         if (\count($req->getArgs()) != 2) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/create mapping_name migration_name' . PHP_EOL;
@@ -60,7 +60,7 @@ class Migration
      * @param  Request         $req current CLI request
      * @throws FileNotReadable if can't find migrate
      */
-    public function generate(Request $req) : void
+    public function generate(Request $req): void
     {
         if (\count($req->getArgs()) != 2) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/create mapping_name migration_name' . PHP_EOL;
@@ -93,7 +93,7 @@ class Migration
      *
      * @param Request $req current CLI request
      */
-    public function migrate(Request $req) : void
+    public function migrate(Request $req): void
     {
         if (\count($req->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/migrate mapping_name' . PHP_EOL;
@@ -116,7 +116,7 @@ class Migration
      *
      * @param Request $req current CLI request
      */
-    public function rollback(Request $req) : void
+    public function rollback(Request $req): void
     {
         if (\count($req->getArgs()) != 1) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/migration/rollback mapping_name' . PHP_EOL;
@@ -148,7 +148,7 @@ class Migration
      * @throws FileNotWritable if can't write to file
      * @return bool            true if successful
      */
-    private function write(array $mapping, string $mappingName, string $name, array $up = [], array $down = [], array $import = []) : bool
+    private function write(array $mapping, string $mappingName, string $name, array $up = [], array $down = [], array $import = []): bool
     {
         $path = \rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $path .= $name . DIRECTORY_SEPARATOR;

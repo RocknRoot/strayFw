@@ -18,7 +18,7 @@ class Database implements ProviderDatabase
      * @param  mixed[] $info database info
      * @return string  DSN string
      */
-    public function getDsn(array $info) : string
+    public function getDsn(array $info): string
     {
         $dsn = 'pgsql:host=';
         $dsn .= (isset($info['host']) === true ? $info['host'] : 'localhost') . ';';
@@ -36,7 +36,7 @@ class Database implements ProviderDatabase
      * @param  mixed $link link info
      * @return bool  true if successful
      */
-    public function beginTransaction($link) : bool
+    public function beginTransaction($link): bool
     {
         return $link->beginTransaction();
     }
@@ -47,7 +47,7 @@ class Database implements ProviderDatabase
      * @param  mixed $link link info
      * @return bool  true if successful
      */
-    public function commit($link) : bool
+    public function commit($link): bool
     {
         return $link->commit();
     }
@@ -58,7 +58,7 @@ class Database implements ProviderDatabase
      * @param  mixed $link link info
      * @return bool  true if successful
      */
-    public function rollBack($link) : bool
+    public function rollBack($link): bool
     {
         return $link->rollBack();
     }
@@ -70,7 +70,7 @@ class Database implements ProviderDatabase
      * @param  string $name save point name
      * @return bool   true if successful
      */
-    public function savePoint($link, string $name) : bool
+    public function savePoint($link, string $name): bool
     {
         return $link->exec('SAVEPOINT ' . $name);
     }
@@ -82,7 +82,7 @@ class Database implements ProviderDatabase
      * @param  string $name save point name
      * @return bool   true if successful
      */
-    public function releaseSavePoint($link, string $name) : bool
+    public function releaseSavePoint($link, string $name): bool
     {
         return $link->exec('RELEASE SAVEPOINT ' . $name);
     }
@@ -94,7 +94,7 @@ class Database implements ProviderDatabase
      * @param  string $name save point name
      * @return bool   true if successful
      */
-    public function rollBackSavePoint($link, string $name) : bool
+    public function rollBackSavePoint($link, string $name): bool
     {
         return $link->exec('ROLLBACK TO SAVEPOINT ' . $name);
     }

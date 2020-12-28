@@ -46,7 +46,7 @@ class RenderTwig implements RenderInterface
      * @param  mixed[] $args render data
      * @return string  content
      */
-    public function render(array $args) : string
+    public function render(array $args): string
     {
         $env = Twig::getEnv($this->templatesDir);
         if (isset($args['request']) === false) {

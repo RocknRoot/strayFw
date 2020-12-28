@@ -31,7 +31,7 @@ abstract class Model extends ProviderModel
      *
      * @return bool true if successfully saved
      */
-    public function save() : bool
+    public function save(): bool
     {
         $status = false;
         if ($this->new === false) {
@@ -118,7 +118,7 @@ abstract class Model extends ProviderModel
      *
      * @return bool true if successfully deleted
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         $status = false;
         if ($this->new === false) {
@@ -144,7 +144,7 @@ abstract class Model extends ProviderModel
      *
      * @return array<string, mixed> values
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
@@ -160,7 +160,7 @@ abstract class Model extends ProviderModel
      *
      * @return array<string, mixed> values
      */
-    public function toRealNamesArray() : array
+    public function toRealNamesArray(): array
     {
         $values = array();
         foreach ($this->getAllFieldsAliases() as $name) {
@@ -380,7 +380,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string database's name
      */
-    abstract public function getDatabaseName() : string;
+    abstract public function getDatabaseName(): string;
 
     /**
      * Get table's name.
@@ -388,7 +388,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string table's name
      */
-    abstract public function getTableName() : string;
+    abstract public function getTableName(): string;
 
     /**
      * Get primary fields' names.
@@ -396,7 +396,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string[] primary fields' names
      */
-    abstract public function getPrimary() : array;
+    abstract public function getPrimary(): array;
 
     /**
      * Get all fields' names.
@@ -404,7 +404,7 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string[] all fields' names
      */
-    abstract public function getAllFieldsRealNames() : array;
+    abstract public function getAllFieldsRealNames(): array;
 
     /**
      * Get all fields' aliases.
@@ -412,5 +412,5 @@ abstract class Model extends ProviderModel
      * @abstract
      * @return string[] all fields' aliases
      */
-    abstract public function getAllFieldsAliases() : array;
+    abstract public function getAllFieldsAliases(): array;
 }

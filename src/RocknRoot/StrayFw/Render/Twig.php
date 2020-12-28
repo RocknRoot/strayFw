@@ -49,7 +49,7 @@ abstract class Twig
      * @throws BadUse            if tmp directory isn't writable
      * @return \Twig\Environment corresponding environment
      */
-    public static function getEnv(string $dir) : \Twig\Environment
+    public static function getEnv(string $dir): \Twig\Environment
     {
         if (isset(self::$environments[$dir]) === false) {
             $dir = \rtrim($dir, '/') . '/';
@@ -101,7 +101,7 @@ abstract class Twig
      * @static
      * @param \Twig\Extension\ExtensionInterface $extension instance
      */
-    public static function addExtension(\Twig\Extension\ExtensionInterface $extension) : void
+    public static function addExtension(\Twig\Extension\ExtensionInterface $extension): void
     {
         self::$extensions[] = $extension;
         foreach (self::$environments as $env) {
@@ -116,7 +116,7 @@ abstract class Twig
      * @param string   $label    function name in Twig templates
      * @param callable $function function
      */
-    public static function addFunction(string $label, callable $function) : void
+    public static function addFunction(string $label, callable $function): void
     {
         if (isset(self::$functions[$label]) === false) {
             self::$functions[$label] = $function;

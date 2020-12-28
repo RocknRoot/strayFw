@@ -40,7 +40,7 @@ class Condition
      *
      * @return string generated SQL code
      */
-    public function toSql() : string
+    public function toSql(): string
     {
         if (\is_string($this->sql) === false) {
             $this->sql = $this->toSqlLevel($this->tree);
@@ -55,7 +55,7 @@ class Condition
      * @param  mixed[] $tree one tree level
      * @return string  generated SQL code for this level
      */
-    protected function toSqlLevel(array $tree) : string
+    protected function toSqlLevel(array $tree): string
     {
         if (\count($tree) == 0) {
             return '';

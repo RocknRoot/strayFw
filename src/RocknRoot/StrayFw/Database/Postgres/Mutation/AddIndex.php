@@ -23,7 +23,7 @@ class AddIndex extends Mutation
      * @param  string               $indexName       index name
      * @return MutationQuery        $statement prepared query
      */
-    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName) : MutationQuery
+    public static function statement(Database $database, string $modelName, string $tableName, array $tableDefinition, string $indexName): MutationQuery
     {
         $indexDefinition = $tableDefinition['indexes'][$indexName];
         $indexes = array();

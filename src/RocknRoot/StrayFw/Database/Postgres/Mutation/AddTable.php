@@ -27,7 +27,7 @@ class AddTable extends Mutation
      * @throws InvalidSchemaDefinition if a model has no field
      * @return MutationQuery           $statement prepared query
      */
-    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName) : MutationQuery
+    public static function statement(Database $database, array $schema, string $mapping, string $tableName, string $modelName): MutationQuery
     {
         $tableDefinition = $schema[$modelName];
         if (isset($tableDefinition['fields']) === false) {

@@ -58,21 +58,21 @@ abstract class Schema
      *
      * @abstract
      */
-    abstract public function build() : void;
+    abstract public function build(): void;
 
     /**
      * Generate base models.
      *
      * @abstract
      */
-    abstract public function generateModels() : void;
+    abstract public function generateModels(): void;
 
     /**
      * Get the schema definition, from schema configuration file.
      *
      * @return array<string, array> schema definition
      */
-    public function getDefinition() : array
+    public function getDefinition(): array
     {
         if ($this->definition == null) {
             $data = Mapping::get($this->mapping);
@@ -87,7 +87,7 @@ abstract class Schema
      *
      * @return string mapping name
      */
-    public function getMapping() : string
+    public function getMapping(): string
     {
         return $this->mapping;
     }
@@ -98,7 +98,7 @@ abstract class Schema
      * @param  string $mapping mapping name
      * @return Schema schema instance
      */
-    public static function getSchema(string $mapping) : Schema
+    public static function getSchema(string $mapping): Schema
     {
         $data = Mapping::get($mapping);
         $class = \rtrim(\ucfirst($data['config']['provider']), '\\') . '\\Schema';

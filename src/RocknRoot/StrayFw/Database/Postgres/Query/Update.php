@@ -45,7 +45,7 @@ class Update extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute() : bool
+    public function execute(): bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -79,7 +79,7 @@ class Update extends Query
      * @throws BadUse if update clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql() : string
+    public function toSql(): string
     {
         if (empty($this->update) === true) {
             throw new BadUse('update clause has not been defined (' . \print_r($this, true) . ')');
@@ -106,7 +106,7 @@ class Update extends Query
      * @param  string $table table real name
      * @return Update this
      */
-    public function update(string $table) : self
+    public function update(string $table): self
     {
         $this->update = $table;
 
@@ -119,7 +119,7 @@ class Update extends Query
      * @param  array<string, mixed>|string $set set clause
      * @return Update                      this
      */
-    public function set($set) : self
+    public function set($set): self
     {
         if (\is_array($set) === true) {
             $this->set = '';
@@ -146,7 +146,7 @@ class Update extends Query
      * @param  array<string, mixed>|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
      * @return Update                                                                           this
      */
-    public function where($where) : self
+    public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -159,7 +159,7 @@ class Update extends Query
      * @param  string|string[] $orderBy order by clause
      * @return Update          this
      */
-    public function orderBy($orderBy) : self
+    public function orderBy($orderBy): self
     {
         if (\is_array($orderBy) === true) {
             $this->orderBy = '';
@@ -180,7 +180,7 @@ class Update extends Query
      * @param  string $limit limit clause
      * @return Update this
      */
-    public function limit(string $limit) : self
+    public function limit(string $limit): self
     {
         $this->limit = $limit;
 

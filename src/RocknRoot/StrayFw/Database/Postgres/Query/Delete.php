@@ -40,7 +40,7 @@ class Delete extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute() : bool
+    public function execute(): bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -74,7 +74,7 @@ class Delete extends Query
      * @throws BadUse if from clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql() : string
+    public function toSql(): string
     {
         if (empty($this->from) === true) {
             throw new BadUse('from clause has not been defined (' . \print_r($this, true) . ')');
@@ -100,7 +100,7 @@ class Delete extends Query
      * @param  string $table table real name
      * @return Delete this
      */
-    public function from(string $table) : self
+    public function from(string $table): self
     {
         $this->from = $table;
 
@@ -113,7 +113,7 @@ class Delete extends Query
      * @param  mixed[]|\RocknRoot\StrayFw\Database\Postgres\Query\Condition|string $where where clause
      * @return Delete                                                              this
      */
-    public function where($where) : self
+    public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -126,7 +126,7 @@ class Delete extends Query
      * @param  array<string, string>|string $orderBy order by clause
      * @return Delete                       this
      */
-    public function orderBy($orderBy) : self
+    public function orderBy($orderBy): self
     {
         if (\is_array($orderBy) === true) {
             $this->orderBy = '';
@@ -147,7 +147,7 @@ class Delete extends Query
      * @param  string $limit limit clause
      * @return Delete this
      */
-    public function limit(string $limit) : self
+    public function limit(string $limit): self
     {
         $this->limit = $limit;
 

@@ -50,7 +50,7 @@ abstract class Locale
      * @param  RawRequest $request base raw request if applied
      * @throws BadUse     if locale.default isn\'t defined in settings
      */
-    public static function init(RawRequest $request = null) : void
+    public static function init(RawRequest $request = null): void
     {
         if (self::$isInit === false) {
             self::$translations = array();
@@ -84,7 +84,7 @@ abstract class Locale
      * @throws BadUse           if called while language is unset
      * @throws InvalidDirectory if directory can't be identified
      */
-    public static function registerTranslations(string $baseDir, string $localesDir, string $prefix = null) : void
+    public static function registerTranslations(string $baseDir, string $localesDir, string $prefix = null): void
     {
         if (!self::$currentLanguage) {
             throw new BadUse('Locale\Locale: language must be set before calling registerTranslation');
@@ -125,7 +125,7 @@ abstract class Locale
      * @param  string[] $args translation arguments values
      * @throws BadUse   if locale isn't initialized
      */
-    public static function translate(string $key, array $args = []) : string
+    public static function translate(string $key, array $args = []): string
     {
         if (self::$isInit === false) {
             throw new BadUse('locale doesn\'t seem to have been initialized');
@@ -155,7 +155,7 @@ abstract class Locale
      * @static
      * @param string $language
      */
-    public static function setCurrentLanguage(string $language) : void
+    public static function setCurrentLanguage(string $language): void
     {
         self::$currentLanguage = $language;
         Session::set('_stray_language', self::$currentLanguage);
@@ -167,7 +167,7 @@ abstract class Locale
      *
      * @static
      */
-    public static function getCurrentLanguage() : ?string
+    public static function getCurrentLanguage(): ?string
     {
         return self::$currentLanguage;
     }

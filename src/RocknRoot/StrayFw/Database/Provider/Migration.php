@@ -61,15 +61,15 @@ abstract class Migration
      * @abstract
      * @return string mapping's name
      */
-    abstract public function getMappingName() : string;
+    abstract public function getMappingName(): string;
 
     /**
      * Perform migration.
      */
-    abstract public function up() : void;
+    abstract public function up(): void;
 
     /**
      * Rollback migration.
      */
-    abstract public function down() : void;
+    abstract public function down(): void;
 }

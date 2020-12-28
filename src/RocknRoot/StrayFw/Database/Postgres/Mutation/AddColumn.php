@@ -25,7 +25,7 @@ class AddColumn extends Mutation
      * @param  string               $fieldName field name
      * @return MutationQuery        $statement prepared query
      */
-    public static function statement(Database $database, array $schema, string $mapping, string $modelName, string $tableName, string $fieldName) : MutationQuery
+    public static function statement(Database $database, array $schema, string $mapping, string $modelName, string $tableName, string $fieldName): MutationQuery
     {
         $fieldDefinition = $schema[$modelName]['fields'][$fieldName];
         $fieldRealName = null;

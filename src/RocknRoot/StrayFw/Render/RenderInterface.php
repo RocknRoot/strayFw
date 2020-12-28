@@ -15,5 +15,5 @@ interface RenderInterface
      * @param  mixed[] $args render data
      * @return string  content
      */
-    public function render(array $args) : string;
+    public function render(array $args): string;
 }

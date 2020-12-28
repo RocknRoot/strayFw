@@ -25,7 +25,7 @@ abstract class Column
      * @throws InvalidSchemaDefinition if a field has an unknown type
      * @return string                  generated SQL
      */
-    public static function generateDefinition(array $schema, string $mapping, string $fieldName, array $fieldDefinition) : string
+    public static function generateDefinition(array $schema, string $mapping, string $fieldName, array $fieldDefinition): string
     {
         $sql = $fieldName . ' ';
         switch ($fieldDefinition['type']) {

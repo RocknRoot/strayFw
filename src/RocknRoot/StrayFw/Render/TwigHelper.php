@@ -24,7 +24,7 @@ abstract class TwigHelper
      * @param  string[] $args translation arguments values
      * @return string   translated content
      */
-    public static function tr(string $key, array $args = []) : string
+    public static function tr(string $key, array $args = []): string
     {
         return Locale::translate($key, $args);
     }
@@ -35,7 +35,7 @@ abstract class TwigHelper
      * @static
      * @return ?string tag
      */
-    public static function langFull() : ?string
+    public static function langFull(): ?string
     {
         return Locale::getCurrentLanguage();
     }
@@ -46,7 +46,7 @@ abstract class TwigHelper
      * @static
      * @return string primary tag
      */
-    public static function langPrimary() : ?string
+    public static function langPrimary(): ?string
     {
         $lang = Locale::getCurrentLanguage();
         if (!$lang) {
@@ -68,7 +68,7 @@ abstract class TwigHelper
      * @param  string $url raw URL
      * @return string nice URL
      */
-    public static function url(string $url) : string
+    public static function url(string $url): string
     {
         return HttpHelper::niceUrl($url);
     }
@@ -82,7 +82,7 @@ abstract class TwigHelper
      * @param  int        $timeFormat time format
      * @return string     localized formatted date
      */
-    public static function localizedDate($time, int $dateFormat, int $timeFormat) : string
+    public static function localizedDate($time, int $dateFormat, int $timeFormat): string
     {
         if ($time === 'now') {
             $time = \time();

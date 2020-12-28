@@ -34,7 +34,7 @@ abstract class Cookie
      * @param  string $name key
      * @return bool
      */
-    public static function has(string $name) : bool
+    public static function has(string $name): bool
     {
         return isset($_COOKIE[$name]);
     }
@@ -48,7 +48,7 @@ abstract class Cookie
      * @param int    $expire expiration timestamp
      * @param string $path   cookie path
      */
-    public static function set(string $name, string $value, int $expire = 0, ?string $path = null) : void
+    public static function set(string $name, string $value, int $expire = 0, ?string $path = null): void
     {
         if ($path === null) {
             \setcookie($name, $value, $expire);
@@ -63,7 +63,7 @@ abstract class Cookie
      * @static
      * @param string $name key
      */
-    public static function delete(string $name) : void
+    public static function delete(string $name): void
     {
         \setcookie($name, '', \time() - 1);
     }
@@ -73,7 +73,7 @@ abstract class Cookie
      *
      * @static
      */
-    public static function clear() : void
+    public static function clear(): void
     {
         $keys = \array_keys($_COOKIE);
         foreach ($keys as $key) {

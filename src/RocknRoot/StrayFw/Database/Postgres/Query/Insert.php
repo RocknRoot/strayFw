@@ -37,7 +37,7 @@ class Insert extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute() : bool
+    public function execute(): bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->getMasterLink()->prepare($this->toSql());
@@ -72,7 +72,7 @@ class Insert extends Query
      * @throws BadUse if values have not been set
      * @return string generated SQL code
      */
-    public function toSql() : string
+    public function toSql(): string
     {
         if (empty($this->into) === true) {
             throw new BadUse('into clause has not been defined (' . \print_r($this, true) . ')');
@@ -104,7 +104,7 @@ class Insert extends Query
      * @param  string $table table real name
      * @return Insert this
      */
-    public function into(string $table) : self
+    public function into(string $table): self
     {
         $this->into = $table;
 
@@ -117,7 +117,7 @@ class Insert extends Query
      * @param  mixed[]|string $values values clause
      * @return Insert         this
      */
-    public function values($values) : self
+    public function values($values): self
     {
         if (\is_array($values) === true) {
             if (\is_numeric(\key($values)) === true) {
@@ -153,7 +153,7 @@ class Insert extends Query
      * @param  mixed[]|string $returning returning clause
      * @return Insert         this
      */
-    public function returning($returning) : self
+    public function returning($returning): self
     {
         if (\is_array($returning) === true) {
             $this->returning = \implode(', ', $returning);

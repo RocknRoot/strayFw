@@ -43,7 +43,7 @@ class Response
      *
      * @return null|\RocknRoot\StrayFw\Render\RenderInterface
      */
-    public function getRender() : ?\RocknRoot\StrayFw\Render\RenderInterface
+    public function getRender(): ?\RocknRoot\StrayFw\Render\RenderInterface
     {
         return $this->renderInst;
     }

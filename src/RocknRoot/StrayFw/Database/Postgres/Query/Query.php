@@ -51,7 +51,7 @@ abstract class Query
      * @abstract
      * @return bool true if the query is successfully executed
      */
-    abstract public function execute() : bool;
+    abstract public function execute(): bool;
 
     /**
      * Extract the corresponding SQL code.
@@ -59,7 +59,7 @@ abstract class Query
      * @abstract
      * @return string generated SQL code
      */
-    abstract public function toSql() : string;
+    abstract public function toSql(): string;
 
     /**
      * Bind a parameter.
@@ -67,7 +67,7 @@ abstract class Query
      * @param string $name  parameter name
      * @param mixed  $value parameter value
      */
-    public function bind(string $name, $value) : void
+    public function bind(string $name, $value): void
     {
         $this->parameters[$name] = $value;
     }
@@ -77,7 +77,7 @@ abstract class Query
      *
      * @return ?\PDOStatement statement
      */
-    public function getStatement() : ?\PDOStatement
+    public function getStatement(): ?\PDOStatement
     {
         return $this->statement;
     }
@@ -87,7 +87,7 @@ abstract class Query
      *
      * @return null|string error state
      */
-    public function getErrorState() : ?string
+    public function getErrorState(): ?string
     {
         if (\is_array($this->errorInfo) === false) {
             return null;
@@ -101,7 +101,7 @@ abstract class Query
      *
      * @return null|string error message
      */
-    public function getErrorMessage() : ?string
+    public function getErrorMessage(): ?string
     {
         if (\is_array($this->errorInfo) === false) {
             return null;

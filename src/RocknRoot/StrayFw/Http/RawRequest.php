@@ -94,7 +94,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getScheme() : string
+    public function getScheme(): string
     {
         return $this->scheme;
     }
@@ -104,7 +104,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -114,7 +114,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getSubDomain() : string
+    public function getSubDomain(): string
     {
         return $this->subDomain;
     }
@@ -124,7 +124,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getQuery() : string
+    public function getQuery(): string
     {
         return $this->query;
     }
@@ -134,7 +134,7 @@ class RawRequest
      *
      * @return string
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -144,7 +144,7 @@ class RawRequest
      *
      * @return array<string, mixed>
      */
-    public function getGetVars() : array
+    public function getGetVars(): array
     {
         return $this->getVars;
     }
@@ -154,7 +154,7 @@ class RawRequest
      *
      * @return array<string, mixed>
      */
-    public function getPostVars() : array
+    public function getPostVars(): array
     {
         return $this->postVars;
     }

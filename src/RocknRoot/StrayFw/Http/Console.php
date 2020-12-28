@@ -16,7 +16,7 @@ class Console
      *
      * @param Request $request current CLI request
      */
-    public function routes(Request $request) : void
+    public function routes(Request $request): void
     {
         $table = new \cli\Table();
         $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);

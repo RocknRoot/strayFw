@@ -25,7 +25,7 @@ abstract class Session
      *
      * @static
      */
-    public static function init() : void
+    public static function init(): void
     {
         if (self::$isInit === false) {
             if (\session_id() == null) {
@@ -41,8 +41,8 @@ abstract class Session
                         ]);
                     }
                     if (isset($settings['session']['lifetime']) === true) {
-                        ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
-                        ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
+                        \ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
+                        \ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
                     }
                 }
                 \session_start();
@@ -85,7 +85,7 @@ abstract class Session
      * @param string $name  key
      * @param mixed  $value new value
      */
-    public static function set(string $name, $value) : void
+    public static function set(string $name, $value): void
     {
         $_SESSION[$name] = $value;
     }
@@ -96,7 +96,7 @@ abstract class Session
      * @static
      * @param string $name key
      */
-    public static function delete(string $name) : void
+    public static function delete(string $name): void
     {
         unset($_SESSION[$name]);
     }
@@ -106,7 +106,7 @@ abstract class Session
      *
      * @static
      */
-    public static function clear() : void
+    public static function clear(): void
     {
         \session_unset();
         \session_destroy();

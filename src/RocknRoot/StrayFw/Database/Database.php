@@ -127,7 +127,7 @@ class Database
      *
      * @throws ExternalLink if database connection can't be established
      */
-    public function connect() : void
+    public function connect(): void
     {
         if ($this->isConnected() === false) {
             try {
@@ -149,7 +149,7 @@ class Database
     /**
      * Disconnect link to database.
      */
-    public function disconnect() : void
+    public function disconnect(): void
     {
         if (isset($this->servers['all']) === true) {
             unset($this->servers['all']['link']);
@@ -164,7 +164,7 @@ class Database
      *
      * @return bool true if connected
      */
-    public function isConnected() : bool
+    public function isConnected(): bool
     {
         if (isset($this->servers['all']) === true) {
             return isset($this->servers['all']['link']);
@@ -215,7 +215,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function beginTransaction() : bool
+    public function beginTransaction(): bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -233,7 +233,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function commit() : bool
+    public function commit(): bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -255,7 +255,7 @@ class Database
      *
      * @return bool true if successful
      */
-    public function rollBack() : bool
+    public function rollBack(): bool
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -277,7 +277,7 @@ class Database
      *
      * @return string alias
      */
-    public function getAlias() : string
+    public function getAlias(): string
     {
         return $this->alias;
     }
@@ -288,7 +288,7 @@ class Database
      * @static
      * @param string $alias database alias
      */
-    public static function registerDatabase(string $alias) : void
+    public static function registerDatabase(string $alias): void
     {
         if (isset(self::$databases[$alias]) === false) {
             self::$databases[$alias] = new static($alias); // @phpstan-ignore-line
@@ -303,7 +303,7 @@ class Database
      * @throws DatabaseNotFound if database isn't registered
      * @return Database         instance
      */
-    public static function get(string $alias) : Database
+    public static function get(string $alias): Database
     {
         if (isset(self::$databases[$alias]) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');

@@ -20,7 +20,7 @@ class DeleteForeignKey extends Mutation
      * @param  string        $key      foreign key name
      * @return MutationQuery $statement prepared query
      */
-    public static function statement(Database $database, string $table, string $key) : MutationQuery
+    public static function statement(Database $database, string $table, string $key): MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $table . ' DROP CONSTRAINT IF EXISTS fk_' . $key);
 

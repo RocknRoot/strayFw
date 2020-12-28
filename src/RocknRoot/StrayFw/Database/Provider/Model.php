@@ -36,21 +36,21 @@ abstract class Model
      *
      * @return bool true if successfully saved
      */
-    abstract public function save() : bool;
+    abstract public function save(): bool;
 
     /**
      * If not new, delete the model.
      *
      * @return bool true if successfully deleted
      */
-    abstract public function delete() : bool;
+    abstract public function delete(): bool;
 
     /**
      * Flag for deletion.
      *
      * @return bool true if model will be deleted on save
      */
-    public function getDeletionFlag() : bool
+    public function getDeletionFlag(): bool
     {
         return $this->deletionFlag;
     }
@@ -60,7 +60,7 @@ abstract class Model
      *
      * @param bool $value new flag value
      */
-    public function setDeletionFlag(bool $value) : void
+    public function setDeletionFlag(bool $value): void
     {
         $this->deletionFlag = $value;
     }

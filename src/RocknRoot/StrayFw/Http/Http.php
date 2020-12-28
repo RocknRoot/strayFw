@@ -75,7 +75,7 @@ abstract class Http
      *
      * @static
      */
-    public static function init() : void
+    public static function init(): void
     {
         if (self::$isInit === false) {
             self::$isInit = true;
@@ -92,7 +92,7 @@ abstract class Http
      * @throws AppException if raw request is not defined
      * @throws NotARender   if response->render is a non RenderInterface implementing object
      */
-    public static function run() : void
+    public static function run(): void
     {
         if (self::$isInit === true) {
             if ((self::$rawRequest instanceof RawRequest) === false) {
@@ -150,7 +150,7 @@ abstract class Http
      * @param null|string|string[] $subdomain subdomain prefix
      * @param string               $uri       uri prefix
      */
-    public static function prefix(string $namespace, $subdomain = null, string $uri = null) : void
+    public static function prefix(string $namespace, $subdomain = null, string $uri = null): void
     {
         self::$namespace = $namespace;
         self::$subdomain = \is_string($subdomain) ? [ $subdomain ] : $subdomain;
@@ -165,7 +165,7 @@ abstract class Http
      * @param string          $path   route path
      * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function route(string $method, string $path, $action) : void
+    public static function route(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -188,7 +188,7 @@ abstract class Http
      * @param string          $path   route path
      * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function before(string $method, string $path, $action) : void
+    public static function before(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -211,7 +211,7 @@ abstract class Http
      * @param string          $path   route path
      * @param string|string[] $action class(es) and method(s) to call
      */
-    public static function after(string $method, string $path, $action) : void
+    public static function after(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
             self::$routes[] = array(
@@ -231,7 +231,7 @@ abstract class Http
      *
      * @return array[] all routes
      */
-    public static function getRoutes() : array
+    public static function getRoutes(): array
     {
         return self::$routes;
     }
@@ -242,7 +242,7 @@ abstract class Http
      * @static
      * @return null|RawRequest
      */
-    public static function getRawRequest() : ?RawRequest
+    public static function getRawRequest(): ?RawRequest
     {
         return self::$rawRequest;
     }
@@ -252,7 +252,7 @@ abstract class Http
      *
      * @static
      */
-    public static function getRequest() : ?\RocknRoot\StrayFw\Http\Request
+    public static function getRequest(): ?\RocknRoot\StrayFw\Http\Request
     {
         return self::$request;
     }

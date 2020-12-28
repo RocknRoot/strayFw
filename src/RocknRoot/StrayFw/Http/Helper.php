@@ -20,7 +20,7 @@ abstract class Helper
      * @param  RawRequest $rawRequest base raw request
      * @return string     domain
      */
-    public static function extractDomain(RawRequest $rawRequest) : string
+    public static function extractDomain(RawRequest $rawRequest): string
     {
         if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $rawRequest->getHost(), $matches)) {
             return $matches['domain'];
@@ -38,7 +38,7 @@ abstract class Helper
      * @throws AppException if raw request is not defined
      * @return string       nice URL
      */
-    public static function niceUrl(string $url) : string
+    public static function niceUrl(string $url): string
     {
         $nice = null;
         if (($pos = \stripos($url, '.')) !== false) {

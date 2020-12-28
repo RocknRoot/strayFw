@@ -45,7 +45,7 @@ abstract class Enum
      *
      * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -55,7 +55,7 @@ abstract class Enum
      *
      * @return string
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->value;
     }
@@ -65,7 +65,7 @@ abstract class Enum
      *
      * @param string $v new value
      */
-    public function setValue(string $v) : void
+    public function setValue(string $v): void
     {
         if (static::isValid($v) === false) {
             throw new BadUse('"' . $v . '" is not recognized as a possible value');
@@ -78,7 +78,7 @@ abstract class Enum
      *
      * @return array<string, mixed>
      */
-    public static function toArray() : array
+    public static function toArray(): array
     {
         if (static::$array == null) {
             $ref = new \ReflectionClass(static::class);
@@ -100,7 +100,7 @@ abstract class Enum
      * @param  string $value
      * @return bool   true if value is recognized
      */
-    public static function isValid(string $value) : bool
+    public static function isValid(string $value): bool
     {
         return \in_array($value, static::toArray());
     }

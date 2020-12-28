@@ -28,7 +28,7 @@ abstract class Migration extends ProviderMigration
      * @param  string        $name        migration name
      * @return array<string, array>   import, up and down code
      */
-    public static function generate(array $mapping, string $mappingName, string $name) : array
+    public static function generate(array $mapping, string $mappingName, string $name): array
     {
         $import = [];
         $up = [];
@@ -132,7 +132,7 @@ abstract class Migration extends ProviderMigration
      * @param  mixed[] $mapping mapping definition
      * @return bool    true if successful
      */
-    public static function ensureTable(array $mapping) : bool
+    public static function ensureTable(array $mapping): bool
     {
         $database = Database::get($mapping['config']['database']);
         $statement = 'CREATE TABLE IF NOT EXISTS _stray_migration (';
@@ -167,7 +167,7 @@ abstract class Migration extends ProviderMigration
      *
      * @param mixed[] $mapping mapping definition
      */
-    public static function migrate(array $mapping) : void
+    public static function migrate(array $mapping): void
     {
         $database = Database::get($mapping['config']['database']);
         $database->beginTransaction();
@@ -230,7 +230,7 @@ abstract class Migration extends ProviderMigration
      *
      * @param mixed[] $mapping mapping definition
      */
-    public static function rollback(array $mapping) : void
+    public static function rollback(array $mapping): void
     {
         $database = Database::get($mapping['config']['database']);
         $database->beginTransaction();

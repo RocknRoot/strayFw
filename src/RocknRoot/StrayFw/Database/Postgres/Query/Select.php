@@ -111,7 +111,7 @@ class Select extends Query
      * @throws AppException on SQL error
      * @return bool         true if the query is successfully executed
      */
-    public function execute() : bool
+    public function execute(): bool
     {
         if ($this->statement == null) {
             $this->statement = Database::get($this->database)->{($this->isCritical === true ? 'getMasterLink' : 'getLink')}()->prepare($this->toSql());
@@ -163,7 +163,7 @@ class Select extends Query
      * @throws BadUse  if statement is null or after SQL error
      * @return mixed[] results data
      */
-    public function fetchAll() : array
+    public function fetchAll(): array
     {
         if ($this->statement == null) {
             throw new BadUse('Database\Postgres/Query/Select.fetchAll: statement is null');
@@ -185,7 +185,7 @@ class Select extends Query
      * @throws BadUse if from clause has not been defined
      * @return string generated SQL code
      */
-    public function toSql() : string
+    public function toSql(): string
     {
         $sql = 'SELECT ';
         if ($this->distinct != null) {
@@ -238,7 +238,7 @@ class Select extends Query
      * @param  array<string, string>|string $select select clause
      * @return Select                       this
      */
-    public function select($select) : self
+    public function select($select): self
     {
         if (\is_array($select) === true) {
             $this->select = '';
@@ -268,7 +268,7 @@ class Select extends Query
      * @param  string $from table real name
      * @return Select this
      */
-    public function from(string $from) : self
+    public function from(string $from): self
     {
         $this->from = $from;
 
@@ -281,7 +281,7 @@ class Select extends Query
      * @param  Condition|mixed $where where clause
      * @return Select          this
      */
-    public function where($where) : self
+    public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
 
@@ -294,7 +294,7 @@ class Select extends Query
      * @param  string|string[] $groupBy group by clause
      * @return Select          this
      */
-    public function groupBy($groupBy) : self
+    public function groupBy($groupBy): self
     {
         if (\is_array($groupBy) === true) {
             $this->groupBy = \implode(', ', $groupBy);
@@ -311,7 +311,7 @@ class Select extends Query
      * @param  Condition|string $having having clause
      * @return Select           this
      */
-    public function having($having) : self
+    public function having($having): self
     {
         $this->having = ($having instanceof Condition ? $having : new Condition($having));
 
@@ -324,7 +324,7 @@ class Select extends Query
      * @param  string|string[] $orderBy order by clause
      * @return Select          this
      */
-    public function orderBy($orderBy) : self
+    public function orderBy($orderBy): self
     {
         if (\is_array($orderBy) === true) {
             $this->orderBy = '';
@@ -345,7 +345,7 @@ class Select extends Query
      * @param  string|string[] $distinct distinct on clause
      * @return Select          this
      */
-    public function distinct($distinct) : self
+    public function distinct($distinct): self
     {
         if (\is_array($distinct) === true) {
             $this->distinct = \implode(', ', $distinct);
@@ -362,7 +362,7 @@ class Select extends Query
      * @param  null|int $limit limit clause
      * @return Select   this
      */
-    public function limit(int $limit = null) : self
+    public function limit(int $limit = null): self
     {
         $this->limit = $limit;
 
@@ -375,7 +375,7 @@ class Select extends Query
      * @param  null|int $offset offset clause
      * @return Select   this
      */
-    public function offset(int $offset = null) : self
+    public function offset(int $offset = null): self
     {
         $this->offset = $offset;
 
@@ -389,7 +389,7 @@ class Select extends Query
      * @param  Condition|mixed[]|string $on    join condition
      * @return Select                   this
      */
-    public function addInnerJoin(string $table, $on) : self
+    public function addInnerJoin(string $table, $on): self
     {
         $this->innerJoins[] = array(
             'table' => $table,
@@ -406,7 +406,7 @@ class Select extends Query
      * @param  Condition|mixed[]|string $on    join condition
      * @return Select                   $this
      */
-    public function addLeftOuterJoin(string $table, $on) : self
+    public function addLeftOuterJoin(string $table, $on): self
     {
         $this->leftOuterJoins[] = array(
             'table' => $table,
@@ -423,7 +423,7 @@ class Select extends Query
      * @param  Condition|mixed[]|string $on    join condition
      * @return Select                   $this
      */
-    public function addRightOuterJoin(string $table, $on) : self
+    public function addRightOuterJoin(string $table, $on): self
     {
         $this->rightOuterJoins[] = array(
             'table' => $table,
@@ -440,7 +440,7 @@ class Select extends Query
      * @param  Condition|mixed[]|string $on    join condition
      * @return Select                   $this
      */
-    public function addFullOuterJoin(string $table, $on) : self
+    public function addFullOuterJoin(string $table, $on): self
     {
         $this->fullOuterJoins[] = array(
             'table' => $table,

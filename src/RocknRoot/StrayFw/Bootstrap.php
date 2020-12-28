@@ -45,10 +45,10 @@ abstract class Bootstrap
      *
      * @static
      */
-    public static function init() : void
+    public static function init(): void
     {
         if (self::$isInit === false) {
-            \spl_autoload_register(function (string $name) : void {
+            \spl_autoload_register(function (string $name): void {
                 self::loadClass($name);
             });
             self::$isInit = true;
@@ -81,7 +81,7 @@ abstract class Bootstrap
      * @throws BadUse           if bootstrap isn't initialized
      * @throws UnknownNamespace if needed namespace can't be found
      */
-    public static function loadClass(string $className) : void
+    public static function loadClass(string $className): void
     {
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');
@@ -121,7 +121,7 @@ abstract class Bootstrap
      * @param string $namespace new namespace
      * @param string $path      custom files path if needed
      */
-    public static function registerApp(string $namespace, string $path = null) : void
+    public static function registerApp(string $namespace, string $path = null): void
     {
         $namespace = \rtrim($namespace, '\\');
         if ($path == null) {
@@ -143,7 +143,7 @@ abstract class Bootstrap
      * @throws BadUse if not CLI_IS_CLI nor STRAY_IS_HTTP
      * @static
      */
-    public static function run() : void
+    public static function run(): void
     {
         if (self::$isInit === false) {
             throw new BadUse('bootstrap doesn\'t seem to have been initialized');

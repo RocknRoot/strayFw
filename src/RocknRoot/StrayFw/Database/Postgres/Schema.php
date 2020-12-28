@@ -25,7 +25,7 @@ class Schema extends ProviderSchema
      * @throws InvalidSchemaDefinition if a model has no field
      * @throws InvalidSchemaDefinition if an enum-typed field has no values defined
      */
-    public function build() : void
+    public function build(): void
     {
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
@@ -126,7 +126,7 @@ class Schema extends ProviderSchema
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if an enum has no value
      */
-    private function buildEnum(string $enumName, array $enumDefinition) : void
+    private function buildEnum(string $enumName, array $enumDefinition): void
     {
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
@@ -170,7 +170,7 @@ class Schema extends ProviderSchema
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if a model has no field
      */
-    private function buildModel(string $modelName, array $modelDefinition) : void
+    private function buildModel(string $modelName, array $modelDefinition): void
     {
         $mapping = Mapping::get($this->mapping);
         $definition = $this->getDefinition();
@@ -218,7 +218,7 @@ class Schema extends ProviderSchema
      * @see generateEnum
      * @see generateModel
      */
-    public function generateModels() : void
+    public function generateModels(): void
     {
         $definition = $this->getDefinition();
         foreach ($definition as $modelName => $modelDefinition) {
@@ -243,7 +243,7 @@ class Schema extends ProviderSchema
      * @throws FileNotWritable         if a base file can't be opened with write permission
      * @throws FileNotWritable         if a user file can't be opened with write permission
      */
-    private function generateEnum(string $enumName, array $enumDefinition) : void
+    private function generateEnum(string $enumName, array $enumDefinition): void
     {
         $definition = $this->getDefinition();
         $consts = null;
@@ -315,7 +315,7 @@ class Schema extends ProviderSchema
      * @throws FileNotWritable         if a base file can't be opened with write permission
      * @throws FileNotWritable         if a user file can't be opened with write permission
      */
-    private function generateModel(string $modelName, array $modelDefinition) : void
+    private function generateModel(string $modelName, array $modelDefinition): void
     {
         $definition = $this->getDefinition();
         $primary = array();
