@@ -135,7 +135,7 @@ abstract class Http
                 }
                 echo $render->render(self::$response->data);
                 \ob_end_flush();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 \ob_end_clean();
                 throw $e;
             }
