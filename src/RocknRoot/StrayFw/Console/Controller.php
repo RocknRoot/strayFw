@@ -17,18 +17,18 @@ class Controller
     public function help(Request $request): void
     {
         $routes = Console::getRoutes();
-        echo 'strayFw console help screen' . PHP_EOL . 'Available actions :' . PHP_EOL . PHP_EOL;
+        \cli\line('strayFw console help screen%nAvailable actions :%n%n');
         $namespace = null;
         foreach ($routes as $route) {
             if ($namespace != $route['namespace']) {
                 $namespace = $route['namespace'];
-                echo $namespace . PHP_EOL . PHP_EOL;
+                \cli\line($namespace . '%n');
             }
-            echo '    ' . $route['usage'] . PHP_EOL;
+            \cli\line('    %Y' . $route['usage'] . '%n');
             if (isset($route['help']) != null) {
-                echo '        ' . $route['help'];
+                \cli\line('        %C' . $route['help']);
             }
-            echo PHP_EOL . PHP_EOL;
+            \cli\line('%W%n');
         }
     }
 }
