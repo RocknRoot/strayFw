@@ -35,7 +35,7 @@ abstract class Console
     /**
      * Current request.
      */
-    protected static ?\RocknRoot\StrayFw\Console\Request $request = null;
+    protected static ?Request $request = null;
 
     /**
      * Current controllers.
@@ -89,7 +89,7 @@ abstract class Console
                         }
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 echo 'Exception: ' . $e->getMessage() . PHP_EOL;
                 echo $e->getTraceAsString();
             }
