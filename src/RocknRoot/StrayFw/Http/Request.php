@@ -57,12 +57,12 @@ class Request extends BaseRequest
     public function route(): void
     {
         foreach ($this->routes as $route) {
-            if (count($route->getSubDomains()) >= 1) {
+            if (\count($route->getSubDomains()) >= 1) {
                 if (\in_array($this->rawRequest->getSubDomain(), $route->getSubDomains()) === false) {
                     continue;
                 }
             }
-            if ($route->getPath() === '' || count($route->getActions()) === 0) {
+            if ($route->getPath() === '' || \count($route->getActions()) === 0) {
                 throw new InvalidRouteDefinition('route "' . $route->getPath() . '" has invalid definition');
             }
             foreach ($route->getActions() as $r) {
