@@ -27,14 +27,14 @@ abstract class Http
     /**
      * Current namespace prefix.
      */
-    protected static ?string $namespace = null;
+    protected static string $namespace = '';
 
     /**
-     * Current subdomain prefix.
+     * Current subdomains prefix.
      *
      * @var string[]
      */
-    protected static ?array $subdomain = null;
+    protected static array $subdomains = [];
 
     /**
      * Current URI prefix.
@@ -44,24 +44,24 @@ abstract class Http
     /**
      * Registed routes.
      *
-     * @var array[]
+     * @var Route[]
      */
     protected static array $routes = [];
 
     /**
      * Current raw request.
      */
-    protected static ?\RocknRoot\StrayFw\Http\RawRequest $rawRequest = null;
+    protected static ?RawRequest $rawRequest = null;
 
     /**
      * Current request.
      */
-    protected static ?\RocknRoot\StrayFw\Http\Request $request = null;
+    protected static ?Request $request = null;
 
     /**
      * Current render.
      */
-    protected static ?\RocknRoot\StrayFw\Http\Response $response = null;
+    protected static ?Response $response = null;
 
     /**
      * Current controllers.
@@ -147,13 +147,19 @@ abstract class Http
      *
      * @static
      * @param string               $namespace namespace prefix
-     * @param null|string|string[] $subdomain subdomain prefix
-     * @param string               $uri       uri prefix
+     * @param null|string|string[] $subdomain subdomain(s) prefix
+     * @param null|string          $uri       uri prefix
      */
     public static function prefix(string $namespace, $subdomain = null, string $uri = null): void
     {
         self::$namespace = $namespace;
-        self::$subdomain = \is_string($subdomain) ? [ $subdomain ] : $subdomain;
+        if (\is_array($subdomain) === true) {
+            self::$subdomains = $subdomain;
+        } elseif (\is_string($subdomain) === true) {
+            self::$subdomains = [ $subdomain ];
+        } else {
+            self::$subdomains = [];
+        }
         self::$uri = $uri;
     }
 
@@ -168,14 +174,14 @@ abstract class Http
     public static function route(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'route',
-                'method' => $method,
-                'path' => $path,
-                'action' => \is_array($action) ? $action : [ $action ],
-                'namespace' => self::$namespace,
-                'subdomain' => self::$subdomain,
-                'uri' => self::$uri
+            self::$routes[] = new Route(
+                'route',
+                $method,
+                $path,
+                self::$subdomains,
+                self::$uri ?? '',
+                \is_array($action) ? $action : [ $action ],
+                self::$namespace
             );
         }
     }
@@ -191,14 +197,14 @@ abstract class Http
     public static function before(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'before',
-                'method' => $method,
-                'path' => $path,
-                'action' => \is_array($action) ? $action : [ $action ],
-                'namespace' => self::$namespace,
-                'subdomain' => self::$subdomain,
-                'uri' => self::$uri
+            self::$routes[] = new Route(
+                'before',
+                $method,
+                $path,
+                self::$subdomains,
+                self::$uri ?? '',
+                \is_array($action) ? $action : [ $action ],
+                self::$namespace
             );
         }
     }
@@ -214,14 +220,14 @@ abstract class Http
     public static function after(string $method, string $path, $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'after',
-                'method' => $method,
-                'path' => $path,
-                'action' => \is_array($action) ? $action : [ $action ],
-                'namespace' => self::$namespace,
-                'subdomain' => self::$subdomain,
-                'uri' => self::$uri
+            self::$routes[] = new Route(
+                'after',
+                $method,
+                $path,
+                self::$subdomains,
+                self::$uri ?? '',
+                \is_array($action) ? $action : [ $action ],
+                self::$namespace
             );
         }
     }
@@ -229,7 +235,7 @@ abstract class Http
     /**
      * Get all registered routes.
      *
-     * @return array[] all routes
+     * @return Route[] all routes
      */
     public static function getRoutes(): array
     {
@@ -252,7 +258,7 @@ abstract class Http
      *
      * @static
      */
-    public static function getRequest(): ?\RocknRoot\StrayFw\Http\Request
+    public static function getRequest(): ?Request
     {
         return self::$request;
     }

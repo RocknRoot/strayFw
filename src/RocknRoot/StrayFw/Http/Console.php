@@ -22,23 +22,35 @@ class Console
         $table->setHeaders([ 'Type', 'Subdomain', 'Method', 'Path', 'Action' ]);
         $rows = [];
         $routes = Http::getRoutes();
-        \usort($routes, function (array $a, array $b): int {
-            if ($a['subdomain'] != $b['subdomain']) {
-                return \strcmp($a['subdomain'], $b['subdomain']);
+        \usort($routes, function (Route $a, Route $b): int {
+            foreach ($a->getSubDomains() as $asd) {
+                foreach ($b->getSubDomains() as $bsd) {
+                    if ($asd !== $bsd) {
+                        return \strcmp($asd, $bsd);
+                    }
+                }
             }
-            if ($a['path'] != $a['path']) {
-                return \strcmp($a['path'], $b['path']);
+            if ($a->getPath() != $a->getPath()) {
+                return \strcmp($a->getPath(), $b->getPath());
             }
 
-            return \strcmp($a['method'], $b['method']);
+            return \strcmp($a->getMethod(), $b->getMethod());
         });
         foreach ($routes as $route) {
+            $actions = [];
+            foreach ($route->getActions() as $a) {
+                if ($a[0] == '\\') {
+                    $actions[] = $a;
+                } else {
+                    $actions[] = \rtrim($route->getNamespace(), '\\') . '\\' . $a;
+                }
+            }
             $rows[] = [
-                $route['type'],
-                $route['subdomain'],
-                $route['method'],
-                empty($route['uri']) === false ? '/' . \ltrim(\rtrim($route['uri'], '/'), '/') . $route['path'] : $route['path'],
-                $route['action'][0] == '\\' ? $route['action'] : \rtrim($route['namespace'], '\\') . '\\' . $route['action'],
+                $route->getKind(),
+                \implode(', ', $route->getSubDomains()),
+                $route->getMethod(),
+                $route->getURI() !== '' ? '/' . \ltrim(\rtrim($route->getURI(), '/'), '/') . $route->getPath() : $route->getPath(),
+                \implode(', ', $actions),
             ];
         }
         $table->setRows($rows);

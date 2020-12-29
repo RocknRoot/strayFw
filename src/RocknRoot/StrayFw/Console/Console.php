@@ -23,7 +23,7 @@ abstract class Console
     /**
      * Current namespace prefix.
      */
-    protected static ?string $namespace = null;
+    protected static string $namespace = '';
 
     /**
      * Registed routes.

@@ -34,17 +34,15 @@ class Request extends BaseRequest
                 }
                 if ($route->getKind() == 'before' || $route->getKind() == 'after') {
                     if (\stripos($cmd, $route->getPath()) === 0) {
-                        foreach ($route->getAction() as $r) {
-                            list($class, $action) = \explode('.', $r);
-                            if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
-                                $class = \rtrim($route->getNamespace(), '\\') . '\\' . $class;
-                            }
-                            $a = [ 'class' => $class, 'action' => $action ];
-                            if ($route->getKind() == 'before') {
-                                $this->before[] = $a;
-                            } else {
-                                $this->after[] = $a;
-                            }
+                        list($class, $action) = \explode('.', $route->getAction());
+                        if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
+                            $class = \rtrim($route->getNamespace(), '\\') . '\\' . $class;
+                        }
+                        $a = [ 'class' => $class, 'action' => $action ];
+                        if ($route->getKind() == 'before') {
+                            $this->before[] = $a;
+                        } else {
+                            $this->after[] = $a;
                         }
                     }
                 } elseif (\count($this->actions) == 0) {

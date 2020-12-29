@@ -43,11 +43,11 @@ class Route
     /**
      * Build a route to register it.
      *
-     * @param string $kind route kind
-     * @param string $path route path
-     * @param string $usage route usage text
-     * @param string $help route help text
-     * @param string $action action
+     * @param string $kind      route kind
+     * @param string $path      route path
+     * @param string $usage     route usage text
+     * @param string $help      route help text
+     * @param string $action    action
      * @param string $namespace namespace
      */
     public function __construct(string $kind, string $path, string $usage, string $help, string $action, string $namespace)
