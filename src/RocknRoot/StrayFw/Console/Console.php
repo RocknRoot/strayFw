@@ -28,7 +28,7 @@ abstract class Console
     /**
      * Registed routes.
      *
-     * @var array[]
+     * @var Route[]
      */
     protected static array $routes = [];
 
@@ -119,14 +119,7 @@ abstract class Console
     public static function route(string $path, string $usage, string $help, string $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'route',
-                'path' => $path,
-                'usage' => $usage,
-                'help' => $help,
-                'action' => $action,
-                'namespace' => self::$namespace
-            );
+            self::$routes[] = new Route('route', $path, $usage, $help, $action, self::$namespace);
         }
     }
 
@@ -142,14 +135,7 @@ abstract class Console
     public static function before(string $path, string $usage, string $help, string $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'before',
-                'path' => $path,
-                'usage' => $usage,
-                'help' => $help,
-                'action' => $action,
-                'namespace' => self::$namespace
-            );
+            self::$routes[] = new Route('before', $path, $usage, $help, $action, self::$namespace);
         }
     }
 
@@ -165,21 +151,14 @@ abstract class Console
     public static function after(string $path, string $usage, string $help, string $action): void
     {
         if (self::$isInit === true) {
-            self::$routes[] = array(
-                'type' => 'after',
-                'path' => $path,
-                'usage' => $usage,
-                'help' => $help,
-                'action' => $action,
-                'namespace' => self::$namespace
-            );
+            self::$routes[] = new Route('after', $path, $usage, $help, $action, self::$namespace);
         }
     }
 
     /**
      * Get all registered routes.
      *
-     * @return array[] all routes
+     * @return Route[] all routes
      */
     public static function getRoutes(): array
     {
