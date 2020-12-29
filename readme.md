@@ -1,7 +1,5 @@
 # strayFw
 
-[![Build Status](https://travis-ci.org/RocknRoot/strayFw.png?branch=master)](https://travis-ci.org/RocknRoot/strayFw)
-
 strayFw is a PHP framework trying to be modern without following fashion, between full-featured frameworks and micro ones.
 
 Code is free, new-BSD license. So... fork us!
