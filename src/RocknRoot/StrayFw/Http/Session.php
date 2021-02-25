@@ -28,25 +28,23 @@ abstract class Session
     public static function init(): void
     {
         if (self::$isInit === false) {
-            if (\session_id() == null) {
-                global $_SERVER;
-                $settings = Config::getSettings();
-                if (isset($settings['session']) === true) {
-                    if (isset($settings['session']['name']) === true) {
-                        \session_name($settings['session']['name']);
-                    }
-                    if (isset($settings['session']['cookie_domain']) === true) {
-                        \session_set_cookie_params([
-                            'domain' => $settings['session']['cookie_domain'],
-                        ]);
-                    }
-                    if (isset($settings['session']['lifetime']) === true) {
-                        \ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
-                        \ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
-                    }
+            global $_SERVER;
+            $settings = Config::getSettings();
+            if (isset($settings['session']) === true) {
+                if (isset($settings['session']['name']) === true) {
+                    \session_name($settings['session']['name']);
                 }
-                \session_start();
+                if (isset($settings['session']['cookie_domain']) === true) {
+                    \session_set_cookie_params([
+                        'domain' => $settings['session']['cookie_domain'],
+                    ]);
+                }
+                if (isset($settings['session']['lifetime']) === true) {
+                    \ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
+                    \ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
+                }
             }
+            \session_start();
             self::$isInit = true;
         }
     }
