@@ -70,7 +70,12 @@ class Condition
         } elseif (\key($tree) === 'OR') {
             foreach ($tree as $value) {
                 if (\is_array($value) === true) {
-                    $sql .= $this->toSqlLevel($value);
+                    $sql .= \implode(' OR ', \array_map(function ($v) {
+                        if (\is_array($v)) {
+                            return $this->toSqlLevel($v);
+                        }
+                        return $v;
+                    }, $value));
                 } else {
                     $sql .= $value;
                 }
@@ -80,7 +85,12 @@ class Condition
         } elseif (\key($tree) === 'AND') {
             foreach ($tree as $value) {
                 if (\is_array($value) === true) {
-                    $sql .= $this->toSqlLevel($value);
+                    $sql .= \implode(' AND ', \array_map(function ($v) {
+                        if (\is_array($v)) {
+                            return $this->toSqlLevel($v);
+                        }
+                        return $v;
+                    }, $value));
                 } else {
                     $sql .= $value;
                 }
