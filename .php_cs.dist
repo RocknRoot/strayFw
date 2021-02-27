@@ -5,6 +5,7 @@ $finder = PhpCsFixer\Finder::create()->in(__DIR__ . '/src');
 return PhpCsFixer\Config::create()
     ->setRules([
             '@PSR2' => true,
+            '@PSR12' => true,
             'no_trailing_comma_in_singleline_array' => true,
             'no_singleline_whitespace_before_semicolons' => true,
             'braces' => ['allow_single_line_closure' => true],
