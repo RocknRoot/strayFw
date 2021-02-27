@@ -107,10 +107,16 @@ abstract class Column
 
         case 'text':
             $sql .= 'TEXT';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+            }
             break;
 
         case 'json':
             $sql .= 'JSON';
+            if (isset($fieldDefinition['default']) === true) {
+                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+            }
             break;
 
         case 'blob':
