@@ -384,7 +384,6 @@ class Schema extends ProviderSchema
                     break;
                 case 'json':
                     $accessors .= 'return \json_decode($this->field' . \ucfirst($fieldName) . '[\'value\'], true);';
-                    $valueType = '?array ';
                     break;
                 default:
                     $accessors .= 'return $this->field' . \ucfirst($fieldName) . '[\'value\'];';
