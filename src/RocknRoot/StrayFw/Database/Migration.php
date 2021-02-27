@@ -177,10 +177,10 @@ class Migration
         $down = \implode('', \array_map(fn (string $a): string => '        ' . $a . '->execute();' . PHP_EOL, $down));
         \var_dump($up);
         $content .= "\nclass " . $name . " extends Migration\n{\n";
-        $content .= '    const NAME = \'' . $name . "';\n\n";
-        $content .= "    public function getMappingName() : string\n    {\n        return '" . $mappingName . "';\n    }\n\n";
-        $content .= "    public function up() : void\n    {\n" . $up . "    }\n\n";
-        $content .= "    public function down() : void\n    {\n" . $down . "    }\n";
+        $content .= '    public const NAME = \'' . $name . "';\n\n";
+        $content .= "    public function getMappingName(): string\n    {\n        return '" . $mappingName . "';\n    }\n\n";
+        $content .= "    public function up(): void\n    {\n" . $up . "    }\n\n";
+        $content .= "    public function down(): void\n    {\n" . $down . "    }\n";
         $content .= "}";
         if (\fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');

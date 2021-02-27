@@ -279,8 +279,8 @@ class Schema extends ProviderSchema
         $path .= 'Base' . DIRECTORY_SEPARATOR . \ucfirst($enumName) . '.php';
         $content = "<?php\n\nnamespace " . \ltrim(\rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
         $content .= "\nclass " . \ucfirst($enumName) . " extends Enum\n{\n";
-        $content .= "    public function getDatabaseName() : string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
-        $content .= "    public function getTableName() : string\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
+        $content .= "    public function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getTableName(): string\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
         $content .= $consts . "\n}";
         if (\fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');
@@ -320,12 +320,12 @@ class Schema extends ProviderSchema
         $definition = $this->getDefinition();
         $primary = array();
         $constructor = '    public function __construct(array $fetch = null)' . "\n    {\n        parent::__construct();\n";
-        $constructorDefaults = '        if (is_array($fetch) === true && count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
+        $constructorDefaults = '        if (\is_array($fetch) === true && \count($fetch) > 0) {' . PHP_EOL . '            $this->new = false;' . "\n        } else {\n" . '            $fetch = array();' . "\n        }\n";
         $consts = null;
         $properties = null;
         $accessors = null;
-        $allFieldsRealNames = "    public function getAllFieldsRealNames() : array\n    {\n        return [ ";
-        $allFieldsAliases = "    public function getAllFieldsAliases() : array\n    {\n        return [ ";
+        $allFieldsRealNames = "    public function getAllFieldsRealNames(): array\n    {\n        return [ ";
+        $allFieldsAliases = "    public function getAllFieldsAliases(): array\n    {\n        return [ ";
 
         $modelRealName = null;
         if (isset($modelDefinition['name']) === true) {
@@ -346,7 +346,7 @@ class Schema extends ProviderSchema
             }
 
             $properties .= '    protected $field' . \ucfirst($fieldName) . ";\n";
-            $consts .= '    const FIELD_' . \strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
+            $consts .= '    public const FIELD_' . \strtoupper(Helper::codifyName($fieldName)) . ' = \'' . $modelRealName . '.' . $fieldRealName . "';\n";
 
             $constructor .= '        $this->field' . \ucfirst($fieldName) . ' = [ \'alias\' => \'' . $fieldName . "', 'value' => null ];\n";
             $constructorDefaults .= '        if (isset($fetch[\'' . $fieldRealName . '\']) === true) {' . "\n            ";
@@ -368,18 +368,23 @@ class Schema extends ProviderSchema
             }
 
             $accessors .= '    public function get' . \ucfirst($fieldName) . "()\n    {\n        ";
+            $valueType = '';
             switch ($fieldDefinition['type']) {
                 case 'string':
-                    $accessors .= 'return stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
+                    $accessors .= 'return \stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
+                    $valueType = '?string ';
                     break;
                 case 'char':
-                    $accessors .= 'return stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
+                    $accessors .= 'return \stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
+                    $valueType = '?string ';
                     break;
                 case 'bool':
-                    $accessors .= 'return filter_var($this->field' . \ucfirst($fieldName) . '[\'value\'], FILTER_VALIDATE_BOOLEAN);';
+                    $accessors .= 'return \filter_var($this->field' . \ucfirst($fieldName) . '[\'value\'], FILTER_VALIDATE_BOOLEAN);';
+                    $valueType = '?bool ';
                     break;
                 case 'json':
-                    $accessors .= 'return json_decode($this->field' . \ucfirst($fieldName) . '[\'value\'], true);';
+                    $accessors .= 'return \json_decode($this->field' . \ucfirst($fieldName) . '[\'value\'], true);';
+                    $valueType = '?array ';
                     break;
                 default:
                     $accessors .= 'return $this->field' . \ucfirst($fieldName) . '[\'value\'];';
@@ -387,11 +392,11 @@ class Schema extends ProviderSchema
             }
             $accessors .= "\n    }\n\n";
 
-            $accessors .= '    public function set' . \ucfirst($fieldName) . '($value)' . "\n    {\n        ";
+            $accessors .= '    public function set' . \ucfirst($fieldName) . '(' . $valueType . '$value): void' . "\n    {\n        ";
             if ($fieldDefinition['type'] == 'bool') {
                 $accessors .= '$this->field' . \ucfirst($fieldName) . '[\'value\'] = (bool) $value;';
             } elseif ($fieldDefinition['type'] == 'json') {
-                $accessors .= 'if (is_string($value) === true) {' . PHP_EOL;
+                $accessors .= 'if (\is_string($value) === true) {' . PHP_EOL;
                 $accessors .= '            $this->field' . \ucfirst($fieldName) . '[\'value\'] = $value;' . PHP_EOL;
                 $accessors .= '        } else {' . PHP_EOL;
                 $accessors .= '            $this->field' . \ucfirst($fieldName) . '[\'value\'] = json_encode($value);' . PHP_EOL;
@@ -400,7 +405,7 @@ class Schema extends ProviderSchema
                 $accessors .= '$this->field' . \ucfirst($fieldName) . '[\'value\'] = $value;';
             }
             $accessors .= PHP_EOL . '        $this->modified[\'' . $fieldName . '\'] = true;';
-            $accessors .= "\n        return true;\n    }\n\n";
+            $accessors .= "\n    }\n\n";
 
             $allFieldsRealNames .= '\'' . $modelRealName . '.' . $fieldRealName . '\', ';
             $allFieldsAliases .= '\'' . $fieldName . '\', ';
@@ -412,7 +417,7 @@ class Schema extends ProviderSchema
                     throw new InvalidSchemaDefinition('unknown model for link "' . $linkName . '" of model "' . $modelName . '"');
                 }
                 $linkedModel = $definition[$linkDefinition['model']];
-                $accessors .= '    public function getLinked' . \ucfirst($linkName) . "()\n    {\n        ";
+                $accessors .= '    public function getLinked' . \ucfirst($linkName) . '(): Models\\' . \ucfirst($linkDefinition['model']) . "\n    {\n        ";
                 $accessors .= 'return Models\\' . \ucfirst($linkDefinition['model']) . '::fetchEntity([ ';
                 $links = array();
                 foreach ($linkDefinition['fields'] as $from => $to) {
@@ -444,11 +449,11 @@ class Schema extends ProviderSchema
         }
         $content = "<?php\n\nnamespace " . \ltrim(\rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
         $content .= "\nclass " . \ucfirst($modelName) . " extends Model\n{\n";
-        $content .= "    public function getDatabaseName() : string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
-        $content .= "    public function getTableName() : string\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
-        $content .= PHP_EOL . $consts . PHP_EOL . $properties . PHP_EOL;
+        $content .= "    public function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public function getTableName(): string\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
+        $content .= $consts . PHP_EOL . $properties . PHP_EOL;
         $content .= $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
-        $content .= "    public function getPrimary() : array\n    {\n        return [ '" . \implode('\', \'', $primary) . "' ];\n    }\n";
+        $content .= "    public function getPrimary(): array\n    {\n        return [ '" . \implode('\', \'', $primary) . "' ];\n    }\n";
         $content .= "}";
         if (\fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');
