@@ -119,7 +119,7 @@ abstract class Http
                         $controller = Controllers::get($a['class']);
                         $action = $a['action'];
                         $controller->$action(self::$request, self::$response);
-                        if (self::$request->hasEnded() === true) {
+                        if (self::$request->hasEnded() === true) { // @phpstan-ignore-line
                             break;
                         }
                     }
