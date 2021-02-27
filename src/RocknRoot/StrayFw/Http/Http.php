@@ -119,13 +119,16 @@ abstract class Http
                         $controller = Controllers::get($a['class']);
                         $action = $a['action'];
                         $controller->$action(self::$request, self::$response);
-                        if (self::$request->hasEnded() === false) {
-                            $after = self::$request->getAfter();
-                            foreach ($after as $a) {
-                                $controller = Controllers::get($a['class']);
-                                $action = $a['action'];
-                                $controller->$action(self::$request, self::$response);
-                            }
+                        if (self::$request->hasEnded() === true) {
+                            break;
+                        }
+                    }
+                    if (self::$request->hasEnded() === false) {
+                        $after = self::$request->getAfter();
+                        foreach ($after as $a) {
+                            $controller = Controllers::get($a['class']);
+                            $action = $a['action'];
+                            $controller->$action(self::$request, self::$response);
                         }
                     }
                 }
