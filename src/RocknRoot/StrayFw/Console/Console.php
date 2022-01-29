@@ -66,6 +66,7 @@ abstract class Console
         if (self::$isInit === true) {
             self::$request = new Request(self::$routes);
             self::$controllers = array();
+            \cli\Colors::enable();
 
             try {
                 $before = self::$request->getBefore();
