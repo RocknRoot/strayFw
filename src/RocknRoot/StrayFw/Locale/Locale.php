@@ -20,6 +20,13 @@ use RocknRoot\StrayFw\Logger;
 abstract class Locale
 {
     /**
+     * In-translation variable marker.
+     *
+     * @static
+     */
+    public static string $varMarker = ':';
+
+    /**
      * True if class has already been initialized.
      *
      * @static
@@ -121,9 +128,9 @@ abstract class Locale
      * Get a translation from loaded files.
      *
      * @static
-     * @param  string   $key  translation key
-     * @param  string[] $args translation arguments values
-     * @throws BadUse   if locale isn't initialized
+     * @param  string                $key  translation key
+     * @param  array<string, string> $args translation arguments values
+     * @throws BadUse                if locale isn't initialized
      */
     public static function translate(string $key, array $args = []): string
     {
@@ -145,7 +152,10 @@ abstract class Locale
 
             return '(null)';
         }
-
+        $str = $section[$key];
+        foreach ($args as $name => $value) {
+            \str_replace($str, self::$varMarker . $name, $value);
+        }
         return $section[$key];
     }
 
@@ -159,7 +169,7 @@ abstract class Locale
     {
         self::$currentLanguage = $language;
         Session::set('_stray_language', self::$currentLanguage);
-        \setlocale(LC_ALL, $language);
+        \setlocale(LC_ALL, self::$currentLanguage);
     }
 
     /**

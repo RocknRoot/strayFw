@@ -53,9 +53,9 @@ class Mapping
     /**
      * Get the mapping data.
      *
-     * @param  string          $name mapping name
-     * @throws MappingNotFound if there's no registered mapping for specified database
-     * @return array<string,   mixed>           mapping data
+     * @param  string                 $name mapping name
+     * @throws MappingNotFound        if there's no registered mapping for specified database
+     * @return array<string,   mixed> mapping data
      */
     public static function get(string $name): array
     {

@@ -23,10 +23,10 @@ abstract class Migration extends ProviderMigration
     /**
      * Generate code for migration.
      *
-     * @param  mixed[]       $mapping     mapping definition
-     * @param  string        $mappingName mapping name
-     * @param  string        $name        migration name
-     * @return array<string, array>   import, up and down code
+     * @param  mixed[]              $mapping     mapping definition
+     * @param  string               $mappingName mapping name
+     * @param  string               $name        migration name
+     * @return array<string, array> import, up and down code
      */
     public static function generate(array $mapping, string $mappingName, string $name): array
     {
