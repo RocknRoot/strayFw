@@ -154,7 +154,7 @@ abstract class Column
             throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type'); // @phpstan-ignore-next-line
             break;
         }
-        if (isset($fieldDefinition['notnull']) === false || $fieldDefinition['notnull'] === true) {
+        if (isset($fieldDefinition['null']) === false || $fieldDefinition['null'] === false) {
             $sql .= ' NOT NULL';
         }
 
