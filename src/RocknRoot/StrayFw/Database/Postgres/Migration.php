@@ -118,6 +118,7 @@ abstract class Migration extends ProviderMigration
                 echo 'TODO Compare Enum values' . PHP_EOL;
             }
         }
+        $down = array_reverse($down);
         return [
             'import' => \array_unique($import),
             'up' => $up,
