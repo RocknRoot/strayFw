@@ -57,7 +57,7 @@ class Config
             try {
                 $content = Yaml::parse($content);
             } catch (ParseException $e) {
-                throw new FileNotParsable('file "' . $fileName . '" can\'t be parsed');
+                throw new FileNotParsable('file "' . $fileName . '" can\'t be parsed: ' + $e->getMessage());
             }
             self::$files[$fileName] = $content ?? [];
         }
