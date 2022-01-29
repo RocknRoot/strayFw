@@ -157,7 +157,6 @@ abstract class Column
         if (isset($fieldDefinition['null']) === false || $fieldDefinition['null'] === false) {
             $sql .= ' NOT NULL';
         }
-
         return $sql;
     }
 }

@@ -21,10 +21,10 @@
     },
     "require-dev": {
         "filp/whoops": "^2.1",
-        "phpstan/phpstan": "^0.12.38",
+        "phpstan/phpstan": "^1.4.3",
         "phpunit/phpunit": "^9",
         "twig/twig": "^2.11",
-        "rector/rector": "^0.8.6"
+        "rector/rector": "^0.12.15"
     },
     "suggest": {
         "twig/twig": "For the Twig renderer"

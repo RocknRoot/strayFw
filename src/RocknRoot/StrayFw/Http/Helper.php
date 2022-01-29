@@ -25,7 +25,6 @@ abstract class Helper
         if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $rawRequest->getHost(), $matches)) {
             return $matches['domain'];
         }
-
         return 'localhost';
     }
 
@@ -53,7 +52,6 @@ abstract class Helper
             }
             $nice .= self::extractDomain($request->getRawRequest());
         }
-
         return $nice . '/' . \ltrim((string) \preg_replace('/\/+/', '/', $url), '/');
     }
 }

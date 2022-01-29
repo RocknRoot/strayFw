@@ -22,7 +22,6 @@ class DeleteTable extends Mutation
     public static function statement(Database $database, string $table): MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('DROP TABLE IF EXISTS ' . $table . ' CASCADE');
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

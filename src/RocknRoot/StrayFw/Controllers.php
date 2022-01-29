@@ -29,7 +29,6 @@ class Controllers
         if (isset(self::$controllers[$class]) === false) {
             self::$controllers[$class] = new $class();
         }
-
         return self::$controllers[$class];
     }
 }

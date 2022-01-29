@@ -109,7 +109,6 @@ abstract class Model extends ProviderModel
                 }
             }
         }
-
         return $status;
     }
 
@@ -135,7 +134,6 @@ abstract class Model extends ProviderModel
 
             $status = $deleteQuery->execute();
         }
-
         return $status;
     }
 
@@ -151,7 +149,6 @@ abstract class Model extends ProviderModel
             $field = $this->{'field' . \ucfirst($name)};
             $values[$name] = $field['value'];
         }
-
         return $values;
     }
 
@@ -168,7 +165,6 @@ abstract class Model extends ProviderModel
             $realName = (string) \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
             $values[$realName] = $field['value'];
         }
-
         return $values;
     }
 
@@ -211,7 +207,6 @@ abstract class Model extends ProviderModel
         if ($data === false) {
             return null;
         }
-
         return new static($data); // @phpstan-ignore-line
     }
 
@@ -254,7 +249,6 @@ abstract class Model extends ProviderModel
         if (\is_array($data) === false) {
             return null;
         }
-
         return $data;
     }
 
@@ -298,7 +292,6 @@ abstract class Model extends ProviderModel
         foreach ($res as $r) {
             $data[] = new static($r); // @phpstan-ignore-line
         }
-
         return $data;
     }
 
@@ -336,9 +329,7 @@ abstract class Model extends ProviderModel
         if ($selectQuery->execute() === false) {
             return false;
         }
-        $data = $selectQuery->fetchAll();
-
-        return $data;
+        return $selectQuery->fetchAll();
     }
 
     /**
@@ -370,7 +361,6 @@ abstract class Model extends ProviderModel
         if ($data === false) {
             return false;
         }
-
         return $data['count'];
     }
 

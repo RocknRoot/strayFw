@@ -15,16 +15,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 //use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::SETS, [
-        SetList::PERFORMANCE,
-        SetList::TYPE_DECLARATION,
-    ]);
+    $containerConfigurator->import(SetList::TYPE_DECLARATION);
     $services = $containerConfigurator->services();
+    $services->set(Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector::class);
     $services->set(Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
     $services->set(Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector::class);
     $services->set(Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector::class);
-    $services->set(Rector\Php74\Rector\Class_\ClassConstantToSelfClassRector::class);
     $services->set(Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class);
     $services->set(Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector::class);
     $services->set(Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector::class);

@@ -61,7 +61,6 @@ class Insert extends Query
                 throw new AppException('insert query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
-
         return $result;
     }
 
@@ -80,8 +79,8 @@ class Insert extends Query
         if (!$this->values || \count($this->values) < 2) {
             throw new BadUse('values have not been set');
         }
-        $sql = 'INSERT INTO ' . $this->into . ' ';
 
+        $sql = 'INSERT INTO ' . $this->into . ' ';
         if ($this->values[0] != null) {
             $sql .= '(' . $this->values[0] . ') ';
         }
@@ -94,7 +93,6 @@ class Insert extends Query
         if ($this->returning != null) {
             $sql .= 'RETURNING ' . $this->returning;
         }
-
         return $sql;
     }
 
@@ -107,7 +105,6 @@ class Insert extends Query
     public function into(string $table): self
     {
         $this->into = $table;
-
         return $this;
     }
 
@@ -143,7 +140,6 @@ class Insert extends Query
                 $values
             );
         }
-
         return $this;
     }
 
@@ -160,7 +156,6 @@ class Insert extends Query
         } else {
             $this->returning = $returning;
         }
-
         return $this;
     }
 }

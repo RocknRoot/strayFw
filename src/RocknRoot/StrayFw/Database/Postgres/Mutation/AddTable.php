@@ -55,7 +55,6 @@ class AddTable extends Mutation
         }
         $sql = \substr($sql, 0, -2) . ')';
         $statement = $database->getMasterLink()->prepare($sql);
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

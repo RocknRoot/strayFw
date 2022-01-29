@@ -23,7 +23,6 @@ class RenderJson implements RenderInterface
         if ((\constant('STRAY_ENV') === 'development' && $prettyPrint !== false) || $prettyPrint === true) {
             return (string) \json_encode($args, JSON_PRETTY_PRINT);
         }
-
         return (string) \json_encode($args);
     }
 }

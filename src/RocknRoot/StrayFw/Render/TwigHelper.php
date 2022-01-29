@@ -92,8 +92,12 @@ abstract class TwigHelper
             Logger::get()->warning('could not create IntlDateFormatter for dateFormat "' . $dateFormat . '" and timeFormat "' . $timeFormat . '"');
             return '';
         }
-
-        return $date->format($time);
+        $str = $date->format($time);
+        if ($str === false) {
+            Logger::get()->warning('IntlDateFormatter::format() failed for dateFormat "' . $dateFormat . '" and timeFormat "' . $timeFormat . '"');
+            return '';
+        }
+        return $str;
     }
 
     /**

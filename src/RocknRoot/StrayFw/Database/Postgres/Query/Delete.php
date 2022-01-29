@@ -64,7 +64,6 @@ class Delete extends Query
                 throw new AppException('delete query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
-
         return $result;
     }
 
@@ -79,8 +78,8 @@ class Delete extends Query
         if (empty($this->from) === true) {
             throw new BadUse('from clause has not been defined (' . \print_r($this, true) . ')');
         }
-        $sql = 'DELETE FROM ' . $this->from . ' ';
 
+        $sql = 'DELETE FROM ' . $this->from . ' ';
         if ($this->where != null) {
             $sql .= 'WHERE ' . $this->where->toSql() . ' ';
         }
@@ -90,7 +89,6 @@ class Delete extends Query
         if ($this->limit != null) {
             $sql .= 'LIMIT ' . $this->limit . ' ';
         }
-
         return $sql;
     }
 
@@ -103,7 +101,6 @@ class Delete extends Query
     public function from(string $table): self
     {
         $this->from = $table;
-
         return $this;
     }
 
@@ -116,7 +113,6 @@ class Delete extends Query
     public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
-
         return $this;
     }
 
@@ -137,7 +133,6 @@ class Delete extends Query
         } else {
             $this->orderBy = $orderBy;
         }
-
         return $this;
     }
 
@@ -150,7 +145,6 @@ class Delete extends Query
     public function limit(string $limit): self
     {
         $this->limit = $limit;
-
         return $this;
     }
 }

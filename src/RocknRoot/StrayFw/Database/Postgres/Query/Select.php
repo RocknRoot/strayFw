@@ -135,7 +135,6 @@ class Select extends Query
                 throw new AppException('select query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
-
         return $result;
     }
 
@@ -153,7 +152,6 @@ class Select extends Query
         if ($this->getErrorState() != '00000') {
             throw new BadUse('Database\Postgres/Query/Select.fetchAll: cannot fetch results after a SQL error');
         }
-
         return $this->statement->fetch(\PDO::FETCH_ASSOC);
     }
 
@@ -228,7 +226,6 @@ class Select extends Query
         if ($this->offset != null) {
             $sql .= 'OFFSET ' . $this->offset . ' ';
         }
-
         return $sql;
     }
 
@@ -258,7 +255,6 @@ class Select extends Query
         } else {
             $this->select = $select;
         }
-
         return $this;
     }
 
@@ -271,7 +267,6 @@ class Select extends Query
     public function from(string $from): self
     {
         $this->from = $from;
-
         return $this;
     }
 
@@ -284,7 +279,6 @@ class Select extends Query
     public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
-
         return $this;
     }
 
@@ -301,7 +295,6 @@ class Select extends Query
         } else {
             $this->groupBy = $groupBy;
         }
-
         return $this;
     }
 
@@ -314,7 +307,6 @@ class Select extends Query
     public function having($having): self
     {
         $this->having = ($having instanceof Condition ? $having : new Condition($having));
-
         return $this;
     }
 
@@ -335,7 +327,6 @@ class Select extends Query
         } else {
             $this->orderBy = $orderBy;
         }
-
         return $this;
     }
 
@@ -352,7 +343,6 @@ class Select extends Query
         } else {
             $this->distinct = $distinct;
         }
-
         return $this;
     }
 
@@ -365,7 +355,6 @@ class Select extends Query
     public function limit(int $limit = null): self
     {
         $this->limit = $limit;
-
         return $this;
     }
 
@@ -378,7 +367,6 @@ class Select extends Query
     public function offset(int $offset = null): self
     {
         $this->offset = $offset;
-
         return $this;
     }
 
@@ -395,7 +383,6 @@ class Select extends Query
             'table' => $table,
             'on' => ($on instanceof Condition ? $on : new Condition($on))
         );
-
         return $this;
     }
 
@@ -412,7 +399,6 @@ class Select extends Query
             'table' => $table,
             'on' => ($on instanceof Condition ? $on : new Condition($on))
         );
-
         return $this;
     }
 
@@ -429,7 +415,6 @@ class Select extends Query
             'table' => $table,
             'on' => ($on instanceof Condition ? $on : new Condition($on))
         );
-
         return $this;
     }
 
@@ -446,7 +431,6 @@ class Select extends Query
             'table' => $table,
             'on' => ($on instanceof Condition ? $on : new Condition($on))
         );
-
         return $this;
     }
 }

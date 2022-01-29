@@ -46,7 +46,7 @@ abstract class Locale
      * Loaded translations.
      *
      * @static
-     * @var mixed[]
+     * @var array<string, mixed>
      */
     protected static array $translations = array();
 
@@ -68,7 +68,7 @@ abstract class Locale
             self::$currentLanguage = $settings['locale']['default'];
             if ($request != null) {
                 if (Session::has('_stray_language') === true) {
-                    self::$currentLanguage = Session::get('_stray_language');
+                    self::$currentLanguage = strval(Session::get('_stray_language'));
                 } else {
                     $domain = HttpHelper::extractDomain($request);
                     if (isset($settings['locale']['hosts']) === true && isset($settings['locale']['hosts'][$domain]) === true) {
@@ -139,7 +139,7 @@ abstract class Locale
         }
         $oldKey = $key;
         $section = self::$translations;
-        while (isset($section[$key]) === false && ($pos = \strpos($key, '.')) !== false) {
+        while (is_array($section) && isset($section[$key]) === false && ($pos = \strpos($key, '.')) !== false) {
             $subSection = \substr($key, 0, $pos);
             if (isset($section[$subSection]) === false) {
                 break;
@@ -147,9 +147,8 @@ abstract class Locale
             $section = $section[$subSection];
             $key = \substr($key, $pos + 1);
         }
-        if (isset($section[$key]) === false) {
+        if (!is_array($section) && isset($section[$key]) === false) {
             Logger::get()->error('can\'t find translation for key "' . $oldKey . '"');
-
             return '(null)';
         }
         $str = $section[$key];

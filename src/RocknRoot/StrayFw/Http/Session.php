@@ -61,7 +61,6 @@ abstract class Session
         if (isset($_SESSION[$name]) === false) {
             return null;
         }
-
         return $_SESSION[$name];
     }
 

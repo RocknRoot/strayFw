@@ -185,7 +185,6 @@ class Migration
             throw new FileNotWritable('can\'t write in "' . $path . '"');
         }
         \fclose($file);
-
         return true;
     }
 }

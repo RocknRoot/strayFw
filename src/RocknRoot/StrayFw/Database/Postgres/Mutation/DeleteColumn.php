@@ -35,7 +35,6 @@ class DeleteColumn extends Mutation
         }
         $sql = 'ALTER TABLE ' . $tableName . ' DROP COLUMN ' . $fieldRealName;
         $statement = $database->getMasterLink()->prepare($sql);
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

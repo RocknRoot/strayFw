@@ -35,7 +35,6 @@ class AddIndex extends Mutation
             }
         }
         $statement = $database->getMasterLink()->prepare('CREATE INDEX idx_' . $indexName . ' ON ' . $tableName . ' (' . \implode(', ', $indexes) . ')');
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

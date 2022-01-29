@@ -51,7 +51,6 @@ class AddForeignKey extends Mutation
             $sql .= ' ON DELETE ' . \strtoupper($foreignDefinition['delete']);
         }
         $statement = $database->getMasterLink()->prepare($sql);
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

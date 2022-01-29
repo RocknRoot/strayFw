@@ -52,20 +52,20 @@ class Route
     /**
      * Build a route to register it.
      *
-     * @param string        $kind       route kind
-     * @param string        $method     route HTTP method
-     * @param string        $path       route path
-     * @param array<string> $subDomains route subdomains
-     * @param string        $uri        route URI
-     * @param array<string> $actions    route actions
-     * @param string        $namespace  actions namespace
+     * @param string   $kind       route kind
+     * @param string   $method     route HTTP method
+     * @param string   $path       route path
+     * @param string[] $subDomains route subdomains
+     * @param string   $uri        route URI
+     * @param string[] $actions    route actions
+     * @param string   $namespace  actions namespace
      */
     public function __construct(string $kind, string $method, string $path, array $subDomains, string $uri, array $actions, string $namespace)
     {
         $this->kind = $kind;
         $this->method = $method;
         $this->path = $path;
-        $this->subDomains = $subDomains ?? [];
+        $this->subDomains = $subDomains;
         $this->uri = $uri;
         $this->actions = $actions;
         $this->namespace = $namespace;

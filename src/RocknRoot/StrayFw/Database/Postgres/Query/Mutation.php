@@ -44,7 +44,6 @@ class Mutation extends Query
                 throw new AppException('mutation query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
-
         return $result;
     }
 

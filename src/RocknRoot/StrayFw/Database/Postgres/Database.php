@@ -26,7 +26,6 @@ class Database implements ProviderDatabase
             $dsn .= 'port=' . $info['port'] . ';';
         }
         $dsn .= 'dbname=' . $info['name'] . ';';
-
         return $dsn;
     }
 

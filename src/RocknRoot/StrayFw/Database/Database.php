@@ -169,7 +169,6 @@ class Database
         if (isset($this->servers['all']) === true) {
             return isset($this->servers['all']['link']);
         }
-
         return isset($this->servers['read']['link']) && isset($this->servers['write']['link']);
     }
 
@@ -189,7 +188,6 @@ class Database
         if ($this->transactionLevel >= 1) {
             return $this->servers['write']['link'];
         }
-
         return $this->servers['read']['link'];
     }
 
@@ -206,7 +204,6 @@ class Database
         if (isset($this->servers['all']) === true) {
             return $this->servers['all']['link'];
         }
-
         return $this->servers['write']['link'];
     }
 
@@ -224,7 +221,6 @@ class Database
         if ($this->transactionLevel == 1) {
             return $this->providerDatabase->beginTransaction($this->GetMasterLink());
         }
-
         return $this->providerDatabase->savePoint($this->GetMasterLink(), 'LEVEL' . ($this->transactionLevel - 1));
     }
 
@@ -243,10 +239,8 @@ class Database
             if ($this->transactionLevel == 0) {
                 return $this->providerDatabase->commit($this->GetMasterLink());
             }
-
             return $this->providerDatabase->releaseSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
-
         return false;
     }
 
@@ -265,10 +259,8 @@ class Database
             if ($this->transactionLevel == 0) {
                 return $this->providerDatabase->rollBack($this->GetMasterLink());
             }
-
             return $this->providerDatabase->rollBackSavePoint($this->GetMasterLink(), 'LEVEL' . $this->transactionLevel);
         }
-
         return false;
     }
 
@@ -308,7 +300,6 @@ class Database
         if (isset(self::$databases[$alias]) === false) {
             throw new DatabaseNotFound('database "' . $alias . '" doesn\'t seem to be registered');
         }
-
         return self::$databases[$alias];
     }
 }

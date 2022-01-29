@@ -31,9 +31,9 @@ class Config
      * Get installation settings.
      *
      * @static
-     * @return mixed file content
+     * @return array file content
      */
-    public static function getSettings() // @phpstan-ignore-line
+    public static function getSettings(): array
     {
         return self::get(\constant('STRAY_PATH_ROOT') . 'settings.yml');
     }
@@ -45,14 +45,15 @@ class Config
      * @param  string          $fileName file name
      * @throws FileNotReadable if file can't be opened
      * @throws FileNotParsable if file can't be parsed
-     * @return mixed           file content
+     * @return array           file content
      */
-    public static function get(string $fileName) // @phpstan-ignore-line
+    public static function get(string $fileName): array
     {
         if (isset(self::$files[$fileName]) === false) {
             if (($content = \file_get_contents($fileName)) === false) {
                 throw new FileNotReadable('file "' . $fileName . '" can\'t be read');
             }
+
             try {
                 $content = Yaml::parse($content);
             } catch (ParseException $e) {
@@ -60,7 +61,6 @@ class Config
             }
             self::$files[$fileName] = $content ?? [];
         }
-
         return self::$files[$fileName];
     }
 

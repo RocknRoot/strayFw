@@ -69,7 +69,6 @@ class Update extends Query
                 throw new AppException('update query failed : ' . $this->getErrorMessage() . ' (' . $this->toSql() . ')');
             }
         }
-
         return $result;
     }
 
@@ -96,7 +95,6 @@ class Update extends Query
         if ($this->limit != null) {
             $sql .= 'LIMIT ' . $this->limit . ' ';
         }
-
         return $sql;
     }
 
@@ -109,7 +107,6 @@ class Update extends Query
     public function update(string $table): self
     {
         $this->update = $table;
-
         return $this;
     }
 
@@ -136,7 +133,6 @@ class Update extends Query
         } else {
             $this->set = $set;
         }
-
         return $this;
     }
 
@@ -149,7 +145,6 @@ class Update extends Query
     public function where($where): self
     {
         $this->where = ($where instanceof Condition ? $where : new Condition($where));
-
         return $this;
     }
 
@@ -170,7 +165,6 @@ class Update extends Query
         } else {
             $this->orderBy = $orderBy;
         }
-
         return $this;
     }
 
@@ -183,7 +177,6 @@ class Update extends Query
     public function limit(string $limit): self
     {
         $this->limit = $limit;
-
         return $this;
     }
 }

@@ -374,17 +374,21 @@ class Schema extends ProviderSchema
                     $accessors .= 'return \stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
                     $valueType = '?string ';
                     break;
+
                 case 'char':
                     $accessors .= 'return \stripslashes($this->field' . \ucfirst($fieldName) . '[\'value\']);';
                     $valueType = '?string ';
                     break;
+
                 case 'bool':
                     $accessors .= 'return \filter_var($this->field' . \ucfirst($fieldName) . '[\'value\'], FILTER_VALIDATE_BOOLEAN);';
                     $valueType = '?bool ';
                     break;
+
                 case 'json':
                     $accessors .= 'return \json_decode($this->field' . \ucfirst($fieldName) . '[\'value\'], true);';
                     break;
+
                 default:
                     $accessors .= 'return $this->field' . \ucfirst($fieldName) . '[\'value\'];';
                     break;

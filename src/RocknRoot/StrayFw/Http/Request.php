@@ -151,19 +151,21 @@ class Request extends BaseRequest
      */
     public function input(string $name, $default = null)
     {
-        if (isset($this->rawRequest->getPostVars()[$name]) === true) {
-            return $this->rawRequest->getPostVars()[$name];
+        $vars = $this->rawRequest->getPostVars();
+        if (is_array($vars) && isset($vars[$name]) === true) {
+            return $vars[$name];
         }
-        if (isset($this->rawRequest->getJSONBodyVars()[$name]) === true) {
-            return $this->rawRequest->getJSONBodyVars()[$name];
+        $vars = $this->rawRequest->getJSONBodyVars();
+        if (is_array($vars) && isset($vars[$name]) === true) {
+            return $vars[$name];
         }
         if (isset($this->args[$name]) === true) {
             return $this->args[$name];
         }
-        if (isset($this->rawRequest->getGetVars()[$name]) === true) {
-            return $this->rawRequest->getGetVars()[$name];
+        $vars = $this->rawRequest->getGetVars();
+        if (is_array($vars) && isset($vars[$name]) === true) {
+            return $vars[$name];
         }
-
         return $default;
     }
 }

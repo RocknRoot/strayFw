@@ -101,6 +101,7 @@ abstract class Http
             self::$request = new Request(self::$rawRequest, self::$routes);
             self::$controllers = array();
             self::$response = new Response();
+
             try {
                 self::$request->route();
                 \ob_start();

@@ -32,7 +32,6 @@ class Logger extends AbstractLogger
         if (self::$log == null) {
             self::$log = new Logger();
         }
-
         return self::$log;
     }
 

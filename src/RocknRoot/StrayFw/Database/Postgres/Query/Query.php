@@ -92,7 +92,6 @@ abstract class Query
         if (\is_array($this->errorInfo) === false) {
             return null;
         }
-
         return $this->errorInfo[0];
     }
 
@@ -106,7 +105,6 @@ abstract class Query
         if (\is_array($this->errorInfo) === false) {
             return null;
         }
-
         return $this->errorInfo[2];
     }
 }

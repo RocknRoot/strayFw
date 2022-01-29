@@ -45,7 +45,6 @@ class Condition
         if (\is_string($this->sql) === false) {
             $this->sql = $this->toSqlLevel($this->tree);
         }
-
         return $this->sql;
     }
 
@@ -104,7 +103,6 @@ class Condition
             $sql = \substr($sql, 0, -5);
         }
         $sql .= ')';
-
         return $sql;
     }
 }

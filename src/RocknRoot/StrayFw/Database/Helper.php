@@ -33,7 +33,6 @@ abstract class Helper
         foreach ($ret as &$match) {
             $match = (\strtoupper($match) == $match ? \strtolower($match) : \lcfirst($match));
         }
-
         return \implode('_', $ret);
     }
 }

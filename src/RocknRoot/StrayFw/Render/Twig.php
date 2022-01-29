@@ -91,7 +91,6 @@ abstract class Twig
                 self::$environments[$dir]->addFunction(new \Twig\TwigFunction($label, $callable));
             }
         }
-
         return self::$environments[$dir];
     }
 

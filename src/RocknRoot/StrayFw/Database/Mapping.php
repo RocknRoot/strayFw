@@ -62,7 +62,6 @@ class Mapping
         if (isset(self::$mappings[$name]) === false) {
             throw new MappingNotFound('there\'s no registered mapping with name "' . $name . '"');
         }
-
         return self::$mappings[$name];
     }
 

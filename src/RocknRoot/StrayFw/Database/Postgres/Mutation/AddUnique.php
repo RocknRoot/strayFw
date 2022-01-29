@@ -35,7 +35,6 @@ class AddUnique extends Mutation
             }
         }
         $statement = $database->getMasterLink()->prepare('ALTER TABLE ' . $tableName . ' ADD CONSTRAINT ' . $uniqueName . ' UNIQUE (' . \implode(', ', $fields) . ')');
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

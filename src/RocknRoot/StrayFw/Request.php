@@ -91,7 +91,6 @@ abstract class Request
     {
         $v = $this->hasEnded;
         $this->hasEnded = true;
-
         return $v;
     }
 

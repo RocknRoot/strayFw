@@ -52,7 +52,6 @@ class RenderTwig implements RenderInterface
         if (isset($args['request']) === false) {
             $args['request'] = $this->request;
         }
-
         return $env->render($this->fileName, $args);
     }
 }

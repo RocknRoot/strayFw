@@ -33,7 +33,6 @@ class Console
             if ($a->getPath() != $a->getPath()) {
                 return \strcmp($a->getPath(), $b->getPath());
             }
-
             return \strcmp($a->getMethod(), $b->getMethod());
         });
         foreach ($routes as $route) {

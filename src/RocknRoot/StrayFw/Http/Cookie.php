@@ -23,7 +23,6 @@ abstract class Cookie
         if (isset($_COOKIE[$name]) === false) {
             return null;
         }
-
         return $_COOKIE[$name];
     }
 

@@ -23,7 +23,6 @@ class AddEnum extends Mutation
     public static function statement(Database $database, string $type, array $values): MutationQuery
     {
         $statement = $database->getMasterLink()->prepare('CREATE TYPE ' . $type . ' AS ENUM(\'' . \implode('\', \'', $values) . '\')');
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

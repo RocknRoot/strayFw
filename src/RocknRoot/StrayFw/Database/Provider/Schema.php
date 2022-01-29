@@ -78,7 +78,6 @@ abstract class Schema
             $data = Mapping::get($this->mapping);
             $this->definition = Config::get($data['config']['schema']);
         }
-
         return $this->definition;
     }
 
@@ -102,7 +101,6 @@ abstract class Schema
     {
         $data = Mapping::get($mapping);
         $class = \rtrim(\ucfirst($data['config']['provider']), '\\') . '\\Schema';
-
         return new $class($mapping);
     }
 }

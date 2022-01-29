@@ -37,7 +37,6 @@ class AddColumn extends Mutation
         $sql = 'ALTER TABLE ' . $tableName . ' ADD COLUMN ';
         $sql .= Column::generateDefinition($schema, $mapping, $fieldRealName, $fieldDefinition);
         $statement = $database->getMasterLink()->prepare($sql);
-
         return new MutationQuery($database->getAlias(), $statement);
     }
 }

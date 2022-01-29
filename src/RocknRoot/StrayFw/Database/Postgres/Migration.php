@@ -118,7 +118,6 @@ abstract class Migration extends ProviderMigration
                 echo 'TODO Compare Enum values' . PHP_EOL;
             }
         }
-
         return [
             'import' => \array_unique($import),
             'up' => $up,
@@ -206,6 +205,7 @@ abstract class Migration extends ProviderMigration
                 $schema = Config::get($mapping['config']['schema']);
             }
             $n = new $cl($schema, \rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migrations[$i]['name']) . DIRECTORY_SEPARATOR);
+
             try {
                 $n->up();
             } catch (Exception $e) {
@@ -281,6 +281,7 @@ abstract class Migration extends ProviderMigration
             echo'last';
         }
         $n = new $cl($schema, \rtrim($mapping['config']['migrations']['path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . \ucfirst($migration['name']) . DIRECTORY_SEPARATOR);
+
         try {
             $n->down();
         } catch (Exception $e) {
