@@ -17,18 +17,18 @@ class AddForeignKey extends Mutation
      * Prepare and return according PDO statement.
      *
      * @param  Database             $database         database
-     * @param  array<string, mixed> $definition       schema definition
+     * @param  array<string, mixed> $schema           schema definition
      * @param  string               $modelName        model name
      * @param  string               $tableName        table real name
      * @param  string               $foreignName      foreign key name
      * @param  string               $foreignTableName foreign table real name
      * @return MutationQuery        $statement prepared query
      */
-    public static function statement(Database $database, array $definition, string $modelName, string $tableName, string $foreignName, string $foreignTableName): MutationQuery
+    public static function statement(Database $database, array $schema, string $modelName, string $tableName, string $foreignName, string $foreignTableName): MutationQuery
     {
-        $tableDefinition = $definition[$modelName];
+        $tableDefinition = $schema[$modelName];
         $foreignDefinition = $tableDefinition['links'][$foreignName];
-        $foreignTableDefinition = $definition[$foreignDefinition['model']];
+        $foreignTableDefinition = $schema[$foreignDefinition['model']];
         $from = array();
         $to = array();
         foreach ($foreignDefinition['fields'] as $field => $linked) {
