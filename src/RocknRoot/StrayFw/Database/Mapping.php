@@ -17,7 +17,7 @@ class Mapping
      * Registered mappings.
      *
      * @static
-     * @var array[]
+     * @var array<string, array{config: array}>
      */
     protected static array $mappings = array();
 
@@ -53,9 +53,9 @@ class Mapping
     /**
      * Get the mapping data.
      *
-     * @param  string                 $name mapping name
-     * @throws MappingNotFound        if there's no registered mapping for specified database
-     * @return array<string,   mixed> mapping data
+     * @param  string               $name mapping name
+     * @throws MappingNotFound      if there's no registered mapping for specified database
+     * @return array{config: array} mapping data
      */
     public static function get(string $name): array
     {

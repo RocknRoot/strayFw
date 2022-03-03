@@ -60,6 +60,9 @@ abstract class Twig
             if (empty($settings['tmp']) === true) {
                 throw new BadUse('tmp directory hasn\'t been defined in installation settings');
             }
+            if (is_string($settings['tmp']) === false) {
+                throw new BadUse('entry "tmp" in installation settings is not a string');
+            }
             $tmp = \rtrim($settings['tmp'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
             if ($tmp[0] != DIRECTORY_SEPARATOR) {
                 $tmp = \constant('STRAY_PATH_ROOT') . $tmp;

@@ -55,15 +55,18 @@ abstract class Locale
      *
      * @static
      * @param  RawRequest $request base raw request if applied
-     * @throws BadUse     if locale.default isn\'t defined in settings
+     * @throws BadUse     if locale is incorrectly defined in installation settings
      */
     public static function init(RawRequest $request = null): void
     {
         if (self::$isInit === false) {
             self::$translations = array();
             $settings = Config::getSettings();
-            if (isset($settings['locale']) === false || isset($settings['locale']['default']) === false) {
-                throw new BadUse('locale.default isn\'t defined in settings');
+            if (!isset($settings['locale']) || !is_array($settings['locale'])) {
+                throw new BadUse('locale is not an array in installation settings');
+            }
+            if (!isset($settings['locale']['default'])) {
+                throw new BadUse('locale.default isn\'t defined in installation settings');
             }
             self::$currentLanguage = $settings['locale']['default'];
             if ($request != null) {

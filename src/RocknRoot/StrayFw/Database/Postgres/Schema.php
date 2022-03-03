@@ -6,6 +6,7 @@ use RocknRoot\StrayFw\Database\Database as GlobalDatabase;
 use RocknRoot\StrayFw\Database\Helper;
 use RocknRoot\StrayFw\Database\Mapping;
 use RocknRoot\StrayFw\Database\Provider\Schema as ProviderSchema;
+use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\DatabaseError;
 use RocknRoot\StrayFw\Exception\FileNotWritable;
 use RocknRoot\StrayFw\Exception\InvalidSchemaDefinition;
@@ -21,6 +22,7 @@ class Schema extends ProviderSchema
     /**
      * Build data structures.
      *
+     * @throws BadUse                  if schema is incorrectly defined
      * @throws DatabaseError           if a SQL query fails
      * @throws InvalidSchemaDefinition if a model has no field
      * @throws InvalidSchemaDefinition if an enum-typed field has no values defined
@@ -37,17 +39,28 @@ class Schema extends ProviderSchema
             }
             $tableName = null;
             if (isset($modelDefinition['name']) === true) {
+                if (!is_string($modelDefinition['name'])) {
+                    throw new BadUse('model definition "name" is not a string');
+                }
                 $tableName = $modelDefinition['name'];
             } else {
                 $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
             }
             $query = $database->getMasterLink()->query('SELECT COUNT(*) as count FROM pg_class WHERE relname = \'' . $tableName . '\'');
+            if (!$query) {
+                throw new DatabaseError('db/build : SQL query to count entries in pg_class failed');
+            }
             $result = $query->fetch(\PDO::FETCH_ASSOC);
+            if (!is_array($result) || !isset($result['count'])) {
+                throw new DatabaseError('db/build : SQL query to count entries in pg_class failed');
+            }
             if ($result['count'] != 0) {
-                foreach ($modelDefinition['links'] as $keyName => $keyDefinition) {
-                    $statement = Mutation\DeleteForeignKey::statement($database, $tableName, $keyName);
-                    if ($statement->execute() == false) {
-                        throw new DatabaseError('db/build : SQL query failed');
+                if (is_array($modelDefinition['links'])) {
+                    foreach ($modelDefinition['links'] as $keyName => $keyDefinition) {
+                        $statement = Mutation\DeleteForeignKey::statement($database, $tableName, $keyName);
+                        if ($statement->execute() == false) {
+                            throw new DatabaseError('db/build : SQL query to delete foreign key failed');
+                        }
                     }
                 }
             }
@@ -57,6 +70,9 @@ class Schema extends ProviderSchema
             if (isset($modelDefinition['type']) === false || $modelDefinition['type'] === 'model') {
                 $tableName = null;
                 if (isset($modelDefinition['name']) === true) {
+                    if (!is_string($modelDefinition['name'])) {
+                        throw new BadUse('model definition "name" is not a string');
+                    }
                     $tableName = $modelDefinition['name'];
                 } else {
                     $tableName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
@@ -71,6 +87,9 @@ class Schema extends ProviderSchema
             if (isset($modelDefinition['type']) === true && $modelDefinition['type'] === 'enum') {
                 $modelRealName = null;
                 if (isset($modelDefinition['name']) === true) {
+                    if (!is_string($modelDefinition['name'])) {
+                        throw new BadUse('model definition "name" is not a string');
+                    }
                     $modelRealName = $modelDefinition['name'];
                 } else {
                     $modelRealName = Helper::codifyName($this->mapping) . '_' . Helper::codifyName($modelName);
@@ -95,6 +114,9 @@ class Schema extends ProviderSchema
 
         foreach ($definition as $modelName => $modelDefinition) {
             if ((isset($modelDefinition['type']) === false || $modelDefinition['type'] === 'model') && isset($modelDefinition['links']) === true) {
+                if (!is_array($modelDefinition['links'])) {
+                    throw new BadUse('model definition "links" is not an array');
+                }
                 foreach ($modelDefinition['links'] as $foreignName => $foreignDefinition) {
                     $tableName = null;
                     if (isset($modelDefinition['name']) === true) {

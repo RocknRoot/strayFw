@@ -40,7 +40,7 @@ class Database
     /**
      * Servers info.
      *
-     * @var array<mixed, array<string, mixed>>
+     * @var array<int|string, array{link: \PDO}>
      */
     protected array $servers;
 
@@ -175,9 +175,9 @@ class Database
     /**
      * Get link.
      *
-     * @return mixed link info
+     * @return \PDO link info
      */
-    public function getLink()
+    public function getLink(): \PDO
     {
         if ($this->isConnected() === false) {
             $this->connect();
@@ -194,9 +194,9 @@ class Database
     /**
      * Get master server link.
      *
-     * @return mixed link info
+     * @return \PDO link info
      */
-    public function getMasterLink()
+    public function getMasterLink(): \PDO
     {
         if ($this->isConnected() === false) {
             $this->connect();

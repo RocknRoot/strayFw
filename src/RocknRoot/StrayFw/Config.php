@@ -23,7 +23,7 @@ class Config
      * Loaded files.
      *
      * @static
-     * @var array<string, array>
+     * @var array<string, array<string, mixed>>
      */
     protected static array $files = array();
 
@@ -31,7 +31,7 @@ class Config
      * Get installation settings.
      *
      * @static
-     * @return array file content
+     * @return array<string, mixed> file content
      */
     public static function getSettings(): array
     {
@@ -42,10 +42,11 @@ class Config
      * Get a file content. Load it if not already done.
      *
      * @static
-     * @param  string          $fileName file name
-     * @throws FileNotReadable if file can't be opened
-     * @throws FileNotParsable if file can't be parsed
-     * @return array           file content
+     * @param  string               $fileName file name
+     * @throws BadUse               if once parsed, file content is not an array
+     * @throws FileNotReadable      if file can't be opened
+     * @throws FileNotParsable      if file can't be parsed
+     * @return array<string, mixed> file content
      */
     public static function get(string $fileName): array
     {
@@ -56,10 +57,13 @@ class Config
 
             try {
                 $content = Yaml::parse($content);
+                if (!is_array($content)) {
+                    throw new BadUse('once parsed, content of file "' . $fileName . '" is not an array');
+                }
+                self::$files[$fileName] = $content;
             } catch (ParseException $e) {
-                throw new FileNotParsable('file "' . $fileName . '" can\'t be parsed: ' + $e->getMessage());
+                throw new FileNotParsable('file "' . $fileName . '" can\'t be parsed: ' . $e->getMessage());
             }
-            self::$files[$fileName] = $content ?? [];
         }
         return self::$files[$fileName];
     }
@@ -68,11 +72,11 @@ class Config
      * Write a file content. Save it internally.
      *
      * @static
-     * @param  string          $fileName file name
-     * @param  mixed           $content  file content
-     * @throws FileNotWritable if file can't be written
+     * @param  string               $fileName file name
+     * @param  array<string, mixed> $content  file content
+     * @throws FileNotWritable      if file can't be written
      */
-    public static function set(string $fileName, $content): void
+    public static function set(string $fileName, array $content): void
     {
         try {
             $json = Yaml::dump($content, 2);

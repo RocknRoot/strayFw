@@ -4,6 +4,8 @@ namespace RocknRoot\StrayFw\Database\Provider;
 
 use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Database\Mapping;
+use RocknRoot\StrayFw\Exception\AppException;
+use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\FileNotReadable;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
 
@@ -24,7 +26,7 @@ abstract class Schema
     /**
      * Schema definition.
      *
-     * @var array[]
+     * @var array<string, mixed>
      */
     protected ?array $definition = null;
 
@@ -32,6 +34,7 @@ abstract class Schema
      * Construct a new schema representation class.
      *
      * @param  string           $mapping mapping name
+     * @throws BadUse           if mapping is incorrectly defined
      * @throws InvalidDirectory if directory $modelsDir can't be indentified
      * @throws InvalidDirectory if directory Base in $modelsDir can't be indentified
      * @throws FileNotReadable  if schema file is not readable
@@ -40,6 +43,15 @@ abstract class Schema
     {
         $this->mapping = $mapping;
         $data = Mapping::get($mapping);
+        if (!isset($data['config']['schema'])) {
+            throw new BadUse('mapping "' . $mapping . '" does not have a "schema" entry');
+        }
+        if (!isset($data['config']['models'])) {
+            throw new BadUse('mapping "' . $mapping . '" does not have a "models" entry');
+        }
+        if (!isset($data['config']['models']['path'])) {
+            throw new BadUse('mapping "' . $mapping . '" does not have a "models/path" entry');
+        }
         $file = $data['config']['schema'];
         $modelsDir = $data['config']['models']['path'];
         if (\is_readable($file) === false) {
@@ -70,7 +82,7 @@ abstract class Schema
     /**
      * Get the schema definition, from schema configuration file.
      *
-     * @return array<string, array> schema definition
+     * @return array<string, array<string, mixed>> schema definition
      */
     public function getDefinition(): array
     {
@@ -95,12 +107,21 @@ abstract class Schema
      * Get the schema instance of specified mapping.
      *
      * @param  string $mapping mapping name
-     * @return Schema schema instance
+     * @throws BadUse if specified provider class does not inherit from Provider\Schema
+     * @return self   schema instance
      */
-    public static function getSchema(string $mapping): Schema
+    public static function getSchema(string $mapping): self
     {
         $data = Mapping::get($mapping);
         $class = \rtrim(\ucfirst($data['config']['provider']), '\\') . '\\Schema';
-        return new $class($mapping);
+        $parents = class_parents($class);
+        if (!$parents) {
+            throw new AppException('cannot get parents of class "' . $class . '"');
+        }
+        $parents = array_keys($parents);
+        if (!in_array(self::class, $parents)) {
+            throw new BadUse('specified provider class "' . $class . '" does not inherit from Provider\Schema');
+        }
+        return new $class($mapping); // @phpstan-ignore-line @TODO cannot infer that this is a child of Schema
     }
 }
