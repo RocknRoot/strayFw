@@ -79,7 +79,7 @@ abstract class Model extends ProviderModel
                 $insertQuery->returning($returning);
 
                 $values = array();
-                foreach ($this->getAllFieldsAliases() as $name) {
+                foreach (static::getAllFieldsAliases() as $name) {
                     $field = $this->{'field' . \ucfirst($name)};
                     if (isset($field['value']) === true) {
                         $realName = \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
@@ -145,7 +145,7 @@ abstract class Model extends ProviderModel
     public function toArray(): array
     {
         $values = array();
-        foreach ($this->getAllFieldsAliases() as $name) {
+        foreach (static::getAllFieldsAliases() as $name) {
             $field = $this->{'field' . \ucfirst($name)};
             $values[$name] = $field['value'];
         }
@@ -160,7 +160,7 @@ abstract class Model extends ProviderModel
     public function toRealNamesArray(): array
     {
         $values = array();
-        foreach ($this->getAllFieldsAliases() as $name) {
+        foreach (static::getAllFieldsAliases() as $name) {
             $field = $this->{'field' . \ucfirst($name)};
             $realName = (string) \constant(static::class . '::FIELD_' . \strtoupper(Helper::codifyName($name)));
             $values[$realName] = $field['value'];
@@ -178,10 +178,9 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntity(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static(); // @phpstan-ignore-line
-        $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select($entity->getAllFieldsRealNames());
-        $selectQuery->from($entity->getTableName());
+        $selectQuery = new Select(static::getDatabaseName(), $critical);
+        $selectQuery->select(static::getAllFieldsRealNames());
+        $selectQuery->from(static::getTableName());
         if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -220,10 +219,9 @@ abstract class Model extends ProviderModel
      */
     public static function fetchArray(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static(); // @phpstan-ignore-line
-        $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select($entity->getAllFieldsRealNames());
-        $selectQuery->from($entity->getTableName());
+        $selectQuery = new Select(static::getDatabaseName(), $critical);
+        $selectQuery->select((array) \array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
+        $selectQuery->from(static::getTableName());
         if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -262,11 +260,9 @@ abstract class Model extends ProviderModel
      */
     public static function fetchEntities(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static(); // @phpstan-ignore-line
-        $res = static::fetchArrays($conditions, $orderBy, $critical);
-        $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select($entity->getAllFieldsRealNames());
-        $selectQuery->from($entity->getTableName());
+        $selectQuery = new Select(static::getDatabaseName(), $critical);
+        $selectQuery->select(static::getAllFieldsRealNames());
+        $selectQuery->from(static::getTableName());
         if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -305,10 +301,9 @@ abstract class Model extends ProviderModel
      */
     public static function fetchArrays(array $conditions, array $orderBy = [], bool $critical = false)
     {
-        $entity = new static(); // @phpstan-ignore-line
-        $selectQuery = new Select($entity->getDatabaseName(), $critical);
-        $selectQuery->select((array) \array_combine($entity->getAllFieldsAliases(), $entity->getAllFieldsRealNames()));
-        $selectQuery->from($entity->getTableName());
+        $selectQuery = new Select(static::getDatabaseName(), $critical);
+        $selectQuery->select((array) \array_combine(static::getAllFieldsAliases(), static::getAllFieldsRealNames()));
+        $selectQuery->from(static::getTableName());
         if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -341,10 +336,9 @@ abstract class Model extends ProviderModel
      */
     public static function countRows(array $conditions, bool $critical = false)
     {
-        $entity = new static(); // @phpstan-ignore-line
-        $selectQuery = new Select($entity->getDatabaseName(), $critical);
+        $selectQuery = new Select(static::getDatabaseName(), $critical);
         $selectQuery->select([ 'count' => 'COUNT(*)' ]);
-        $selectQuery->from($entity->getTableName());
+        $selectQuery->from(static::getTableName());
         if (\count($conditions) > 0) {
             $where = array();
             foreach ($conditions as $key => $value) {
@@ -367,40 +361,50 @@ abstract class Model extends ProviderModel
     /**
      * Get database's name.
      *
-     * @abstract
      * @return string database's name
      */
-    abstract public function getDatabaseName(): string;
+    public static function getDatabaseName(): string
+    {
+        throw new AppException('Postgres\Model::getDatabaseName got called');
+    }
 
     /**
      * Get table's name.
      *
-     * @abstract
      * @return string table's name
      */
-    abstract public function getTableName(): string;
+    public static function getTableName(): string
+    {
+        throw new AppException('Postgres\Model::getTableName got called');
+    }
 
     /**
      * Get primary fields' names.
      *
-     * @abstract
      * @return string[] primary fields' names
      */
-    abstract public function getPrimary(): array;
+    public static function getPrimary(): array
+    {
+        throw new AppException('Postgres\Model::getPrimar got called');
+    }
 
     /**
      * Get all fields' names.
      *
-     * @abstract
      * @return string[] all fields' names
      */
-    abstract public function getAllFieldsRealNames(): array;
+    public static function getAllFieldsRealNames(): array
+    {
+        throw new AppException('Postgres\Model::getAllFieldsRealNames got called');
+    }
 
     /**
      * Get all fields' aliases.
      *
-     * @abstract
      * @return string[] all fields' aliases
      */
-    abstract public function getAllFieldsAliases(): array;
+    public static function getAllFieldsAliases(): array
+    {
+        throw new AppException('Postgres\Model::getAllFieldsAliases got called');
+    }
 }

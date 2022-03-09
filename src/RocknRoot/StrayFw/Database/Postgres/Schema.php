@@ -287,7 +287,7 @@ class Schema extends ProviderSchema
             } else {
                 $valueRealName = Helper::codifyName($enumName) . '_' . Helper::codifyName($valueAlias);
             }
-            $consts .= '    const VALUE_' . \strtoupper(Helper::codifyName($valueAlias)) . ' = \'' . $enumRealName . '.' . $valueRealName . "';\n";
+            $consts .= '    public const VALUE_' . \strtoupper(Helper::codifyName($valueAlias)) . ' = \'' . $enumRealName . '.' . $valueRealName . "';\n";
         }
 
         $mapping = Mapping::get($this->mapping);
@@ -301,8 +301,8 @@ class Schema extends ProviderSchema
         $path .= 'Base' . DIRECTORY_SEPARATOR . \ucfirst($enumName) . '.php';
         $content = "<?php\n\nnamespace " . \ltrim(\rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Provider\Enum;\n";
         $content .= "\nclass " . \ucfirst($enumName) . " extends Enum\n{\n";
-        $content .= "    public function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
-        $content .= "    public function getTableName(): string\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
+        $content .= "    public static function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public static function getTableName(): string\n    {\n        return '" . $enumRealName . "';\n    }\n\n";
         $content .= $consts . "\n}";
         if (\fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');
@@ -346,8 +346,8 @@ class Schema extends ProviderSchema
         $consts = null;
         $properties = null;
         $accessors = null;
-        $allFieldsRealNames = "    public function getAllFieldsRealNames(): array\n    {\n        return [ ";
-        $allFieldsAliases = "    public function getAllFieldsAliases(): array\n    {\n        return [ ";
+        $allFieldsRealNames = "    public static function getAllFieldsRealNames(): array\n    {\n        return [ ";
+        $allFieldsAliases = "    public static function getAllFieldsAliases(): array\n    {\n        return [ ";
 
         $modelRealName = null;
         if (isset($modelDefinition['name']) === true) {
@@ -474,11 +474,11 @@ class Schema extends ProviderSchema
         }
         $content = "<?php\n\nnamespace " . \ltrim(\rtrim($mapping['config']['models']['namespace'], '\\'), '\\') . "\\Base;\n\nuse RocknRoot\StrayFw\Database\Postgres\Model;\n";
         $content .= "\nclass " . \ucfirst($modelName) . " extends Model\n{\n";
-        $content .= "    public function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
-        $content .= "    public function getTableName(): string\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
+        $content .= "    public static function getDatabaseName(): string\n    {\n        return '" . $mapping['config']['database'] . "';\n    }\n\n";
+        $content .= "    public static function getTableName(): string\n    {\n        return '" . $modelRealName . "';\n    }\n\n";
         $content .= $consts . PHP_EOL . $properties . PHP_EOL;
         $content .= $constructor . $accessors . $allFieldsRealNames . $allFieldsAliases;
-        $content .= "    public function getPrimary(): array\n    {\n        return [ '" . \implode('\', \'', $primary) . "' ];\n    }\n";
+        $content .= "    public static function getPrimary(): array\n    {\n        return [ '" . \implode('\', \'', $primary) . "' ];\n    }\n";
         $content .= "}";
         if (\fwrite($file, $content) === false) {
             throw new FileNotWritable('can\'t write in "' . $path . '"');
