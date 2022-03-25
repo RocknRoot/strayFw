@@ -35,6 +35,11 @@ class Delete extends Query
     protected ?string $limit = null;
 
     /**
+     * Using clause.
+     */
+    protected ?string $using = null;
+
+    /**
      * Execute the constructed query.
      *
      * @throws AppException on SQL error
@@ -80,6 +85,9 @@ class Delete extends Query
         }
 
         $sql = 'DELETE FROM ' . $this->from . ' ';
+        if ($this->using != null) {
+            $sql .= 'USING ' . $this->using . ' ';
+        }
         if ($this->where != null) {
             $sql .= 'WHERE ' . $this->where->toSql() . ' ';
         }
@@ -145,6 +153,26 @@ class Delete extends Query
     public function limit(string $limit): self
     {
         $this->limit = $limit;
+        return $this;
+    }
+
+    /**
+     * Set using clause.
+     *
+     * @param  array<string, string>|string $using using clause
+     * @return Delete                       this
+     */
+    public function using(string|array $using): self
+    {
+        if (\is_array($using) === true) {
+            $this->using = '';
+            foreach ($using as $key => $elem) {
+                $this->using .= $key . ' ' . $elem . ', ';
+            }
+            $this->using = \substr($this->using, 0, -2);
+        } else {
+            $this->using = $using;
+        }
         return $this;
     }
 }
