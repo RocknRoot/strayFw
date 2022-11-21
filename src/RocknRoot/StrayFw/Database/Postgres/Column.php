@@ -29,130 +29,130 @@ abstract class Column
     {
         $sql = $fieldName . ' ';
         switch ($fieldDefinition['type']) {
-        case 'bool':
-            $sql .= 'BOOL';
-            if (isset($fieldDefinition['default']) === true) {
-                if (\is_bool($fieldDefinition['default']) === false) {
-                    throw new InvalidSchemaDefinition('default value for "' . $fieldName . '" isn\'t a boolean');
+            case 'bool':
+                $sql .= 'BOOL';
+                if (isset($fieldDefinition['default']) === true) {
+                    if (\is_bool($fieldDefinition['default']) === false) {
+                        throw new InvalidSchemaDefinition('default value for "' . $fieldName . '" isn\'t a boolean');
+                    }
+                    $sql .= ' DEFAULT ' . ($fieldDefinition['default'] === true ? 'TRUE' : 'FALSE');
                 }
-                $sql .= ' DEFAULT ' . ($fieldDefinition['default'] === true ? 'TRUE' : 'FALSE');
-            }
-            break;
+                break;
 
-        case 'char':
-            $sql .= 'CHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'string':
-            $sql .= 'VARCHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'serial':
-            $sql .= 'SERIAL';
-            break;
-
-        case 'bigserial':
-            $sql .= 'BIGSERIAL';
-            break;
-
-        case 'int':
-            $sql .= 'INT';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'smallint':
-            $sql .= 'SMALLINT';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'float':
-            $sql .= 'FLOAT';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'numeric':
-        case 'decimal':
-            $sql .= 'NUMERIC';
-            if (isset($fieldDefinition['precision']) === true) {
-                $sql .= '(' . $fieldDefinition['precision'];
-                if (isset($fieldDefinition['scale']) === true) {
-                    $sql .= ', ' . $fieldDefinition['scale'];
-                }
-                $sql .= ')';
-            }
-            break;
-
-        case 'timestamp':
-            $sql .= 'TIMESTAMP';
-            if (isset($fieldDefinition['default']) === true) {
-                if ($fieldDefinition['default'] == 'now') {
-                    $sql .= ' DEFAULT CURRENT_TIMESTAMP';
-                } else {
+            case 'char':
+                $sql .= 'CHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
+                if (isset($fieldDefinition['default']) === true) {
                     $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
                 }
-            }
-            break;
+                break;
 
-        case 'text':
-            $sql .= 'TEXT';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'json':
-            $sql .= 'JSON';
-            if (isset($fieldDefinition['default']) === true) {
-                $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
-            }
-            break;
-
-        case 'blob':
-            $sql .= 'BLOB';
-            break;
-
-        case 'bit':
-            $sql .= 'BIT';
-            if (isset($fieldDefinition['size']) === true) {
-                $sql .= '(' . $fieldDefinition['size'] . ')';
-            }
-            break;
-
-        case 'bitstring':
-            $sql .= 'BIT VARYING';
-            if (isset($fieldDefinition['size']) === true) {
-                $sql .= '(' . $fieldDefinition['size'] . ')';
-            }
-            break;
-
-        default:
-            $type = $fieldDefinition['type'];
-            if (isset($schema[$type]) === true) {
-                if ($schema[$type]['type'] == 'enum') {
-                    $enumRealName = null;
-                    if (isset($schema[$type]['name']) === true) {
-                        $enumRealName = $schema[$type]['name'];
-                    } else {
-                        $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($type);
-                    }
-                    $sql .= $enumRealName;
-                    break;
+            case 'string':
+                $sql .= 'VARCHAR(' . (isset($fieldDefinition['size']) === true ? $fieldDefinition['size'] : 45) . ')';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
                 }
-            }
-            throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type'); // @phpstan-ignore-next-line
-            break;
+                break;
+
+            case 'serial':
+                $sql .= 'SERIAL';
+                break;
+
+            case 'bigserial':
+                $sql .= 'BIGSERIAL';
+                break;
+
+            case 'int':
+                $sql .= 'INT';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                }
+                break;
+
+            case 'smallint':
+                $sql .= 'SMALLINT';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                }
+                break;
+
+            case 'float':
+                $sql .= 'FLOAT';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                }
+                break;
+
+            case 'numeric':
+            case 'decimal':
+                $sql .= 'NUMERIC';
+                if (isset($fieldDefinition['precision']) === true) {
+                    $sql .= '(' . $fieldDefinition['precision'];
+                    if (isset($fieldDefinition['scale']) === true) {
+                        $sql .= ', ' . $fieldDefinition['scale'];
+                    }
+                    $sql .= ')';
+                }
+                break;
+
+            case 'timestamp':
+                $sql .= 'TIMESTAMP';
+                if (isset($fieldDefinition['default']) === true) {
+                    if ($fieldDefinition['default'] == 'now') {
+                        $sql .= ' DEFAULT CURRENT_TIMESTAMP';
+                    } else {
+                        $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                    }
+                }
+                break;
+
+            case 'text':
+                $sql .= 'TEXT';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                }
+                break;
+
+            case 'json':
+                $sql .= 'JSON';
+                if (isset($fieldDefinition['default']) === true) {
+                    $sql .= ' DEFAULT \'' . $fieldDefinition['default'] . '\'';
+                }
+                break;
+
+            case 'blob':
+                $sql .= 'BLOB';
+                break;
+
+            case 'bit':
+                $sql .= 'BIT';
+                if (isset($fieldDefinition['size']) === true) {
+                    $sql .= '(' . $fieldDefinition['size'] . ')';
+                }
+                break;
+
+            case 'bitstring':
+                $sql .= 'BIT VARYING';
+                if (isset($fieldDefinition['size']) === true) {
+                    $sql .= '(' . $fieldDefinition['size'] . ')';
+                }
+                break;
+
+            default:
+                $type = $fieldDefinition['type'];
+                if (isset($schema[$type]) === true) {
+                    if ($schema[$type]['type'] == 'enum') {
+                        $enumRealName = null;
+                        if (isset($schema[$type]['name']) === true) {
+                            $enumRealName = $schema[$type]['name'];
+                        } else {
+                            $enumRealName = Helper::codifyName($mapping) . '_' . Helper::codifyName($type);
+                        }
+                        $sql .= $enumRealName;
+                        break;
+                    }
+                }
+                throw new InvalidSchemaDefinition('field "' . $fieldName . '" has an unknown type'); // @phpstan-ignore-next-line
+                break;
         }
         if (isset($fieldDefinition['nullable']) === false || $fieldDefinition['nullable'] === false) {
             $sql .= ' NOT NULL';

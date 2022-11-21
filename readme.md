@@ -46,10 +46,6 @@ The framework follows these standards:
 
 ### Quality
 
-Rector :
-
-    $ php vendor/bin/rector -c quality/rector.php process src
-
 Static analysis :
 
     $ php vendor/bin/phpstan analyse src --level=max
