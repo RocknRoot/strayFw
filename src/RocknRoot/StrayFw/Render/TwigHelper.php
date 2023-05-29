@@ -65,7 +65,7 @@ abstract class TwigHelper
      * Get nice URL.
      *
      * @static
-     * @param  string $url raw URL
+     * @param  string $url URL
      * @return string nice URL
      */
     public static function url(string $url): string
@@ -88,7 +88,7 @@ abstract class TwigHelper
             $time = \time();
         }
         $date = \IntlDateFormatter::create(Locale::getCurrentLanguage(), $dateFormat, $timeFormat);
-        if ($date === false) {
+        if ($date === null) {
             Logger::get()->warning('could not create IntlDateFormatter for dateFormat "' . $dateFormat . '" and timeFormat "' . $timeFormat . '"');
             return '';
         }

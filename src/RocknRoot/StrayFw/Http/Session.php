@@ -3,6 +3,7 @@
 namespace RocknRoot\StrayFw\Http;
 
 use RocknRoot\StrayFw\Config;
+use RocknRoot\StrayFw\Logger;
 
 /**
  * Wrapper class for session variables.
@@ -31,17 +32,21 @@ abstract class Session
             global $_SERVER;
             $settings = Config::getSettings();
             if (isset($settings['session']) === true) {
-                if (isset($settings['session']['name']) === true) {
-                    \session_name($settings['session']['name']);
-                }
-                if (isset($settings['session']['cookie_domain']) === true) {
-                    \session_set_cookie_params([
-                        'domain' => $settings['session']['cookie_domain'],
-                    ]);
-                }
-                if (isset($settings['session']['lifetime']) === true) {
-                    \ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
-                    \ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
+                if (is_array($settings['session']) === true) {
+                    if (isset($settings['session']['name']) === true) {
+                        \session_name($settings['session']['name']);
+                    }
+                    if (isset($settings['session']['cookie_domain']) === true) {
+                        \session_set_cookie_params([
+                            'domain' => $settings['session']['cookie_domain'],
+                        ]);
+                    }
+                    if (isset($settings['session']['lifetime']) === true) {
+                        \ini_set('session.cookie_lifetime', $settings['session']['lifetime']);
+                        \ini_set('session.gc_maxlifetime', $settings['session']['lifetime']);
+                    }
+                } else {
+                    Logger::get()->error('settings.session is set, but not an array');
                 }
             }
             \session_start();

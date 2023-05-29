@@ -82,7 +82,7 @@ abstract class Schema
     /**
      * Get the schema definition, from schema configuration file.
      *
-     * @return array<string, array<string, mixed>> schema definition
+     * @return array<string, mixed> schema definition
      */
     public function getDefinition(): array
     {

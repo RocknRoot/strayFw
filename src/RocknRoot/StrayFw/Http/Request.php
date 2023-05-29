@@ -5,18 +5,19 @@ namespace RocknRoot\StrayFw\Http;
 use RocknRoot\StrayFw\Exception\InvalidRouteDefinition;
 use RocknRoot\StrayFw\Exception\RouteNotFound;
 use RocknRoot\StrayFw\Request as BaseRequest;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
- * Routed data from raw request.
+ * Routed data from HTTP request.
  *
  * @author Nekith <nekith@errant-works.com>
  */
 class Request extends BaseRequest
 {
     /**
-     * Raw request.
+     * HTTP request.
      */
-    protected RawRequest $rawRequest;
+    protected HttpRequest $httpRequest;
 
     /**
      * Apps routes.
@@ -35,12 +36,12 @@ class Request extends BaseRequest
     /**
      * Construct request.
      *
-     * @param RawRequest $rawRequest base raw request
-     * @param Route[]    $routes     registered routes
+     * @param HttpRequest $httpRequest base HTTP request
+     * @param Route[]     $routes      registered routes
      */
-    public function __construct(RawRequest $rawRequest, array $routes)
+    public function __construct(HttpRequest $httpRequest, array $routes)
     {
-        $this->rawRequest = $rawRequest;
+        $this->httpRequest = $httpRequest;
         $this->routes = $routes;
         if (\count($routes) == 0) {
             throw new InvalidRouteDefinition('there is no route');
@@ -48,7 +49,7 @@ class Request extends BaseRequest
     }
 
     /**
-     * Parse raw request and choose a route.
+     * Parse HTTP request and choose a route.
      *
      * @throws InvalidRouteDefinition if there is no route
      * @throws InvalidRouteDefinition if a route has an invalid definition
@@ -56,9 +57,14 @@ class Request extends BaseRequest
      */
     public function route(): void
     {
+        $subdomain = $this->httpRequest->getHost();
+        if (\preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $subdomain, $matches)) {
+            $subdomain = $matches['domain'];
+        }
+        $subdomain = \rtrim((string)\strstr($this->httpRequest->getHost(), $subdomain, true), '.');
         foreach ($this->routes as $route) {
             if (\count($route->getSubDomains()) >= 1) {
-                if (\in_array($this->rawRequest->getSubDomain(), $route->getSubDomains()) === false) {
+                if (\in_array($subdomain, $route->getSubDomains()) === false) {
                     continue;
                 }
             }
@@ -71,7 +77,7 @@ class Request extends BaseRequest
                 }
             }
 
-            if ($route->getMethod() === '' || \strtolower($route->getMethod()) === 'all' || \strtolower($route->getMethod()) == \strtolower($this->rawRequest->getMethod())) {
+            if ($route->getMethod() === '' || \strtolower($route->getMethod()) === 'all' || \strtolower($route->getMethod()) == \strtolower($this->httpRequest->getMethod())) {
                 $path = $route->getPath();
                 if ($route->getURI() !== '') {
                     $path = '/' . \ltrim(\rtrim($route->getURI(), '/'), '/') . $path;
@@ -81,7 +87,7 @@ class Request extends BaseRequest
                 }
                 $matches = null;
                 if ($route->getKind() == 'before' || $route->getKind() == 'after') {
-                    if (\preg_match('#^' . $path . '#', $this->rawRequest->getQuery(), $matches) === 1) {
+                    if (\preg_match('#^' . $path . '#', $this->httpRequest->getPathInfo(), $matches) === 1) {
                         foreach ($route->getActions() as $r) {
                             list($class, $action) = \explode('.', $r);
                             if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
@@ -96,7 +102,7 @@ class Request extends BaseRequest
                         }
                     }
                 } elseif (\count($this->actions) == 0) {
-                    if (\preg_match('#^' . $path . '$#', $this->rawRequest->getQuery(), $matches) === 1) {
+                    if (\preg_match('#^' . $path . '$#', $this->httpRequest->getPathInfo(), $matches) === 1) {
                         foreach ($route->getActions() as $r) {
                             list($class, $action) = \explode('.', $r);
                             if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
@@ -115,7 +121,7 @@ class Request extends BaseRequest
             }
         }
         if (\count($this->actions) == 0) {
-            throw new RouteNotFound('no route matches this : ' . \print_r($this->rawRequest, true));
+            throw new RouteNotFound('no route matches this : ' . \print_r($this->httpRequest, true));
         }
     }
 
@@ -124,24 +130,23 @@ class Request extends BaseRequest
      */
     public function __clone()
     {
-        $this->rawRequest = clone $this->rawRequest;
+        $this->httpRequest = clone $this->httpRequest;
     }
 
     /**
-     * Get associated raw request.
+     * Get associated HTTP request.
      *
-     * @return RawRequest
+     * @return HttpRequest
      */
-    public function getRawRequest(): RawRequest
+    public function getHttpRequest(): HttpRequest
     {
-        return $this->rawRequest;
+        return $this->httpRequest;
     }
 
     /**
      * Retrieve an input var from, in this order of priority:
-     *  * POST vars
-     *  * JSON body vars
      *  * route args
+     *  * POST vars
      *  * GET vars
      *  * $default
      *
@@ -151,20 +156,14 @@ class Request extends BaseRequest
      */
     public function input(string $name, $default = null)
     {
-        $vars = $this->rawRequest->getPostVars();
-        if (is_array($vars) && isset($vars[$name]) === true) {
-            return $vars[$name];
-        }
-        $vars = $this->rawRequest->getJSONBodyVars();
-        if (is_array($vars) && isset($vars[$name]) === true) {
-            return $vars[$name];
-        }
         if (isset($this->args[$name]) === true) {
             return $this->args[$name];
         }
-        $vars = $this->rawRequest->getGetVars();
-        if (is_array($vars) && isset($vars[$name]) === true) {
-            return $vars[$name];
+        if ($this->httpRequest->request->has($name)) {
+            return $this->httpRequest->request->get($name);
+        }
+        if ($this->httpRequest->query->has($name)) {
+            return $this->httpRequest->query->get($name);
         }
         return $default;
     }

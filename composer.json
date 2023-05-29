@@ -16,6 +16,7 @@
     "require": {
         "php": ">=8.0",
         "psr/log": "~3.0",
+        "symfony/http-foundation": "^6.2",
         "symfony/yaml": "^6.0",
         "wp-cli/php-cli-tools": "^0.11"
     },

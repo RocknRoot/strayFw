@@ -19,10 +19,10 @@ class Console
      */
     public function build(Request $request): void
     {
-        if (\count($request->getArgs()) != 1) {
+        $mapping = $request->getArgs()[0];
+        if (\count($request->getArgs()) != 1 || !\is_string($mapping)) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/build mapping_name' . PHP_EOL;
         } else {
-            $mapping = $request->getArgs()[0];
             echo 'Are you sure you want to delete all existing tables and data for mapping "' . $mapping . '" ? [y/n] : ';
             if (\fgetc(STDIN) == 'y') {
                 $schema = Schema::getSchema($mapping);
@@ -61,10 +61,10 @@ class Console
      */
     public function generate(Request $request): void
     {
-        if (\count($request->getArgs()) != 1) {
+        $mapping = $request->getArgs()[0];
+        if (\count($request->getArgs()) != 1 || !\is_string($mapping)) {
             echo 'Wrong arguments.' . PHP_EOL . 'Usage : db/generate mapping_name' . PHP_EOL;
         } else {
-            $mapping = $request->getArgs()[0];
             $schema = Schema::getSchema($mapping);
             $schema->generateModels();
         }

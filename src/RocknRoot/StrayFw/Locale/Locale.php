@@ -6,9 +6,9 @@ use RocknRoot\StrayFw\Config;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\InvalidDirectory;
 use RocknRoot\StrayFw\Http\Helper as HttpHelper;
-use RocknRoot\StrayFw\Http\RawRequest;
 use RocknRoot\StrayFw\Http\Session;
 use RocknRoot\StrayFw\Logger;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Internationalization and localization base class.
@@ -54,10 +54,10 @@ abstract class Locale
      * Initialize properties, detect current language and load translations.
      *
      * @static
-     * @param  RawRequest $request base raw request if applied
-     * @throws BadUse     if locale is incorrectly defined in installation settings
+     * @param  HttpRequest $request base HTTP request if applied
+     * @throws BadUse      if locale is incorrectly defined in installation settings
      */
-    public static function init(RawRequest $request = null): void
+    public static function init(HttpRequest $request = null): void
     {
         if (self::$isInit === false) {
             self::$translations = array();

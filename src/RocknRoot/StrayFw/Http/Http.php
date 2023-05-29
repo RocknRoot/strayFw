@@ -7,6 +7,7 @@ use RocknRoot\StrayFw\Exception\AppException;
 use RocknRoot\StrayFw\Exception\NotARender;
 use RocknRoot\StrayFw\Locale\Locale;
 use RocknRoot\StrayFw\Render\RenderInterface;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Bootstrapping class for HTTP requests.
@@ -49,9 +50,9 @@ abstract class Http
     protected static array $routes = [];
 
     /**
-     * Current raw request.
+     * Current HTTP request.
      */
-    protected static ?RawRequest $rawRequest = null;
+    protected static ?HttpRequest $httpRequest = null;
 
     /**
      * Current request.
@@ -79,9 +80,9 @@ abstract class Http
     {
         if (self::$isInit === false) {
             self::$isInit = true;
-            self::$rawRequest = new RawRequest();
+            self::$httpRequest = HttpRequest::createFromGlobals();
             Session::init();
-            Locale::init(self::$rawRequest);
+            Locale::init(self::$httpRequest);
         }
     }
 
@@ -89,16 +90,16 @@ abstract class Http
      * Launch the logic stuff. Http need to be initialized beforehand.
      *
      * @static
-     * @throws AppException if raw request is not defined
+     * @throws AppException if HTTP request is not defined
      * @throws NotARender   if response->render is a non RenderInterface implementing object
      */
     public static function run(): void
     {
         if (self::$isInit === true) {
-            if ((self::$rawRequest instanceof RawRequest) === false) {
-                throw new AppException('Http\Helper: raw request is not defined');
+            if ((self::$httpRequest instanceof HttpRequest) === false) {
+                throw new AppException('Http\Helper: HTTP request is not defined');
             }
-            self::$request = new Request(self::$rawRequest, self::$routes);
+            self::$request = new Request(self::$httpRequest, self::$routes);
             self::$controllers = array();
             self::$response = new Response();
 
@@ -247,14 +248,14 @@ abstract class Http
     }
 
     /**
-     * Get current raw request.
+     * Get current HTTP request.
      *
      * @static
-     * @return null|RawRequest
+     * @return null|HttpRequest
      */
-    public static function getRawRequest(): ?RawRequest
+    public static function getHttpRequest(): ?HttpRequest
     {
-        return self::$rawRequest;
+        return self::$httpRequest;
     }
 
     /**
