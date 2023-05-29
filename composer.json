@@ -20,9 +20,9 @@
         "wp-cli/php-cli-tools": "^0.11"
     },
     "require-dev": {
-        "filp/whoops": "^2.1",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9",
+        "symfony/error-handler": "^6.2",
         "twig/twig": "^3.4"
     },
     "suggest": {

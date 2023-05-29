@@ -6,6 +6,7 @@ use RocknRoot\StrayFw\Console\Console;
 use RocknRoot\StrayFw\Exception\BadUse;
 use RocknRoot\StrayFw\Exception\UnknownNamespace;
 use RocknRoot\StrayFw\Http\Http;
+use Symfony\Component\ErrorHandler\Debug;
 
 /**
  * First loaded framework class, taking care of autoloading
@@ -67,7 +68,7 @@ abstract class Bootstrap
             Console::route('http/routing/list', 'http/routing/list', 'list registered routes', 'Console.routes');
             Http::init();
             if (\defined('STRAY_IS_HTTP') === true && \constant('STRAY_IS_HTTP') === true && \constant('STRAY_ENV') === 'development') {
-                Debug\ErrorPage::init();
+                Debug::enable();
             }
         }
     }
