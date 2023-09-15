@@ -62,6 +62,10 @@ class Request extends BaseRequest
             $subdomain = $matches['domain'];
         }
         $subdomain = \rtrim((string)\strstr($this->httpRequest->getHost(), $subdomain, true), '.');
+        $pathInfo = $this->httpRequest->getPathInfo();
+        if (\strlen($pathInfo) > 1) {
+            $pathInfo = \rtrim($pathInfo, '/');
+        }
         foreach ($this->routes as $route) {
             if (\count($route->getSubDomains()) >= 1) {
                 if (\in_array($subdomain, $route->getSubDomains()) === false) {
@@ -87,7 +91,7 @@ class Request extends BaseRequest
                 }
                 $matches = null;
                 if ($route->getKind() == 'before' || $route->getKind() == 'after') {
-                    if (\preg_match('#^' . $path . '#', $this->httpRequest->getPathInfo(), $matches) === 1) {
+                    if (\preg_match('#^' . $path . '#', $pathInfo, $matches) === 1) {
                         foreach ($route->getActions() as $r) {
                             list($class, $action) = \explode('.', $r);
                             if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
@@ -102,7 +106,7 @@ class Request extends BaseRequest
                         }
                     }
                 } elseif (\count($this->actions) == 0) {
-                    if (\preg_match('#^' . $path . '$#', $this->httpRequest->getPathInfo(), $matches) === 1) {
+                    if (\preg_match('#^' . $path . '$#', $pathInfo, $matches) === 1) {
                         foreach ($route->getActions() as $r) {
                             list($class, $action) = \explode('.', $r);
                             if (\stripos($class, '\\') !== 0 && $route->getNamespace() !== '') {
