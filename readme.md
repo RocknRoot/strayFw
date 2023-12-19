@@ -57,7 +57,7 @@ Coding standards :
 
 ### External Contributors
 
-* [moafred](https://github.com/moafred 'moafred')
+* [moafred](https://github.com/moafred 'moafred'): PR review, AJAX, Twig, and other frontend related things.
 * [SignpostMarv](https://github.com/SignpostMarv 'SignpostMarv'): phpstan compliance.
 
 Thank you!

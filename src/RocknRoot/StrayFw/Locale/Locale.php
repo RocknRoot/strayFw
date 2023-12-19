@@ -70,8 +70,8 @@ abstract class Locale
             }
             self::$currentLanguage = $settings['locale']['default'];
             if ($request != null) {
-                if (Session::has('_stray_language') === true) {
-                    self::$currentLanguage = strval(Session::get('_stray_language'));
+                if (Session::has('_stray_language') === true && is_string($language = Session::get('_stray_language'))) {
+                    self::$currentLanguage = $language;
                 } else {
                     $domain = HttpHelper::extractDomain($request);
                     if (isset($settings['locale']['hosts']) === true && isset($settings['locale']['hosts'][$domain]) === true) {

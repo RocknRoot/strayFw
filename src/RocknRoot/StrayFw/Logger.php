@@ -45,7 +45,7 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = array()): void
     {
-        if (! \is_string($message)) {
+        if (!\is_string($message)) {
             throw new LoggerInvalidArgumentException(\sprintf(
                 'Argument 2 passed to %s must be a string!',
                 __METHOD__
